@@ -1,0 +1,30 @@
+{
+  "id": "firmy",
+  "type": "cli",
+  "displayName": "Firmy CLI",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "CLI nástroj pro hledání firem v ARES. Scraping podle oboru a města, výstup JSON do data/leads/.",
+  "runtime": "node",
+  "entrypoint": "../../../../tools/cli/firmy/index.ts",
+  "packageDir": "tools/cli/firmy",
+  "subcommands": [
+    {
+      "name": "search",
+      "description": "Hledá firmy podle oboru a města",
+      "flags": [
+        { "name": "obor", "type": "string", "required": true, "description": "Obor/firemní kategorie" },
+        { "name": "mesto", "type": "string", "required": true, "description": "Město pro vyhledávání" },
+        { "name": "bez-webu", "type": "boolean", "required": false, "description": "Pouze firmy bez vlastního webu" },
+        { "name": "limit", "type": "number", "required": false, "description": "Maximální počet výsledků" }
+      ]
+    }
+  ],
+  "permissions": [
+    "net:fetch:api.ares.cz",
+    "fs:write:data/leads/*"
+  ],
+  "tags": ["scraping", "ares", "leads"],
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
+}

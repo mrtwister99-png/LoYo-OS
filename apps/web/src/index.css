@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #F8F6F1;
+  --card: #FFFFFF;
+  --black: #0A0A0A;
+  --gold: #C6A46B;
+  --blue: #59CBFF;
+}
+
+/* KURZOR S !IMPORTANT A PNG */
+* {
+  cursor: url('/cursor.png') 0 0, auto !important;
+}
+
+html, body, #root {
+  background: var(--bg);
+  color: var(--black);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+* { scrollbar-width: thin; scrollbar-color: var(--black) transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #0A0A0A; border-radius: 999px; }

@@ -1,0 +1,16 @@
+{
+  "name": "@loyo-os/cli-firmy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "index.ts",
+  "bin": {
+    "cli-firmy": "./index.ts"
+  },
+  "scripts": {
+    "search": "tsx index.ts"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0"
+  }
+}

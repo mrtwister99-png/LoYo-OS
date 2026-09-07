@@ -1,0 +1,319 @@
+[
+  {
+    "id": "894bbe5f-ac6e-42ea-8c98-49deae53048d",
+    "ts": "2026-09-06T19:00:32.128Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "517f5275-950e-4d5e-972f-86e79b4adc8f",
+    "ts": "2026-09-06T18:00:31.722Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "6a41d414-9f98-4487-bba5-247e0d34e60e",
+    "ts": "2026-09-06T17:00:31.214Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "a7b452e7-f15a-4839-92ac-22de7ed6281a",
+    "ts": "2026-09-06T16:00:30.760Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "c6af0fc0-fe93-48a3-8e3c-9c2f7e71589c",
+    "ts": "2026-09-06T15:00:27.292Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "609462fb-0b14-4973-9054-c53b86dbdbf7",
+    "ts": "2026-09-06T14:00:26.925Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "d9a638fd-3f13-4396-bb8d-0754bc85c064",
+    "ts": "2026-09-06T08:00:23.997Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "da3c2476-bde0-419d-85c3-cbf845345edd",
+    "ts": "2026-09-06T07:00:23.513Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "e279eae4-8f9d-4f73-821e-55daa7c7fff6",
+    "ts": "2026-09-06T06:00:22.961Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "12f36ab8-1a75-47eb-8c52-972b64e3e932",
+    "ts": "2026-09-05T20:00:45.623Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "23906e19-d231-418b-9364-13409100da9e",
+    "ts": "2026-09-05T11:00:53.995Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "96062cbe-2dfe-4074-95f4-da7d7ddcb66d",
+    "ts": "2026-09-05T10:00:14.067Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "3faaffc9-6a90-440e-b4b8-77f8665c3b16",
+    "ts": "2026-09-05T09:05:03.011Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "poznámka: \"JDEME NA TOOOO yes\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\4poznamka_jdeme-na-toooo-yes.md",
+    "meta": {
+      "runId": "2026-09-05T09-05-03-008Z_af74ce1d",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\4poznamka_jdeme-na-toooo-yes.md"
+    }
+  },
+  {
+    "id": "fe5cad4c-0cc4-4f8f-b761-1cf35e8b8e9e",
+    "ts": "2026-09-05T09:00:13.581Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "ce0eeed5-53b7-4e39-b165-ccba01455ce7",
+    "ts": "2026-09-05T08:00:13.044Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "37e12202-bb8f-47d7-a419-6f36895bd7e4",
+    "ts": "2026-09-05T07:00:12.467Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "bcb61d08-907c-4e48-b55d-0b86c5dab9cb",
+    "ts": "2026-09-01T07:00:27.576Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "f4dd8a1e-9606-4c4d-ae7d-23486861a2a3",
+    "ts": "2026-09-01T04:53:59.980Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "poznámka: \"test\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\1poznamka_test.md",
+    "meta": {
+      "runId": "2026-09-01T04-53-59-976Z_cd7301b6",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\1poznamka_test.md"
+    }
+  },
+  {
+    "id": "ebd5f4c3-29b0-4138-82b2-da3013a7786f",
+    "ts": "2026-09-01T04:52:34.411Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "nový příkaz: /voda",
+    "meta": {
+      "runId": "2026-09-01T04-52-34-408Z_370f27a9"
+    }
+  },
+  {
+    "id": "7d7650b2-0bc6-4f0e-8a0c-6bc782b32e2e",
+    "ts": "2026-09-01T03:42:35.806Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "úkol: \"DNES\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\aktivni\\2ukol_dnes.md",
+    "meta": {
+      "runId": "2026-09-01T03-42-35-804Z_f9191bdc",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\aktivni\\2ukol_dnes.md"
+    }
+  },
+  {
+    "id": "2efc22fa-4981-4887-a0e1-97a41b8fef05",
+    "ts": "2026-09-01T03:09:57.010Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "poznámka: \"bazerant\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\1poznamka_bazerant.md",
+    "meta": {
+      "runId": "2026-09-01T03-09-57-009Z_23e4bac9",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\1poznamka_bazerant.md"
+    }
+  },
+  {
+    "id": "1ad9e53a-a189-4f5e-ac58-405f5bdd6169",
+    "ts": "2026-09-01T02:50:02.760Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "úkol: \"testukolu\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\aktivni\\1ukol_testukolu.md",
+    "meta": {
+      "runId": "2026-09-01T02-50-02-758Z_472e2ba9",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\aktivni\\1ukol_testukolu.md"
+    }
+  },
+  {
+    "id": "bfa2c916-f158-4b32-aa49-c4f79c3a57b9",
+    "ts": "2026-09-01T02:47:54.695Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "poznámka: \"testukolu\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\6poznamka_testukolu.md",
+    "meta": {
+      "runId": "2026-09-01T02-47-54-693Z_2ea8901f",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\6poznamka_testukolu.md"
+    }
+  },
+  {
+    "id": "eaa14dfa-78e6-4209-8623-4b0b1ecfd2fd",
+    "ts": "2026-08-31T04:41:29.201Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "úkol: \"posta.\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\3ukol_posta.md",
+    "meta": {
+      "runId": "2026-08-31T04-41-29-200Z_70c4eda2",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\3ukol_posta.md"
+    }
+  },
+  {
+    "id": "c41cb2dc-18dc-4c83-9053-45946e0bf523",
+    "ts": "2026-08-31T04:40:33.198Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "poznámka: \"Posta.\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\5poznamka_posta.md",
+    "meta": {
+      "runId": "2026-08-31T04-40-33-197Z_67699c78",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\5poznamka_posta.md"
+    }
+  },
+  {
+    "id": "a96f24c1-17b0-4f84-a9f4-bbd9fc8a909b",
+    "ts": "2026-08-31T04:39:15.413Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "úkol: \"koupit jar, mleko, maso, sladke, vajicka\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\2ukol_koupit-jar-mleko-maso-sladke-vajicka.md",
+    "meta": {
+      "runId": "2026-08-31T04-39-15-413Z_40285c86",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\2ukol_koupit-jar-mleko-maso-sladke-vajicka.md"
+    }
+  },
+  {
+    "id": "b284afb2-cc2f-4c33-b4bd-3147d3305170",
+    "ts": "2026-08-31T04:38:28.109Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "úkol: \"Koupit rohliky\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\1ukol_koupit-rohliky.md",
+    "meta": {
+      "runId": "2026-08-31T04-38-28-108Z_9d71b7c4",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\1ukol_koupit-rohliky.md"
+    }
+  },
+  {
+    "id": "7f41c576-570a-4cc9-a595-b382ae06147a",
+    "ts": "2026-08-31T04:16:36.689Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "poznámka: \"Bagr - ahoj ja jsem bagr.\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\poznamka-1788149796689.md",
+    "meta": {
+      "runId": "2026-08-31T04-16-36-688Z_625bc52c",
+      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\poznamka-1788149796689.md"
+    }
+  },
+  {
+    "id": "cf0a20af-334e-465d-8a5f-4338ca64c7c0",
+    "ts": "2026-08-31T03:14:07.632Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: kdo v čR prodava hracky Mondo → D:\\dev\\loyo-os\\data\\reports\\kdo-v-R-prodava-hracky-Mondo_2026-08-31-03-14-07.md",
+    "meta": {
+      "runId": "2026-08-31T03-13-42-193Z_91bead1d",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\kdo-v-R-prodava-hracky-Mondo_2026-08-31-03-14-07.md",
+      "sourcesUsed": 5
+    }
+  },
+  {
+    "id": "7fa542b2-823c-4a0a-aa84-f004650167dd",
+    "ts": "2026-08-31T03:13:42.197Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "web_search: \"kdo v čR prodava hracky Mondo\""
+  },
+  {
+    "id": "06876a47-8150-40e2-b41a-d47717162bf3",
+    "ts": "2026-08-31T03:13:42.193Z",
+    "agent": "Mary_Jane",
+    "type": "routing",
+    "action": "\"/research kdo v čR prodava hracky Mondo\" → Julia_Nehledalova"
+  }
+]

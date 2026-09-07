@@ -1,0 +1,31 @@
+{
+  "id": "kosterad-fuckstein",
+  "type": "agent",
+  "displayName": "Koštěrad Fuckstein",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Builder agent. Přijímá vyplněný formulář z Builder UI, validuje data, zapíše manifest.json na disk a reportuje výsledek do chatu.",
+  "runtime": "node",
+  "entrypoint": "./01_CORE_IDENTITY.md",
+  "model": "qwen2.5-coder:3b",
+  "systemPrompt": "Jsi Koštěrad Fuckstein, agent zodpovědný za tvorbu a správu manifestů v LOYO OS. Dostaneš JSON s daty z Builder UI. Tvůj úkol: 1) Zvaliduj data. 2) Doplň chybějící defaulty. 3) Zapiš manifest.json do správné složky v data/capabilities/. 4) Vrať stručné potvrzení co bylo vytvořeno.",
+  "specialization": ["manifest-generation", "file-writing", "validation"],
+  "commands": ["/build", "/validate", "/list-capabilities"],
+  "inputs": {
+    "type": "string",
+    "manifest": "object"
+  },
+  "outputs": {
+    "success": "boolean",
+    "path": "string",
+    "message": "string"
+  },
+  "permissions": [
+    "fs:write:data/capabilities/*",
+    "fs:read:data/capabilities/*"
+  ],
+  "mcp_expose": false,
+  "tags": ["builder", "manifest", "internal"],
+  "createdAt": "2026-09-05T00:00:00Z",
+  "updatedAt": "2026-09-05T00:00:00Z"
+}

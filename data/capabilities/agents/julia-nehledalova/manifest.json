@@ -1,0 +1,29 @@
+{
+  "id": "julia-nehledalova",
+  "type": "agent",
+  "displayName": "Julia Nehledalová",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Deep research analytik. Hledá informace přes web search a píše detailní reporty.",
+  "runtime": "prompt",
+  "entrypoint": "./01_CORE_IDENTITY.md",
+  "model": "qwen3:8b",
+  "systemPrompt": "Jsi Julie Nehledalová, research analytik. Děláš hloubkový research na zadané téma. Používáš web_search službu. Výsledky zapisuješ jako markdown reporty do data/reports/.",
+  "commands": ["/research"],
+  "specialization": ["research", "analysis", "report-writing"],
+  "permissions": {
+    "net": ["*:fetch"],
+    "fs": ["data/reports:write", "data/rag:read"]
+  },
+  "tags": ["research", "web-search", "reports"],
+  "inputs": {
+    "topic": "string",
+    "depth": "shallow|deep"
+  },
+  "outputs": {
+    "report": "Report",
+    "reportPath": "string"
+  },
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
+}

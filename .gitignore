@@ -1,0 +1,83 @@
+# === LOYO OS v3 - .gitignore - 2026-09-07 - Fáze 1 hotovo, Fáze 2 start ===
+
+# závislosti
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+pnpm-debug.log*
+
+# build výstupy - NIKDY do gitu
+dist/
+build/
+.next/
+out/
+.cache/
+.turbo/
+**/.turbo/
+**/dist/
+apps/web/src-tauri/target/
+apps/web/src-tauri/gen/
+apps/web/dist/
+apps/api/dist/
+apps/mcp/dist/
+packages/core/dist/
+
+# env / tajné klíče - NIKDY necommitovat
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# logy
+*.log
+
+# === RUNTIME DATA - file-based DB - NIKDY do public gitu ===
+# legacy - už smazáno, ale pro jistotu
+data/agents/
+data/agents/*/memory.json
+data/agents/*/scheduler_state.json
+
+# capabilities runtime - osobní stav agentů (memory, audit, scheduler)
+data/capabilities/agents/*/memory.json
+data/capabilities/agents/*/audit.json
+data/capabilities/agents/*/scheduler_state.json
+data/capabilities/agents/*/commands.json
+data/capabilities/*/memory.json
+data/capabilities/*/audit.json
+
+# chat historie - osobní konverzace
+data/chat_history/
+audit.jsonl
+
+# generovaná / osobní data
+data/leads/
+data/logs/
+data/cache/
+data/cache/blobs/
+data/notifications/_pending.json
+data/ja/
+data/reports/
+data/reputation/
+data/current_state/
+
+# keep manifesty a šablony - TY CHCEME v gitu!
+!data/capabilities/**/manifest.json
+!data/capabilities/**/index.json
+!data/capabilities/**/01_*.md
+!data/capabilities/**/02_*.md
+!data/capabilities/**/03_*.md
+!data/capabilities/**/04_*.md
+!data/capabilities/agents/*/meta.json
+!data/specs/**
+
+# editor / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+ehthumbs.db
