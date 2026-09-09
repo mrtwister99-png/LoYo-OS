@@ -5,27 +5,29 @@
 @tailwind utilities;
 
 :root {
-  --bg: #F8F6F1;
+  --bg: #ededed;
+  --panel: #dbdbdb;
+  --blue: #040b8d;
+  --red: #ac0001;
+  --gold: #CDA24D;
   --card: #FFFFFF;
   --black: #0A0A0A;
-  --gold: #C6A46B;
-  --blue: #59CBFF;
 }
 
-/* KURZOR S !IMPORTANT A PNG */
+/* KURZOR */
 * {
   cursor: url('/cursor.png') 0 0, auto !important;
 }
 
 html, body, #root {
   background: var(--bg);
-  color: var(--black);
+  color: var(--blue);
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 .mono { font-family: 'JetBrains Mono', monospace; }
 
-* { scrollbar-width: thin; scrollbar-color: var(--black) transparent; }
+* { scrollbar-width: thin; scrollbar-color: var(--blue) transparent; }
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-thumb { background: #0A0A0A; border-radius: 999px; }
+::-webkit-scrollbar-thumb { background: #040b8d; border-radius: 999px; }

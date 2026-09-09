@@ -31,7 +31,7 @@ const MENU_STRUCTURE: MenuNode[] = [
     children: [
       { id: 'tym', label: 'TEAMS' },
       { id: 'agenti', label: 'AGENTS' },
-      { id: 'projekty', label: 'PROJEKTY' },
+      // PROJEKTY smazán v3.0 - viz ARCHITECTURE.md
     ],
   },
   {

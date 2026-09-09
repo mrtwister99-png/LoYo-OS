@@ -2,3 +2,7 @@ packages:
   - "apps/*"
   - "packages/*"
   - "tools/cli/*"
+allowBuilds:
+  '@prisma/engines': false
+  esbuild: false
+  prisma: false

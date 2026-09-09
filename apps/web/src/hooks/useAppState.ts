@@ -10,7 +10,7 @@ export type Page =
   | 'tasks'
   | 'tym'
   | 'agenti'
-  | 'projekty'
+  // | 'projekty' - smazán v3.0
   | 'skills'
   | 'mcp'
   | 'cli'

@@ -16,3 +16,5 @@
 6. 9. 2026 19:00 — připomenuto
 6. 9. 2026 20:00 — připomenuto
 6. 9. 2026 21:00 — připomenuto
+7. 9. 2026 07:00 — připomenuto
+9. 9. 2026 11:00 — připomenuto

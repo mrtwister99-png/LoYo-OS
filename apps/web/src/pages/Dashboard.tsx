@@ -1,295 +1,306 @@
-// D:\dev\loyo-os\apps\web\src\pages\Dashboard.tsx
-// LOYO OS // Dashboard — živý přehled napojený na apps/api (localhost:3001)
-import { useEffect, useState } from 'react'
+import React, { useState, useMemo } from 'react';
 
-const API = 'http://localhost:3001/api'
-
-interface AgentRecord {
-  id: string
-  name?: string
-  status?: string
-  tasksToday?: number
-  lastRun?: string
+interface Checkpoint {
+  id: string;
+  name: string;
+  description: string;
+  done: boolean;
 }
 
-interface TeamRecord {
-  id: string
-  name: string
-  agents?: string[]
+interface Idea {
+  id: string;
+  title: string;
+  note: string;
+  done: boolean;
 }
 
-interface WorkflowRecord {
-  id: string
-  name: string
-  status?: string
-}
-
-interface LoopRecord {
-  id: string
-  name: string
-  active?: boolean
-}
-
-interface McpRecord {
-  id: string
-  name: string
-  status?: string
-  tools?: string[]
-}
-
-interface ActivityEvent {
-  id: string
-  ts: string
-  agent: string
-  type: string
-  action: string
-}
-
-function timeAgo(iso: string): string {
-  const diffMs = Date.now() - new Date(iso).getTime()
-  const mins = Math.floor(diffMs / 60000)
-  if (mins < 1) return 'právě teď'
-  if (mins < 60) return `před ${mins} min`
-  const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `před ${hrs} hod`
-  return `před ${Math.floor(hrs / 24)} dny`
-}
-
-function initials(name: string): string {
-  return (name || '?').trim().charAt(0).toUpperCase()
-}
-
-function avatarColor(name: string): string {
-  const palette = ['#0057F7', '#BD0000', '#7A7A7A']
-  const idx = (name || '').split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) % palette.length
-  return palette[idx]
-}
+type CheckpointType = 'overall' | 'current';
 
 export default function Dashboard() {
-  const [agents, setAgents] = useState<AgentRecord[]>([])
-  const [teams, setTeams] = useState<TeamRecord[]>([])
-  const [workflows, setWorkflows] = useState<WorkflowRecord[]>([])
-  const [loops, setLoops] = useState<LoopRecord[]>([])
-  const [mcp, setMcp] = useState<McpRecord[]>([])
-  const [activity, setActivity] = useState<ActivityEvent[]>([])
-  const [loading, setLoading] = useState(true)
-  const [apiDown, setApiDown] = useState(false)
+  // Checkpoints
+  const [overallCheckpoints, setOverallCheckpoints] = useState<Checkpoint[]>([]);
+  const [currentCheckpoints, setCurrentCheckpoints] = useState<Checkpoint[]>([]);
+  const [ideas, setIdeas] = useState<Idea[]>([]);
 
-  async function loadAll() {
-    try {
-      const [a, t, w, l, m, act] = await Promise.all([
-        fetch(`${API}/agents`).then(r => r.json()),
-        fetch(`${API}/teams`).then(r => r.json()),
-        fetch(`${API}/workflows`).then(r => r.json()),
-        fetch(`${API}/loops`).then(r => r.json()),
-        fetch(`${API}/mcp`).then(r => r.json()),
-        fetch(`${API}/activity?limit=8`).then(r => r.json()),
-      ])
-      setAgents(a.agents || [])
-      setTeams(t.teams || [])
-      setWorkflows(w.workflows || [])
-      setLoops(l.loops || [])
-      setMcp(m.servers || [])
-      setActivity(act.events || [])
-      setApiDown(false)
-    } catch {
-      setApiDown(true)
-    } finally {
-      setLoading(false)
+  // Modals
+  const [isCheckpointModalOpen, setIsCheckpointModalOpen] = useState(false);
+  const [activeType, setActiveType] = useState<CheckpointType>('overall');
+  const [isIdeasModalOpen, setIsIdeasModalOpen] = useState(false);
+
+  // Form states - controlled, no document.getElementById
+  const [checkpointName, setCheckpointName] = useState('');
+  const [checkpointDesc, setCheckpointDesc] = useState('');
+  const [ideaTitle, setIdeaTitle] = useState('');
+  const [ideaNote, setIdeaNote] = useState('');
+
+  const generateId = () => globalThis.crypto.randomUUID();
+
+  // Progress calculations - derived, not stored in separate useState
+  const overallProgress = useMemo(() => {
+    if (overallCheckpoints.length === 0) return 0;
+    const done = overallCheckpoints.filter(c => c.done).length;
+    return Math.min(100 * (done / overallCheckpoints.length), 100);
+  }, [overallCheckpoints]);
+
+  const currentProgress = useMemo(() => {
+    if (currentCheckpoints.length === 0) return 0;
+    const done = currentCheckpoints.filter(c => c.done).length;
+    return Math.min(100 * (done / currentCheckpoints.length), 100);
+  }, [currentCheckpoints]);
+
+  const sortedIdeas = useMemo(() => {
+    return [...ideas].sort((a, b) => Number(a.done) - Number(b.done));
+  }, [ideas]);
+
+  const addCheckpoint = () => {
+    if (!checkpointName.trim()) return;
+    const newCp: Checkpoint = {
+      id: generateId(),
+      name: checkpointName.trim(),
+      description: checkpointDesc.trim(),
+      done: false,
+    };
+    if (activeType === 'overall') {
+      setOverallCheckpoints(prev => [...prev, newCp]);
+    } else {
+      setCurrentCheckpoints(prev => [...prev, newCp]);
     }
-  }
+    setCheckpointName('');
+    setCheckpointDesc('');
+    setIsCheckpointModalOpen(false);
+  };
 
-  useEffect(() => {
-    loadAll()
-    const interval = setInterval(loadAll, 10000) // refresh každých 10s = "LIVE"
-    return () => clearInterval(interval)
-  }, [])
+  const toggleCheckpoint = (type: CheckpointType, id: string) => {
+    const updater = (prev: Checkpoint[]) =>
+      prev.map(c => (c.id === id ? { ...c, done: !c.done } : c));
+    if (type === 'overall') setOverallCheckpoints(updater);
+    else setCurrentCheckpoints(updater);
+  };
 
-  const onlineAgents = agents.filter(a => a.status === 'online' || a.status === 'active').length
-  const totalTeamMembers = teams.reduce((sum, t) => sum + (t.agents?.length || 0), 0)
-  const runningWorkflows = workflows.filter(w => w.status === 'running').length
-  const activeLoops = loops.filter(l => l.active !== false).length
-  const activeTools = mcp.filter(m => m.status === 'running' || m.status === 'active').length
-  const totalTools = mcp.reduce((sum, m) => sum + (m.tools?.length || 0), 0)
+  const removeCheckpoint = (type: CheckpointType, id: string) => {
+    if (type === 'overall') {
+      setOverallCheckpoints(prev => prev.filter(c => c.id !== id));
+    } else {
+      setCurrentCheckpoints(prev => prev.filter(c => c.id !== id));
+    }
+  };
 
-  const typeLabel: Record<string, string> = {
-    routing: 'SMS',
-    research: 'SKILL',
-    cli: 'CLI',
-    save: 'NOTE',
-    error: 'ERROR',
-    system: 'SYSTEM',
-  }
+  const addIdea = () => {
+    if (!ideaTitle.trim()) return;
+    const newIdea: Idea = {
+      id: generateId(),
+      title: ideaTitle.trim(),
+      note: ideaNote.trim(),
+      done: false,
+    };
+    setIdeas(prev => [...prev, newIdea]);
+    setIdeaTitle('');
+    setIdeaNote('');
+    setIsIdeasModalOpen(false);
+  };
 
-  if (loading) {
-    return (
-      <div className="p-6 flex items-center justify-center h-64 text-gray-500 font-mono text-sm">
-        Načítám dashboard...
-      </div>
-    )
-  }
+  const toggleIdea = (id: string) => {
+    setIdeas(prev => prev.map(i => (i.id === id ? { ...i, done: !i.done } : i)));
+  };
+
+  const removeIdea = (id: string) => {
+    setIdeas(prev => prev.filter(i => i.id !== id));
+  };
+
+  const openCheckpointModal = (type: CheckpointType) => {
+    setActiveType(type);
+    setCheckpointName('');
+    setCheckpointDesc('');
+    setIsCheckpointModalOpen(true);
+  };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 p-6 md:p-12">
+      <div className="max-w-4xl mx-auto space-y-10">
+        <div>
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-zinc-400 mt-1">Single file TSX, no errors, no document.getElementById</p>
+        </div>
 
-      {apiDown && (
-        <div
-          className="rounded-lg p-4 text-white font-bold flex items-center gap-3"
-          style={{ backgroundColor: '#BD0000' }}
-        >
-          <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-          API neběží (localhost:3001) — zobrazují se poslední známá data, ne aktuální stav.
+        {/* Overall Progress */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-semibold">Overall progress - {Math.round(overallProgress)}%</h2>
+            <button
+              onClick={() => openCheckpointModal('overall')}
+              className="bg-white text-black px-4 py-1.5 rounded-full text-sm font-medium hover:bg-zinc-200"
+            >
+              + Add Checkpoint
+            </button>
+          </div>
+          <div className="w-full h-3 bg-zinc-800 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-emerald-500 transition-all duration-300"
+              style={{ width: `${overallProgress}%` }}
+            />
+          </div>
+          <div className="space-y-3">
+            {overallCheckpoints.map((cp: Checkpoint) => (
+              <div key={cp.id} className="flex gap-3 items-start bg-zinc-800/50 p-3 rounded-xl">
+                <input
+                  type="checkbox"
+                  checked={cp.done}
+                  onChange={() => toggleCheckpoint('overall', cp.id)}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <div className="font-medium">{cp.name}</div>
+                  <div className="text-sm text-zinc-400">{cp.description}</div>
+                </div>
+                <button
+                  onClick={() => removeCheckpoint('overall', cp.id)}
+                  className="text-sm text-red-400 hover:text-red-300"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            {overallCheckpoints.length === 0 && <div className="text-sm text-zinc-500">No checkpoints yet</div>}
+          </div>
+        </div>
+
+        {/* Current Progress */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-semibold">Current progress - {Math.round(currentProgress)}%</h2>
+            <button
+              onClick={() => openCheckpointModal('current')}
+              className="bg-white text-black px-4 py-1.5 rounded-full text-sm font-medium hover:bg-zinc-200"
+            >
+              + Add Checkpoint
+            </button>
+          </div>
+          <div className="w-full h-3 bg-zinc-800 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-amber-400 transition-all duration-300"
+              style={{ width: `${currentProgress}%` }}
+            />
+          </div>
+          <div className="space-y-3">
+            {currentCheckpoints.map((cp: Checkpoint) => (
+              <div key={cp.id} className="flex gap-3 items-start bg-zinc-800/50 p-3 rounded-xl">
+                <input
+                  type="checkbox"
+                  checked={cp.done}
+                  onChange={() => toggleCheckpoint('current', cp.id)}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <div className="font-medium">{cp.name}</div>
+                  <div className="text-sm text-zinc-400">{cp.description}</div>
+                </div>
+                <button
+                  onClick={() => removeCheckpoint('current', cp.id)}
+                  className="text-sm text-red-400 hover:text-red-300"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            {currentCheckpoints.length === 0 && <div className="text-sm text-zinc-500">No checkpoints yet</div>}
+          </div>
+        </div>
+
+        {/* Ideas */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-semibold">Ideas</h2>
+            <button
+              onClick={() => setIsIdeasModalOpen(true)}
+              className="bg-white text-black px-4 py-1.5 rounded-full text-sm font-medium hover:bg-zinc-200"
+            >
+              + Add Idea
+            </button>
+          </div>
+          <div className="space-y-3">
+            {sortedIdeas.map((idea: Idea) => (
+              <div key={idea.id} className={`flex gap-3 items-start p-3 rounded-xl ${idea.done ? 'bg-zinc-800/30 opacity-60' : 'bg-zinc-800/50'}`}>
+                <input
+                  type="checkbox"
+                  checked={idea.done}
+                  onChange={() => toggleIdea(idea.id)}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <div className={`font-medium ${idea.done ? 'line-through text-zinc-400' : ''}`}>{idea.title}</div>
+                  <div className="text-sm text-zinc-400">{idea.note}</div>
+                </div>
+                <button onClick={() => removeIdea(idea.id)} className="text-sm text-red-400 hover:text-red-300">
+                  Remove
+                </button>
+              </div>
+            ))}
+            {ideas.length === 0 && <div className="text-sm text-zinc-500">No ideas yet</div>}
+          </div>
+        </div>
+      </div>
+
+      {/* Checkpoint Modal */}
+      {isCheckpointModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 w-full max-w-md space-y-4">
+            <h3 className="font-semibold">Add Checkpoint to {activeType}</h3>
+            <input
+              type="text"
+              placeholder="Name"
+              value={checkpointName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCheckpointName(e.target.value)}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 outline-none focus:border-zinc-600"
+            />
+            <input
+              type="text"
+              placeholder="Description"
+              value={checkpointDesc}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCheckpointDesc(e.target.value)}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 outline-none focus:border-zinc-600"
+            />
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setIsCheckpointModalOpen(false)} className="px-4 py-2 text-sm text-zinc-400 hover:text-white">
+                Cancel
+              </button>
+              <button onClick={addCheckpoint} className="px-4 py-2 text-sm bg-white text-black rounded-full font-medium">
+                Add
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* RYCHLÝ PŘEHLED - GRID */}
-      <div className="grid grid-cols-4 gap-4">
-        {/* AGENTI */}
-        <div className="bg-white rounded-lg p-6 border border-black/10">
-          <div className="text-sm font-mono text-gray-500 mb-2">AGENTI</div>
-          <div className="text-4xl font-black mb-2">{agents.length}</div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#0057F7' }}></span>
-            <span>{onlineAgents} online</span>
-          </div>
-        </div>
-
-        {/* TEAMY */}
-        <div className="bg-white rounded-lg p-6 border border-black/10">
-          <div className="text-sm font-mono text-gray-500 mb-2">TEAMY</div>
-          <div className="text-4xl font-black mb-2">{teams.length}</div>
-          <div className="text-sm text-gray-600">{totalTeamMembers} členů</div>
-        </div>
-
-        {/* WORKFLOWS */}
-        <div className="bg-black text-white rounded-lg p-6">
-          <div className="text-sm font-mono text-gray-400 mb-2">WORKFLOWS</div>
-          <div className="text-4xl font-black mb-2">{workflows.length}</div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#0057F7' }}></span>
-            <span>{runningWorkflows} běží</span>
-          </div>
-        </div>
-
-        {/* LOOPS */}
-        <div className="bg-white rounded-lg p-6 border border-black/10">
-          <div className="text-sm font-mono text-gray-500 mb-2">LOOPS</div>
-          <div className="text-4xl font-black mb-2">{loops.length}</div>
-          <div className="text-sm text-gray-600">{activeLoops} aktivních automatizací</div>
-        </div>
-
-        {/* CLI */}
-        <div className="bg-white rounded-lg p-6 border border-black/10 col-span-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm font-mono text-gray-500 mb-1">CLI TOOLS</div>
-              <div className="text-2xl font-black">Agent → CLI → Výsledek</div>
-            </div>
-            <div className="flex items-center gap-3 text-sm font-mono">
-              <span className="px-3 py-1 bg-black text-white rounded">{mcp.length + 5} tools</span>
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#0057F7' }}></span>
+      {/* Ideas Modal */}
+      {isIdeasModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 w-full max-w-md space-y-4">
+            <h3 className="font-semibold">Add Idea</h3>
+            <input
+              type="text"
+              placeholder="Title"
+              value={ideaTitle}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIdeaTitle(e.target.value)}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 outline-none focus:border-zinc-600"
+            />
+            <input
+              type="text"
+              placeholder="Note"
+              value={ideaNote}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIdeaNote(e.target.value)}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 outline-none focus:border-zinc-600"
+            />
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setIsIdeasModalOpen(false)} className="px-4 py-2 text-sm text-zinc-400 hover:text-white">
+                Cancel
+              </button>
+              <button onClick={addIdea} className="px-4 py-2 text-sm bg-white text-black rounded-full font-medium">
+                Add
+              </button>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* ACTIVITY FEED + MCP STATUS */}
-      <div className="grid grid-cols-3 gap-6">
-
-        {/* ACTIVITY FEED */}
-        <div className="col-span-2 bg-white rounded-lg border border-black/10">
-          <div className="p-4 border-b border-black/10 flex items-center justify-between">
-            <div>
-              <div className="font-black text-lg">ACTIVITY FEED</div>
-              <div className="text-sm font-mono text-gray-500">SMS • Notes • Akce agentů</div>
-            </div>
-            <div className="flex items-center gap-2 text-xs font-mono">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#0057F7' }}></span>
-              LIVE
-            </div>
-          </div>
-          <div className="p-4 space-y-3">
-            {activity.length === 0 && (
-              <div className="text-sm text-gray-400 text-center py-6">Zatím žádná aktivita</div>
-            )}
-            {activity.map(ev => (
-              <div key={ev.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded">
-                <div
-                  className="w-8 h-8 rounded-full text-white flex items-center justify-center font-bold text-xs shrink-0"
-                  style={{ backgroundColor: avatarColor(ev.agent) }}
-                >
-                  {initials(ev.agent)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-sm truncate">{ev.action}</div>
-                  <div className="text-xs text-gray-600">{ev.agent} • {timeAgo(ev.ts)}</div>
-                </div>
-                <div className="text-xs font-mono bg-black text-white px-2 py-1 rounded shrink-0">
-                  {typeLabel[ev.type] || ev.type.toUpperCase()}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* MCP STATUS */}
-        <div className="bg-black text-white rounded-lg">
-          <div className="p-4 border-b border-white/20">
-            <div className="font-black text-lg">MCP STATUS</div>
-            <div className="text-sm font-mono text-gray-400">Model Context Protocol</div>
-          </div>
-          <div className="p-4 space-y-3">
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-400">Servery</span>
-              <span className="font-bold">{mcp.length}</span>
-            </div>
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-400">Aktivní</span>
-              <span className="font-bold">{activeTools}</span>
-            </div>
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-400">Nástroje celkem</span>
-              <span className="font-bold">{totalTools}</span>
-            </div>
-            <div className="pt-3 mt-3 border-t border-white/20">
-              <div className="flex items-center gap-2 text-xs font-mono">
-                <span
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: activeTools > 0 ? '#0057F7' : '#7A7A7A' }}
-                ></span>
-                {activeTools > 0 ? 'RUNNING' : 'IDLE'}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* RYCHLÉ AKCE */}
-      <div className="grid grid-cols-4 gap-4">
-        <button
-          className="text-white py-4 rounded-lg font-black hover:brightness-110 transition"
-          style={{ backgroundColor: '#0057F7' }}
-        >
-          + NOVÝ PROJEKT
-        </button>
-        <button
-          className="text-white py-4 rounded-lg font-black hover:brightness-110 transition"
-          style={{ backgroundColor: '#BD0000' }}
-        >
-          + NOVÝ AGENT
-        </button>
-        <button
-          className="text-white py-4 rounded-lg font-black hover:brightness-110 transition"
-          style={{ backgroundColor: '#7A7A7A' }}
-        >
-          + ODESLAT SMS
-        </button>
-        <button
-          className="text-black py-4 rounded-lg font-black border-2 border-black hover:bg-black hover:text-white transition"
-        >
-          + NOVÝ NOTE
-        </button>
-      </div>
+      )}
     </div>
-  )
+  );
 }

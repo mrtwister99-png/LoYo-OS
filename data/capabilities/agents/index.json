@@ -1,6 +1,6 @@
 {
   "version": "3.0.0",
-  "lastSync": "2026-09-07T00:00:00Z",
+  "lastSync": "2026-09-07T22:00:22.100Z",
   "agents": [
     {
       "id": "mary-jane",
@@ -10,8 +10,16 @@
       "category": "all",
       "team": "LOYO OS v3",
       "status": "online",
-      "skills": ["dispatcher", "notes", "calendar"],
-      "tools": ["rag", "fs_read", "fs_write"],
+      "skills": [
+        "dispatcher",
+        "notes",
+        "calendar"
+      ],
+      "tools": [
+        "rag",
+        "fs_read",
+        "fs_write"
+      ],
       "workflow": "dispatcher",
       "prompt_file": "01_CORE_IDENTITY.md",
       "docs": [
@@ -32,11 +40,22 @@
       "category": "research",
       "team": "LOYO OS v3",
       "status": "online",
-      "skills": ["lead-generation", "cli", "research"],
-      "tools": ["cli:firmy", "fs_read"],
+      "skills": [
+        "lead-generation",
+        "cli",
+        "research"
+      ],
+      "tools": [
+        "cli:firmy",
+        "fs_read"
+      ],
       "workflow": "find",
       "prompt_file": "01_CORE_IDENTITY.md",
-      "docs": ["01_CORE_IDENTITY.md", "02_WORKFLOW.md", "03_GUARDRAILS.md"],
+      "docs": [
+        "01_CORE_IDENTITY.md",
+        "02_WORKFLOW.md",
+        "03_GUARDRAILS.md"
+      ],
       "tasksToday": 0,
       "created": "2026-08-28T00:00:00Z",
       "lastRun": "2026-08-31T02:34:30.650Z"
@@ -49,11 +68,21 @@
       "category": "research",
       "team": "LOYO OS v3",
       "status": "online",
-      "skills": ["deep-research", "analysis"],
-      "tools": ["fs_write", "web_search"],
+      "skills": [
+        "deep-research",
+        "analysis"
+      ],
+      "tools": [
+        "fs_write",
+        "web_search"
+      ],
       "workflow": "research",
       "prompt_file": "01_CORE_IDENTITY.md",
-      "docs": ["01_CORE_IDENTITY.md", "02_WORKFLOW.md", "03_GUARDRAILS.md"],
+      "docs": [
+        "01_CORE_IDENTITY.md",
+        "02_WORKFLOW.md",
+        "03_GUARDRAILS.md"
+      ],
       "tasksToday": 0,
       "created": "2026-08-31T00:00:00Z",
       "lastRun": "2026-08-31T03:14:07.634Z"
@@ -66,11 +95,22 @@
       "category": "internal",
       "team": "LOYO OS v3",
       "status": "online",
-      "skills": ["manifest-generation", "validation", "file-writing"],
-      "tools": ["fs_write", "fs_read"],
+      "skills": [
+        "manifest-generation",
+        "validation",
+        "file-writing"
+      ],
+      "tools": [
+        "fs_write",
+        "fs_read"
+      ],
       "workflow": "build",
       "prompt_file": "01_CORE_IDENTITY.md",
-      "docs": ["01_CORE_IDENTITY.md", "02_WORKFLOW.md", "03_GUARDRAILS.md"],
+      "docs": [
+        "01_CORE_IDENTITY.md",
+        "02_WORKFLOW.md",
+        "03_GUARDRAILS.md"
+      ],
       "tasksToday": 0,
       "created": "2026-09-05T00:00:00Z",
       "lastRun": null

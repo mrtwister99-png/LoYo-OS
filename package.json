@@ -1,11 +1,11 @@
 {
   "name": "loyo-os",
   "private": true,
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@12.3.4",
   "scripts": {
     "manifest:check": "tsx tools/scripts/manifest-check.ts",
     "agent:new": "tsx tools/scripts/agent-new.ts",
-    "dev": "turbo run dev --parallel",
+    "dev": "turbo run dev",
     "build": "turbo run build",
     "db:push": "turbo run db:push",
     "cli:firmy": "tsx tools/cli/firmy/index.ts",

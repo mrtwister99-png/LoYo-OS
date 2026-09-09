@@ -1,5 +1,35 @@
 [
   {
+    "id": "4e29783e-5cc8-4e5c-a97a-7048da4eb7fe",
+    "ts": "2026-09-09T09:00:23.331Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "5077cbb3-6ba0-4b8d-aa80-4edc3e7989da",
+    "ts": "2026-09-07T05:00:46.459Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /daily-brief",
+    "meta": {
+      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n**Status:**  \nSystém je aktivní a připraven na příkazy.\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?"
+    }
+  },
+  {
+    "id": "feab1213-dcc7-43b5-956d-d56390102e6b",
+    "ts": "2026-09-07T05:00:35.991Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
     "id": "894bbe5f-ac6e-42ea-8c98-49deae53048d",
     "ts": "2026-09-06T19:00:32.128Z",
     "agent": "Scheduler",

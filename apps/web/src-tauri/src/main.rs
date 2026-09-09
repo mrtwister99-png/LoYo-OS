@@ -6,7 +6,8 @@ use std::path::{Path, PathBuf};
 // Fallback na hardcoded cestu pokud env není nastavena (dev bez .env)
 fn data_root() -> String {
     std::env::var("LOYO_DATA_DIR")
-        .unwrap_or_else(|_| "D:/dev/loyo-os/data".to_string())
+        .or_else(|_| std::env::var("CARGO_MANIFEST_DIR").map(|m| format!("{}/../../../data", m)))
+        .unwrap_or_else(|_| "./data".to_string())
 }
 
 fn agents_base()    -> String { format!("{}/capabilities/agents",    data_root()) }

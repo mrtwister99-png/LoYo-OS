@@ -6,7 +6,7 @@ import { Builder } from './components/Builder'
 import Dashboard from './pages/Dashboard'
 import Calendar from './pages/Calendar'
 import Team from './pages/Team'
-import Projekty from './pages/Projekty'
+// Projekty smazán v3.0
 import Agents from './pages/Agents'
 import Activity from './pages/Activity'
 import Notes from './pages/Notes'
@@ -28,7 +28,7 @@ const PAGE_TITLES: Record<string, string> = {
   tasks: 'ÚKOLY',
   tym: 'TÝM',
   agenti: 'AGENTI',
-  projekty: 'PROJEKTY',
+  // projekty: smazán v3.0
   skills: 'SKILLS',
   mcp: 'MCP',
   cli: 'CLI',
@@ -90,7 +90,7 @@ export default function App() {
         {page === 'tasks' && <Tasks />}
         {page === 'tym' && <Team />}
         {page === 'agenti' && <Agents />}
-        {page === 'projekty' && <Projekty />}
+        {/* projekty smazán */}
         {page === 'skills' && <Skills />}
         {page === 'mcp' && <Mcp />}
         {page === 'loops' && <Loops />}
