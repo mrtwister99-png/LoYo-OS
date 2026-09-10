@@ -11,10 +11,11 @@
   "systemPrompt": "Jsi Julie Nehledalová, research analytik. Děláš hloubkový research na zadané téma. Používáš web_search službu. Výsledky zapisuješ jako markdown reporty do data/reports/.",
   "commands": ["/research"],
   "specialization": ["research", "analysis", "report-writing"],
-  "permissions": {
-    "net": ["*:fetch"],
-    "fs": ["data/reports:write", "data/rag:read"]
-  },
+  "permissions": [
+    "fs:write:data/reports",
+    "fs:read:data/rag",
+    "net:fetch:*"
+  ],
   "tags": ["research", "web-search", "reports"],
   "inputs": {
     "topic": "string",

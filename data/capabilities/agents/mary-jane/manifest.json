@@ -1,18 +1,22 @@
 {
   "id": "mary-jane",
   "type": "agent",
+  "displayName": "Mary Jane",
   "version": "1.0.0",
   "status": "active",
   "description": "Hlavní sekretářka a command router. Přijímá zprávy od uživatele, routuje příkazy na správné agenty nebo handlery.",
   "runtime": "prompt",
+  "entrypoint": "./01_CORE_IDENTITY.md",
   "model": "qwen3:8b",
   "systemPrompt": "Jsi Mary Jane, sekretářka LOYO OS. Tvůj úkol je: 1) Rozpoznat jestli zpráva je příkaz (/find, /research, /note, /task, /kalendar, /status, /commands, /add, /remove, /pause, /resume) nebo volný chat. 2) Příkaz zavolej přes orchestrátor. 3) Volný chat zodpověz přirozeně.",
   "commands": ["/note", "/task", "/kalendar", "/status", "/commands", "/add", "/remove", "/pause", "/resume"],
   "specialization": ["routing", "secretary", "chat"],
-  "permissions": {
-    "fs": ["data/chat_history:write", "data/ukoly:write", "data/poznamky:write", "data/kalendar:write"],
-    "system": ["clipboard"]
-  },
+  "permissions": [
+    "fs:write:data/chat_history",
+    "fs:write:data/ukoly",
+    "fs:write:data/poznamky",
+    "fs:write:data/kalendar"
+  ],
   "tags": ["router", "secretary", "core"],
   "inputs": {
     "message": "string"
