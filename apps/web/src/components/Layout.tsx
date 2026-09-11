@@ -135,12 +135,12 @@ export default function Layout({ children, page, setPage, biosMode = false, setB
     return () => window.removeEventListener('keydown', handleEnter)
   }, [bottomFocus, builderFocus])
 
-  return (
+    return (
     <div
       className="relative h-screen w-screen flex flex-col overflow-hidden overscroll-none transition-colors duration-150"
-      style={{ background: biosMode ? '#040b8d' : '#ededed' }}
+      style={{ background: biosMode? '#040b8d' : '#cccccc' }}
     >
-      <div className="relative z-10 h-screen w-screen flex flex-col overflow-hidden">
+      <div className="relative z-10 h-full w-full flex flex-col overflow-hidden">
         <Header
           currentPage={page}
           focusedIdx={headerFocus}
@@ -163,13 +163,13 @@ export default function Layout({ children, page, setPage, biosMode = false, setB
             onTabToHeader={() => { setBiosMenuOpen(false); setHeaderFocus(0) }}
           />
           <main
-            className="flex-1 w-full overflow-y-auto overflow-x-hidden min-h-0 overscroll-contain transition-all duration-300"
+            className="flex-1 w-full overflow-y-auto overflow-x-hidden min-h-0 overscroll-contain transition-all duration-300 pb-"
             style={{
-              background: biosMode ? 'rgba(4,11,141,0.8)' : 'rgba(255,255,255,0.6)',
+              background: biosMode? 'rgba(4,11,141,0.8)' : 'rgba(255,255,255,0.6)',
               backdropFilter: 'blur(0.3px)',
             }}
           >
-            <div className="min-h-full w-full">{children}</div>
+            <div className="min-h-full w-full pb-">{children}</div>
           </main>
         </div>
         {/* Bottom bez focused — prop zatím neexistuje */}

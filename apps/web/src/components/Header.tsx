@@ -31,8 +31,8 @@ const monthYearLabel = (d: Date) =>
 
 // ── barvy ────────────────────────────────────────────────────
 const C = {
-  bg: '#ededed',
-  headBg: '#949494',
+  bg: '#cccccc',
+  headBg: '#cccccc',
   border: '#7a7a7a',
   blue: '#040b8d',
   red: '#ac0001',
@@ -436,7 +436,7 @@ export default function Header({
         height: 56,
         display: 'flex',
         alignItems: 'stretch',
-        background: '#949494',
+        background: '#cccccc',
         borderBottom: '1px solid #6b6b6b',
         position: 'sticky',
         top: 0,

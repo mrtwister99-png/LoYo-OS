@@ -169,10 +169,10 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
         onMouseLeave={() => {
           if (!keyboardOpen) setSelectedIdx(-1)
         }}
-        className={`w-full text-left px-6 py-[14px] text-[12px] tracking-[0.2em] font-bold border-b flex justify-between items-center transition-all duration-150 ease-out ${
-          focused? 'bg-[#1000a1] text-white border-white/30 shadow-[inset_0_0_0_1px_white]' :
-          active? 'bg-[#7a7a7a] text-white border-white/20' :
-          'bg-black text-white hover:bg-[#1000a1] border-white/10'
+           className={`w-full text-left px-6 py-[14px] text-[12px] tracking-[0.2em] font-bold border-b flex justify-between items-center transition-all duration-150 ease-out ${
+          focused? 'bg-[#ac0001] text-white border-white/30 shadow-[inset_0_0_0_1px_white]' :
+          active? 'bg-[#ac0001] text-white border-white/20' :
+          'bg-[#040b8d] text-white hover:bg-[#040b8d]/80 border-white/10'
         }`}
       >
         <span>{label}</span>
@@ -196,8 +196,8 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
           onMouseLeave={() => {
             if (!keyboardOpen) setSelectedIdx(-1)
           }}
-          className={`w-full flex justify-between items-center px-6 py-3 text-[12px] tracking-[0.3em] font-black transition-all duration-150 ease-out hover:bg-[#1000a1] ${
-            focused? 'bg-[#1000a1] text-white shadow-[inset_0_0_0_1px_white]' : 'bg-[#ae1710] text-white hover:bg-[#1000a1]'
+          className={`w-full flex justify-between items-center px-6 py-3 text-[12px] tracking-[0.3em] font-black transition-all duration-150 ease-out hover:bg-[#cccccc]/80 ${
+            focused? 'bg-[#ac0001] text-white shadow-[inset_0_0_0_1px_white]' : 'bg-[#cccccc] text-black hover:bg-[#ac0001]/20'
           }`}
         >
           <span>{label}</span>
@@ -210,7 +210,7 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
             />
           </span>
         </button>
-        {isOpen && <div className="bg-black">{children}</div>}
+        {isOpen && <div className="bg-[#040b8d]">{children}</div>}
       </div>
     )
   }
@@ -229,17 +229,17 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
           setIsHovered(false)
           if (!keyboardOpen) setSelectedIdx(-1)
         }}
-        className="hidden md:flex w-[280px] bg-black flex-col fixed left-0 top-[132px] bottom-[110px] z-30 shadow-[4px_0_24px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] border-r border-white/10"
+                className="hidden md:flex w-[280px] bg-[#040b8d] flex-col fixed left-0 top-[56px] bottom-[42px] z-30 shadow-[4px_0_24px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] border-r border-white/10"
         style={{ transform: isMenuVisible? 'translateX(0)' : 'translateX(-90%)' }}
       >
         {/* 10% viditelný proužek s 2 ŠIPKAMI - klik VŽDY zavře/sbalí menu */}
         <div
-          onClick={() => {
+                    onClick={() => {
             setIsHovered(false)
             if (onClose) onClose()
             else setInternalOpen(false)
           }}
-          className="absolute right-0 top-0 bottom-0 w-[25px] bg-black flex flex-col items-center justify-between py-4 border-l border-white/10 cursor-pointer"
+          className="absolute right-0 top-0 bottom-0 w-[25px] bg-[#CDA24D] flex flex-col items-center justify-between py-4 border-l border-white/10 cursor-pointer"
         >
           <span className="flex items-center justify-center w-[18px] h-[18px] rounded-full bg-white shadow-[0_0_6px_rgba(0,87,247,0.7)]">
             <img 

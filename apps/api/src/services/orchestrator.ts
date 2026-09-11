@@ -3,7 +3,6 @@
 import { Ollama } from 'ollama'
 import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises'
 import { join, resolve, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
 import { randomUUID } from 'node:crypto'
@@ -12,24 +11,36 @@ import { logRun } from './runLogger'
 import { webSearch, type SearchResult } from './web_search'
 import { bumpAgentStats } from './agentStats'
 import { slugify, safeName, nextFileNumber, readDirSafe } from './fileUtils'
+import {
+  DATA_DIR,
+  AGENTS_DIR,
+  REPORTS_DIR,
+  JA_POZNAMKY_DIR,
+  JA_UKOLY_AKTIVNI_DIR,
+  JA_UKOLY_HOTOVE_DIR,
+  JA_KALENDAR_DIR,
+} from '../lib/dataPaths'
+import { pickModel, getPriority, MODELS, type ModelSpec } from './modelRouter'
+import { enqueueJob, getNextPendingJob, markJobStatus, getQueueLength, isQueueBusy, setQueueBusy, loadQueue } from './queue'
 
 const execFileAsync = promisify(execFile)
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
-const AGENTS_DIR = resolve(__dirname, '../../../../data/agents')
-const REPORTS_DIR = resolve(__dirname, '../../../../data/reports')
-const POZNAMKY_DIR = resolve(__dirname, '../../../../data/ja/poznamky')
-const UKOLY_DIR = resolve(__dirname, '../../../../data/ja/ukoly')
-const UKOLY_AKTIVNI_DIR = join(UKOLY_DIR, 'aktivni')
-const UKOLY_HOTOVE_DIR = join(UKOLY_DIR, 'hotove')
-const KALENDAR_DIR = resolve(__dirname, '../../../../data/ja/kalendar')
-const COMMANDS_FILE = resolve(__dirname, '../../../../data/agents/Mary_Jane/commands.json')
-const ROOT = resolve(__dirname, '../../../../')
+// KONVENCE v3 - jediný zdroj pravdy je dataPaths.ts, žádný D:/ hardcode
+const POZNAMKY_DIR = JA_POZNAMKY_DIR
+const UKOLY_AKTIVNI_DIR = JA_UKOLY_AKTIVNI_DIR
+const UKOLY_HOTOVE_DIR = JA_UKOLY_HOTOVE_DIR
+const KALENDAR_DIR = JA_KALENDAR_DIR
+const COMMANDS_FILE = join(AGENTS_DIR, 'mary-jane', 'commands.json')
+const ROOT = resolve(DATA_DIR, '..')
 
 const ollama = new Ollama({ host: 'http://localhost:11434' })
 const MODEL = 'qwen3:8b'
+const FAST_MODEL = MODELS.FAST.model
 const MAX_MEMORY_MESSAGES = 20 // posledních 10 výměn drženo v kontextu
 const OLLAMA_TIMEOUT_MS = 90000 // ochrana proti zaseklému/pomalému modelu
 const DEEP_TIMEOUT_MS = 120000 // deep research smí trvat déle
+
+// fronta - in-memory guard proti paralelním běhům
+let queueProcessing = false
 
 type ChatMsg = { role: 'system' | 'user' | 'assistant'; content: string }
 
@@ -43,6 +54,7 @@ interface CommandDef
   response?: string
   addedBy: string
   createdAt: string
+  schedule?: { type: 'hourly' | 'daily'; from?: number; to?: number; at?: string }
 }
 
 interface CommandsFile
@@ -105,10 +117,26 @@ async function chatWithTimeout(
   }
 }
 
+// ---------- normalizace legacy názvů Mary_Jane -> mary-jane ----------
+const AGENT_FOLDER_MAP: Record<string, string> = {
+  Mary_Jane: 'mary-jane',
+  Lubor_Nehleda: 'lubor-nehleda',
+  Julia_Nehledalova: 'julia-nehledalova',
+  Kosterad_Fuckstein: 'kosterad-fuckstein',
+}
+
+function toKebabAgent(folder: string): string {
+  return AGENT_FOLDER_MAP[folder] || folder.replace(/_/g, '-').toLowerCase()
+}
+
+function resolveAgentDir(folder: string): string {
+  return join(AGENTS_DIR, toKebabAgent(folder))
+}
+
 // ---------- načte MD mozky agenta ----------
 async function loadAgentDocs(folder: string): Promise<string> {
   try {
-    const dir = join(AGENTS_DIR, folder)
+    const dir = resolveAgentDir(folder)
     const files = (await readdir(dir)).filter(f => f.endsWith('.md')).sort()
     const parts = await Promise.all(files.map(f => readFile(join(dir, f), 'utf-8')))
     return parts.join('\n\n---\n\n')
@@ -120,7 +148,7 @@ async function loadAgentDocs(folder: string): Promise<string> {
 // ---------- načte model agenta z meta.json (fallback na výchozí MODEL) ----------
 async function loadAgentModel(folder: string): Promise<string> {
   try {
-    const raw = await readFile(join(AGENTS_DIR, folder, 'meta.json'), 'utf-8')
+    const raw = await readFile(join(resolveAgentDir(folder), 'meta.json'), 'utf-8')
     const meta = JSON.parse(raw)
     return meta.model || MODEL
   } catch {
@@ -128,9 +156,9 @@ async function loadAgentModel(folder: string): Promise<string> {
   }
 }
 
-// ---------- perzistentní paměť: data/agents/<agent>/memory.json ----------
+// ---------- perzistentní paměť: data/capabilities/agents/<kebab>/memory.json ----------
 function memoryPath(folder: string) {
-  return join(AGENTS_DIR, folder, 'memory.json')
+  return join(resolveAgentDir(folder), 'memory.json')
 }
 
 async function loadMemory(folder: string): Promise<ChatMsg[]> {
@@ -455,16 +483,32 @@ async function runStatus(userMessage: string, runId: string, steps: string[]) {
   )
   const openCount = doneFlags.filter(Boolean).length
 
+  const picked = pickModel(userMessage, 'status')
   const reply = [
-    `📋 **Status LoYo OS**`,
+    `📋 **Status LoYo OS** [${picked.label} <1s]`,
     `• Otevřené úkoly: ${openCount} / ${taskFilesAll.length}`,
     `• Poznámky celkem: ${noteFiles.length}`,
     `• Kalendářní události: ${eventFiles.length}`,
   ].join('\n')
 
-  steps.push('Mary Jane: sestaven status')
-  await logRun(runId, { userMessage, mode: 'status', openCount, totalTasks: taskFilesAll.length, noteCount: noteFiles.length, eventCount: eventFiles.length })
+  steps.push(`Mary Jane: sestaven status via ${picked.model} (${picked.label}) - fast path <1s`)
+  await logRun(runId, { userMessage, mode: 'status', model: picked.model, openCount, totalTasks: taskFilesAll.length, noteCount: noteFiles.length, eventCount: eventFiles.length })
 
+  return { reply, steps }
+}
+
+// ============================================================
+// /daily-brief — ranní přehled (nově z commands.json)
+// ============================================================
+async function runDailyBrief(userMessage: string, runId: string, steps: string[]) {
+  // stejná logika jako /status ale s routerem deep pro budoucí rozšíření
+  const taskFilesAktivni = (await readDirSafe(UKOLY_AKTIVNI_DIR)).map(f => ({ dir: UKOLY_AKTIVNI_DIR, f })).filter(x => x.f.endsWith('.md'))
+  const taskFilesHotove = (await readDirSafe(UKOLY_HOTOVE_DIR)).map(f => ({ dir: UKOLY_HOTOVE_DIR, f })).filter(x => x.f.endsWith('.md'))
+  const noteFiles = (await readDirSafe(POZNAMKY_DIR)).filter(f => f.endsWith('.md'))
+  const eventFiles = (await readDirSafe(KALENDAR_DIR)).filter(f => f.endsWith('.md'))
+  const reply = [`☀️ **Daily Brief**`, `• Aktivní úkoly: ${taskFilesAktivni.length}`, `• Hotové: ${taskFilesHotove.length}`, `• Poznámky: ${noteFiles.length}`, `• Kalendář dnes: ${eventFiles.length}`, ``, `Napiš /status pro detail.`].join('\n')
+  steps.push('Mary Jane: daily-brief sestaven')
+  await logRun(runId, { userMessage, mode: 'daily-brief' })
   return { reply, steps }
 }
 
@@ -713,12 +757,10 @@ async function runResume(userMessage: string, runId: string, steps: string[])
 }
 
 // ============================================================
-// HLAVNÍ TOK
+// CORE LOGIKA - bez fronty, voláno z fronty i přímo
 // ============================================================
-export async function runOrchestrator(userMessage: string): Promise<{ reply: string; steps: string[] }>
+async function runOrchestratorCore(userMessage: string, runId: string, steps: string[]): Promise<{ reply: string; steps: string[] }>
 {
-  const steps: string[] = []
-  const runId = `${new Date().toISOString().replace(/[:.]/g, '-')}_${randomUUID().slice(0, 8)}`
   const trimmed = userMessage.trim()
 
   // ---------- dynamický routing z commands.json ----------
@@ -769,6 +811,11 @@ export async function runOrchestrator(userMessage: string): Promise<{ reply: str
         s.push(`Mary Jane: "${msg}" → seznam příkazů`)
         return runCommands(msg, rid, s)
       },
+      'daily-brief': async (msg, rid, s) =>
+      {
+        s.push(`Mary Jane: "${msg}" → daily-brief`)
+        return runDailyBrief(msg, rid, s)
+      },
       add: async (msg, rid, s) =>
       {
         s.push(`Mary Jane: "${msg}" → přidání příkazu`)
@@ -807,38 +854,88 @@ export async function runOrchestrator(userMessage: string): Promise<{ reply: str
     }
   }
 
-  // ---------- žádný příkaz — MJ řeší sama s pamětí (BEZE ZÁZNAMU do Activity) ----------
+  // ---------- žádný příkaz — MJ řeší sama s pamětí + MODEL ROUTER ----------
   const mjDocs = await loadAgentDocs('Mary_Jane')
-  const mjModel = await loadAgentModel('Mary_Jane')
+  const baseModel = await loadAgentModel('Mary_Jane')
+  const picked: ModelSpec = pickModel(userMessage, 'chat')
+  // fast path <120 znaků -> 3b, jinak meta.json nebo normal 8b
+  const finalModel = picked.label === 'fast-3b'? picked.model : (baseModel || picked.model)
+  const finalCtx = picked.num_ctx || 4096
   const systemPrompt = mjDocs || 'Jsi Mary Jane, sekretářka v LOYO OS. Odpovídej stručně a věcně česky.'
 
   const history = await loadMemory('Mary_Jane')
   const messages: ChatMsg[] = [
     { role: 'system', content: systemPrompt },
-    ...history,
+   ...history,
     { role: 'user', content: userMessage },
   ]
 
   let reply: string
   try {
+    steps.push(`Model router: "${userMessage.slice(0, 40)}" (${userMessage.length} chars) -> ${finalModel} ${picked.label} ctx=${finalCtx}`)
     const res = await chatWithTimeout({
-      model: mjModel,
+      model: finalModel,
       messages,
-      options: { temperature: 0.3, num_ctx: 4096 },
-    })
+      options: { temperature: 0.3, num_ctx: finalCtx },
+    }, picked.timeoutMs)
     reply = res.message.content
   } catch (e: any) {
-    reply = `⚠️ Mary Jane neodpověděla včas: ${e.message}`
+    reply = `⚠ Mary Jane (${finalModel}) neodpověděla včas: ${e.message}`
     return { reply, steps }
   }
 
   await saveMemory('Mary_Jane', [
-    ...history,
+   ...history,
     { role: 'user', content: userMessage },
     { role: 'assistant', content: reply },
   ])
   await bumpAgentStats('mary_jane')
-  // POZNÁMKA: běžný chat se záměrně NELOGUJE do Activity — tam patří jen akce agentů (routing, CLI, reporty)
-  await logRun(runId, { userMessage, mode: 'chat', mjModel, reply })
+  await logRun(runId, { userMessage, mode: 'chat', model: finalModel, router: picked.label, reply })
   return { reply, steps }
+}
+
+// ============================================================
+// HLAVNÍ TOK S FRONTOU
+// ============================================================
+async function processPendingQueue() {
+  while (true) {
+    const next = await getNextPendingJob()
+    if (!next) break
+    await markJobStatus(next.id, 'running', next.runId)
+    const steps: string[] = []
+    const runId = next.runId || `${new Date().toISOString().replace(/[:.]/g, '-')}_${next.id.slice(0, 8)}`
+    try {
+      await runOrchestratorCore(next.message, runId, steps)
+      await markJobStatus(next.id, 'done', runId)
+    } catch {
+      await markJobStatus(next.id, 'failed', runId)
+    }
+  }
+}
+
+export async function runOrchestrator(userMessage: string): Promise<{ reply: string; steps: string[] }>
+{
+  const steps: string[] = []
+  const runId = `${new Date().toISOString().replace(/[:.]/g, '-')}_${randomUUID().slice(0, 8)}`
+  const trimmed = userMessage.trim()
+  const priority = getPriority(trimmed)
+
+  // pokud už něco běží, zařaď do fronty - akceptace ÚKOL 10
+  if (queueProcessing || isQueueBusy()) {
+    const job = await enqueueJob(trimmed, priority)
+    const len = await getQueueLength()
+    return { reply: `⏳ Fronta: úkol #${job.id.slice(0, 6)} zařazen (priorita ${priority}), před tebou ${len - 1} úkolů.`, steps: [`Queue enqueued ${job.id} prio=${priority} len=${len}`] }
+  }
+
+  queueProcessing = true
+  setQueueBusy(true)
+  try {
+    const result = await runOrchestratorCore(trimmed, runId, steps)
+    // po doběhu zpracuj co se mezitím nahromadilo
+    await processPendingQueue()
+    return result
+  } finally {
+    queueProcessing = false
+    setQueueBusy(false)
+  }
 }

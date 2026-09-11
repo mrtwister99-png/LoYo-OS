@@ -1,5 +1,35 @@
 [
   {
+    "id": "c1664142-d5f5-416a-8c1d-26991b322043",
+    "ts": "2026-09-11T06:00:33.300Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "52e72a35-ffbf-4d19-b8a8-91d33b3dde42",
+    "ts": "2026-09-11T05:00:49.565Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /daily-brief",
+    "meta": {
+      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n📋 **Status LoYo OS** [fast-3b <1s]\n• Otevřené úkoly: 1 / 3\n• Poznámky celkem: 6\n• Kalendářní události: 0\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?"
+    }
+  },
+  {
+    "id": "4425b9e8-b61a-41b4-af58-001200107273",
+    "ts": "2026-09-11T05:00:49.547Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
     "id": "4e29783e-5cc8-4e5c-a97a-7048da4eb7fe",
     "ts": "2026-09-09T09:00:23.331Z",
     "agent": "Scheduler",
