@@ -21,4 +21,5 @@ export type Runtime =
   | 'python'
   | 'rust'
   | 'prompt'        // čistě LLM prompt, žádný kód
+  | 'ollama'
   | 'composite';    // kombinuje více runtime

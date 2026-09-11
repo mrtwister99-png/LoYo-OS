@@ -43,6 +43,7 @@ export async function loadCapabilities(options: LoaderOptions): Promise<LoadResu
           ...json,
           id,
           type,
+          _filePath: manifestPath,
           createdAt: json.createdAt ?? new Date().toISOString(),
           updatedAt: json.updatedAt ?? new Date().toISOString(),
         });
@@ -74,6 +75,7 @@ export async function findCapability(
       const json = JSON.parse(raw);
       return CapabilityManifestSchema.parse({
         ...json, id, type,
+        _filePath: manifestPath,
         createdAt: json.createdAt ?? new Date().toISOString(),
         updatedAt: json.updatedAt ?? new Date().toISOString(),
       });

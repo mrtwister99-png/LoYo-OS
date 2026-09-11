@@ -3,6 +3,9 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import Chat from './Chat'
 import { useCalendarEvents } from '../hooks/useCalendarEvents'
 import { Builder } from './Builder'
+import { JA_UKOLY_AKTIVNI_DIR, JA_UKOLY_HOTOVE_DIR } from '../lib/dataPaths'
+
+import { useSaveStatusContext } from '../hooks/useSaveStatus'
 
 type Props = {
   currentPage?: string
@@ -12,10 +15,13 @@ type Props = {
   setBiosMode?: (v: boolean) => void
   onOpenBuilderMenu?: () => void
   onOpenMobil?: () => void
+  saveStatus?: 'idle' | 'saving' | 'saved' | 'dirty'
+  onSaveClick?: () => void
 }
 
 type TaskLite = { file_name: string; title: string; done: boolean }
-const TASKS_DIR = 'D:/dev/loyo-os/data/ja/ukoly'
+const TASKS_DIR_ACTIVE = JA_UKOLY_AKTIVNI_DIR
+const TASKS_DIR_DONE = JA_UKOLY_HOTOVE_DIR
 
 const toIso = (d: Date) => d.toISOString().slice(0, 10)
 const dayLabel = (d: Date) =>
@@ -110,7 +116,20 @@ export default function Header({
   setBiosMode,
   onOpenBuilderMenu,
   onOpenMobil,
+  saveStatus: propStatus,
+  onSaveClick: propOnSaveClick,
 }: Props) {
+  const ctx = useSaveStatusContext();
+  const saveStatus = propStatus?? ctx.status;
+  const onSaveClick = propOnSaveClick?? ctx.onSaveClick?? undefined;
+  const lastSavedAt = (ctx as any).lastSavedAt as Date | null;
+  const saveTitle = saveStatus === 'dirty'
+    ? 'Máš neuložené změny - klik pro uložení (Ctrl+S)'
+    : saveStatus === 'saved'
+    ? `Uloženo ✓ ${lastSavedAt? lastSavedAt.toLocaleTimeString() : ''} - 5s`
+    : saveStatus === 'saving'
+    ? 'Ukládám... (Ctrl+S)'
+    : 'Vše uloženo';
   const [time, setTime]                     = useState(new Date())
   const [isTerminalOpen, setIsTerminalOpen] = useState(false)
   const [showSavedToast, setShowSavedToast] = useState(false)
@@ -149,7 +168,8 @@ export default function Header({
   const [closingBuilder, setClosingBuilder]     = useState(false)
   const [selectedDate, setSelectedDate]         = useState(new Date())
   const [calendarViewDate, setCalendarViewDate] = useState(new Date())
-  const [openTasks, setOpenTasks]               = useState<TaskLite[]>([])
+    const [openTasks, setOpenTasks] = useState<TaskLite[]>([])
+  const tasksCacheRef = useRef<{ ts: number; data: TaskLite[] } | null>(null)
 
   const dateBoxRef = useRef<HTMLDivElement>(null)
   const timeBoxRef = useRef<HTMLDivElement>(null)
@@ -300,19 +320,26 @@ export default function Header({
     return () => window.removeEventListener('mousedown', onClick)
   }, [showCalendar, showDayPanel, showNotifPanel])
 
-  // ── úkoly ─────────────────────────────────────────────────────
+   // ── úkoly ─────────────────────────────────────────────────────
   const loadOpenTasks = async () => {
-    const hasTauri = typeof window !== 'undefined' &&
+    const now = Date.now()
+    if (tasksCacheRef.current && now - tasksCacheRef.current.ts < 10000) {
+      setOpenTasks(tasksCacheRef.current.data)
+      return
+    }
+    const hasTauri = typeof window!== 'undefined' &&
       ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)
     if (!hasTauri) return
     try {
       const { invoke } = await import('@tauri-apps/api/core')
-      const list = await invoke<any[]>('list_tasks', { dir: TASKS_DIR })
-      setOpenTasks((list || []).filter(t => !t.done).map(t => ({
+      const all = await invoke<any[]>('list_tasks_lite', { dirs: [TASKS_DIR_ACTIVE, TASKS_DIR_DONE] })
+      const filtered = (all||[]).filter(t =>!t.done).map(t => ({
         file_name: t.file_name,
         title: t.title,
         done: t.done,
-      })))
+      }))
+      tasksCacheRef.current = { ts: now, data: filtered }
+      setOpenTasks(filtered)
     } catch {}
   }
 
@@ -828,6 +855,30 @@ export default function Header({
           fontWeight: 500,
         }}>
           {chatLabel}
+        </span>
+
+               {/* saveStatus - úplně pravo v chat sekci - klik = uložit */}
+        <span
+          onClick={() => { if (saveStatus!== 'dirty') return; onSaveClick?.() }}
+          title={saveTitle}
+          style={{
+            marginLeft: 'auto',
+            fontSize: 10,
+            fontFamily: 'monospace',
+            fontWeight: 700,
+            color: saveStatus === 'saving'? '#FFC700' : saveStatus === 'saved'? '#00D084' : saveStatus === 'dirty'? '#FF9500' : 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+            flexShrink: 0,
+            cursor: saveStatus === 'dirty'? 'pointer' : 'default',
+          }}>
+          <span style={{
+            width: 6, height: 6, borderRadius: '50%',
+            background: saveStatus === 'saving' ? '#FFC700' : saveStatus === 'saved' ? '#00D084' : saveStatus === 'dirty' ? '#FF9500' : 'transparent',
+            display: saveStatus === 'idle' ? 'none' : 'inline-block',
+          }} />
+          {saveStatus === 'saving' ? '🟡 ukládám' : saveStatus === 'saved' ? '🟢 uloženo' : saveStatus === 'dirty' ? '• neuloženo' : ''}
         </span>
 
         {/* Chat komponenta */}

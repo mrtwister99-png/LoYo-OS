@@ -6,6 +6,8 @@
     "manifest:check": "tsx tools/scripts/manifest-check.ts",
     "agent:new": "tsx tools/scripts/agent-new.ts",
     "dev": "turbo run dev",
+    "dev:api": "pnpm --filter api dev",
+    "dev:api:clean": "tsx tools/scripts/dev-api-clean.ts",
     "build": "turbo run build",
     "db:push": "turbo run db:push",
     "cli:firmy": "tsx tools/cli/firmy/index.ts",

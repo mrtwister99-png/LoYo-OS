@@ -1,8 +1,9 @@
 packages:
-  - "apps/*"
-  - "packages/*"
-  - "tools/cli/*"
+    - "apps/*"
+    - "packages/*"
+    - "tools/cli/*"
 allowBuilds:
   '@prisma/engines': false
-  esbuild: false
+  better-sqlite3: true
+  esbuild: true
   prisma: false

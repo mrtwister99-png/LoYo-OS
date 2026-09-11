@@ -10,6 +10,16 @@ fn data_root() -> String {
         .unwrap_or_else(|_| "./data".to_string())
 }
 
+fn resolve_data_path(input: &str) -> PathBuf {
+    let p = Path::new(input);
+    if p.is_absolute() {
+        p.to_path_buf()
+    } else {
+        // KONVENCE v3 - relativní cesty se joinují s DATA_DIR
+        PathBuf::from(data_root()).join(p)
+    }
+}
+
 fn agents_base()    -> String { format!("{}/capabilities/agents",    data_root()) }
 fn skills_base()    -> String { format!("{}/capabilities/skills",    data_root()) }
 fn mcp_base()       -> String { format!("{}/capabilities/mcp",       data_root()) }
@@ -33,6 +43,15 @@ struct TaskFile {
     file_path: String,
     title: String,
     content: String,
+    done: bool,
+    created_at: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct TaskLiteFile {
+    file_name: String,
+    file_path: String,
+    title: String,
     done: bool,
     created_at: String,
 }
@@ -215,17 +234,18 @@ struct WorkflowIndex {
 // ========== NOTES COMMANDS ==========
 #[tauri::command]
 fn save_note(path: String, content: String) -> Result<String, String> {
-    let p = Path::new(&path);
-    if let Some(parent) = p.parent() {
+    let resolved = resolve_data_path(&path);
+    if let Some(parent) = resolved.parent() {
         fs::create_dir_all(parent).map_err(|e| e.to_string())?;
     }
-    fs::write(&path, content).map_err(|e| e.to_string())?;
-    Ok(path)
+    fs::write(&resolved, content).map_err(|e| e.to_string())?;
+    Ok(resolved.to_string_lossy().to_string().replace('\\', "/"))
 }
 
 #[tauri::command]
 fn list_notes(dir: String) -> Result<Vec<NoteFile>, String> {
-    let path = Path::new(&dir);
+    let resolved = resolve_data_path(&dir);
+    let path = resolved.as_path();
     if !path.exists() {
         fs::create_dir_all(path).map_err(|e| e.to_string())?;
         return Ok(vec![]);
@@ -257,18 +277,19 @@ fn list_notes(dir: String) -> Result<Vec<NoteFile>, String> {
 }
 
 #[tauri::command]
-fn read_note(path: String) -> Result<String, String> { fs::read_to_string(&path).map_err(|e| e.to_string()) }
+fn read_note(path: String) -> Result<String, String> { fs::read_to_string(resolve_data_path(&path)).map_err(|e| e.to_string()) }
 
 #[tauri::command]
-fn delete_note(path: String) -> Result<(), String> { fs::remove_file(&path).map_err(|e| e.to_string()) }
+fn delete_note(path: String) -> Result<(), String> { fs::remove_file(resolve_data_path(&path)).map_err(|e| e.to_string()) }
 
 #[tauri::command]
-fn ensure_dir(path: String) -> Result<String, String> { fs::create_dir_all(&path).map_err(|e| e.to_string())?; Ok(path) }
+fn ensure_dir(path: String) -> Result<String, String> { let resolved = resolve_data_path(&path); fs::create_dir_all(&resolved).map_err(|e| e.to_string())?; Ok(resolved.to_string_lossy().to_string().replace('\\', "/")) }
 
 // ========== TASKS COMMANDS ==========
 #[tauri::command]
 fn list_tasks(dir: String) -> Result<Vec<TaskFile>, String> {
-    let path = Path::new(&dir);
+    let resolved = resolve_data_path(&dir);
+    let path = resolved.as_path();
     if !path.exists() {
         fs::create_dir_all(path).map_err(|e| e.to_string())?;
         return Ok(vec![]);
@@ -301,22 +322,91 @@ fn list_tasks(dir: String) -> Result<Vec<TaskFile>, String> {
 }
 
 #[tauri::command]
-fn save_task(path: String, content: String) -> Result<String, String> {
-    let p = Path::new(&path);
-    if let Some(parent) = p.parent() {
-        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+fn list_tasks_multi(dirs: Vec<String>) -> Result<Vec<TaskFile>, String> {
+    let mut all_tasks = Vec::new();
+    for dir in dirs {
+        let resolved = resolve_data_path(&dir);
+        let path = resolved.as_path();
+        if !path.exists() { continue; }
+        let entries = fs::read_dir(path).map_err(|e| e.to_string())?;
+        for entry in entries {
+            let entry = entry.map_err(|e| e.to_string())?;
+            let p = entry.path();
+            if p.is_file() {
+                if let Some(ext) = p.extension() {
+                    if ext == "md" || ext == "txt" {
+                        if let Ok(content) = fs::read_to_string(&p) {
+                            let title = content.lines().next().unwrap_or("Bez nazvu").trim_start_matches('#').trim().to_string();
+                            let done = content.lines().find(|l| l.contains("**Hotovo:**")).map(|l| l.to_lowercase().contains("true")).unwrap_or(false);
+                            let file_name = p.file_name().unwrap().to_string_lossy().to_string();
+                            let file_path = p.to_string_lossy().to_string().replace('\\', "/");
+                            let created_at = fs::metadata(&p).and_then(|m| m.modified()).map(|t| {
+                                let dt: chrono::DateTime<chrono::Local> = t.into();
+                                dt.format("%d.%m.%Y %H:%M").to_string()
+                            }).unwrap_or_else(|_| chrono::Local::now().format("%d.%m.%Y").to_string());
+                            all_tasks.push(TaskFile { file_name, file_path, title: if title.is_empty() { "Bez nazvu".into() } else { title }, content: content.clone(), done, created_at });
+                        }
+                    }
+                }
+            }
+        }
     }
-    fs::write(&path, content).map_err(|e| e.to_string())?;
-    Ok(path)
+    all_tasks.sort_by(|a, b| b.file_name.cmp(&a.file_name));
+    Ok(all_tasks)
 }
 
 #[tauri::command]
-fn delete_task(path: String) -> Result<(), String> { fs::remove_file(&path).map_err(|e| e.to_string()) }
+fn list_tasks_lite(dirs: Vec<String>) -> Result<Vec<TaskLiteFile>, String> {
+    let mut all = Vec::new();
+    for dir in dirs {
+        let resolved = resolve_data_path(&dir);
+        let path = resolved.as_path();
+        if!path.exists() { continue; }
+        let entries = fs::read_dir(path).map_err(|e| e.to_string())?;
+        for entry in entries {
+            let entry = entry.map_err(|e| e.to_string())?;
+            let p = entry.path();
+            if p.is_file() {
+                if let Some(ext) = p.extension() {
+                    if ext == "md" || ext == "txt" {
+                        if let Ok(content) = fs::read_to_string(&p) {
+                            let title = content.lines().next().unwrap_or("Bez nazvu").trim_start_matches('#').trim().to_string();
+                            let done = content.lines().find(|l| l.contains("**Hotovo:**")).map(|l| l.to_lowercase().contains("true")).unwrap_or(false);
+                            let file_name = p.file_name().unwrap().to_string_lossy().to_string();
+                            let file_path = p.to_string_lossy().to_string().replace('\\', "/");
+                            let created_at = fs::metadata(&p).and_then(|m| m.modified()).map(|t| {
+                                let dt: chrono::DateTime<chrono::Local> = t.into();
+                                dt.format("%d.%m.%Y %H:%M").to_string()
+                            }).unwrap_or_else(|_| chrono::Local::now().format("%d.%m.%Y").to_string());
+                            all.push(TaskLiteFile { file_name, file_path, title: if title.is_empty() { "Bez nazvu".into() } else { title }, done, created_at });
+                        }
+                    }
+                }
+            }
+        }
+    }
+    all.sort_by(|a, b| b.file_name.cmp(&a.file_name));
+    Ok(all)
+}
+
+#[tauri::command]
+fn save_task(path: String, content: String) -> Result<String, String> {
+    let resolved = resolve_data_path(&path);
+    if let Some(parent) = resolved.parent() {
+        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    }
+    fs::write(&resolved, content).map_err(|e| e.to_string())?;
+    Ok(resolved.to_string_lossy().to_string().replace('\\', "/"))
+}
+
+#[tauri::command]
+fn delete_task(path: String) -> Result<(), String> { fs::remove_file(resolve_data_path(&path)).map_err(|e| e.to_string()) }
 
 // ========== CALENDAR EVENTS COMMANDS ==========
 #[tauri::command]
 fn list_events(dir: String) -> Result<Vec<EventFile>, String> {
-    let path = Path::new(&dir);
+    let resolved = resolve_data_path(&dir);
+    let path = resolved.as_path();
     if !path.exists() {
         fs::create_dir_all(path).map_err(|e| e.to_string())?;
         return Ok(vec![]);
@@ -351,16 +441,16 @@ fn list_events(dir: String) -> Result<Vec<EventFile>, String> {
 
 #[tauri::command]
 fn save_event(path: String, content: String) -> Result<String, String> {
-    let p = Path::new(&path);
-    if let Some(parent) = p.parent() {
+    let resolved = resolve_data_path(&path);
+    if let Some(parent) = resolved.parent() {
         fs::create_dir_all(parent).map_err(|e| e.to_string())?;
     }
-    fs::write(&path, content).map_err(|e| e.to_string())?;
-    Ok(path)
+    fs::write(&resolved, content).map_err(|e| e.to_string())?;
+    Ok(resolved.to_string_lossy().to_string().replace('\\', "/"))
 }
 
 #[tauri::command]
-fn delete_event(path: String) -> Result<(), String> { fs::remove_file(&path).map_err(|e| e.to_string()) }
+fn delete_event(path: String) -> Result<(), String> { fs::remove_file(resolve_data_path(&path)).map_err(|e| e.to_string()) }
 
 // ========== AGENTS COMMANDS ==========
 fn get_base_path() -> PathBuf { PathBuf::from(agents_base()) }
@@ -663,7 +753,7 @@ fn main() {
         .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             save_note, list_notes, read_note, delete_note, ensure_dir,
-            list_tasks, save_task, delete_task,
+            list_tasks, list_tasks_multi, list_tasks_lite, save_task, delete_task,
             list_events, save_event, delete_event,
             sync_agents_from_fs, save_agent_to_fs, delete_agent_from_fs,
             sync_skills_from_fs, save_skill_to_fs,

@@ -20,6 +20,10 @@ import { startScheduler } from './services/scheduler'
 import notificationsRoutes from './routes/notifications'
 import cliRoutes from './routes/cli'
 import { capabilitiesRoutes } from './routes/capabilities'
+import { searchRoutes } from './routes/search.js'
+import { initDb, countFromDb } from './lib/manifestDb.js'
+import { reindexCapabilities } from './lib/manifestLoader.js'
+
 
 const ollama = new Ollama({ host: 'http://localhost:11434' })
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'warn' } })
@@ -35,6 +39,7 @@ await app.register(mcpRoutes, { prefix: '/api' })
 await app.register(notificationsRoutes, { prefix: '/api' })
 await app.register(cliRoutes, { prefix: '/api' })
 await app.register(capabilitiesRoutes, { prefix: '/api' })
+await app.register(searchRoutes, { prefix: '/api' })
 
 app.get('/api/health', async () => ({ ok: true }))
 
@@ -140,10 +145,10 @@ app.get('/api/capabilities/watch', (req, reply) => {
 
   const dataDir = join(DATA_DIR, 'capabilities');
   let debounce: ReturnType<typeof setTimeout> | null = null;
-
   const watcher = watch(dataDir, { recursive: true }, () => {
     if (debounce) clearTimeout(debounce);
-    debounce = setTimeout(() => {
+    debounce = setTimeout(async () => {
+      await reindexCapabilities().catch(() => {});
       reply.raw.write('data: reload\n\n');
     }, 300);
   });
@@ -154,9 +159,17 @@ app.get('/api/capabilities/watch', (req, reply) => {
   });
 });
 
-app.listen({ port: 3001 }).then(async () =>
-{
+app.listen({ port: 3001 }).then(async () => {
   console.log('API on http://localhost:3001')
+  initDb();
+console.log('[manifestDb] init done, reindexing...');
+const reindexed = await reindexCapabilities().catch(e => { console.error('[manifestDb] reindex fail', e); return { capabilities: [], errors: [e] } }) as any
+console.log(`[manifestDb] reindexed ${reindexed.capabilities?.length?? 0} caps, ${reindexed.errors?.length?? 0} errors`)
+const { reindexAll, getFtsStats } = await import('./lib/notesTasksFts.js');
+const fts = reindexAll();
+const stats = getFtsStats();
+console.log(`[fts] reindexed ${fts.notes} notes, ${fts.tasks} tasks -> db now ${stats.notes} notes, ${stats.tasks} tasks`);
+console.log('[manifestDb] index.db ready →', join(DATA_DIR, 'index.db'), `(${countFromDb()} capabilities)`)
   await startScheduler()
   console.log('[scheduler] registered — checking commands.json every 60s')
 })

@@ -1,6 +1,7 @@
 // D:\dev\loyo-os\apps\web\src\pages\Calendar.tsx
 import { useState, useMemo, useCallback } from 'react'
-import { useCalendarEvents, KALENDAR_DIR, type CalendarEvent } from '../hooks/useCalendarEvents'
+import { useCalendarEvents, type CalendarEvent } from '../hooks/useCalendarEvents'
+import { JA_KALENDAR_DIR } from '../lib/dataPaths'
 
 const MONTHS_CZ = [
   'Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen',
@@ -162,7 +163,7 @@ export default function Calendar() {
         })
       } else {
         const fileName = `${modal.date}_${modal.time.replace(':', '')}_${slugify(modal.title)}.md`
-        const filePath = `${KALENDAR_DIR}/${fileName}`
+        const filePath = `${JA_KALENDAR_DIR}/${fileName}`
         await persistEvent({
           file_name: fileName,
           file_path: filePath,

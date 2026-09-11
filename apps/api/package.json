@@ -10,12 +10,15 @@
   "dependencies": {
     "@fastify/cors": "^11.0.1",
     "@loyo/core": "workspace:^",
+    "better-sqlite3": "^13.0.3",
     "cheerio": "^1.2.0",
     "fastify": "^5.3.2",
+    "isomorphic-git": "^1.41.9",
     "ollama": "^0.5.13",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^22.7.5",
     "prisma": "^5.22.0",
     "tsx": "^4.19.1",

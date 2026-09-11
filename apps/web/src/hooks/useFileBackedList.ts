@@ -95,6 +95,7 @@ export function useFileBackedList<T extends FileBackedItem>(
   useEffect(() => {
     if (!isTauri) return
     pollingRef.current = setInterval(async () => {
+      if (saving) return
       try {
         const { invoke } = await import('@tauri-apps/api/core')
         const list = await invoke<T[]>(commands.list, { dir })

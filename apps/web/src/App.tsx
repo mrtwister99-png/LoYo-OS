@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Layout from './components/Layout'
 import { useAppState } from './hooks/useAppState'
+import { SaveStatusContext } from './hooks/useSaveStatus'
 import Background from './components/Background'
 import { Builder } from './components/Builder'
 import Dashboard from './pages/Dashboard'
@@ -46,18 +47,33 @@ export default function App() {
     mobilOpen, openMobil, closeMobil,
   } = useAppState('dashboard')
 
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'dirty'>('idle')
+  const [saveClick, setSaveClick] = useState<(() => void) | null>(null)
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null)
+
   useEffect(() => {
     const title = PAGE_TITLES[page] || 'LOYO OS'
-    const fullTitle = `${title} • LOYO OS${biosMode ? ' • TRUE BIOS' : ''}`
+    const fullTitle = `${title} • LOYO OS${biosMode? ' • TRUE BIOS' : ''}`
     document.title = fullTitle
     if ((window as any).__TAURI__) {
       import('@tauri-apps/api/window')
-        .then(({ getCurrentWindow }) => {
+       .then(({ getCurrentWindow }) => {
           getCurrentWindow().setTitle(fullTitle)
         })
-        .catch(() => {})
+       .catch(() => {})
     }
   }, [page, biosMode])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault()
+        if (saveStatus === 'dirty') saveClick?.()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [saveStatus, saveClick])
 
   const handleManifestComplete = async (type: string, manifest: object) => {
     try {
@@ -73,6 +89,7 @@ export default function App() {
   }
 
   return (
+    <SaveStatusContext.Provider value={{ status: saveStatus, setStatus: setSaveStatus, onSaveClick: saveClick, setOnSaveClick: (fn) => setSaveClick(() => fn), lastSavedAt, setLastSavedAt }}>
     <div className="relative min-h-screen">
       <Background biosMode={biosMode} />
       <Layout
@@ -108,5 +125,6 @@ export default function App() {
         onExternalClose={closeBuilder}
       />
     </div>
+    </SaveStatusContext.Provider>
   )
 }

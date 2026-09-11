@@ -73,19 +73,40 @@ export default function AgentsPro() {
     return () => clearInterval(id)
   }, [])
 
+   const API_URL = 'http://localhost:3001'
+
   const loadAgentsFromFS = async (isBackground = false) => {
     if (!isBackground) setLoading(true)
     setSyncStatus('syncing')
     try {
-      const data = await invoke<any>('sync_agents_from_fs')
-      const rawAgents = Array.isArray(data) ? data : data.agents || []
+      let rawAgents: any[] = []
+      try {
+        const url = search
+         ? `${API_URL}/api/agents?search=${encodeURIComponent(search)}`
+          : `${API_URL}/api/agents`
+        const res = await fetch(url)
+        if (res.ok) {
+          const json = await res.json()
+          rawAgents = Array.isArray(json)? json : json.agents || json.data || []
+        } else throw new Error('API fail')
+      } catch {
+        const data = await invoke<any>('sync_agents_from_fs')
+        rawAgents = Array.isArray(data)? data : data.agents || []
+      }
       const normalized: Agent[] = rawAgents.map((a: any) => ({
-        ...a,
+        id: a.id,
+        folder: a.folder || a.id,
+        name: a.displayName || a.name || a.id,
+        role: a.role || a.description || '',
+        category: a.category || a.type || 'all',
+        team: a.team || 'LOYO OS v3',
+        status: a.status || 'online',
+        skills: a.skills || [],
+        tools: a.tools || [],
+        workflow: a.workflow || a.runtime || '',
         prompt: a.prompt || a.prompt_file || '',
         docs: a.docs || [],
-        folder: a.folder || a.id,
-        tasksToday: a.tasksToday ?? 0,
-        status: a.status || 'online',
+        tasksToday: a.tasksToday?? 0,
       }))
       setAgents(normalized)
       setSelectedAgent(prev => {
@@ -163,9 +184,9 @@ export default function AgentsPro() {
             <div className="flex items-baseline gap-3">
               <h1 className="text-[56px] leading-[0.85] font-black tracking-tighter">AGENTI</h1>
               <span className="text-[20px] font-mono text-black/20">/ {String(filtered.length).padStart(2,'0')}</span>
-            </div>
-            <div className="mt-3 text-[11px] font-mono tracking-wide text-black/40 max-w-[560px]">
-              Ukládá se do <span className="font-bold text-black">D:\dev\loyo-os\data\agents</span> • každý agent má skills, tools, team a workflow. Klikni pro detail a editaci všeho.
+            </div>  
+              <div className="mt-3 text- font-mono tracking-wide text-black/40 max-w-">
+              Index <span className="font-bold text-black">data/index.db ({agents.length} z DB)</span> • zdroj: <span className="font-mono">data/capabilities/agents/*/manifest.json</span> • FTS5 search <span className="font-mono">&lt;5ms</span>
               <span className="ml-3 inline-flex items-center gap-2">
                 <span className={`w-2 h-2 rounded-full ${syncStatus==='synced'?'bg-green-500':syncStatus==='syncing'?'bg-yellow-500 animate-pulse':'bg-red-500'}`} />
                 <span className="text-[10px] uppercase tracking-widest">{syncStatus}</span>

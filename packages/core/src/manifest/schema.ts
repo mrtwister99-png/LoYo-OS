@@ -20,13 +20,13 @@ export type Reputation = z.infer<typeof ReputationSchema>;
 export const BaseManifestSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/, 'id musí být kebab-case').min(2).max(64),
   type: z.enum(['agent', 'mcp', 'cli', 'rag', 'loop', 'workflow', 'team', 'skill']),
-  displayName: z.string().min(1).max(100), // "Mary Jane"
+  displayName: z.string().min(1).max(100),
   version: z.string().regex(/^\d+\.\d+\.\d+$/).default('1.0.0'),
   status: z.enum(['draft', 'testing', 'active', 'paused', 'deprecated', 'broken']).default('draft'),
   description: z.string().max(500).optional(),
   runtime: z.enum(['node', 'python', 'rust', 'prompt', 'ollama', 'composite']).default('prompt'),
-  entrypoint: z.string().min(1), // "./01_CORE_IDENTITY.md" nebo "./dist/index.js"
-  model: z.enum(['qwen2.5-coder:3b', 'qwen3:8b', 'qwen3:4b', 'llama3.1:8b']).default('qwen2.5-coder:3b'),
+  entrypoint: z.string().min(1),
+  model: z.string().default('qwen2.5-coder:3b'),
   inputs: z.record(z.string(), z.string()).default({}),
   outputs: z.record(z.string(), z.string()).default({}),
   permissions: z.array(PermissionSchema).default([]),
@@ -40,6 +40,8 @@ export const BaseManifestSchema = z.object({
     totalRuns: 0,
     avgLatencyMs: 0,
   }),
+  freshness_ttl_hours: z.number().int().min(1).max(8760).default(24),
+  _filePath: z.string().optional(),
   createdAt: z.string().datetime().default(() => new Date().toISOString()),
   updatedAt: z.string().datetime().default(() => new Date().toISOString()),
 });

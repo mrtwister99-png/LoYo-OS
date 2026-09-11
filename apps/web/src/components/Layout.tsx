@@ -4,6 +4,7 @@ import Header from './Header'
 import Bottom from './Bottom'
 import Mobil from './Mobil'
 import { Menu } from './Menu'
+import { useSaveStatus } from '../hooks/useSaveStatus'
 
 import type { Page } from '../hooks/useAppState'
 
@@ -38,6 +39,7 @@ const HEADER_MAX = 7
 
 export default function Layout({ children, page, setPage, biosMode = false, setBiosMode, onOpenBuilderMenu, onOpenMobil }: LayoutProps) {
   const [telefonOpen, setTelefonOpen]   = useState(false)
+  const { status: saveStatus, onSaveClick } = useSaveStatus()
 
   // prázdný blok — onOpenMobil je prop pro Header, Header si ho zavolá sám
   const [biosMenuOpen, setBiosMenuOpen] = useState(false)
@@ -147,6 +149,8 @@ export default function Layout({ children, page, setPage, biosMode = false, setB
           setBiosMode={setBiosMode}
           onOpenBuilderMenu={onOpenBuilderMenu}
           onOpenMobil={onOpenMobil}
+          saveStatus={saveStatus}
+          onSaveClick={onSaveClick || undefined}
         />
         <div className="flex flex-1 min-h-0 overflow-hidden overscroll-contain">
           <Menu

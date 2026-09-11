@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import { promises as fs } from 'fs';
 import { join } from 'path';
-import { getCapabilities, getCapabilityById } from '../services/manifestLoader.js';
+import { getCapabilities, getCapabilityById } from '../lib/manifestLoader.js';
 import { DATA_DIR as ROOT_DATA_DIR } from '../lib/dataPaths.js';
 
 const DATA_DIR = join(ROOT_DATA_DIR, 'capabilities');

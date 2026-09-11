@@ -10,7 +10,8 @@ export type CalendarEvent = {
   content: string
 }
 
-export const KALENDAR_DIR = 'D:/dev/loyo-os/data/ja/kalendar'
+import { JA_KALENDAR_DIR } from '../lib/dataPaths'
+export const KALENDAR_DIR = JA_KALENDAR_DIR
 
 function parseEventFile(file_name: string, file_path: string, content: string): CalendarEvent {
   const titleMatch = content.match(/^#\s*(.+)$/m)
