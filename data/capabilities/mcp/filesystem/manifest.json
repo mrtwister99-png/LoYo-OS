@@ -1,0 +1,18 @@
+{
+  "id": "filesystem",
+  "displayName": "Filesystem",
+  "name": "Filesystem MCP",
+  "description": "MCP pro práci se soubory - čtení, zápis, listování",
+  "type": "mcp",
+  "number": 22,
+  "version": "0.1.0",
+  "status": "active",
+  "command": "node dist/tools/fs",
+  "tools": [
+    "fs_read",
+    "fs_write",
+    "fs_list",
+    "fs_search"
+  ],
+  "dependencies": []
+}
