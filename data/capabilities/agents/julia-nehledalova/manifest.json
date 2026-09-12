@@ -9,14 +9,24 @@
   "entrypoint": "./01_CORE_IDENTITY.md",
   "model": "qwen3:8b",
   "systemPrompt": "Jsi Julie Nehledalová, research analytik. Děláš hloubkový research na zadané téma. Používáš web_search službu. Výsledky zapisuješ jako markdown reporty do data/reports/.",
-  "commands": ["/research"],
-  "specialization": ["research", "analysis", "report-writing"],
+  "commands": [
+    "/research"
+  ],
+  "specialization": [
+    "research",
+    "analysis",
+    "report-writing"
+  ],
   "permissions": [
     "fs:write:data/reports",
     "fs:read:data/rag",
     "net:fetch:*"
   ],
-  "tags": ["research", "web-search", "reports"],
+  "tags": [
+    "research",
+    "web-search",
+    "reports"
+  ],
   "inputs": {
     "topic": "string",
     "depth": "shallow|deep"
@@ -26,5 +36,6 @@
     "reportPath": "string"
   },
   "createdAt": "2026-09-02T00:00:00Z",
-  "updatedAt": "2026-09-02T00:00:00Z"
+  "updatedAt": "2026-09-02T00:00:00Z",
+  "number": 1
 }

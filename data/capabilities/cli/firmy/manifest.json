@@ -13,10 +13,30 @@
       "name": "search",
       "description": "Hledá firmy podle oboru a města",
       "flags": [
-        { "name": "obor", "type": "string", "required": true, "description": "Obor/firemní kategorie" },
-        { "name": "mesto", "type": "string", "required": true, "description": "Město pro vyhledávání" },
-        { "name": "bez-webu", "type": "boolean", "required": false, "description": "Pouze firmy bez vlastního webu" },
-        { "name": "limit", "type": "number", "required": false, "description": "Maximální počet výsledků" }
+        {
+          "name": "obor",
+          "type": "string",
+          "required": true,
+          "description": "Obor/firemní kategorie"
+        },
+        {
+          "name": "mesto",
+          "type": "string",
+          "required": true,
+          "description": "Město pro vyhledávání"
+        },
+        {
+          "name": "bez-webu",
+          "type": "boolean",
+          "required": false,
+          "description": "Pouze firmy bez vlastního webu"
+        },
+        {
+          "name": "limit",
+          "type": "number",
+          "required": false,
+          "description": "Maximální počet výsledků"
+        }
       ]
     }
   ],
@@ -24,7 +44,12 @@
     "net:fetch:api.ares.cz",
     "fs:write:data/leads/*"
   ],
-  "tags": ["scraping", "ares", "leads"],
+  "tags": [
+    "scraping",
+    "ares",
+    "leads"
+  ],
   "createdAt": "2026-09-02T00:00:00Z",
-  "updatedAt": "2026-09-02T00:00:00Z"
+  "updatedAt": "2026-09-02T00:00:00Z",
+  "number": 30
 }

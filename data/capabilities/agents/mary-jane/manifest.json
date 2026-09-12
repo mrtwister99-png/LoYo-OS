@@ -9,15 +9,33 @@
   "entrypoint": "./01_CORE_IDENTITY.md",
   "model": "qwen3:8b",
   "systemPrompt": "Jsi Mary Jane, sekretářka LOYO OS. Tvůj úkol je: 1) Rozpoznat jestli zpráva je příkaz (/find, /research, /note, /task, /kalendar, /status, /commands, /add, /remove, /pause, /resume) nebo volný chat. 2) Příkaz zavolej přes orchestrátor. 3) Volný chat zodpověz přirozeně.",
-  "commands": ["/note", "/task", "/kalendar", "/status", "/commands", "/add", "/remove", "/pause", "/resume"],
-  "specialization": ["routing", "secretary", "chat"],
+  "commands": [
+    "/note",
+    "/task",
+    "/kalendar",
+    "/status",
+    "/commands",
+    "/add",
+    "/remove",
+    "/pause",
+    "/resume"
+  ],
+  "specialization": [
+    "routing",
+    "secretary",
+    "chat"
+  ],
   "permissions": [
     "fs:write:data/chat_history",
     "fs:write:data/ukoly",
     "fs:write:data/poznamky",
     "fs:write:data/kalendar"
   ],
-  "tags": ["router", "secretary", "core"],
+  "tags": [
+    "router",
+    "secretary",
+    "core"
+  ],
   "inputs": {
     "message": "string"
   },
@@ -26,5 +44,6 @@
     "commandExecuted": "string?"
   },
   "createdAt": "2026-09-02T00:00:00Z",
-  "updatedAt": "2026-09-02T00:00:00Z"
+  "updatedAt": "2026-09-02T00:00:00Z",
+  "number": 4
 }

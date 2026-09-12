@@ -9,8 +9,15 @@
   "entrypoint": "./01_CORE_IDENTITY.md",
   "model": "qwen2.5-coder:3b",
   "systemPrompt": "Jsi Lubor Nehleda, research agent LOYO OS. Hledáš ověřené informace a generuješ leady. Každé tvrzení musí mít zdroj. Nikdy nevymýšlíš fakta.",
-  "specialization": ["lead-generation", "research", "cli"],
-  "commands": ["/find", "/research"],
+  "specialization": [
+    "lead-generation",
+    "research",
+    "cli"
+  ],
+  "commands": [
+    "/find",
+    "/research"
+  ],
   "inputs": {
     "query": "string",
     "city": "string?",
@@ -30,7 +37,12 @@
     "net:fetch:ares"
   ],
   "mcp_expose": true,
-  "tags": ["leads", "scraping", "research"],
+  "tags": [
+    "leads",
+    "scraping",
+    "research"
+  ],
   "createdAt": "2026-08-28T00:00:00Z",
-  "updatedAt": "2026-09-05T00:00:00Z"
+  "updatedAt": "2026-09-05T00:00:00Z",
+  "number": 3
 }
