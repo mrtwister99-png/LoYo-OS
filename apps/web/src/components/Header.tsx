@@ -11,6 +11,7 @@ type Props = {
   currentPage?: string
   focusedIdx?: number | null
   notifSubFocus?: 0 | 1 | 2 | null
+  profileSubFocus?: 0 | 1 | 2 | 3 | null
   biosMode?: boolean
   setBiosMode?: (v: boolean) => void
   onOpenBuilderMenu?: () => void
@@ -112,6 +113,7 @@ export default function Header({
   currentPage,
   focusedIdx,
   notifSubFocus,
+  profileSubFocus,
   biosMode,
   setBiosMode,
   onOpenBuilderMenu,
@@ -134,8 +136,9 @@ export default function Header({
   const [isTerminalOpen, setIsTerminalOpen] = useState(false)
   const [showSavedToast, setShowSavedToast] = useState(false)
 
-  // profil
+  // profil - řízený z Layoutu přes Shift+1, fallback na lokální
   const [profileIdx, setProfileIdx] = useState(0)
+  const effectiveProfileIdx = profileSubFocus?? profileIdx
 
   // notifikace
   const [notifications, setNotifications] = useState<SchedulerNotification[]>([])
@@ -397,7 +400,7 @@ export default function Header({
     setShowDayPanel(true)
   }
 
-  const profile = PROFILES[profileIdx]
+  const profile = PROFILES[effectiveProfileIdx]
 
   const dateFormatted = (() => {
     const d  = time.getDate().toString().padStart(2, '0')
@@ -450,16 +453,14 @@ export default function Header({
           1. LOGO + PROFIL — 10% (zkráceno, končí u žluté čárky)
       ══════════════════════════════════════════════════════════ */}
       <div style={{ ...sectionBase(0), width: '10%', padding: '0 10px', gap: 8 }}>
-        {/* Logo čtverec */}
+        {/* Logo čtverec - Shift+1 cykluje z Layoutu přes effectiveProfileIdx */}
         <div
           onClick={() => setProfileIdx(v => (v + 1) % PROFILES.length)}
-          onContextMenu={e => { e.preventDefault(); setBiosMode && setBiosMode(!biosMode) }}
-          title={`Profil: ${profile.label} — klik = přepnout | pravý klik = BIOS`}
           style={{
             width: 38,
             height: 38,
             background: profile.color,
-            color: profileIdx === 3 ? '#000' : '#fff',
+            color: effectiveProfileIdx === 3? '#000' : '#fff',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -469,10 +470,12 @@ export default function Header({
             userSelect: 'none',
             flexShrink: 0,
             border: '2px solid rgba(255,255,255,0.2)',
-            boxShadow: isFocused(0)
-              ? `0 0 0 3px ${profile.color}88`
-              : '0 2px 8px rgba(0,0,0,0.4)',
-          }}
+            boxShadow: isFocused(0)? `0 0 0 3px ${profile.color}88, 0 2px 8px rgba(0,0,0,0.4)` : '0 2px 8px rgba(0,0,0,0.4)',
+            outline: focusedIdx === 0 && profileSubFocus!== null? `2px dashed ${profile.color}` : 'none',
+            outlineOffset: '2px',
+          } as any}
+          onContextMenu={e => { e.preventDefault(); setBiosMode && setBiosMode(!biosMode) }}
+          title={`Profil: ${profile.label} — klik = přepnout | pravý klik = BIOS`}
         >
           {profile.letter}
         </div>

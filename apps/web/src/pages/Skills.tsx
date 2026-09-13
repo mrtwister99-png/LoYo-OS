@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 
-const ACCENT = '#FF3B30'
+const ACCENT = '#fff700'
 
 type Skill = {
   id: string
@@ -87,11 +87,20 @@ export default function Skills() {
           </div>
         ):(
           <div className="mt-2 grid grid-cols-12 gap-5">
-            {skills.map(s=>(
-              <div key={s.id} className="col-span-12 md:col-span-6 xl:col-span-4 bg-white rounded- border border-black/5 p-7">
-                <div className="text- font-black">{s.name}</div>
+            {skills.map((s, idx)=>(
+              <div key={s.id} className="col-span-12 md:col-span-6 xl:col-span-4 bg-white rounded- border border-black/5 p-7 border-l-4" style={{ borderLeftColor: ACCENT }}>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="text- font-black">{s.name}</div>
+                  <div className="flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded-full bg-black text-white text- font-mono tracking-widest">#{String(idx+1).padStart(2,'0')}</span>
+                    <span className="px-2 py-0.5 rounded-full text- font-mono font-bold tracking-widest" style={{ background: ACCENT, color: '#000' }}>SKILLS</span>
+                  </div>
+                </div>
                 <div className="mt-1 text- font-mono text-black/40">{s.desc||'Bez popisu'}</div>
-                <div className="mt-4 text- font-mono text-black/30">{s.folder}/{s.file} • {s.version}</div>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text- font-mono text-black/30">{s.folder}/{s.file} • {s.version}</span>
+                  <span className="text- font-mono text-black/20">5-{String(idx+1).padStart(2,'0')} • {s.id}</span>
+                </div>
               </div>
             ))}
           </div>

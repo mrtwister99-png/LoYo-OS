@@ -1,5 +1,10 @@
 // D:\dev\loyo-os\apps\web\src\pages\Activity.tsx
 import { useEffect, useRef, useState } from 'react'
+import { categoryColors, categoryNumbers, categoryGradients } from '../styles/theme'
+
+const ACTIVITY_COLOR = categoryColors.activity
+const ACTIVITY_NUM = categoryNumbers.activity
+const ACTIVITY_GRADIENT = categoryGradients.activity
 
 type ActivityEvent = {
   id: string
@@ -146,10 +151,11 @@ export default function Activity() {
       )}
 
       <div className="flex flex-col gap-2">
-        {events.map(ev => (
+        {events.map((ev, idx) => (
           <div
             key={ev.id}
-            className="flex items-start gap-4 px-4 py-3 bg-white/[0.03] border border-white/10 rounded hover:border-white/30 transition-colors"
+            className="flex items-start gap-4 px-4 py-3 bg-white/[0.03] border border-white/10 rounded hover:border-white/30 transition-colors border-l-4"
+            style={{ borderLeftColor: ACTIVITY_COLOR, background: `linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.03) 70%, ${ACTIVITY_COLOR}22 100%)` }}
           >
             <span
               className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0"

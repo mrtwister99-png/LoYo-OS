@@ -1,7 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
 import { invoke } from '@tauri-apps/api/core'
+import { categoryColors, categoryNumbers } from '../styles/theme'
 
-const ACCENT = '#FF3B30'
+const ACCENT = '#ff6f00'
+const TEAM_COLOR = categoryColors.teams
+const TEAM_NUM = categoryNumbers.teams
 const BLUE = '#000000'
 const GOLD = '#EEEAE1'
 
@@ -215,17 +218,22 @@ export default function Team() {
         <div className="col-span-4 bg-white border-2 border-black h-[calc(100vh-240px)] flex flex-col">
           <div className="p-4 text- tracking-[0.4em] text-black/40 border-b-2 border-black">TEAMS LIST // {teams.length}</div>
           <div className="flex-1 overflow-y-auto">
-            {teams.map(t => {
+            {teams.map((t, idx) => {
               const isActive = selectedId === t.id
               return (
-                <div key={t.id} onClick={() => setSelectedId(t.id)} className="p-5 cursor-pointer border-b-2 border-black flex justify-between" style={{ background: isActive? BLUE : 'white', color: isActive? 'white' : 'black' }}>
+                <div key={t.id} onClick={() => setSelectedId(t.id)} className="p-5 cursor-pointer border-b-2 border-black flex justify-between border-l-4" style={{ background: isActive? BLUE : 'white', color: isActive? 'white' : 'black', borderLeftColor: TEAM_COLOR }}>
                   <div className="flex-1">
                     <div className="flex gap-2 items-center">
+                      <span className="font-mono text- px-1.5 py-0.5 rounded bg-black text-white">{TEAM_NUM}-{String(idx+1).padStart(2,'0')}</span>
                       <span className="font-black text-sm">{t.name}</span>
                       <span className="text- px-2 py-0.5 bg-white text-black border">{t.status}</span>
+                      <span className="w-2 h-2 rounded-full" style={{ background: TEAM_COLOR }} />
                     </div>
                     <div className="text- opacity-60 mt-1 line-clamp-1">{t.purpose}</div>
-                    <div className="mt-2 text- opacity-50">{t.agents.length} agentů • {t.workflows.length} workflows • {t.loops.length} loops</div>
+                    <div className="mt-2 text- opacity-50 flex gap-2 items-center">
+                      <span>{t.agents.length} agentů • {t.workflows.length} workflows • {t.loops.length} loops</span>
+                      <span className="text- font-mono opacity-30">{t.id}</span>
+                    </div>
                   </div>
                   <div className="ml-3 w-2 h-2 rounded-full self-center" style={{ background: t.color === BLUE? GOLD : t.color }} />
                 </div>

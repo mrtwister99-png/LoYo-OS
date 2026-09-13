@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "id": "firmy",
+      "number": 30,
+      "displayName": "Firmy CLI",
+      "folder": "firmy"
+    }
+  ]
+}

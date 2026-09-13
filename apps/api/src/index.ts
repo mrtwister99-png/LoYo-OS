@@ -41,7 +41,15 @@ await app.register(cliRoutes, { prefix: '/api' })
 await app.register(capabilitiesRoutes, { prefix: '/api' })
 await app.register(searchRoutes, { prefix: '/api' })
 
-app.get('/api/health', async () => ({ ok: true }))
+app.get('/api/health', async () => {
+  const { getHealth } = await import('./services/health.js')
+  return getHealth()
+})
+
+app.post('/api/kosterad/run', async () => {
+  const { runKosterad } = await import('./services/kosterad.js')
+  return runKosterad()
+})
 
 app.get('/api/models', async () => {
   const m = await ollama.list()
@@ -172,4 +180,15 @@ console.log(`[fts] reindexed ${fts.notes} notes, ${fts.tasks} tasks -> db now ${
 console.log('[manifestDb] index.db ready →', join(DATA_DIR, 'index.db'), `(${countFromDb()} capabilities)`)
   await startScheduler()
   console.log('[scheduler] registered — checking commands.json every 60s')
+
+  // ÚKOL 11 - Koštěrad nightly 02:00
+  setInterval(async () => {
+    const now = new Date()
+    if (now.getHours() === 2 && now.getMinutes() === 0) {
+      console.log('[kosterad] nightly run 02:00')
+      const { runKosterad } = await import('./services/kosterad.js')
+      await runKosterad().catch(e=>console.error('[kosterad] fail',e))
+    }
+  }, 60_000)
+  console.log('[kosterad] scheduled daily 02:00 + POST /api/kosterad/run for manual')
 })

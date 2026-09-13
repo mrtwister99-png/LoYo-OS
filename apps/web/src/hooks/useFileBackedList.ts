@@ -12,14 +12,30 @@ export type FileBackedItem = {
 export function slugify(s: string): string {
   return (
     s
-      .trim()
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .slice(0, 40) || 'bez-nazvu'
+     .trim()
+     .toLowerCase()
+     .normalize('NFD')
+     .replace(/[\u0300-\u036f]/g, '')
+     .replace(/[^a-z0-9]+/g, '-')
+     .replace(/^-+|-+$/g, '')
+     .slice(0, 40) || 'bez-nazvu'
   )
+}
+
+function getFileType(key: string): 'notes' | 'tasks' {
+  return key.includes('notes') || key.includes('poznamk')? 'notes' : 'tasks'
+}
+
+function saveHistoryLocal(fileName: string, fileType: 'notes' | 'tasks', oldContent: string) {
+  if (!oldContent?.trim()) return
+  const k = `loyo-history-${fileType}-${fileName}`
+  try {
+    const raw = localStorage.getItem(k)
+    const arr: any[] = raw? JSON.parse(raw) : []
+    if (arr.length > 0 && arr[arr.length - 1].content === oldContent) return
+    arr.push({ timestamp: new Date().toISOString(), content: oldContent })
+    localStorage.setItem(k, JSON.stringify(arr.slice(-50)))
+  } catch {}
 }
 
 type Commands = { list: string; save: string; del: string }
@@ -137,7 +153,11 @@ export function useFileBackedList<T extends FileBackedItem>(
       }
     } else {
       setItems(prev => {
-        const updated = prev.map(n => n.file_name === item.file_name ? { ...n, content: newContent, ...(optimisticPatch || {}) } : n)
+        const existing = prev.find(n => n.file_name === item.file_name)
+        if (existing && existing.content!== newContent) {
+          saveHistoryLocal(item.file_name, getFileType(localStorageKey), existing.content)
+        }
+        const updated = prev.map(n => n.file_name === item.file_name? {...n, content: newContent,...(optimisticPatch || {}) } : n)
         localStorage.setItem(localStorageKey, JSON.stringify(updated))
         return updated
       })
@@ -172,11 +192,12 @@ export function useFileBackedList<T extends FileBackedItem>(
         const { invoke } = await import('@tauri-apps/api/core')
         await invoke(commands.del, { path: targetPath })
         await loadItems()
-      } else {
+          } else {
+        saveHistoryLocal(item.file_name, getFileType(localStorageKey), item.content)
         setItems(prev => {
-          const remain = prev.filter(n => n.file_name !== item.file_name)
+          const remain = prev.filter(n => n.file_name!== item.file_name)
           localStorage.setItem(localStorageKey, JSON.stringify(remain))
-          setSelectedId(remain.length > 0 ? remain[0].file_name : '')
+          setSelectedId(remain.length > 0? remain[0].file_name : '')
           return remain
         })
       }
@@ -190,5 +211,6 @@ export function useFileBackedList<T extends FileBackedItem>(
     items, selectedId, setSelectedId,
     isTauri, saving, setSaving, status, setStatus, lastSync,
     persist, createItem, deleteItem,
+    reload: loadItems,
   }
 }

@@ -1,7 +1,11 @@
 import { useState, useMemo } from 'react'
+import { categoryColors, categoryNumbers } from '../styles/theme'
 
 const BLUE = '#000000'
 const GOLD = '#EEEAE1'
+const ACCENT = '#ffa600'
+const API_COLOR = categoryColors.api
+const API_NUM = categoryNumbers.api
 
 // ===== TYPY =====
 type Tab = 'internal' | 'external' | 'keys' | 'logs' | 'webhooks' | 'mcp'
@@ -168,14 +172,14 @@ export default function Api() {
           </div>
 
           <div className="flex-1 overflow-y-auto">
-            {tab === 'internal' && filteredInternal.map(ep => {
+                       {tab === 'internal' && filteredInternal.map((ep, idx) => {
               const isActive = selectedInternal === ep.id
               return (
                 <div
                   key={ep.id}
                   onClick={() => setSelectedInternal(ep.id)}
-                  className="p-5 cursor-pointer border-b-2 border-black flex justify-between items-center"
-                  style={isActive ? { background: BLUE } : { background: 'white' }}
+                  className="p-5 cursor-pointer border-b-2 border-black flex justify-between items-center border-l-4"
+                  style={isActive? { background: BLUE, borderLeftColor: API_COLOR } : { background: 'white', borderLeftColor: API_COLOR }}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex gap-2 items-center">
@@ -194,15 +198,15 @@ export default function Api() {
               )
             })}
 
-            {tab === 'external' && filteredExternal.map(ex => {
+                        {tab === 'external' && filteredExternal.map((ex, idx) => {
               const isActive = selectedExternal === ex.id
-              const statusColor = ex.status === 'CONNECTED' ? '#22c55e' : ex.status === 'QUOTA' ? GOLD : '#ef4444'
+              const statusColor = ex.status === 'CONNECTED'? '#22c55e' : ex.status === 'QUOTA'? GOLD : '#ef4444'
               return (
                 <div
                   key={ex.id}
                   onClick={() => setSelectedExternal(ex.id)}
-                  className="p-5 cursor-pointer border-b-2 border-black flex justify-between"
-                  style={isActive ? { background: GOLD } : { background: 'white' }}
+                  className="p-5 cursor-pointer border-b-2 border-black flex justify-between border-l-4"
+                  style={isActive? { background: GOLD, borderLeftColor: API_COLOR } : { background: 'white', borderLeftColor: API_COLOR }}
                 >
                   <div>
                     <div className="flex gap-2 items-center">

@@ -2,6 +2,12 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useFileBackedList, slugify } from '../hooks/useFileBackedList'
 import { JA_POZNAMKY_DIR, getNotesPath } from '../lib/dataPaths'
 import { useSaveStatus } from '../hooks/useSaveStatus'
+import { useUndo } from '../hooks/useUndo'
+import { categoryColors, categoryNumbers, categoryGradients } from '../styles/theme'
+
+const NOTE_COLOR = categoryColors.notes
+const NOTE_NUM = categoryNumbers.notes
+const NOTE_GRADIENT = categoryGradients.notes
 
 type Note = {
   file_name: string
@@ -17,9 +23,10 @@ export default function Notes() {
   const {
     items: notes, selectedId, setSelectedId,
     isTauri, saving, setSaving, status, setStatus, lastSync,
-    persist, createItem, deleteItem,
+    persist, createItem, deleteItem, reload,
   } = useFileBackedList<Note>(NOTES_DIR, { list: 'list_notes', save: 'save_note', del: 'delete_note' }, 'loyo-notes')
 
+  const [lastDeleted, setLastDeleted] = useState<{ id: string; content: string } | null>(null)
   const [search, setSearch] = useState('')
   const [editingTitle, setEditingTitle] = useState('')
   const [editingContent, setEditingContent] = useState('')
@@ -31,6 +38,41 @@ export default function Notes() {
     }
     setSelectedId(id);
   }, [])
+
+  const handleUndoRestore = useCallback((restoredContent: string) => {
+    const title = restoredContent.split('\n')[0]?.replace(/^#\s*/, '').trim() || 'Bez názvu'
+    const body = restoredContent.replace(/^#.*\n\n?/, '')
+    setEditingTitle(title)
+    setEditingContent(body)
+    setStatus('↩️ Vráceno zpět (Ctrl+Z)')
+  }, [])
+
+  const { canUndo, historyCount, undo, restoreSpecific } = useUndo(selectedId, 'notes', handleUndoRestore)
+
+  useEffect(() => {
+    if (!lastDeleted) return
+    const handler = async (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' &&!e.shiftKey) {
+        e.preventDefault()
+        try {
+          const content = await restoreSpecific(lastDeleted.id)
+          if (content && reload) { await reload(); setSelectedId(lastDeleted.id); setLastDeleted(null); setStatus('↩️ Obnoveno po smazání') }
+          else {
+            const fileName = lastDeleted.id
+            const filePath = getNotesPath(fileName)
+            const today = new Date().toISOString().slice(0, 10)
+            const title = lastDeleted.content.split('\n')[0]?.replace(/^#\s*/, '') || 'Bez názvu'
+            const newNote: Note = { file_name: fileName, file_path: filePath, title, content: lastDeleted.content, created_at: today }
+            await createItem(newNote); setLastDeleted(null)
+          }
+        } catch (err) { setStatus(`Chyba obnovení: ${err}`) }
+      }
+    }
+    window.addEventListener('keydown', handler)
+    const t = setTimeout(() => setLastDeleted(null), 15000)
+    return () => { window.removeEventListener('keydown', handler); clearTimeout(t) }
+  }, [lastDeleted])
+
   // ÚKOL 13: auto-save - stav a debounce ref
   const [autoSaveState, setAutoSaveState] = useState<'idle' | 'saving' | 'saved'>('idle')
   const debounceRef = useRef<number | null>(null)
@@ -152,9 +194,11 @@ export default function Notes() {
     await createItem(newNote)
   }
 
-  const handleDelete = async () => {
-    if (!selected || !confirm(`Smazat "${selected.title}"?`)) return
+    const handleDelete = async () => {
+    if (!selected ||!confirm(`Smazat "${selected.title}"?`)) return
+    setLastDeleted({ id: selected.file_name, content: selected.content })
     await deleteItem(selected)
+    setStatus('🗑️ Smazáno - Ctrl+Z pro vrácení (15s)')
   }
 
   return (
@@ -177,10 +221,12 @@ export default function Notes() {
               {lastSync && <span className="text-[10px] mono text-black/30">poslední sync: {lastSync.toLocaleTimeString()}</span>}
             </div>
             {status && <div className="mt-2 text-[11px] mono bg-black text-white px-3 py-1.5 rounded-full inline-block">{status}</div>}
-          </div>
+          
+                   </div>
           <div className="flex gap-3 items-center">
-            <div className={`w-2 h-2 rounded-full ${isTauri ? 'bg-[#00D084] animate-pulse' : 'bg-[#FF3B30]'}`} />
-            <button onClick={handleNew} className="bg-black text-white px-6 py-3 rounded-[12px] text-[11px] font-black tracking-[0.2em] hover:bg-zinc-900 transition">+ NOVÁ POZNÁMKA</button>
+            <div className={`w-2 h-2 rounded-full ${isTauri? 'bg-[#00D084] animate-pulse' : 'bg-[#FF3B30]'}`} />
+            <button onClick={undo} disabled={!canUndo} className={`px-5 py-3 rounded- text- font-black tracking-[0.2em] border transition ${canUndo? 'bg-white border-black text-black hover:bg-black hover:text-white' : 'bg-[#F8F6F1] border-black/10 text-black/20'}`} title="Ctrl+Z">↩️ UNDO {canUndo? `(${historyCount})` : ''}</button>
+            <button onClick={handleNew} className="bg-black text-white px-6 py-3 rounded- text- font-black tracking-[0.2em] hover:bg-zinc-900 transition">+ NOVÁ POZNÁMKA</button>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4">
@@ -208,9 +254,9 @@ export default function Notes() {
             <div className="bg-white rounded-[16px] border border-black/[0.06] overflow-hidden">
               <div className="p-4 border-b border-black/[0.06] flex justify-between items-center"><span className="mono text-[10px] tracking-[0.3em] text-black/30">SEZNAM • {filtered.length}</span><span className="text-[10px] opacity-30">.md</span></div>
                             <div className="max-h- overflow-y-auto divide-y divide-black/[0.04]">
-                {filtered.length === 0? <div className="p-8 text-center text- text-black/30 mono">Žádné poznámky</div> : filtered.map((note: Note) => {
+                {filtered.length === 0? <div className="p-8 text-center text- text-black/30 mono">Žádné poznámky</div> : filtered.map((note: Note, idx) => {
                   const isActive = note.file_name === selectedId
-                  return <div key={note.file_name} onClick={() => safeSetSelectedId(note.file_name)} className={`p-5 cursor-pointer transition hover:bg-[#F8F6F1] ${isActive? 'bg-black text-white hover:bg-black' : 'bg-white'}`}><div className="font-bold text- leading-tight line-clamp-1">{note.title}</div><div className={`text- mt-2 line-clamp-2 leading-relaxed ${isActive? 'text-white/60' : 'text-black/50'}`}>{note.content.replace(/^#.*\n\n?/, '').slice(0, 120)}</div><div className={`mono text- mt-3 ${isActive? 'text-white/30' : 'text-black/30'}`}>{note.created_at} • {note.file_name}</div></div>
+                  return <div key={note.file_name} onClick={() => safeSetSelectedId(note.file_name)} className={`p-5 cursor-pointer transition hover:bg-[#F8F6F1] border-l-4 ${isActive? 'bg-black text-white hover:bg-black' : 'bg-white'}`} style={{ borderLeftColor: NOTE_COLOR }}><div className="flex gap-2"><span className="font-mono text- px-1 py-0.5 rounded bg-black text-white">{NOTE_NUM}-{String(idx+1).padStart(2,'0')}</span><span className="w-2 h-2 rounded-full self-center" style={{ background: NOTE_COLOR }} /></div><div className="font-bold text- leading-tight line-clamp-1 mt-1">{note.title}</div><div className={`text- mt-2 line-clamp-2 leading-relaxed ${isActive? 'text-white/60' : 'text-black/50'}`}>{note.content.replace(/^#.*\n\n?/, '').slice(0, 120)}</div><div className={`mono text- mt-3 ${isActive? 'text-white/30' : 'text-black/30'}`}>{note.created_at} • {note.file_name}</div></div>
                 })}
               </div>
             </div>

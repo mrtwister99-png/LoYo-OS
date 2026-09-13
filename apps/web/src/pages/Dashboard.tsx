@@ -1,6 +1,18 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { categoryColors, categoryNumbers } from '../styles/theme';
+
+const DASHBOARD_COLOR = categoryColors.dashboard
+const DASHBOARD_NUM = categoryNumbers.dashboard
 
 type TaskStatus = 'done' | 'todo' | 'in-progress';
+
+type Health = {
+  vram: { usedPercent: number; total: number; free: number; load: number[] };
+  models: { qwen3_8b: string; all: any[]; running: any[] };
+  disk: { total: number; free: number; usedPercent: number };
+  backup: { at: string | null; status?: string; ageHours?: number };
+  ok: boolean;
+}
 
 interface Task {
   id: number;
@@ -25,8 +37,8 @@ const INITIAL_TASKS: Task[] = [
   { id: 8, title: 'Git auto-commit pro data/capabilities', phase: 'F1', phaseLabel: 'FÁZE 1 - JÁDRO v4.5', status: 'done', description: 'isomorphic-git auto: agent updated, time-travel' },
   { id: 9, title: 'Model router - Fast Path', phase: 'F1', phaseLabel: 'FÁZE 1 - JÁDRO v4.5', status: 'done', description: '<120 chars -> qwen2.5-coder:3b (0.5s), chat -> qwen3:8b, screen -> qwen2.5vl:7b, research -> 8192' },
   { id: 10, title: 'Fronta úkolů file-based', phase: 'F1', phaseLabel: 'FÁZE 1 - JÁDRO v4.5', status: 'done', description: 'data/queue/pending.json, priorita, 5x /find = fronta ne crash' },
-  { id: 11, title: 'Self-healing Koštěrad', phase: 'F1', phaseLabel: 'FÁZE 1 - JÁDRO v4.5', status: 'todo', description: 'Noc projde failed runs, navrhne opravu manifestu, EWMA reputace' },
-  { id: 12, title: 'Health check endpoint', phase: 'F1', phaseLabel: 'FÁZE 1 - JÁDRO v4.5', status: 'todo', description: '/api/health VRAM, model status, disk, záloha' },
+  { id: 11, title: 'Self-healing Koštěrad', phase: 'F1', phaseLabel: 'FÁZE 1 - JÁDRO v4.5', status: 'done', description: 'Noc projde failed runs, navrhne opravu manifestu, EWMA reputace - Koštěrad opravil 2 manifesty v Activity' },
+  { id: 12, title: 'Health check endpoint', phase: 'F1', phaseLabel: 'FÁZE 1 - JÁDRO v4.5', status: 'done', description: '/api/health VRAM, model status, disk, záloha - Dashboard widget LIVE' },
 
   // FÁZE 2 - UX v4.5
   { id: 13, title: 'Poznámky auto save!', phase: 'F2', phaseLabel: 'FÁZE 2 - UX v4.5', status: 'done', description: 'Notes.tsx debounce 800ms PUT, 🟡 ukládám / 🟢 uloženo' },
@@ -92,6 +104,20 @@ export default function Dashboard() {
   const [selectedPhase, setSelectedPhase] = useState<string>('ALL');
   const [currentTaskId, setCurrentTaskId] = useState<number | null>(9);
   const [search, setSearch] = useState('');
+  const [health, setHealth] = useState<Health | null>(null)
+
+  useEffect(()=>{
+    const load=async()=>{
+      try{
+        const r=await fetch('http://localhost:3001/api/health')
+        const j=await r.json()
+        setHealth(j)
+      }catch{}
+    }
+    load()
+    const id=setInterval(load,10000)
+    return()=>clearInterval(id)
+  },[])
 
   const overallDone = useMemo(() => tasks.filter(t => t.status === 'done').length, [tasks]);
   const overallProgress = useMemo(() => Math.round((overallDone / tasks.length) * 100), [overallDone, tasks.length]);
@@ -183,8 +209,19 @@ export default function Dashboard() {
             </div>
           </div>
 
+        <div className="bg-[#ededed] border-2 border-black p-4">
+          <h3 className="font-black text-xs flex justify-between"><span>HEALTH CHECK • /api/health • ÚKOL 12</span><span className={`px-2 py-0.5 text- ${health?.ok?'bg-black text-white':'bg-[#ac0001] text-white'}`}>{health?'LIVE':'LOADING...'}</span></h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+            <div className={`border-2 border-black p-3 ${health && health.vram.usedPercent>85?'bg-[#ac0001] text-white':'bg-white'}`}><div className="text- font-bold">VRAM / RAM</div><div className="text-lg font-black mt-1">{health? `${health.vram.usedPercent}%` : '--'}</div><div className="w-full h-1 bg-black/10 mt-2"><div className="h-full bg-[#040b8d]" style={{width:`${health?.vram.usedPercent||0}%`}} /></div></div>
+            <div className={`border-2 border-black p-3 ${health?.models.qwen3_8b==='loaded'?'bg-[#00D084]':'bg-white'}`}><div className="text- font-bold">MODEL qwen3:8b</div><div className="text-sm font-black mt-1 truncate">{health?.models.qwen3_8b || '--'}</div></div>
+            <div className={`border-2 border-black p-3 ${health && health.disk.usedPercent>90?'bg-[#ac0001] text-white':'bg-white'}`}><div className="text- font-bold">DISK {health?.disk.usedPercent||0}%</div><div className="text-lg font-black mt-1">{health? `${Math.round(health.disk.free/1024/1024/1024)}GB free` : '--'}</div></div>
+            <div className={`border-2 border-black p-3 ${!health?.backup?.at?'bg-[#ac0001] text-white':'bg-white'}`}><div className="text- font-bold">ZÁLOHA</div><div className="text- font-black mt-1 truncate">{health?.backup?.at? new Date(health.backup.at).toLocaleString('cs-CZ') : '--'}</div></div>
+          </div>
+        </div>
+
           {/* Current selector */}
-          <div className="bg-[#040b8d] border-2 border-black p-5 text-white space-y-3">
+          <div className="bg-[#040b8d] border-2 border-black p-5 text-white space-y-3 border-l-4" style={{ borderLeftColor: DASHBOARD_COLOR }}>
+            <div className="flex items-center gap-2"><span className="font-mono text- px-1.5 py-0.5 rounded bg-white text-black">{DASHBOARD_NUM}-DASH</span><span className="w-2 h-2 rounded-full" style={{ background: DASHBOARD_COLOR }} /><span className="text- tracking-widest opacity-60">DASHBOARD • {DASHBOARD_COLOR}</span></div>
             <h2 className="font-black text-sm">CURRENT • VYBER SI CO DĚLÁŠ TEĎ</h2>
             <input
               value={search}
@@ -242,7 +279,7 @@ export default function Dashboard() {
                 >
                   <div className="flex justify-between gap-2">
                     <span className="font-black">#{task.id} {task.title}</span>
-                    <input type="checkbox" checked={task.status === 'done'} onChange={(e) => { e.stopPropagation(); toggleStatus(task.id); }} className="accent-[#040b8d]" />
+                    <input type="checkbox" checked={task.status === 'done'} onClick={e=>e.stopPropagation()} onChange={(e) => { e.stopPropagation(); toggleStatus(task.id); }} className="accent-[#040b8d] w-4 h-4 cursor-pointer" />
                   </div>
                   <div className="text-[10px] mt-1 opacity-80">{task.phaseLabel}</div>
                   <div className="text-[10px] mt-1">{task.description}</div>

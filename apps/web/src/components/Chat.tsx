@@ -228,7 +228,15 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
         body: JSON.stringify({ message: trimmed }),
       })
       const data = await res.json()
-      setChatMessages(prev => [...prev, { from: 'mary', text: data.reply }])
+      const builderMatch = (data.reply as string).match(/OPEN_BUILDER:([^:]+):([^:]+):?([^\n]*)?/)
+      let displayText = data.reply as string
+      if (builderMatch) {
+        const [, bType, bId, bExtra] = builderMatch
+        window.dispatchEvent(new CustomEvent('loyo:open-builder', { detail: { type: bType, id: bId, extra: bExtra, raw: data.reply } }))
+        // schovej technický řádek, ukaž jen lidskou zprávu
+        displayText = displayText.replace(/OPEN_BUILDER:[^\n]*\n?/, '').trim()
+      }
+      setChatMessages(prev => [...prev, { from: 'mary', text: displayText }])
       if (isQuickSave) onSaved?.()
       else if (!isOpenRef.current) onUnreadMessage?.()
     } catch {

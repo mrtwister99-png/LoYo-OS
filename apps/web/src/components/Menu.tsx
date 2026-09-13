@@ -1,7 +1,23 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, memo, useCallback } from 'react'
 import sipkaImg from '../images/sipka.png'
 import sipka2Img from '../images/sipka2.png'
 import type { Page } from '../hooks/useAppState'
+import { categoryColors, categoryNumbers, categoryGradients } from '../styles/theme'
+
+const MENU_META: Record<string, { color: string; num: number; gradient?: string }> = {
+  dashboard: { color: categoryColors.dashboard, num: categoryNumbers.dashboard },
+  kalendar: { color: categoryColors.calendar, num: categoryNumbers.calendar, gradient: categoryGradients.calendar },
+  activity: { color: categoryColors.activity, num: categoryNumbers.activity, gradient: categoryGradients.activity },
+  notes: { color: categoryColors.notes, num: categoryNumbers.notes, gradient: categoryGradients.notes },
+  tasks: { color: categoryColors.tasks, num: categoryNumbers.tasks, gradient: categoryGradients.tasks },
+  tym: { color: categoryColors.teams, num: categoryNumbers.teams },
+  agenti: { color: categoryColors.agents, num: categoryNumbers.agents },
+  skills: { color: categoryColors.skills, num: categoryNumbers.skills },
+  mcp: { color: categoryColors.mcp, num: categoryNumbers.mcp },
+  loops: { color: categoryColors.loops, num: categoryNumbers.loops },
+  workflows: { color: categoryColors.workflows, num: categoryNumbers.workflows },
+  cli: { color: categoryColors.cli, num: categoryNumbers.cli },
+}
 
 
 type Props = {
@@ -31,7 +47,6 @@ const MENU_STRUCTURE: MenuNode[] = [
     children: [
       { id: 'tym', label: 'TEAMS' },
       { id: 'agenti', label: 'AGENTS' },
-      // PROJEKTY smazán v3.0 - viz ARCHITECTURE.md
     ],
   },
   {
@@ -48,7 +63,7 @@ const MENU_STRUCTURE: MenuNode[] = [
   },
 ]
 
-export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, onClose, onTabToHeader }: Props) {
+function MenuComponent({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, onClose, onTabToHeader }: Props) {
   const [open, setOpen] = useState({ firma: true, config: true })
   const [isHovered, setIsHovered] = useState(false)
   const [internalOpen, setInternalOpen] = useState(false)
@@ -64,7 +79,7 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
     }
   }, [forcedOpen, isControlled])
 
-  const setSelectedIdx = (fn: any) => {
+  const setSelectedIdx = useCallback((fn: any) => {
     if (isControlled && onForcedIdxChange) {
       if (typeof fn === 'function') {
         const next = fn(forcedIdx?? 0)
@@ -75,7 +90,7 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
     } else {
       setInternalIdx(fn)
     }
-  }
+  }, [isControlled, onForcedIdxChange, forcedIdx])
 
   const flatItems = useMemo(() => {
     const list: any[] = []
@@ -98,7 +113,7 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
     if (selectedIdx >= flatItems.length) {
       setSelectedIdx(Math.max(0, flatItems.length - 1))
     }
-  }, [flatItems, selectedIdx])
+  }, [flatItems, selectedIdx, setSelectedIdx])
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -142,7 +157,7 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [keyboardOpen, flatItems, selectedIdx, setPage, onClose])
+  }, [keyboardOpen, flatItems, selectedIdx, setPage, onClose, setSelectedIdx])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -153,32 +168,32 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [setSelectedIdx])
 
   const isMenuVisible = isHovered || keyboardOpen
 
-  const Item = ({ id, label, focused }: any) => {
+   const Item = ({ id, label, focused }: any) => {
     const active = page === id
+    const meta = (MENU_META as any)[id] || { color: '#040b8d', num: 99 }
+    const isLoop = id === 'loops'
     return (
       <button
         onClick={() => setPage(id)}
-        onMouseEnter={() => {
-          const idx = flatItems.findIndex((f: any) => f.id === id && f.type === 'item')
-          if (idx!== -1) setSelectedIdx(idx)
-        }}
-        onMouseLeave={() => {
-          if (!keyboardOpen) setSelectedIdx(-1)
-        }}
-           className={`w-full text-left px-6 py-[14px] text-[12px] tracking-[0.2em] font-bold border-b flex justify-between items-center transition-all duration-150 ease-out ${
-          focused? 'bg-[#ac0001] text-white border-white/30 shadow-[inset_0_0_0_1px_white]' :
+        onMouseEnter={() => { const idx = flatItems.findIndex((f: any) => f.id === id && f.type === 'item'); if (idx!== -1) setSelectedIdx(idx) }}
+        onMouseLeave={() => { if (!keyboardOpen) setSelectedIdx(-1) }}
+        className={`w-full text-left px-3 h- text- tracking-[0.2em] font-bold border-b border-l-4 flex justify-between items-center box-border transition-colors duration-100 ${
+          focused? 'bg-[#ac0001] text-white border-white/20' :
           active? 'bg-[#ac0001] text-white border-white/20' :
-          'bg-[#040b8d] text-white hover:bg-[#040b8d]/80 border-white/10'
+          'bg-[#040b8d] text-white hover:bg-[#0a1ab4] border-white/10'
         }`}
+        style={{ borderLeftColor: meta.color }}
       >
-        <span>{label}</span>
-        <span className="flex items-center gap-2">
-          <span className={`transition-opacity duration-150 ${isMenuVisible? 'opacity-100' : 'opacity-0'}`}>{active? '●' : ''}</span>
+        <span className="flex items-center gap-2 min-w-0">
+          <span className="font-mono text- w- h- flex items-center justify-center rounded bg-white text-black shrink-0">{String(meta.num).padStart(2,'0')}</span>
+          <span className={`w-2 h-2 rounded-full shrink-0 ${isLoop? 'animate-pulse' : ''}`} style={{ background: meta.color }} />
+          <span className="truncate">{label}</span>
         </span>
+        <span className={`w-1.5 h-1.5 rounded-full bg-white shrink-0 ${active? 'opacity-100' : 'opacity-0'}`} />
       </button>
     )
   }
@@ -215,11 +230,11 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
     )
   }
 
-  const getFocused = (id: string, type: 'item' | 'group') => {
+  const getFocused = useCallback((id: string, type: 'item' | 'group') => {
     if (selectedIdx < 0) return false
     const cur = flatItems[selectedIdx]
     return cur && cur.id === id && cur.type === type
-  }
+  }, [selectedIdx, flatItems])
 
   return (
     <>
@@ -232,7 +247,6 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
                 className="hidden md:flex w-[280px] bg-[#040b8d] flex-col fixed left-0 top-[56px] bottom-[42px] z-30 shadow-[4px_0_24px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] border-r border-white/10"
         style={{ transform: isMenuVisible? 'translateX(0)' : 'translateX(-90%)' }}
       >
-        {/* 10% viditelný proužek s 2 ŠIPKAMI - klik VŽDY zavře/sbalí menu */}
         <div
                     onClick={() => {
             setIsHovered(false)
@@ -293,3 +307,5 @@ export function Menu({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, 
     </>
   )
 }
+
+export const Menu = memo(MenuComponent)

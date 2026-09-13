@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
+import { categoryColors, categoryNumbers } from '../styles/theme'
 
-const ACCENT = '#FF3B30'
+const ACCENT = '#00f2ff'
+const LOOP_COLOR = categoryColors.loops
+const LOOP_NUM = categoryNumbers.loops
 
 type Loop = {
   id: string
@@ -113,22 +116,25 @@ export default function Loops() {
           </div>
         ):(
           <div className="mt-2 grid grid-cols-12 gap-5">
-            {loops.map(l=>{
+                        {loops.map((l, idx)=>{
               const isScheduled = (l as any).source === 'commands.json'
               return (
-                <div key={l.id} className={`col-span-12 md:col-span-6 xl:col-span-4 rounded- border p-7 ${isScheduled ? 'bg-[#FFF8F0] border-[#FF9500]/20' : 'bg-white border-black/5'}`}>
+                <div key={l.id} className={`col-span-12 md:col-span-6 xl:col-span-4 rounded- border p-7 border-l-4 ${isScheduled? 'bg-[#FFF8F0] border-[#FF9500]/20' : 'bg-white border-black/5'}`} style={{ borderLeftColor: LOOP_COLOR }}>
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: LOOP_COLOR }} />
+                      <span className="font-mono text- px-1 py-0.5 rounded bg-black text-white">{LOOP_NUM}-{String(idx+1).padStart(2,'0')}</span>
                       {isScheduled && <span className="text-sm">⏰</span>}
                       <div className="text- font-black">{l.name}</div>
                     </div>
                     <div className="flex gap-1.5">
                       {isScheduled && <span className="text- px-2 py-1 rounded-full bg-[#FF9500] text-white font-bold">SCHEDULED</span>}
-                      <span className={`text- px-2 py-1 rounded-full text-white font-bold ${l.status === 'ACTIVE' ? 'bg-black' : 'bg-black/40'}`}>{l.status}</span>
+                      <span className="text- px-2 py-1 rounded-full font-bold" style={{ background: LOOP_COLOR, color: '#000' }}>LOOP</span>
+                      <span className={`text- px-2 py-1 rounded-full text-white font-bold ${l.status === 'ACTIVE'? 'bg-black' : 'bg-black/40'}`}>{l.status}</span>
                     </div>
                   </div>
                   <div className="mt-1 text- font-mono text-black/40">{l.desc||'Bez popisu'}</div>
-                  <div className="mt-4 text- font-mono text-black/30">{l.schedule} • {l.agent} • {l.enabled?'ENABLED':'PAUSED'}</div>
+                  <div className="mt-4 text- font-mono text-black/30 flex justify-between"><span>{l.schedule} • {l.agent} • {l.enabled?'ENABLED':'PAUSED'}</span><span className="text- opacity-30">{l.id}</span></div>
                   {isScheduled && <div className="mt-2 text- font-mono text-black/20">zdroj: commands.json</div>}
                 </div>
               )

@@ -1,5 +1,9 @@
 import { useState, useEffect, useMemo } from 'react'
+import { categoryColors, categoryNumbers } from '../styles/theme'
 
+const ACCENT = '#40ff00'
+const CLI_COLOR = categoryColors.cli
+const CLI_NUM = categoryNumbers.cli
 const GOLD = '#EEEAE1'
 
 type CliTool = {
@@ -97,19 +101,21 @@ export default function Cli() {
               {filtered.length === 0 && (
                 <div className="p-8 text-center text-sm opacity-40">Žádné CLI tools v tools/cli/</div>
               )}
-              {filtered.map(cli =>
+                            {filtered.map((cli, idx) =>
               {
                 const isActive = selected === cli.id
                 return (
-                  <div key={cli.id} onClick={() => setSelected(cli.id)} className="p-5 cursor-pointer border-b-2 border-black flex justify-between" style={{ background: isActive ? GOLD : 'white' }}>
+                  <div key={cli.id} onClick={() => setSelected(cli.id)} className="p-5 cursor-pointer border-b-2 border-black flex justify-between border-l-4" style={{ background: isActive? GOLD : 'white', borderLeftColor: CLI_COLOR }}>
                     <div className="flex-1 min-w-0">
                       <div className="flex gap-2 items-center">
+                        <span className="font-mono text- px-1 py-0.5 rounded bg-black text-white">{CLI_NUM}-{String(idx+1).padStart(2,'0')}</span>
                         <span className="font-black text-sm">$ {cli.name}</span>
-                        {cli.hasIndex && <span className="text-[9px] px-2 py-0.5 bg-black text-white">READY</span>}
-                        {cli.hasPackageJson && <span className="text-[9px] px-1.5 py-0.5 border border-black/20">pkg</span>}
+                        <span className="w-2 h-2 rounded-full" style={{ background: CLI_COLOR }} />
+                        {cli.hasIndex && <span className="text- px-2 py-0.5 bg-black text-white">READY</span>}
+                        {cli.hasPackageJson && <span className="text- px-1.5 py-0.5 border border-black/20">pkg</span>}
                       </div>
-                      <div className="text-[11px] opacity-60 mt-1">{cli.path}</div>
-                      <div className="mt-2 text-[10px] opacity-50">{cli.commands.length} commands parsováno z index.ts</div>
+                      <div className="text- opacity-60 mt-1">{cli.path}</div>
+                      <div className="mt-2 text- opacity-50 flex gap-2"><span>{cli.commands.length} commands parsováno z index.ts</span><span className="opacity-30">{cli.id}</span></div>
                     </div>
                   </div>
                 )

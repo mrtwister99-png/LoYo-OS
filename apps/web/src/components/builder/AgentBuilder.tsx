@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { BuilderProps } from '../Builder'
+
+type ExtendedProps = BuilderProps & { initialData?: any; prefill?: any; _editId?: any }
 
 const MODELS = ['qwen3:8b', 'qwen2.5-coder:3b'] as const
 const RUNTIMES = ['prompt', 'node', 'python', 'rust'] as const
 const STATUSES = ['draft', 'testing', 'active'] as const
 
-export default function AgentBuilder({ onComplete }: BuilderProps) {
+export default function AgentBuilder({ onComplete, initialData, prefill }: ExtendedProps) {
+  const editSource = (prefill as any) || (initialData as any) || {}
   const [form, setForm] = useState({
     displayName: '',
     id: '',
@@ -22,6 +25,57 @@ export default function AgentBuilder({ onComplete }: BuilderProps) {
     permissions: '',
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isEditMode, setIsEditMode] = useState(false)
+
+  // ÚKOL 22: když přijde _extra = lubor-nehleda nebo _editId = 2, načti existující manifest
+  useEffect(() => {
+    const agentId = editSource?._extra || editSource?._editId
+    const rawId = typeof agentId === 'string'? agentId : null
+    // pokud je to číslo 2, mapuj na lubor-nehleda podle tvého číslování
+    const numberMap: Record<string, string> = { '1': 'mary-jane', '2': 'lubor-nehleda', '3': 'julia-nehledalova', '4': 'kosterad-fuckstein' }
+    let targetId = rawId
+    if (rawId && numberMap[rawId]) targetId = numberMap[rawId]
+    if (!targetId) return
+
+    // zkus API, pak fallback na index.json
+    const load = async () => {
+      try {
+        let data: any = null
+        try {
+          const r = await fetch(`http://localhost:3001/api/agents/${targetId}`)
+          if (r.ok) data = await r.json()
+        } catch {}
+        if (!data) {
+          const r2 = await fetch(`http://localhost:3001/api/agents`)
+          if (r2.ok) {
+            const list = await r2.json()
+            const arr = Array.isArray(list)? list : list.agents || list.items || []
+            data = arr.find((a: any) => a.id === targetId || String(a.number) === String(editSource._editId) || a.folder === targetId)
+          }
+        }
+        if (data) {
+          setForm(f => ({
+           ...f,
+            displayName: data.displayName || data.name || data.id || targetId,
+            id: data.id || targetId,
+            description: data.description || data.role || '',
+            model: data.model || f.model,
+            runtime: data.runtime || f.runtime,
+            entrypoint: data.entrypoint || f.entrypoint,
+            status: data.status || f.status,
+            systemPrompt: data.systemPrompt || data.prompt || '',
+            commands: (data.commands || []).join(', '),
+            specialization: (data.specialization || []).join(', '),
+            tags: (data.tags || []).join(', '),
+            permissions: (data.permissions || []).join('\n'),
+            mcp_expose: data.mcp_expose?? f.mcp_expose,
+          }))
+          setIsEditMode(true)
+        }
+      } catch (e) { console.error('edit load failed', e) }
+    }
+    load()
+  }, [editSource?._extra, editSource?._editId])
 
   const toKebab = (s: string) =>
     s.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -84,10 +138,15 @@ export default function AgentBuilder({ onComplete }: BuilderProps) {
   const inputCls = "w-full bg-white/5 border border-white/10 text-white text-xs font-mono px-3 py-2 outline-none focus:border-[#f5c518]/60 transition-colors"
   const selectCls = inputCls + " cursor-pointer"
 
-  return (
+   return (
     <div className="text-white">
-      <p className="text-[11px] text-white/40 mb-6 font-mono">
-        Vyplň formulář → Koštěrad vygeneruje <code className="text-[#f5c518]">manifest.json</code> a zapíše ho na disk.
+      {isEditMode && (
+        <div className="mb-4 px-3 py-2 bg-[#f5c518]/20 border border-[#f5c518]/40 text- tracking-[0.2em] text-[#f5c518] font-bold">
+          EDIT MÓD: #{editSource?._editId} {editSource?._extra} — načteno z manifest.json
+        </div>
+      )}
+      <p className="text- text-white/40 mb-6 font-mono">
+        {isEditMode? 'Uprav pole → uloží se do stejné složky' : 'Vyplň formulář'} → Koštěrad vygeneruje <code className="text-[#f5c518]">manifest.json</code>
       </p>
 
       <Field label="DISPLAY NAME *" error={errors.displayName}>

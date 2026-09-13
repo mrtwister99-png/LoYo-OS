@@ -40,22 +40,38 @@ export interface BuilderProps {
   onComplete: (manifest: object) => void
 }
 
+type BuilderInitial = { type: BuilderType; id?: string | number; extra?: string; prefill?: any }
+
 type Props = {
   onManifestComplete?: (type: BuilderType, manifest: object) => void
   focused?: boolean
   externalOpen?: boolean
   onExternalClose?: () => void
+  initialRequest?: BuilderInitial | null
+  onInitialConsumed?: () => void
 }
 
-export function Builder({ onManifestComplete, focused, externalOpen, onExternalClose }: Props) {
+export function Builder({ onManifestComplete, focused, externalOpen, onExternalClose, initialRequest, onInitialConsumed }: Props) {
   const [open, setOpen] = useState(false)
   const [closing, setClosing] = useState(false)
+  const [activeBuilder, setActiveBuilder] = useState<BuilderType | null>(null)
+  const [prefillData, setPrefillData] = useState<any>(null)
 
   // Sync s externím stavem (Tab focus z Layout)
   useEffect(() => {
     if (externalOpen) setOpen(true)
   }, [externalOpen])
-  const [activeBuilder, setActiveBuilder] = useState<BuilderType | null>(null)
+
+  useEffect(() => {
+    if (initialRequest?.type) {
+      const t = initialRequest.type as BuilderType
+      setActiveBuilder(t)
+      setOpen(true)
+      if (initialRequest.prefill) setPrefillData(initialRequest.prefill)
+      else setPrefillData({ _editId: initialRequest.id, _extra: initialRequest.extra })
+      onInitialConsumed?.()
+    }
+  }, [initialRequest])
 
   const closeMenu = () => {
     setClosing(true)
@@ -208,6 +224,9 @@ export function Builder({ onManifestComplete, focused, externalOpen, onExternalC
             </div>
             <ActiveComponent
               onComplete={(manifest) => handleComplete(activeBuilder!, manifest)}
+              // @ts-ignore — ÚKOL 22-24 prefill pro edit/new
+              initialData={prefillData}
+              prefill={prefillData}
             />
           </div>
         </div>

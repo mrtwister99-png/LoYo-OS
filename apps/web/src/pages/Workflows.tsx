@@ -1,7 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
 import { invoke } from '@tauri-apps/api/core'
+import { categoryColors, categoryNumbers } from '../styles/theme'
 
-const ACCENT = '#FF3B30'
+const ACCENT = '#d9ff00'
+const WORKFLOW_COLOR = categoryColors.workflows
+const WORKFLOW_NUM = categoryNumbers.workflows
 const GOLD = '#EEEAE1'
 
 type StepType = 'loop' | 'agent' | 'skill' | 'action' | 'condition'
@@ -176,13 +179,13 @@ export default function Workflows() {
         <div className="col-span-4 bg-white border-2 border-black h-[calc(100vh-240px)] flex flex-col">
           <div className="p-4 text- tracking-[0.4em] text-black/40 border-b-2 border-black">WORKFLOWS LIST // {workflows.length}</div>
           <div className="flex-1 overflow-y-auto">
-            {workflows.map(w => {
+            {workflows.map((w, idx) => {
               const active = w.id === selectedId
               return (
-                <div key={w.id} onClick={() => setSelectedId(w.id)} className="p-5 cursor-pointer border-b-2 border-black flex justify-between" style={{ background: active? '#000' : 'white', color: active? 'white' : 'black' }}>
+                <div key={w.id} onClick={() => setSelectedId(w.id)} className="p-5 cursor-pointer border-b-2 border-black flex justify-between border-l-4" style={{ background: active? '#000' : 'white', color: active? 'white' : 'black', borderLeftColor: WORKFLOW_COLOR }}>
                   <div>
-                    <div className="flex items-center gap-2"><span className="font-black text-sm">{w.name}</span><span className={`w-2 h-2 rounded-full ${w.status==='live'?'bg-emerald-500': w.status==='draft'?'bg-yellow-400':'bg-red-500'}`} /></div>
-                    <div className="text- opacity-60 mt-1">{w.steps.length} steps • {w.lastRun}</div>
+                    <div className="flex items-center gap-2"><span className="font-mono text- px-1 py-0.5 rounded bg-black text-white">{WORKFLOW_NUM}-{String(idx+1).padStart(2,'0')}</span><span className="font-black text-sm">{w.name}</span><span className={`w-2 h-2 rounded-full ${w.status==='live'?'bg-emerald-500': w.status==='draft'?'bg-yellow-400':'bg-red-500'}`} /><span className="w-2 h-2 rounded-full" style={{ background: WORKFLOW_COLOR }} /></div>
+                    <div className="text- opacity-60 mt-1">{w.steps.length} steps • {w.lastRun} • {w.id}</div>
                   </div>
                   <div className="text- px-2 py-1 bg-white text-black border self-center">{w.status.toUpperCase()}</div>
                 </div>

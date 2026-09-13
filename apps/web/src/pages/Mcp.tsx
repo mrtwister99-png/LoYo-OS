@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
+import { categoryColors, categoryNumbers } from '../styles/theme'
 
-const ACCENT = '#FF3B30'
+const ACCENT = '#33a3ff'
+const MCP_COLOR = categoryColors.mcp
+const MCP_NUM = categoryNumbers.mcp
 
 type McpServer = {
   id: string
@@ -10,6 +13,7 @@ type McpServer = {
   command: string
   status: string
   tools: any[]
+  number?: number
 }
 
 export default function Mcp() {
@@ -83,11 +87,14 @@ export default function Mcp() {
           </div>
         ):(
           <div className="mt-2 grid grid-cols-12 gap-5">
-            {servers.map(s=>(
-              <div key={s.id} className="col-span-12 md:col-span-6 xl:col-span-4 bg-white rounded- border border-black/5 p-7">
-                <div className="text- font-black">{s.name}</div>
+            {servers.map((s, idx)=>(
+              <div key={s.id} className="col-span-12 md:col-span-6 xl:col-span-4 bg-white rounded- border border-black/5 p-7 border-l-4" style={{ borderLeftColor: MCP_COLOR }}>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="text- font-black">{s.name}</div>
+                  <div className="flex items-center gap-1"><span className="font-mono text- px-1.5 py-0.5 rounded bg-black text-white">#{s.number?? idx+22} {s.id}</span><span className="text- font-bold px-1.5 py-0.5 rounded" style={{ background: MCP_COLOR, color: '#000' }}>MCP</span></div>
+                </div>
                 <div className="mt-1 text- font-mono text-black/40">{s.desc||'Bez popisu'}</div>
-                <div className="mt-4 text- font-mono text-black/30">{s.command} • {s.tools.length} tools</div>
+                <div className="mt-4 text- font-mono text-black/30 flex justify-between"><span>{s.command} • {s.tools.length} tools</span><span className="text- opacity-30">{s.id}</span></div>
               </div>
             ))}
           </div>

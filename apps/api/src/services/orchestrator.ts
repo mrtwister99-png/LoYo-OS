@@ -757,11 +757,168 @@ async function runResume(userMessage: string, runId: string, steps: string[])
 }
 
 // ============================================================
+// ÚKOL 21-24 — helpery pro number index + nové příkazy
+// ============================================================
+type CapabilityType = 'agents' | 'mcp' | 'skills' | 'cli' | 'teams' | 'workflows' | 'loops' | 'api'
+
+async function loadManifestsIndex(type: CapabilityType): Promise<any[]> {
+  try {
+    const indexPath = join(DATA_DIR, 'capabilities', type, 'index.json')
+    const raw = await readFile(indexPath, 'utf-8')
+    const data = JSON.parse(raw)
+    return Array.isArray(data)? data : (data.items || data.capabilities || data.agents || [])
+  } catch {
+    return []
+  }
+}
+
+async function findByNumber(type: CapabilityType, num: number): Promise<{ entry: any; filePath: string } | null> {
+  const items = await loadManifestsIndex(type)
+  const found = items.find((it: any) => it.number === num || it.number === String(num))
+  if (found) return { entry: found, filePath: join(DATA_DIR, 'capabilities', type, 'index.json') }
+  try {
+    const baseDir = join(DATA_DIR, 'capabilities', type)
+    const dirs = await readdir(baseDir)
+    for (const d of dirs) {
+      try {
+        const mfPath = join(baseDir, d, 'manifest.json')
+        const mf = JSON.parse(await readFile(mfPath, 'utf-8'))
+        if (mf.number === num || mf.number === String(num)) return { entry: {...mf, folder: d }, filePath: mfPath }
+      } catch {}
+    }
+  } catch {}
+  return null
+}
+
+async function runEdit(userMessage: string, runId: string, steps: string[]) {
+  const m = userMessage.trim().match(/^\/edit\s+(agent|mcp|skill|cli|team|workflow|loop|api|rag)\s+(\d+|[a-z0-9-]+)/i)
+  if (!m) return { reply: 'Formát: `/edit <typ> <číslo|id>` např. `/edit agent 2` nebo `/edit skill lead-generation`', steps }
+  const [, rawType, rawId] = m
+  const typeMap: Record<string, CapabilityType> = { agent: 'agents', mcp: 'mcp', skill: 'skills', cli: 'cli', team: 'teams', workflow: 'workflows', loop: 'loops', api: 'api', rag: 'rag' as any }
+  const type = typeMap[rawType.toLowerCase()] || (rawType.toLowerCase() as CapabilityType)
+  const num = parseInt(rawId, 10)
+  let found: any = null
+  if (!isNaN(num)) found = await findByNumber(type, num)
+  if (!found) {
+    // zkus najít podle id
+    const all = await loadManifestsIndex(type)
+    const f = all.find((a: any) => a.id === rawId || a.folder === rawId)
+    if (f) found = { entry: f, filePath: join(DATA_DIR, 'capabilities', type, f.folder || f.id, 'manifest.json') }
+  }
+  if (!found) return { reply: `Nenalezen ${rawType} #${rawId}. Zkontroluj data/capabilities/${type}/index.json`, steps }
+  steps.push(`Mary Jane: edit ${type} #${rawId} → ${found.entry.id || found.entry.folder}`)
+  await logActivity({ agent: 'Mary_Jane', type: 'routing', action: `edit ${type} #${rawId}`, meta: { runId } })
+  return { reply: `OPEN_BUILDER:${type}:${isNaN(num)? rawId : num}:${found.entry.id || found.entry.folder}\nOtevírám Builder pro ${rawType} #${rawId}`, steps }
+}
+
+async function runAddMcp(userMessage: string, runId: string, steps: string[]) {
+  const m = userMessage.trim().match(/^\/add\s+mcp\s+(\d+)/i)
+  if (!m) return { reply: 'Formát: `/add mcp <číslo>` např. `/add mcp 22`', steps }
+  const num = parseInt(m[1], 10)
+  const found = await findByNumber('mcp', num)
+  if (!found) return { reply: `MCP #${num} nenalezeno.`, steps }
+  const agents = await loadManifestsIndex('agents')
+  const agentList = agents.map((a: any) => `${a.number?? '?'} - ${a.id}`).join(', ') || '1-Mary, 2-Lubor'
+  await mkdir(join(DATA_DIR, 'tmp'), { recursive: true })
+  await writeFile(join(DATA_DIR, 'tmp', `add_mcp_${runId}.json`), JSON.stringify({ mcpNum: num, mcpId: found.entry.id || found.entry.folder }), 'utf-8')
+  steps.push(`Mary Jane: add mcp #${num} found ${found.entry.id}`)
+  return { reply: `Našel jsem MCP #${num} — ${found.entry.id}. K jakému agentovi? Napiš číslo: ${agentList}`, steps }
+}
+
+async function runAddMcpConfirm(userMessage: string, runId: string, steps: string[], pending: { mcpNum: number; mcpId: string }) {
+  const input = userMessage.trim()
+  const agentNum = parseInt(input, 10)
+  if (isNaN(agentNum)) return null
+  const agentFound = await findByNumber('agents', agentNum)
+  if (!agentFound) return { reply: `Agent #${agentNum} nenalezen.`, steps }
+  try {
+    // vždy zapiš do manifest.json, ne do index.json
+    const agentFolder = agentFound.entry.folder || agentFound.entry.id
+    const manifestPath = join(DATA_DIR, 'capabilities', 'agents', agentFolder, 'manifest.json')
+    let manifest: any
+    try { manifest = JSON.parse(await readFile(manifestPath, 'utf-8')) } catch { manifest = agentFound.entry }
+    manifest.dependencies = manifest.dependencies || []
+    // pro #22 filesystem je konvence fs:22
+    const finalDep = pending.mcpId === 'filesystem' || pending.mcpNum === 22? `fs:22` : `${pending.mcpId}:${pending.mcpNum}`
+    if (!manifest.dependencies.includes(finalDep)) manifest.dependencies.push(finalDep)
+    manifest.updatedAt = new Date().toISOString()
+    await mkdir(dirname(manifestPath), { recursive: true })
+    await writeFile(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8')
+    steps.push(`Mary Jane: přidáno ${finalDep} do agenta #${agentNum} → ${manifestPath}`)
+    await logActivity({ agent: 'Mary_Jane', type: 'save', action: `add mcp ${finalDep} to agent #${agentNum}`, meta: { runId } })
+    return { reply: `Hotovo. MCP #${pending.mcpNum} (${pending.mcpId}) přiřazeno k agentovi #${agentNum} (${agentFound.entry.id}). Dependencies: [${manifest.dependencies.join(', ')}]\nOPEN_BUILDER:agents:${agentNum}:${agentFound.entry.id}`, steps }
+  } catch (e: any) { return { reply: `Chyba: ${e.message}`, steps } }
+}
+
+async function runNewMcp(userMessage: string, runId: string, steps: string[]) {
+  const query = userMessage.replace(/^\/new\s+mcp\s*/i, '').trim() || 'best MCP filesystem tools 2026'
+  steps.push(`Mary Jane: /new mcp → research "${query}"`)
+  const researchResult = await runResearch(`/research ${query}`, runId, steps)
+  let lastReport = ''
+ try {
+    const files = await readdir(REPORTS_DIR)
+    const sorted = files.filter(f => f.endsWith('.md')).sort().reverse()
+    if (sorted[0]) lastReport = await readFile(join(REPORTS_DIR, sorted[0]), 'utf-8')
+  } catch {}
+  let manifestObj: any
+  try {
+    const mod = await import('./kosterad.js')
+    if (mod?.generateMcpManifest) manifestObj = await mod.generateMcpManifest(lastReport || query)
+    else throw new Error('no generator')
+  } catch {
+    manifestObj = {
+      id: `filesystem`,
+      type: 'mcp',
+      displayName: 'Filesystem MCP',
+      number: 23,
+      version: '0.1.0',
+      status: 'draft',
+      description: `Z research Julia: ${query.slice(0,200)}`,
+      runtime: 'node',
+      entrypoint: './src/server.ts',
+      transport: 'stdio',
+      tools: ['fs_read','fs_write','fs_list'],
+      tags: ['fs','filesystem'],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+  }
+  const prefilled = typeof manifestObj === 'string'? manifestObj : JSON.stringify(manifestObj, null, 2)
+  const tmpPath = join(DATA_DIR, 'tmp', `new_mcp_${runId}.json`)
+  await mkdir(join(DATA_DIR, 'tmp'), { recursive: true })
+  await writeFile(tmpPath, prefilled, 'utf-8')
+  return { reply: `OPEN_BUILDER:mcp:new:${tmpPath}\nResearch hotovo → ${researchResult.reply}\nKoštěrad předvyplnil manifest z research.`, steps }
+}
+
+// ============================================================
 // CORE LOGIKA - bez fronty, voláno z fronty i přímo
 // ============================================================
 async function runOrchestratorCore(userMessage: string, runId: string, steps: string[]): Promise<{ reply: string; steps: string[] }>
 {
   const trimmed = userMessage.trim()
+
+  // ---------- ÚKOL 22-24: explicitní příkazy ----------
+  if (/^\/edit\s+(agent|mcp|skill|cli|team|workflow)\s+\d+/i.test(trimmed)) {
+    return runEdit(trimmed, runId, steps)
+  }
+  if (/^\/add\s+mcp\s+\d+/i.test(trimmed)) {
+    return runAddMcp(trimmed, runId, steps)
+  }
+  if (/^\/new\s+mcp\b/i.test(trimmed)) {
+    return runNewMcp(trimmed, runId, steps)
+  }
+  if (/^\d+$/.test(trimmed)) {
+    try {
+      const tmpDir = join(DATA_DIR, 'tmp')
+      const files = await readdir(tmpDir)
+      const pending = files.filter(f => f.startsWith('add_mcp_')).sort().reverse()[0]
+      if (pending) {
+        const data = JSON.parse(await readFile(join(tmpDir, pending), 'utf-8'))
+        const confirm = await runAddMcpConfirm(trimmed, runId, steps, data)
+        if (confirm) { try { const { unlink } = await import('node:fs/promises'); await unlink(join(tmpDir, pending)) } catch {}; return confirm }
+      }
+    } catch {}
+  }
 
   // ---------- dynamický routing z commands.json ----------
   const commands = await loadCommands()

@@ -2,6 +2,11 @@
 import { useState, useMemo, useCallback } from 'react'
 import { useCalendarEvents, type CalendarEvent } from '../hooks/useCalendarEvents'
 import { JA_KALENDAR_DIR } from '../lib/dataPaths'
+import { categoryColors, categoryNumbers, categoryGradients } from '../styles/theme'
+
+const CALENDAR_COLOR = categoryColors.calendar
+const CALENDAR_NUM = categoryNumbers.calendar
+const CALENDAR_GRADIENT = categoryGradients.calendar
 
 const MONTHS_CZ = [
   'Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen',
@@ -250,8 +255,8 @@ export default function Calendar() {
             <div className="text-[12px] opacity-50 py-6 text-center">Žádné události tento den.</div>
           ) : (
             <div className="flex flex-col gap-2">
-              {selectedEvents.map(ev => (
-                <div key={ev.file_path} className="p-3 bg-white rounded-sm border border-black/10 group">
+              {selectedEvents.map((ev, idx) => (
+                <div key={ev.file_path} className="p-3 bg-white rounded-sm border border-black/10 group border-l-4" style={{ borderLeftColor: CALENDAR_COLOR, background: `linear-gradient(90deg, #fff 70%, ${CALENDAR_COLOR}22 100%)` }}>
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="text-[11px] font-bold tracking-[0.1em] opacity-60">{ev.time}</div>

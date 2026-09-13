@@ -4,7 +4,7 @@
   "name": "Filesystem MCP",
   "description": "MCP pro práci se soubory - čtení, zápis, listování",
   "type": "mcp",
-  "number": 22,
+  "number": "2_01",
   "version": "0.1.0",
   "status": "active",
   "command": "node dist/tools/fs",

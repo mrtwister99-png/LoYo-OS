@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "id": "mary-jane",
+      "number": 1,
+      "displayName": "Mary Jane",
+      "folder": "mary-jane"
+    },
+    {
+      "id": "lubor-nehleda",
+      "number": 2,
+      "displayName": "Lubor Nehleda",
+      "folder": "lubor-nehleda"
+    },
+    {
+      "id": "julia-nehledalova",
+      "number": 3,
+      "displayName": "Julia Nehledalová",
+      "folder": "julia-nehledalova"
+    },
+    {
+      "id": "kosterad-fuckstein",
+      "number": 4,
+      "displayName": "Koštěrad Fuckstein",
+      "folder": "kosterad-fuckstein"
+    }
+  ]
+}

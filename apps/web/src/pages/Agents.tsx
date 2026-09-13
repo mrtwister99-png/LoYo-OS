@@ -2,8 +2,11 @@
 import { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import AgentBuilder from '../components/builder/AgentBuilder'
+import { categoryColors, categoryNumbers } from '../styles/theme'
 
-const ACCENT = '#FF3B30'
+const ACCENT = '#a136ff'
+const AGENT_COLOR = categoryColors.agents
+const AGENT_NUM = categoryNumbers.agents
 
 type Skill = { id: string; name: string }
 type Tool = { id: string; name: string; icon: string }
@@ -21,6 +24,7 @@ type Agent = {
   tasksToday: number
   docs: string[]
   folder: string
+  number?: number
 }
 
 const ALL_SKILLS: Skill[] = [
@@ -107,6 +111,7 @@ export default function AgentsPro() {
         prompt: a.prompt || a.prompt_file || '',
         docs: a.docs || [],
         tasksToday: a.tasksToday?? 0,
+        number: a.number?? a.manifest?.number,
       }))
       setAgents(normalized)
       setSelectedAgent(prev => {
@@ -232,7 +237,7 @@ export default function AgentsPro() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {filtered.map(agent=>{
+                        {filtered.map((agent, idx)=>{
               const fn = firstName(agent.name)
               const isOnline = agent.status==='online'
               const isBusy = agent.status==='busy'
@@ -240,8 +245,10 @@ export default function AgentsPro() {
                 <button
                   key={agent.id}
                   onClick={()=>setSelectedAgent(agent)}
-                  className="group relative aspect-square bg-black text-white rounded-[12px] border border-black/10 overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-[#1000a1] hover:border-white/20 transition-all duration-200 shadow-[0_0_0_1px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y-[2px]"
+                  className="group relative aspect-square bg-black text-white rounded- border border-black/10 overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-[#1000a1] hover:border-white/20 transition-all duration-200 shadow-[0_0_0_1px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y- border-l-4"
+                  style={{ borderLeftColor: AGENT_COLOR }}
                 >
+                  <span className="absolute top-2 left-2 font-mono text- px-1.5 py-0.5 rounded bg-white text-black">#{agent.number?? idx+1} {agent.id}</span>
                   {/* status tečka */}
                   <span className={`absolute top-3 right-3 w-2.5 h-2.5 rounded-full ${isOnline?'bg-[#FF3B30]':isBusy?'bg-yellow-400':'bg-white/20'} shadow-[0_0_8px_rgba(0,0,0,0.4)]`} />
 

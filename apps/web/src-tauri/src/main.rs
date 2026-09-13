@@ -27,6 +27,29 @@ fn loops_base()     -> String { format!("{}/capabilities/loops",     data_root()
 fn teams_base()     -> String { format!("{}/capabilities/teams",     data_root()) }
 fn workflows_base() -> String { format!("{}/capabilities/workflows", data_root()) }
 
+// ÚKOL 19: history helpers
+fn history_root() -> String { format!("{}/history", data_root()) }
+fn history_notes_base(file_name: &str) -> PathBuf { PathBuf::from(history_root()).join("notes").join(file_name) }
+fn history_tasks_base(file_name: &str) -> PathBuf { PathBuf::from(history_root()).join("tasks").join(file_name) }
+
+fn archive_old_version(resolved: &Path, content_to_compare: Option<&str>) -> Result<(), String> {
+    if!resolved.exists() { return Ok(()); }
+    let old_content = match fs::read_to_string(resolved) { Ok(c) => c, Err(_) => return Ok(()), };
+    if old_content.trim().is_empty() { return Ok(()); }
+    if let Some(new_c) = content_to_compare { if old_content == new_c { return Ok(()); } }
+    let file_name = match resolved.file_name() { Some(n) => n.to_string_lossy().to_string(), None => return Ok(()), };
+    let path_str = resolved.to_string_lossy().to_lowercase().replace('\\', "/");
+    let hist_dir = if path_str.contains("poznamky") { history_notes_base(&file_name) } else if path_str.contains("ukoly") { history_tasks_base(&file_name) } else { history_notes_base(&file_name) };
+    fs::create_dir_all(&hist_dir).map_err(|e| e.to_string())?;
+    let ts = chrono::Utc::now().format("%Y-%m-%dT%H-%M-%S%.3fZ").to_string();
+    fs::write(hist_dir.join(format!("{}.md", ts)), old_content).map_err(|e| e.to_string())?;
+    if let Ok(entries) = fs::read_dir(&hist_dir) {
+        let mut files: Vec<PathBuf> = entries.flatten().map(|e| e.path()).filter(|p| p.is_file()).collect();
+        if files.len() > 50 { files.sort(); for old_f in files.iter().take(files.len() - 50) { let _ = fs::remove_file(old_f); } }
+    }
+    Ok(())
+}
+
 // ========== STRUCTS ==========
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct NoteFile {
@@ -235,6 +258,7 @@ struct WorkflowIndex {
 #[tauri::command]
 fn save_note(path: String, content: String) -> Result<String, String> {
     let resolved = resolve_data_path(&path);
+    let _ = archive_old_version(&resolved, Some(&content));
     if let Some(parent) = resolved.parent() {
         fs::create_dir_all(parent).map_err(|e| e.to_string())?;
     }
@@ -280,7 +304,11 @@ fn list_notes(dir: String) -> Result<Vec<NoteFile>, String> {
 fn read_note(path: String) -> Result<String, String> { fs::read_to_string(resolve_data_path(&path)).map_err(|e| e.to_string()) }
 
 #[tauri::command]
-fn delete_note(path: String) -> Result<(), String> { fs::remove_file(resolve_data_path(&path)).map_err(|e| e.to_string()) }
+fn delete_note(path: String) -> Result<(), String> {
+    let resolved = resolve_data_path(&path);
+    let _ = archive_old_version(&resolved, None);
+    fs::remove_file(resolved).map_err(|e| e.to_string())
+}
 
 #[tauri::command]
 fn ensure_dir(path: String) -> Result<String, String> { let resolved = resolve_data_path(&path); fs::create_dir_all(&resolved).map_err(|e| e.to_string())?; Ok(resolved.to_string_lossy().to_string().replace('\\', "/")) }
@@ -392,6 +420,7 @@ fn list_tasks_lite(dirs: Vec<String>) -> Result<Vec<TaskLiteFile>, String> {
 #[tauri::command]
 fn save_task(path: String, content: String) -> Result<String, String> {
     let resolved = resolve_data_path(&path);
+    let _ = archive_old_version(&resolved, Some(&content));
     if let Some(parent) = resolved.parent() {
         fs::create_dir_all(parent).map_err(|e| e.to_string())?;
     }
@@ -400,7 +429,11 @@ fn save_task(path: String, content: String) -> Result<String, String> {
 }
 
 #[tauri::command]
-fn delete_task(path: String) -> Result<(), String> { fs::remove_file(resolve_data_path(&path)).map_err(|e| e.to_string()) }
+fn delete_task(path: String) -> Result<(), String> {
+    let resolved = resolve_data_path(&path);
+    let _ = archive_old_version(&resolved, None);
+    fs::remove_file(resolved).map_err(|e| e.to_string())
+}
 
 // ========== CALENDAR EVENTS COMMANDS ==========
 #[tauri::command]
@@ -745,6 +778,42 @@ fn delete_workflow_from_fs(workflow_id: String) -> Result<(), String> {
     Ok(())
 }
 
+// ÚKOL 19: history commands
+#[tauri::command]
+fn list_history_versions(file_name: String, file_type: String) -> Result<Vec<String>, String> {
+    let hist_dir = if file_type == "notes" { history_notes_base(&file_name) } else { history_tasks_base(&file_name) };
+    if!hist_dir.exists() { return Ok(vec![]); }
+    let mut entries: Vec<String> = fs::read_dir(&hist_dir).map_err(|e| e.to_string())?.flatten().filter_map(|e| { let p = e.path(); if p.is_file() { p.file_name().map(|n| n.to_string_lossy().to_string()) } else { None } }).collect();
+    entries.sort_by(|a, b| b.cmp(a));
+    Ok(entries)
+}
+
+#[tauri::command]
+fn restore_history_version(file_name: String, file_type: String, timestamp_file: Option<String>) -> Result<String, String> {
+    let hist_dir = if file_type == "notes" { history_notes_base(&file_name) } else { history_tasks_base(&file_name) };
+    if!hist_dir.exists() { return Err("Historie neexistuje".into()); }
+    let target_hist_file = if let Some(ts) = timestamp_file { hist_dir.join(ts) } else {
+        let entries = fs::read_dir(&hist_dir).map_err(|e| e.to_string())?;
+        let mut files: Vec<PathBuf> = entries.flatten().map(|e| e.path()).filter(|p| p.is_file()).collect();
+        if files.is_empty() { return Err("Žádná verze v historii".into()); }
+        files.sort_by(|a, b| b.cmp(a));
+        files[0].clone()
+    };
+    if!target_hist_file.exists() { return Err("Verze nenalezena".into()); }
+    let content = fs::read_to_string(&target_hist_file).map_err(|e| e.to_string())?;
+    let original_path = if file_type == "notes" {
+        PathBuf::from(data_root()).join("ja/poznamky").join(&file_name)
+    } else {
+        let aktivni = PathBuf::from(data_root()).join("ja/ukoly/aktivni").join(&file_name);
+        let hotove = PathBuf::from(data_root()).join("ja/ukoly/hotove").join(&file_name);
+        if hotove.exists() { hotove } else { aktivni }
+    };
+    if let Some(parent) = original_path.parent() { fs::create_dir_all(parent).map_err(|e| e.to_string())?; }
+    fs::write(&original_path, &content).map_err(|e| e.to_string())?;
+    fs::remove_file(&target_hist_file).map_err(|e| e.to_string())?;
+    Ok(content)
+}
+
 // ========== MAIN ==========
 fn main() {
     tauri::Builder::default()
@@ -760,7 +829,8 @@ fn main() {
             sync_mcp_from_fs, save_mcp_to_fs,
             sync_loops_from_fs, save_loop_to_fs,
             sync_teams_from_fs, save_team_to_fs, delete_team_from_fs,
-            sync_workflows_from_fs, save_workflow_to_fs, delete_workflow_from_fs
+            sync_workflows_from_fs, save_workflow_to_fs, delete_workflow_from_fs,
+            list_history_versions, restore_history_version
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
