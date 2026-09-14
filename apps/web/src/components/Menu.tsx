@@ -4,19 +4,19 @@ import sipka2Img from '../images/sipka2.png'
 import type { Page } from '../hooks/useAppState'
 import { categoryColors, categoryNumbers, categoryGradients } from '../styles/theme'
 
-const MENU_META: Record<string, { color: string; num: number; gradient?: string }> = {
-  dashboard: { color: categoryColors.dashboard, num: categoryNumbers.dashboard },
-  kalendar: { color: categoryColors.calendar, num: categoryNumbers.calendar, gradient: categoryGradients.calendar },
-  activity: { color: categoryColors.activity, num: categoryNumbers.activity, gradient: categoryGradients.activity },
-  notes: { color: categoryColors.notes, num: categoryNumbers.notes, gradient: categoryGradients.notes },
-  tasks: { color: categoryColors.tasks, num: categoryNumbers.tasks, gradient: categoryGradients.tasks },
-  tym: { color: categoryColors.teams, num: categoryNumbers.teams },
-  agenti: { color: categoryColors.agents, num: categoryNumbers.agents },
-  skills: { color: categoryColors.skills, num: categoryNumbers.skills },
-  mcp: { color: categoryColors.mcp, num: categoryNumbers.mcp },
-  loops: { color: categoryColors.loops, num: categoryNumbers.loops },
-  workflows: { color: categoryColors.workflows, num: categoryNumbers.workflows },
-  cli: { color: categoryColors.cli, num: categoryNumbers.cli },
+const MENU_META: Record<string, { color: string; num: string; gradient?: string }> = {
+  dashboard: { color: categoryColors.dashboard, num: '0_01' },
+  kalendar: { color: categoryColors.calendar, num: '0_02', gradient: categoryGradients.calendar },
+  activity: { color: categoryColors.activity, num: '0_03', gradient: categoryGradients.activity },
+  notes: { color: categoryColors.notes, num: '0_04', gradient: categoryGradients.notes },
+  tasks: { color: categoryColors.tasks, num: '0_05', gradient: categoryGradients.tasks },
+  tym: { color: categoryColors.teams, num: '7_01' },
+  agenti: { color: categoryColors.agents, num: '1_01' },
+  skills: { color: categoryColors.skills, num: '3_01' },
+  mcp: { color: categoryColors.mcp, num: '2_01' },
+  loops: { color: categoryColors.loops, num: '6_01' },
+  workflows: { color: categoryColors.workflows, num: '8_01' },
+  cli: { color: categoryColors.cli, num: '4_01' },
 }
 
 
@@ -174,14 +174,15 @@ function MenuComponent({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange
 
    const Item = ({ id, label, focused }: any) => {
     const active = page === id
-    const meta = (MENU_META as any)[id] || { color: '#040b8d', num: 99 }
+    const meta = (MENU_META as any)[id] || { color: '#040b8d', num: '0_00' }
     const isLoop = id === 'loops'
+    const [prefix, seq] = String(meta.num).split('_')
     return (
       <button
         onClick={() => setPage(id)}
         onMouseEnter={() => { const idx = flatItems.findIndex((f: any) => f.id === id && f.type === 'item'); if (idx!== -1) setSelectedIdx(idx) }}
         onMouseLeave={() => { if (!keyboardOpen) setSelectedIdx(-1) }}
-        className={`w-full text-left px-3 h- text- tracking-[0.2em] font-bold border-b border-l-4 flex justify-between items-center box-border transition-colors duration-100 ${
+        className={`w-full text-left px-3 py-2.5 text- tracking-[0.18em] font-bold border-b border-l-4 flex justify-between items-center box-border transition-colors duration-100 ${
           focused? 'bg-[#ac0001] text-white border-white/20' :
           active? 'bg-[#ac0001] text-white border-white/20' :
           'bg-[#040b8d] text-white hover:bg-[#0a1ab4] border-white/10'
@@ -189,7 +190,9 @@ function MenuComponent({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange
         style={{ borderLeftColor: meta.color }}
       >
         <span className="flex items-center gap-2 min-w-0">
-          <span className="font-mono text- w- h- flex items-center justify-center rounded bg-white text-black shrink-0">{String(meta.num).padStart(2,'0')}</span>
+          <span className="font-mono flex items-center justify-center rounded bg-white text-black shrink-0 px-1.5 py-0.5 text- leading-none">
+            <span style={{ opacity: 0.6 }}>{prefix}_</span>{seq}
+          </span>
           <span className={`w-2 h-2 rounded-full shrink-0 ${isLoop? 'animate-pulse' : ''}`} style={{ background: meta.color }} />
           <span className="truncate">{label}</span>
         </span>

@@ -21,6 +21,7 @@ import notificationsRoutes from './routes/notifications'
 import cliRoutes from './routes/cli'
 import { capabilitiesRoutes } from './routes/capabilities'
 import { searchRoutes } from './routes/search.js'
+import tmpRoutes from './routes/tmp.js'
 import { initDb, countFromDb } from './lib/manifestDb.js'
 import { reindexCapabilities } from './lib/manifestLoader.js'
 
@@ -40,6 +41,7 @@ await app.register(notificationsRoutes, { prefix: '/api' })
 await app.register(cliRoutes, { prefix: '/api' })
 await app.register(capabilitiesRoutes, { prefix: '/api' })
 await app.register(searchRoutes, { prefix: '/api' })
+await app.register(tmpRoutes, { prefix: '/api' })
 
 app.get('/api/health', async () => {
   const { getHealth } = await import('./services/health.js')

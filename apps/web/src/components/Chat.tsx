@@ -32,6 +32,11 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
   const dragRef = useRef({ dragging: false, startX: 0, startY: 0, origX: 0, origY: 0 })
   const resizeRef = useRef({ resizing: false, startX: 0, startY: 0, origW: 0, origH: 0 })
 
+  // --- PICKER (↑↓ + Enter) ---
+  type PickerState = { type: string; items: any[]; tmpPath: string } | null
+  const [picker, setPicker] = useState<PickerState>(null)
+  const [pickerIdx, setPickerIdx] = useState(0)
+
   // init pos bottom-right small
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -210,14 +215,15 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
   useEffect(() => { if (isOpen) chatEndRef.current?.scrollIntoView({ behavior: 'auto' }) }, [isOpen])
   useEffect(() => { if (isOpen) chatInputRef.current?.focus() }, [isOpen])
 
-  const sendChatMessage = async () => {
-    const trimmed = chatInput.trim()
+  const sendWithValue = async (value: string) => {
+    const trimmed = value.trim()
     if (!trimmed || isChatLoading) return
     const isResearch = /^\/research/i.test(trimmed)
     const isQuickSave = /^\/(note|task)/i.test(trimmed)
     setChatMessages(prev => [...prev, { from: 'me', text: trimmed }])
     setChatInput('')
     setIsChatLoading(true)
+    setPicker(null)
     if (isResearch) {
       setChatMessages(prev => [...prev, { from: 'mary', text: 'Jasně Tome, přeposílám a dám vědět, jak bude výsledek. 🚀' }])
     }
@@ -228,13 +234,27 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
         body: JSON.stringify({ message: trimmed }),
       })
       const data = await res.json()
-      const builderMatch = (data.reply as string).match(/OPEN_BUILDER:([^:]+):([^:]+):?([^\n]*)?/)
       let displayText = data.reply as string
+      const builderMatch = displayText.match(/OPEN_BUILDER:([^:]+):([^:]+):?([^\n]*)?/)
       if (builderMatch) {
         const [, bType, bId, bExtra] = builderMatch
         window.dispatchEvent(new CustomEvent('loyo:open-builder', { detail: { type: bType, id: bId, extra: bExtra, raw: data.reply } }))
-        // schovej technický řádek, ukaž jen lidskou zprávu
         displayText = displayText.replace(/OPEN_BUILDER:[^\n]*\n?/, '').trim()
+      }
+      const pickerMatch = (data.reply as string).match(/PICKER:([^:]+):([^\n]+)/)
+      if (pickerMatch) {
+        const [, pType, pPath] = pickerMatch
+        try {
+          const r = await fetch(`http://localhost:3001/api/tmp?path=${encodeURIComponent(pPath)}`)
+          const j = await r.json()
+          let items: any[] = j.items || j.agents || []
+          if (j.types) items = j.types.map((t: string) => ({ number: t, id: t, displayName: t }))
+          if (!items.length && Array.isArray(j)) items = j
+          setPicker({ type: pType, items, tmpPath: pPath })
+          setPickerIdx(0)
+          displayText = displayText.replace(/PICKER:[^\n]*\n?/, '').trim()
+          if (!displayText) displayText = `Vyber ${pType} — ↑↓ + Enter nebo klik`
+        } catch {}
       }
       setChatMessages(prev => [...prev, { from: 'mary', text: displayText }])
       if (isQuickSave) onSaved?.()
@@ -245,6 +265,10 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
     } finally {
       setIsChatLoading(false)
     }
+  }
+
+  const sendChatMessage = async () => {
+    await sendWithValue(chatInput)
   }
 
   if (!isOpen) return null
@@ -344,6 +368,16 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
             </div>
           </div>
         ))}
+        {picker && (
+          <div style={{ border: '2px solid #040b8d', background: 'white', boxShadow: '3px 3px 0px black', maxHeight: 220, overflowY: 'auto' }}>
+            <div style={{ padding: '6px 8px', background: '#040b8d', color: 'white', fontWeight: 900, fontSize: 10 }}>↑↓ vyber • Enter potvrdí • Esc zavře — {picker.type} ({picker.items.length})</div>
+            {picker.items.map((it: any, idx: number) => (
+              <div key={idx} onClick={() => { const v = it.number || it.id; sendWithValue(v) }} style={{ padding: '5px 8px', cursor: 'pointer', background: idx === pickerIdx? '#CDA24D' : 'white', borderBottom: '1px solid #ddd', fontWeight: idx === pickerIdx? 900 : 400 }}>
+                <span style={{ opacity: 0.6 }}>[{it.number}]</span> {it.id} {it.displayName && it.displayName!== it.id? `— ${it.displayName}` : ''}
+              </div>
+            ))}
+          </div>
+        )}
         {isChatLoading && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
             <div style={{ padding: '6px 10px', border: '1.5px solid black', background: 'white', fontSize: 10 }}>píše…</div>
@@ -376,8 +410,16 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
           ref={chatInputRef}
           value={chatInput}
           onChange={e => setChatInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && sendChatMessage()}
-          placeholder="Napiš… /note /task /find"
+          onKeyDown={e => {
+            if (picker) {
+              if (e.key === 'ArrowUp') { e.preventDefault(); setPickerIdx(i => Math.max(0, i - 1)) }
+              if (e.key === 'ArrowDown') { e.preventDefault(); setPickerIdx(i => Math.min(picker.items.length - 1, i + 1)) }
+              if (e.key === 'Escape') { e.preventDefault(); setPicker(null) }
+              if (e.key === 'Enter' &&!chatInput.trim()) { e.preventDefault(); const sel = picker.items[pickerIdx]; if (sel) { const v = sel.number || sel.id; sendWithValue(v) } return }
+            }
+            if (e.key === 'Enter') sendChatMessage()
+          }}
+          placeholder={picker? `Vyber ${picker.type} ↑↓ Enter — nebo piš...` : "Napiš… /note /task /find /edit"}
           style={{
             flex: 1, background: 'white', color: 'black',
             fontSize: 11, fontFamily: 'monospace', padding: '6px 8px',

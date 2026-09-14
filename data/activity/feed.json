@@ -1,5 +1,15 @@
 [
   {
+    "id": "11a33244-38a4-4b92-b482-fe8d1e6d3ac1",
+    "ts": "2026-09-14T00:00:37.225Z",
+    "agent": "Koštěrad",
+    "type": "system",
+    "action": "Koštěrad: žádná failed runs ke kontrole",
+    "meta": {
+      "scanned": 0
+    }
+  },
+  {
     "id": "e769a906-6ef1-4e9f-9103-243a54088150",
     "ts": "2026-09-12T17:20:42.611Z",
     "agent": "Mary_Jane",

@@ -757,9 +757,42 @@ async function runResume(userMessage: string, runId: string, steps: string[])
 }
 
 // ============================================================
-// ÚKOL 21-24 — helpery pro number index + nové příkazy
+// ÚKOL 21-24 + NOVÉ ČÍSLOVÁNÍ 1_01, 2_01, 3_01...
 // ============================================================
-type CapabilityType = 'agents' | 'mcp' | 'skills' | 'cli' | 'teams' | 'workflows' | 'loops' | 'api'
+type CapabilityType = 'agents' | 'mcp' | 'skills' | 'cli' | 'teams' | 'workflows' | 'loops' | 'api' | 'rag'
+
+const TYPE_PREFIX: Record<CapabilityType, number> = {
+  agents: 1,
+  mcp: 2,
+  skills: 3,
+  cli: 4,
+  api: 5,
+  loops: 6,
+  teams: 7,
+  workflows: 8,
+  rag: 9,
+}
+
+function formatNumber(type: CapabilityType, seq: number): string {
+  const prefix = TYPE_PREFIX[type]
+  return `${prefix}_${String(seq).padStart(2,'0')}`
+}
+function extractSeq(num: any): number {
+  if (num == null) return 0
+  const s = String(num)
+  if (s.includes('_')) return parseInt(s.split('_')[1], 10) || 0
+  return parseInt(s, 10) || 0
+}
+async function getNextNumber(type: CapabilityType): Promise<string> {
+  try {
+    const items = await loadManifestsIndex(type)
+    let max = 0
+    for (const it of items) { const seq = extractSeq((it as any).number); if (seq > max) max = seq }
+    const baseDir = join(DATA_DIR, 'capabilities', type)
+    try { const dirs = await readdir(baseDir); for (const d of dirs){ try{ const mf = JSON.parse(await readFile(join(baseDir,d,'manifest.json'),'utf-8')); const seq=extractSeq(mf.number); if(seq>max) max=seq }catch{} } }catch{}
+    return formatNumber(type, max+1)
+  } catch { return formatNumber(type, 1) }
+}
 
 async function loadManifestsIndex(type: CapabilityType): Promise<any[]> {
   try {
@@ -767,15 +800,22 @@ async function loadManifestsIndex(type: CapabilityType): Promise<any[]> {
     const raw = await readFile(indexPath, 'utf-8')
     const data = JSON.parse(raw)
     return Array.isArray(data)? data : (data.items || data.capabilities || data.agents || [])
-  } catch {
-    return []
-  }
+  } catch { return [] }
 }
 
-async function findByNumber(type: CapabilityType, num: number): Promise<{ entry: any; filePath: string } | null> {
-  const items = await loadManifestsIndex(type)
-  const found = items.find((it: any) => it.number === num || it.number === String(num))
-  if (found) return { entry: found, filePath: join(DATA_DIR, 'capabilities', type, 'index.json') }
+async function findByNumber(type: CapabilityType, input: number | string): Promise<{ entry: any; filePath: string } | null> {
+  const rawInput = String(input).trim()
+  const searchSeq = extractSeq(rawInput)
+  try {
+    const items = await loadManifestsIndex(type)
+    let found = items.find((it: any) => String(it.number) === rawInput)
+    if (found) return { entry: found, filePath: join(DATA_DIR, 'capabilities', type, 'index.json') }
+    found = items.find((it: any) => extractSeq((it as any).number) === searchSeq)
+    if (found) return { entry: found, filePath: join(DATA_DIR, 'capabilities', type, 'index.json') }
+    const formatted = formatNumber(type, searchSeq)
+    found = items.find((it: any) => String(it.number) === formatted)
+    if (found) return { entry: found, filePath: join(DATA_DIR, 'capabilities', type, 'index.json') }
+  } catch {}
   try {
     const baseDir = join(DATA_DIR, 'capabilities', type)
     const dirs = await readdir(baseDir)
@@ -783,24 +823,56 @@ async function findByNumber(type: CapabilityType, num: number): Promise<{ entry:
       try {
         const mfPath = join(baseDir, d, 'manifest.json')
         const mf = JSON.parse(await readFile(mfPath, 'utf-8'))
-        if (mf.number === num || mf.number === String(num)) return { entry: {...mf, folder: d }, filePath: mfPath }
+        if (String(mf.number) === rawInput || extractSeq(mf.number) === searchSeq) return { entry: {...mf, folder: d }, filePath: mfPath }
       } catch {}
     }
   } catch {}
   return null
 }
 
+async function savePicker(runId: string, data: any){
+  const p = join(DATA_DIR, 'tmp', `picker_${runId}.json`)
+  await mkdir(join(DATA_DIR, 'tmp'), { recursive: true })
+  await writeFile(p, JSON.stringify(data, null, 2), 'utf-8')
+  return p
+}
+async function loadLatestPicker(prefix: string){
+  try{
+    const dir = join(DATA_DIR, 'tmp')
+    const files = (await readdir(dir)).filter(f=>f.startsWith(prefix)).sort().reverse()
+    if (!files[0]) return null
+    const raw = await readFile(join(dir, files[0]), 'utf-8')
+    return { file: join(dir, files[0]), data: JSON.parse(raw) }
+  }catch{ return null }
+}
+function formatPickerText(items: any[]){
+  return items.map((it:any)=> `${it.number} - ${it.id}${it.displayName? ` — ${it.displayName}`:''}`).join('\n')
+}
+async function runPickerList(type: CapabilityType, runId: string, steps: string[]){
+  const items = await loadManifestsIndex(type)
+  if (!items.length) return { reply: `Žádné ${type} nemám. Zkus /new ${type.slice(0,-1)}`, steps }
+  const tmpPath = await savePicker(runId, { mode: 'edit', type, items })
+  steps.push(`Mary Jane: picker ${type} → ${items.length} položek`)
+  return { reply: `PICKER:${type}:${tmpPath}\n${formatPickerText(items)}\n\nNapiš číslo (např. ${items[0].number} nebo ${extractSeq(items[0].number)}) nebo název, nebo vyber šipkama ↑↓ a Enter`, steps }
+}
+
 async function runEdit(userMessage: string, runId: string, steps: string[]) {
-  const m = userMessage.trim().match(/^\/edit\s+(agent|mcp|skill|cli|team|workflow|loop|api|rag)\s+(\d+|[a-z0-9-]+)/i)
-  if (!m) return { reply: 'Formát: `/edit <typ> <číslo|id>` např. `/edit agent 2` nebo `/edit skill lead-generation`', steps }
-  const [, rawType, rawId] = m
-  const typeMap: Record<string, CapabilityType> = { agent: 'agents', mcp: 'mcp', skill: 'skills', cli: 'cli', team: 'teams', workflow: 'workflows', loop: 'loops', api: 'api', rag: 'rag' as any }
+  const m = userMessage.trim().match(/^\/edit\s*(agent|mcp|skill|cli|team|workflow|loop|api|rag)?\s*([\d_]+|[a-z0-9-]+)?/i)
+  if (!m) return { reply: 'Formát: `/edit <typ> <číslo|id>` např. `/edit agent 1_02` nebo `/edit skill lead-generation`', steps }
+  const rawType = m[1]
+  const rawId = m[2]
+  if (!rawType){
+    const types = Object.keys(TYPE_PREFIX)
+    const tmpPath = await savePicker(runId, { mode: 'edit-type', types })
+    return { reply: `PICKER:type:${tmpPath}\n${types.join('\n')}\n\nCo chceš editovat? Napiš typ: agent, mcp, skill, cli, api, loop, team, workflow`, steps }
+  }
+  const typeMap: Record<string, CapabilityType> = { agent: 'agents', mcp: 'mcp', skill: 'skills', cli: 'cli', team: 'teams', workflow: 'workflows', loop: 'loops', api: 'api', rag: 'rag' }
   const type = typeMap[rawType.toLowerCase()] || (rawType.toLowerCase() as CapabilityType)
-  const num = parseInt(rawId, 10)
-  let found: any = null
-  if (!isNaN(num)) found = await findByNumber(type, num)
+  if (!rawId){
+    return runPickerList(type, runId, steps)
+  }
+  let found: any = await findByNumber(type, rawId)
   if (!found) {
-    // zkus najít podle id
     const all = await loadManifestsIndex(type)
     const f = all.find((a: any) => a.id === rawId || a.folder === rawId)
     if (f) found = { entry: f, filePath: join(DATA_DIR, 'capabilities', type, f.folder || f.id, 'manifest.json') }
@@ -808,45 +880,41 @@ async function runEdit(userMessage: string, runId: string, steps: string[]) {
   if (!found) return { reply: `Nenalezen ${rawType} #${rawId}. Zkontroluj data/capabilities/${type}/index.json`, steps }
   steps.push(`Mary Jane: edit ${type} #${rawId} → ${found.entry.id || found.entry.folder}`)
   await logActivity({ agent: 'Mary_Jane', type: 'routing', action: `edit ${type} #${rawId}`, meta: { runId } })
-  return { reply: `OPEN_BUILDER:${type}:${isNaN(num)? rawId : num}:${found.entry.id || found.entry.folder}\nOtevírám Builder pro ${rawType} #${rawId}`, steps }
+  return { reply: `OPEN_BUILDER:${type}:${found.entry.number}:${found.entry.id || found.entry.folder}\nOtevírám Builder pro ${rawType} #${found.entry.number}`, steps }
 }
 
 async function runAddMcp(userMessage: string, runId: string, steps: string[]) {
-  const m = userMessage.trim().match(/^\/add\s+mcp\s+(\d+)/i)
-  if (!m) return { reply: 'Formát: `/add mcp <číslo>` např. `/add mcp 22`', steps }
-  const num = parseInt(m[1], 10)
-  const found = await findByNumber('mcp', num)
-  if (!found) return { reply: `MCP #${num} nenalezeno.`, steps }
+  const m = userMessage.trim().match(/^\/add\s+mcp\s*([\d_]+)?/i)
+  const rawNum = m?.[1]
+  if (!rawNum){
+    return runPickerList('mcp', runId, steps)
+  }
+  const found = await findByNumber('mcp', rawNum)
+  if (!found) return { reply: `MCP #${rawNum} nenalezeno. Zkus /add mcp pro výběr.`, steps }
   const agents = await loadManifestsIndex('agents')
-  const agentList = agents.map((a: any) => `${a.number?? '?'} - ${a.id}`).join(', ') || '1-Mary, 2-Lubor'
-  await mkdir(join(DATA_DIR, 'tmp'), { recursive: true })
-  await writeFile(join(DATA_DIR, 'tmp', `add_mcp_${runId}.json`), JSON.stringify({ mcpNum: num, mcpId: found.entry.id || found.entry.folder }), 'utf-8')
-  steps.push(`Mary Jane: add mcp #${num} found ${found.entry.id}`)
-  return { reply: `Našel jsem MCP #${num} — ${found.entry.id}. K jakému agentovi? Napiš číslo: ${agentList}`, steps }
+  const tmpPath = await savePicker(runId, { mode: 'add-mcp', mcpNum: found.entry.number, mcpId: found.entry.id || found.entry.folder, agents })
+  steps.push(`Mary Jane: add mcp #${found.entry.number} found ${found.entry.id} → čekám na agenta`)
+  return { reply: `PICKER:agents:${tmpPath}\nNašel jsem MCP #${found.entry.number} — ${found.entry.id}. K jakému agentovi?\n${formatPickerText(agents)}`, steps }
 }
 
-async function runAddMcpConfirm(userMessage: string, runId: string, steps: string[], pending: { mcpNum: number; mcpId: string }) {
+async function runAddMcpConfirm(userMessage: string, runId: string, steps: string[], pending: { mcpNum: string; mcpId: string }) {
   const input = userMessage.trim()
-  const agentNum = parseInt(input, 10)
-  if (isNaN(agentNum)) return null
-  const agentFound = await findByNumber('agents', agentNum)
-  if (!agentFound) return { reply: `Agent #${agentNum} nenalezen.`, steps }
+  const agentFound = await findByNumber('agents', input)
+  if (!agentFound) return { reply: `Agent #${input} nenalezen.`, steps }
   try {
-    // vždy zapiš do manifest.json, ne do index.json
     const agentFolder = agentFound.entry.folder || agentFound.entry.id
     const manifestPath = join(DATA_DIR, 'capabilities', 'agents', agentFolder, 'manifest.json')
     let manifest: any
     try { manifest = JSON.parse(await readFile(manifestPath, 'utf-8')) } catch { manifest = agentFound.entry }
     manifest.dependencies = manifest.dependencies || []
-    // pro #22 filesystem je konvence fs:22
-    const finalDep = pending.mcpId === 'filesystem' || pending.mcpNum === 22? `fs:22` : `${pending.mcpId}:${pending.mcpNum}`
+    const finalDep = `${pending.mcpId}:${pending.mcpNum}`
     if (!manifest.dependencies.includes(finalDep)) manifest.dependencies.push(finalDep)
     manifest.updatedAt = new Date().toISOString()
     await mkdir(dirname(manifestPath), { recursive: true })
     await writeFile(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8')
-    steps.push(`Mary Jane: přidáno ${finalDep} do agenta #${agentNum} → ${manifestPath}`)
-    await logActivity({ agent: 'Mary_Jane', type: 'save', action: `add mcp ${finalDep} to agent #${agentNum}`, meta: { runId } })
-    return { reply: `Hotovo. MCP #${pending.mcpNum} (${pending.mcpId}) přiřazeno k agentovi #${agentNum} (${agentFound.entry.id}). Dependencies: [${manifest.dependencies.join(', ')}]\nOPEN_BUILDER:agents:${agentNum}:${agentFound.entry.id}`, steps }
+    steps.push(`Mary Jane: přidáno ${finalDep} do agenta #${agentFound.entry.number} → ${manifestPath}`)
+    await logActivity({ agent: 'Mary_Jane', type: 'save', action: `add mcp ${finalDep} to agent #${agentFound.entry.number}`, meta: { runId } })
+    return { reply: `Hotovo. MCP #${pending.mcpNum} (${pending.mcpId}) přiřazeno k agentovi #${agentFound.entry.number} (${agentFound.entry.id}). Dependencies: [${manifest.dependencies.join(', ')}]\nOPEN_BUILDER:agents:${agentFound.entry.number}:${agentFound.entry.id}`, steps }
   } catch (e: any) { return { reply: `Chyba: ${e.message}`, steps } }
 }
 
@@ -855,11 +923,7 @@ async function runNewMcp(userMessage: string, runId: string, steps: string[]) {
   steps.push(`Mary Jane: /new mcp → research "${query}"`)
   const researchResult = await runResearch(`/research ${query}`, runId, steps)
   let lastReport = ''
- try {
-    const files = await readdir(REPORTS_DIR)
-    const sorted = files.filter(f => f.endsWith('.md')).sort().reverse()
-    if (sorted[0]) lastReport = await readFile(join(REPORTS_DIR, sorted[0]), 'utf-8')
-  } catch {}
+  try { const files = await readdir(REPORTS_DIR); const sorted = files.filter(f => f.endsWith('.md')).sort().reverse(); if (sorted[0]) lastReport = await readFile(join(REPORTS_DIR, sorted[0]), 'utf-8') } catch {}
   let manifestObj: any
   try {
     const mod = await import('./kosterad.js')
@@ -867,27 +931,51 @@ async function runNewMcp(userMessage: string, runId: string, steps: string[]) {
     else throw new Error('no generator')
   } catch {
     manifestObj = {
-      id: `filesystem`,
-      type: 'mcp',
-      displayName: 'Filesystem MCP',
-      number: 23,
-      version: '0.1.0',
-      status: 'draft',
+      id: `filesystem`, type: 'mcp', displayName: 'Filesystem MCP',
+      number: await getNextNumber('mcp'), version: '0.1.0', status: 'draft',
       description: `Z research Julia: ${query.slice(0,200)}`,
-      runtime: 'node',
-      entrypoint: './src/server.ts',
-      transport: 'stdio',
-      tools: ['fs_read','fs_write','fs_list'],
-      tags: ['fs','filesystem'],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      runtime: 'node', entrypoint: './src/server.ts', transport: 'stdio',
+      tools: ['fs_read','fs_write','fs_list'], tags: ['fs','filesystem'],
+      createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
     }
   }
+  if (typeof manifestObj!== 'string') manifestObj.number = await getNextNumber('mcp')
+  else { try{ const tmp=JSON.parse(manifestObj); tmp.number=await getNextNumber('mcp'); manifestObj=JSON.stringify(tmp,null,2) }catch{} }
   const prefilled = typeof manifestObj === 'string'? manifestObj : JSON.stringify(manifestObj, null, 2)
   const tmpPath = join(DATA_DIR, 'tmp', `new_mcp_${runId}.json`)
   await mkdir(join(DATA_DIR, 'tmp'), { recursive: true })
   await writeFile(tmpPath, prefilled, 'utf-8')
   return { reply: `OPEN_BUILDER:mcp:new:${tmpPath}\nResearch hotovo → ${researchResult.reply}\nKoštěrad předvyplnil manifest z research.`, steps }
+}
+
+async function runNewSkill(userMessage: string, runId: string, steps: string[]) {
+  const query = userMessage.replace(/^\/new\s+skill\s*/i, '').trim() || 'best skill pattern 2026'
+  steps.push(`Mary Jane: /new skill → research "${query}"`)
+  const researchResult = await runResearch(`/research ${query}`, runId, steps)
+  let lastReport = ''
+  try { const files = await readdir(REPORTS_DIR); const sorted = files.filter(f => f.endsWith('.md')).sort().reverse(); if (sorted[0]) lastReport = await readFile(join(REPORTS_DIR, sorted[0]), 'utf-8') } catch {}
+  let manifestObj: any
+  try {
+    const mod = await import('./kosterad.js')
+    if ((mod as any)?.generateSkillManifest) manifestObj = await (mod as any).generateSkillManifest(lastReport || query)
+    else throw new Error('no generator')
+  } catch {
+    manifestObj = {
+      id: `skill-${Date.now()}`, type: 'skill', displayName: 'New Skill',
+      number: await getNextNumber('skills'), version: '0.1.0', status: 'draft',
+      description: `Z research: ${query.slice(0,200)}`,
+      runtime: 'node', entrypoint: './src/index.ts', pure: false,
+      tools: ['custom_tool'], tags: ['skill'],
+      createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+    }
+  }
+  if (typeof manifestObj!== 'string') manifestObj.number = await getNextNumber('skills')
+  else { try{ const tmp=JSON.parse(manifestObj); tmp.number=await getNextNumber('skills'); manifestObj=JSON.stringify(tmp,null,2) }catch{} }
+  const prefilled = typeof manifestObj === 'string'? manifestObj : JSON.stringify(manifestObj, null, 2)
+  const tmpPath = join(DATA_DIR, 'tmp', `new_skill_${runId}.json`)
+  await mkdir(join(DATA_DIR, 'tmp'), { recursive: true })
+  await writeFile(tmpPath, prefilled, 'utf-8')
+  return { reply: `OPEN_BUILDER:skills:new:${tmpPath}\nResearch hotovo → ${researchResult.reply}\nKoštěrad předvyplnil skill manifest.`, steps }
 }
 
 // ============================================================
@@ -898,19 +986,50 @@ async function runOrchestratorCore(userMessage: string, runId: string, steps: st
   const trimmed = userMessage.trim()
 
   // ---------- ÚKOL 22-24: explicitní příkazy ----------
-  if (/^\/edit\s+(agent|mcp|skill|cli|team|workflow)\s+\d+/i.test(trimmed)) {
+  if (/^\/edit\s+(agent|mcp|skill|cli|team|workflow|loop|api|rag)\s+[\d_]+/i.test(trimmed)) {
     return runEdit(trimmed, runId, steps)
   }
-  if (/^\/add\s+mcp\s+\d+/i.test(trimmed)) {
+  if (/^\/add\s+mcp\s+[\d_]+/i.test(trimmed)) {
     return runAddMcp(trimmed, runId, steps)
   }
   if (/^\/new\s+mcp\b/i.test(trimmed)) {
     return runNewMcp(trimmed, runId, steps)
   }
-  if (/^\d+$/.test(trimmed)) {
+  if (/^\/new\s+skill\b/i.test(trimmed)) {
+    return runNewSkill(trimmed, runId, steps)
+  }
+  // PICKER SELECTION — když uživatel vybere z nabídky
+  if (/^[\d_]+$/.test(trimmed) || /^[a-z0-9-]+$/i.test(trimmed)) {
     try {
       const tmpDir = join(DATA_DIR, 'tmp')
       const files = await readdir(tmpDir)
+      // nejnovější picker
+      const pickerFile = files.filter(f => f.startsWith('picker_')).sort().reverse()[0]
+      if (pickerFile){
+        const { data } = (await loadLatestPicker('picker_')) || {}
+        if (data){
+          if (data.mode === 'add-mcp'){
+            const confirm = await runAddMcpConfirm(trimmed, runId, steps, { mcpNum: data.mcpNum, mcpId: data.mcpId })
+            if (confirm){ try{ const { unlink } = await import('node:fs/promises'); await unlink(join(tmpDir, pickerFile)) }catch{}; return confirm }
+          }
+          if (data.mode === 'edit'){
+            const found = await findByNumber(data.type, trimmed)
+            if (found){
+              try{ const { unlink } = await import('node:fs/promises'); await unlink(join(tmpDir, pickerFile)) }catch{}
+              return { reply: `OPEN_BUILDER:${data.type}:${found.entry.number}:${found.entry.id || found.entry.folder}\nOtevírám Builder pro ${data.type} #${found.entry.number}`, steps }
+            }
+          }
+          if (data.mode === 'edit-type'){
+            const typeMap: any = { agent: 'agents', mcp: 'mcp', skill: 'skills', cli: 'cli', team: 'teams', workflow: 'workflows', loop: 'loops', api: 'api', rag: 'rag' }
+            const t = typeMap[trimmed.toLowerCase()] || trimmed.toLowerCase()
+            if (TYPE_PREFIX[t as CapabilityType]){
+              try{ const { unlink } = await import('node:fs/promises'); await unlink(join(tmpDir, pickerFile)) }catch{}
+              return runPickerList(t as CapabilityType, runId, steps)
+            }
+          }
+        }
+      }
+      // legacy add_mcp _ podpora
       const pending = files.filter(f => f.startsWith('add_mcp_')).sort().reverse()[0]
       if (pending) {
         const data = JSON.parse(await readFile(join(tmpDir, pending), 'utf-8'))
