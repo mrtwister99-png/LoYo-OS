@@ -1,0 +1,17 @@
+{
+  "id": "cancel",
+  "type": "agent",
+  "displayName": "Cancel",
+  "name": "Cancel",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Poslední gate. Hlídá SOLID, coroutines, performance. Tvůj senior co říká 'tohle předělej'.",
+  "profileId": "profile1",
+  "role": "specialist",
+  "capabilities": [
+    "kotlin",
+    "development"
+  ],
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "updatedAt": "2026-09-28T00:00:00.000Z"
+}

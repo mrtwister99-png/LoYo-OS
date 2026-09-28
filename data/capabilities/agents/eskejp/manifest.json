@@ -1,0 +1,17 @@
+{
+  "id": "eskejp",
+  "type": "agent",
+  "displayName": "Eskejp",
+  "name": "Eskejp",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Research Agent - ten co chceš ty - vyhledá cokoliv na netu a zapíše do souboru. Verze 2026.",
+  "profileId": "profile1",
+  "role": "specialist",
+  "capabilities": [
+    "kotlin",
+    "development"
+  ],
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "updatedAt": "2026-09-28T00:00:00.000Z"
+}

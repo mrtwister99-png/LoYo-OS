@@ -1,0 +1,17 @@
+{
+  "id": "laggy",
+  "type": "agent",
+  "displayName": "Laggy",
+  "name": "Laggy",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Jetpack Compose, Material 3, MVI, Navigation, animace. Bez něj máš funkční, ale hnusnou appku.",
+  "profileId": "profile1",
+  "role": "specialist",
+  "capabilities": [
+    "kotlin",
+    "development"
+  ],
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "updatedAt": "2026-09-28T00:00:00.000Z"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "error",
+  "type": "agent",
+  "displayName": "Error",
+  "name": "Error",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Gradle KTS, KMP, flavors, signing, version catalog. Bez něj ti to nikdy nesestaví APK/AAB.",
+  "profileId": "profile1",
+  "role": "specialist",
+  "capabilities": [
+    "kotlin",
+    "development"
+  ],
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "updatedAt": "2026-09-28T00:00:00.000Z"
+}

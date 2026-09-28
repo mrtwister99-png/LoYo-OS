@@ -1,0 +1,17 @@
+{
+  "id": "nofps",
+  "type": "agent",
+  "displayName": "NoFPS",
+  "name": "NoFPS",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Rozbije 'chci appku na...' na PRD, MVP a moduly. Bez něj ostatní postaví kravinu. Pracuje na Koog 1.0.",
+  "profileId": "profile1",
+  "role": "specialist",
+  "capabilities": [
+    "kotlin",
+    "development"
+  ],
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "updatedAt": "2026-09-28T00:00:00.000Z"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "camper",
+  "type": "agent",
+  "displayName": "Camper",
+  "name": "Camper",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Room, Ktor, DataStore, SQLDelight, repo implementace. Bez něj nemáš odkud brát data.",
+  "profileId": "profile1",
+  "role": "specialist",
+  "capabilities": [
+    "kotlin",
+    "development"
+  ],
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "updatedAt": "2026-09-28T00:00:00.000Z"
+}

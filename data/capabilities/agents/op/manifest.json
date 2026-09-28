@@ -1,0 +1,17 @@
+{
+  "id": "op",
+  "type": "agent",
+  "displayName": "OP",
+  "name": "OP",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Vygeneruje README, ARCHITECTURE.md, API docs. Aby to pochopil nováček za 10 minut.",
+  "profileId": "profile1",
+  "role": "specialist",
+  "capabilities": [
+    "kotlin",
+    "development"
+  ],
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "updatedAt": "2026-09-28T00:00:00.000Z"
+}

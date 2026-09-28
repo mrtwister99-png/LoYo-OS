@@ -1,0 +1,29 @@
+{
+  "id": "iiaa-team",
+  "type": "team",
+  "displayName": "IIAA Team",
+  "name": "IIAA Team",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Elitni tym 11 specialistu: Error, Cancel, Laggy, NoFPS, Camper, PWner, OP, cheater, Fatal, Eskejp, Delete. Prvni 4 agenti zustavaji bez tymu.",
+  "profileId": "profile1",
+  "color": "#ff6f00",
+  "purpose": "Hlavni vyvojovy tym",
+  "agents": [
+    "error",
+    "cancel",
+    "laggy",
+    "nofps",
+    "camper",
+    "pwner",
+    "op",
+    "cheater",
+    "fatal",
+    "eskejp",
+    "delete"
+  ],
+  "workflows": [],
+  "loops": [],
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "updatedAt": "2026-09-28T00:00:00.000Z"
+}
