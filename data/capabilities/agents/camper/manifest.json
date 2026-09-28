@@ -1,17 +1,18 @@
 {
   "id": "camper",
   "type": "agent",
-  "displayName": "Camper",
-  "name": "Camper",
+  "displayName": "Camper Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Room, Ktor, DataStore, SQLDelight, repo implementace. Bez něj nemáš odkud brát data.",
-  "profileId": "profile1",
-  "role": "specialist",
-  "capabilities": [
-    "kotlin",
-    "development"
+  "description": "Agent camper - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/camper/index.ts",
+  "packageDir": "agents/camper",
+  "permissions": [],
+  "tags": [
+    "camper",
+    "agent"
   ],
-  "createdAt": "2026-09-28T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

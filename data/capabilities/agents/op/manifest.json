@@ -1,17 +1,18 @@
 {
   "id": "op",
   "type": "agent",
-  "displayName": "OP",
-  "name": "OP",
+  "displayName": "Op Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Vygeneruje README, ARCHITECTURE.md, API docs. Aby to pochopil nováček za 10 minut.",
-  "profileId": "profile1",
-  "role": "specialist",
-  "capabilities": [
-    "kotlin",
-    "development"
+  "description": "Agent op - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/op/index.ts",
+  "packageDir": "agents/op",
+  "permissions": [],
+  "tags": [
+    "op",
+    "agent"
   ],
-  "createdAt": "2026-09-28T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

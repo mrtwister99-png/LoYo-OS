@@ -1,17 +1,18 @@
 {
   "id": "pwner",
   "type": "agent",
-  "displayName": "PWner",
-  "name": "PWner",
+  "displayName": "Pwner Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "GitHub Actions, CI/CD, R8/Proguard, secrets, Play Console release. Bez něj to nikdy nevydáš.",
-  "profileId": "profile1",
-  "role": "specialist",
-  "capabilities": [
-    "kotlin",
-    "development"
+  "description": "Agent pwner - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/pwner/index.ts",
+  "packageDir": "agents/pwner",
+  "permissions": [],
+  "tags": [
+    "pwner",
+    "agent"
   ],
-  "createdAt": "2026-09-28T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

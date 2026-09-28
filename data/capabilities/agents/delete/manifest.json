@@ -1,17 +1,18 @@
 {
   "id": "delete",
   "type": "agent",
-  "displayName": "Delete",
-  "name": "Delete",
+  "displayName": "Delete Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Drží Clean Architecture, moduly, Gradle KTS, DI. Bez něj máš za týden spaghetti. Koog 1.0 agent.",
-  "profileId": "profile1",
-  "role": "specialist",
-  "capabilities": [
-    "kotlin",
-    "development"
+  "description": "Agent delete - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/delete/index.ts",
+  "packageDir": "agents/delete",
+  "permissions": [],
+  "tags": [
+    "delete",
+    "agent"
   ],
-  "createdAt": "2026-09-28T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

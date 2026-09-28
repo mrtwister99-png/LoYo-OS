@@ -1,17 +1,18 @@
 {
   "id": "julia-nehledalova",
   "type": "agent",
-  "displayName": "Julia Nehledalova",
-  "name": "Julia Nehledalova",
+  "displayName": "Julia Nehledalova Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Julia - research a data agentka",
-  "profileId": "profile1",
-  "role": "researcher",
-  "capabilities": [
-    "research",
-    "data-analysis"
+  "description": "Agent julia-nehledalova - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/julia-nehledalova/index.ts",
+  "packageDir": "agents/julia-nehledalova",
+  "permissions": [],
+  "tags": [
+    "julia-nehledalova",
+    "agent"
   ],
-  "createdAt": "2026-01-01T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

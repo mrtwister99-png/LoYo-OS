@@ -1,17 +1,18 @@
 {
   "id": "kosterad-fuckstein",
   "type": "agent",
-  "displayName": "Kosterad Fuckstein",
-  "name": "Kosterad Fuckstein",
+  "displayName": "Kosterad Fuckstein Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Kosterad - cleanup a maintenance agent",
-  "profileId": "profile1",
-  "role": "cleaner",
-  "capabilities": [
-    "cleanup",
-    "maintenance"
+  "description": "Agent kosterad-fuckstein - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/kosterad-fuckstein/index.ts",
+  "packageDir": "agents/kosterad-fuckstein",
+  "permissions": [],
+  "tags": [
+    "kosterad-fuckstein",
+    "agent"
   ],
-  "createdAt": "2026-01-01T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

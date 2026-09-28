@@ -1,5 +1,15 @@
 [
   {
+    "id": "0c271493-4d5c-4461-b56d-61ed89ea7fbe",
+    "ts": "2026-09-28T20:00:25.575Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
     "id": "11a33244-38a4-4b92-b482-fe8d1e6d3ac1",
     "ts": "2026-09-14T00:00:37.225Z",
     "agent": "Koštěrad",

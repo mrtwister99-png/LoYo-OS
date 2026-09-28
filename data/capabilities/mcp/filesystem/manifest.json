@@ -1,18 +1,51 @@
 {
   "id": "filesystem",
-  "displayName": "Filesystem",
-  "name": "Filesystem MCP",
-  "description": "MCP pro práci se soubory - čtení, zápis, listování",
   "type": "mcp",
-  "number": "2_01",
-  "version": "0.1.0",
+  "displayName": "Filesystem MCP",
+  "version": "1.0.0",
   "status": "active",
-  "command": "node dist/tools/fs",
+  "description": "Filesystem MCP tools for file operations",
+  "runtime": "node",
+  "entrypoint": "../../../../tools/mcp/filesystem/index.ts",
+  "packageDir": "tools/mcp/filesystem",
   "tools": [
-    "fs_read",
-    "fs_write",
-    "fs_list",
-    "fs_search"
+    {
+      "name": "read_file",
+      "description": "Read file content",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "write_file",
+      "description": "Write file content",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_directory",
+      "description": "List directory contents",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "delete_file",
+      "description": "Delete file",
+      "inputSchema": {
+        "type": "object"
+      }
+    }
   ],
-  "dependencies": []
+  "permissions": [
+    "fs:read:*",
+    "fs:write:*"
+  ],
+  "tags": [
+    "filesystem",
+    "mcp"
+  ],
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

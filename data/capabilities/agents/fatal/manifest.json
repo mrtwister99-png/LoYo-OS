@@ -1,17 +1,18 @@
 {
   "id": "fatal",
   "type": "agent",
-  "displayName": "Fatal",
-  "name": "Fatal",
+  "displayName": "Fatal Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Unit testy s MockK + Turbine, UI testy, Detekt, Ktlint. Bez něj to padá u zákazníka.",
-  "profileId": "profile1",
-  "role": "specialist",
-  "capabilities": [
-    "kotlin",
-    "development"
+  "description": "Agent fatal - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/fatal/index.ts",
+  "packageDir": "agents/fatal",
+  "permissions": [],
+  "tags": [
+    "fatal",
+    "agent"
   ],
-  "createdAt": "2026-09-28T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

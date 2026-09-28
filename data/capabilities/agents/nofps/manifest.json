@@ -1,17 +1,18 @@
 {
   "id": "nofps",
   "type": "agent",
-  "displayName": "NoFPS",
-  "name": "NoFPS",
+  "displayName": "Nofps Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Rozbije 'chci appku na...' na PRD, MVP a moduly. Bez něj ostatní postaví kravinu. Pracuje na Koog 1.0.",
-  "profileId": "profile1",
-  "role": "specialist",
-  "capabilities": [
-    "kotlin",
-    "development"
+  "description": "Agent nofps - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/nofps/index.ts",
+  "packageDir": "agents/nofps",
+  "permissions": [],
+  "tags": [
+    "nofps",
+    "agent"
   ],
-  "createdAt": "2026-09-28T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

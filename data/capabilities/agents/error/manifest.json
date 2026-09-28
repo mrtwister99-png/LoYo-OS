@@ -1,17 +1,18 @@
 {
   "id": "error",
   "type": "agent",
-  "displayName": "Error",
-  "name": "Error",
+  "displayName": "Error Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Gradle KTS, KMP, flavors, signing, version catalog. Bez něj ti to nikdy nesestaví APK/AAB.",
-  "profileId": "profile1",
-  "role": "specialist",
-  "capabilities": [
-    "kotlin",
-    "development"
+  "description": "Agent error - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/error/index.ts",
+  "packageDir": "agents/error",
+  "permissions": [],
+  "tags": [
+    "error",
+    "agent"
   ],
-  "createdAt": "2026-09-28T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

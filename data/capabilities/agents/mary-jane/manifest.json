@@ -1,18 +1,18 @@
 {
   "id": "mary-jane",
   "type": "agent",
-  "displayName": "Mary Jane",
-  "name": "Mary Jane",
+  "displayName": "Mary Jane Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Mary Jane - sekretarka, routing a orchestrace",
-  "profileId": "profile1",
-  "role": "secretary",
-  "capabilities": [
-    "routing",
-    "chat",
-    "orchestration"
+  "description": "Agent mary-jane - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/mary-jane/index.ts",
+  "packageDir": "agents/mary-jane",
+  "permissions": [],
+  "tags": [
+    "mary-jane",
+    "agent"
   ],
-  "createdAt": "2026-01-01T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

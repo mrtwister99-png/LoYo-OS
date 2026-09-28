@@ -1,0 +1,22 @@
+{
+  "id": "iiaa-team",
+  "type": "team",
+  "displayName": "IIAA Team",
+  "name": "IIAA Team",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Hlavni tym pro IIAA - Kotlin + AI + integrace - sdruzuje vsechny agenty",
+  "profileId": "profile1",
+  "color": "#ff6f00",
+  "purpose": "Vyvoj IIAA platformy",
+  "agents": [
+    "julia-nehledalova",
+    "mary-jane",
+    "lubor-nehleda",
+    "kosterad-fuckstein"
+  ],
+  "workflows": [],
+  "loops": [],
+  "createdAt": "2026-09-28T00:00:00.000Z",
+  "updatedAt": "2026-09-28T00:00:00.000Z"
+}

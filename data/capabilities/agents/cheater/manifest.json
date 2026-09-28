@@ -1,17 +1,18 @@
 {
   "id": "cheater",
   "type": "agent",
-  "displayName": "cheater",
-  "name": "cheater",
+  "displayName": "Cheater Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Čistá business logika, use-cases, entities. Bez Android závislostí. Testovatelný mozek appky.",
-  "profileId": "profile1",
-  "role": "specialist",
-  "capabilities": [
-    "kotlin",
-    "development"
+  "description": "Agent cheater - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/cheater/index.ts",
+  "packageDir": "agents/cheater",
+  "permissions": [],
+  "tags": [
+    "cheater",
+    "agent"
   ],
-  "createdAt": "2026-09-28T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }

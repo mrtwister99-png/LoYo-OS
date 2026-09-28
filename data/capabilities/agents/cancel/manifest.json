@@ -1,17 +1,18 @@
 {
   "id": "cancel",
   "type": "agent",
-  "displayName": "Cancel",
-  "name": "Cancel",
+  "displayName": "Cancel Agent",
   "version": "1.0.0",
   "status": "active",
-  "description": "Poslední gate. Hlídá SOLID, coroutines, performance. Tvůj senior co říká 'tohle předělej'.",
-  "profileId": "profile1",
-  "role": "specialist",
-  "capabilities": [
-    "kotlin",
-    "development"
+  "description": "Agent cancel - auto-fixed manifest",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/cancel/index.ts",
+  "packageDir": "agents/cancel",
+  "permissions": [],
+  "tags": [
+    "cancel",
+    "agent"
   ],
-  "createdAt": "2026-09-28T00:00:00.000Z",
-  "updatedAt": "2026-09-28T00:00:00.000Z"
+  "createdAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-09-02T00:00:00Z"
 }
