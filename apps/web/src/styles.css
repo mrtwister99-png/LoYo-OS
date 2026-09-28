@@ -1,0 +1,48 @@
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Space Grotesk', monospace; background:#f6f6f3; overflow-x:hidden; color:#111}
+button{font-family:inherit}
+
+/* GRID BG */
+.bg-grid{position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:0.6}
+
+/* HERO JOINED */
+.hero-joined{display:flex; border:3px solid #111; border-radius:24px; overflow:hidden; background:white; box-shadow:8px 8px 0 #111; max-width:1100px}
+.hero-loyo{display:grid; grid-template-columns:120px 120px; grid-template-rows:120px 120px; gap:0; background:#fff}
+.hero-loyo-cell{display:flex; align-items:center; justify-content:center; font-family:'Syne', sans-serif; font-weight:800; font-size:56px; border-right:3px solid #111; border-bottom:3px solid #111; position:relative; background:white}
+.hero-loyo-cell:nth-child(2){border-right:3px solid #111}
+.hero-loyo-cell:nth-child(2n){border-right:3px solid #111}
+.hero-loyo-cell:nth-child(3),.hero-loyo-cell:nth-child(4){border-bottom:none}
+.hero-loyo-cell b{line-height:1}
+.cell-accent-top{position:absolute; top:0; left:0; right:0; height:10px}
+.hero-dev{flex:1; display:flex; flex-direction:column; justify-content:center; padding:0 32px; border-left:3px solid #111; margin-left:-3px; background:white}
+.hero-dev-title{font-family:'Syne', sans-serif; font-weight:800; font-size: clamp(36px, 6vw, 78px); letter-spacing:-0.02em; line-height:0.9; display:flex; flex-wrap:wrap; gap:16px}
+.hero-dev-premium{font-size:12px; letter-spacing:0.4em; margin-bottom:12px; display:flex; align-items:center; gap:12px}
+.hero-dev-premium::after{content:''; width:80px; height:2px; background:#111; display:inline-block}
+
+/* MENU GLITCH */
+@keyframes glitchTopDown {
+  0% { transform: translateY(-100%); clip-path: inset(0 0 100% 0); opacity:0; filter: hue-rotate(90deg) }
+  10% { transform: translateY(-80%); clip-path: inset(0 0 80% 0); opacity:1; filter: hue-rotate(0deg) contrast(2) }
+  20% { transform: translateY(-60%) skewX(5deg); clip-path: inset(20% 0 20% 0); text-shadow: 4px 0 #ff0000, -4px 0 #0000ff }
+  35% { transform: translateY(-30%) skewX(-8deg); clip-path: inset(0 0 0 0); text-shadow: -6px 0 #ff0000, 6px 0 #00ff00 }
+  50% { transform: translateY(-10%) skewX(3deg); }
+  70% { transform: translateY(0) skewX(0); filter: none }
+  100% { transform: translateY(0); clip-path: inset(0 0 0 0); opacity:1 }
+}
+@keyframes rgbSplit {
+  0%,100%{text-shadow:0 0 transparent}
+  20%{text-shadow:3px 0 #ff0055, -3px 0 #00ffff}
+  40%{text-shadow:-3px 0 #ff0055, 3px 0 #00ffff}
+  60%{text-shadow:2px 0 #ff0055, -2px 0 #00ffff}
+}
+.menu-glitch-enter{animation: glitchTopDown 0.9s cubic-bezier(0.25,1,0.5,1) both, rgbSplit 0.3s 0.4s}
+.menu-overlay{position:fixed; inset:0; z-index:50; background:#f6f6f3; display:flex; flex-direction:column; padding:32px; border-bottom:6px solid #111}
+.menu-scanline{position:absolute; inset:0; background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,0.04) 2px 3px); pointer-events:none}
+
+/* TETRIS FIX */
+.tetris-board{display:grid; gap:2px; background:#111; padding:4px; border-radius:8px}
+.tetris-cell{width:24px; height:24px; background:#fff; border-radius:3px}
+
+/* INFINITE BG CUBES */
+.infinite-cube{position:absolute; border:1px solid rgba(0,0,0,0.06); background:white; box-shadow:2px 2px 0 rgba(0,0,0,0.04)}

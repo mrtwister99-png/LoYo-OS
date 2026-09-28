@@ -1,0 +1,1 @@
+export const profile4Colors = { accent: '#a136ff', bg: '#fdfdfc', border: '#000', neon: '#d9ff00' }

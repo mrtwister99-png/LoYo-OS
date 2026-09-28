@@ -1,0 +1,1 @@
+export const profile3Colors = { accent: '#ff6f00', bg: '#fdfdfc', border: '#000', caramel: '#CDA24D' }
