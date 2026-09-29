@@ -22,3 +22,15 @@ Chceš se na něco zaměřit, nebo jedeme podle plánu?
 
 ---
 
+## 29. 9. 2026
+☀️ Čauky, Tome! Tady tvůj ranní přehled:
+
+📋 **Status LoYo OS** [fast-3b <1s]
+• Otevřené úkoly: 1 / 3
+• Poznámky celkem: 7
+• Kalendářní události: 0
+
+Chceš se na něco zaměřit, nebo jedeme podle plánu?
+
+---
+

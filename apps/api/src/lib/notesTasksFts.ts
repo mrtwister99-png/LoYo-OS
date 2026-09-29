@@ -1,14 +1,8 @@
-import Database from 'better-sqlite3'
-import { join } from 'path'
 import { existsSync, readdirSync, readFileSync } from 'fs'
+import { join } from 'path'
 import { DATA_DIR } from './dataPaths.js'
-const dbPath = join(DATA_DIR, 'index.db')
-const db = new Database(dbPath)
-db.pragma('journal_mode = WAL')
-db.pragma('synchronous = NORMAL')
-db.pragma('temp_store = MEMORY')
-db.pragma('cache_size = -64000')
-db.pragma('mmap_size = 268435456')
+import { getDb } from './connection.js'
+const db = getDb()
 db.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(file_name, title, content)`)
 db.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS tasks_fts USING fts5(file_name, title, content, done)`)
 
@@ -58,8 +52,8 @@ export function searchTasks(q: string) {
 }
 
 export function searchAll(q: string) {
-  const notes = db.prepare(`SELECT 'note' as type, file_name, title, content, bm25(notes_fts) as rank FROM notes_fts WHERE notes_fts MATCH? ORDER BY rank LIMIT 10`).all(q) as any[]
-  const tasks = db.prepare(`SELECT 'task' as type, file_name, title, content, bm25(tasks_fts) as rank FROM tasks_fts WHERE tasks_fts MATCH? ORDER BY rank LIMIT 10`).all(q) as any[]
+  const notes = db.prepare(`SELECT 'note' as type, file_name, title, content, bm25(notes_fts) as rank FROM notes_fts WHERE notes_fts MATCH ? ORDER BY rank LIMIT 10`).all(q) as any[]
+  const tasks = db.prepare(`SELECT 'task' as type, file_name, title, content, bm25(tasks_fts) as rank FROM tasks_fts WHERE tasks_fts MATCH ? ORDER BY rank LIMIT 10`).all(q) as any[]
   return [...notes,...tasks].sort((a,b)=>a.rank-b.rank).slice(0,20)
 }
 

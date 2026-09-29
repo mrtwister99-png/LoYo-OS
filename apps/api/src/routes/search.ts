@@ -1,7 +1,5 @@
 import type { FastifyInstance } from 'fastify'
-import { join } from 'path'
-import { DATA_DIR } from '../lib/dataPaths.js'
-import Database from 'better-sqlite3'
+import { getDb } from '../lib/connection.js'
 import { z } from 'zod'
 
 const QuerySchema = z.object({
@@ -15,10 +13,7 @@ export async function searchRoutes(app: FastifyInstance) {
     const parsed = QuerySchema.safeParse(req.query)
     if (!parsed.success) return []
     const { q, limit, type } = parsed.data
-    const dbPath = join(DATA_DIR, 'index.db')
-    const { existsSync } = await import('fs');
-    if (!existsSync(dbPath)) return [];
-    const db = new Database(dbPath, { readonly: true })
+    const db = getDb()
     try {
       // better-sqlite3 sync + WAL - <10ms, FTS5 + bm25
       if (type === 'all') {
@@ -33,8 +28,6 @@ export async function searchRoutes(app: FastifyInstance) {
     } catch (e) {
       console.error('[search] FTS error', e)
       return []
-    } finally {
-      db.close()
     }
   })
 }

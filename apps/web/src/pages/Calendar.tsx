@@ -71,6 +71,7 @@ export default function Calendar() {
   const [viewYear, setViewYear] = useState(new Date().getFullYear())
   const [viewMonth, setViewMonth] = useState(new Date().getMonth())
   const [selectedDate, setSelectedDate] = useState(today)
+  const [viewMode, setViewMode] = useState<'grid' | 'timeline'>('grid')
   const [modal, setModal] = useState<ModalState>(EMPTY_MODAL)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -189,16 +190,20 @@ export default function Calendar() {
   const selectedEvents = eventsForDate(selectedDate).sort((a, b) => a.time.localeCompare(b.time))
 
   return (
-    <div className="p-6 md:p-10 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-lg md:text-xl font-black tracking-[0.2em]">KALENDÁŘ</h1>
-        <button
-          onClick={() => openNewEvent()}
-          className="px-4 py-2 text-[12px] tracking-[0.15em] font-bold bg-[#1000a1] text-white hover:opacity-90 transition-opacity"
-        >
-          + PŘIDAT UDÁLOST
-        </button>
-      </div>
+        <div className="flex items-center gap-2">
+          <div className="flex border border-black/20 rounded-sm overflow-hidden">
+            <button onClick={() => setViewMode('grid')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='grid'? 'bg-black text-white' : 'bg-white hover:bg-black/5'}`}>GRID</button>
+            <button onClick={() => setViewMode('timeline')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='timeline'? 'bg-black text-white' : 'bg-white hover:bg-black/5'}`}>TIMELINE</button>
+          </div>
+          <button
+            onClick={() => openNewEvent()}
+            className="px-4 py-2 text- tracking-[0.15em] font-bold bg-[#1000a1] text-white hover:opacity-90 transition-opacity"
+          >
+            + PŘIDAT UDÁLOST
+          </button>
+        </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
         {/* Kalendářní mřížka */}
@@ -245,44 +250,108 @@ export default function Calendar() {
           </div>
         </div>
 
-        {/* Přehled dne */}
+               {/* Přehled dne / Timeline - ÚKOL 17 */}
         <div className="bg-white/80 backdrop-blur-sm p-4 md:p-5 rounded-sm border border-black/10">
-          <div className="text-[12px] font-bold tracking-[0.15em] mb-3 opacity-70">
-            {new Date(selectedDate).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}
+          <div className="flex items-center justify-between mb-3">
+            <div className="text- font-bold tracking-[0.15em] opacity-70">
+              {new Date(selectedDate).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}
+            </div>
+            {viewMode==='timeline' && <div className="text- opacity-50">{selectedEvents.length} událostí</div>}
           </div>
 
-          {selectedEvents.length === 0 ? (
-            <div className="text-[12px] opacity-50 py-6 text-center">Žádné události tento den.</div>
-          ) : (
-            <div className="flex flex-col gap-2">
-              {selectedEvents.map((ev, idx) => (
-                <div key={ev.file_path} className="p-3 bg-white rounded-sm border border-black/10 group border-l-4" style={{ borderLeftColor: CALENDAR_COLOR, background: `linear-gradient(90deg, #fff 70%, ${CALENDAR_COLOR}22 100%)` }}>
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <div className="text-[11px] font-bold tracking-[0.1em] opacity-60">{ev.time}</div>
-                      <div className="text-[13px] font-semibold">{ev.title}</div>
-                      {extractDescription(ev.content) && (
-                        <div className="text-[11px] opacity-60 mt-1 whitespace-pre-wrap">{extractDescription(ev.content)}</div>
-                      )}
+          {viewMode==='grid'? (
+            <>
+              {selectedEvents.length === 0? (
+                <div className="text- opacity-50 py-6 text-center">Žádné události tento den.</div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {selectedEvents.map((ev) => (
+                    <div key={ev.file_path} className="p-3 bg-white rounded-sm border border-black/10 group border-l-4" style={{ borderLeftColor: CALENDAR_COLOR, background: `linear-gradient(90deg, #fff 70%, ${CALENDAR_COLOR}22 100%)` }}>
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="text- font-bold tracking-[0.1em] opacity-60">{ev.time}</div>
+                          <div className="text- font-semibold">{ev.title}</div>
+                          {extractDescription(ev.content) && (
+                            <div className="text- opacity-60 mt-1 whitespace-pre-wrap">{extractDescription(ev.content)}</div>
+                          )}
+                        </div>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                          <button onClick={() => openEditEvent(ev)} className="text- px-2 py-1 border border-black/20 rounded-sm hover:bg-black/5">EDIT</button>
+                          <button onClick={() => deleteEvent(ev)} className="text- px-2 py-1 border border-[#ae1710]/40 text-[#ae1710] rounded-sm hover:bg-[#ae1710]/10">SMAZAT</button>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                      <button onClick={() => openEditEvent(ev)} className="text-[10px] px-2 py-1 border border-black/20 rounded-sm hover:bg-black/5">EDIT</button>
-                      <button onClick={() => deleteEvent(ev)} className="text-[10px] px-2 py-1 border border-[#ae1710]/40 text-[#ae1710] rounded-sm hover:bg-[#ae1710]/10">SMAZAT</button>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              )}
+            </>
+          ) : (
+            <div className="relative border border-black/10 rounded-sm bg-white overflow-hidden">
+              <div className="h- overflow-y-auto relative">
+                {Array.from({ length: 24 }).map((_, h) => (
+                  <div key={h} className="absolute left-0 right-0 flex" style={{ top: `${h * 52}px`, height: '52px' }}>
+                    <div className="w-12 text- opacity-40 pr-2 text-right pt-1 border-r border-black/5">{String(h).padStart(2,'0')}:00</div>
+                    <div className="flex-1 border-t border-black/5"></div>
+                  </div>
+                ))}
+                {(() => {
+                  const toMin = (t:string)=>{ const [hh,mm]=t.split(':').map(Number); return (hh||0)*60+(mm||0) }
+                  const sorted = [...selectedEvents].sort((a,b)=>toMin(a.time)-toMin(b.time))
+                  const cols: typeof sorted[] = []
+                  const placed = sorted.map(ev=>{
+                    const start = toMin(ev.time)
+                    let colIdx = cols.findIndex(col=>{
+                      const last = col[col.length-1]
+                      return last? toMin(last.time)+60 <= start : true
+                    })
+                    if(colIdx===-1){ colIdx=cols.length; cols.push([]) }
+                    cols[colIdx].push(ev)
+                    return {ev, colIdx, start}
+                  })
+                  const colCount = Math.max(1, cols.length)
+                  return placed.map(({ev, colIdx, start})=>{
+                    const top = (start/60)*52
+                    return (
+                      <div
+                        key={ev.file_path}
+                        className="absolute rounded-sm border border-[#1000a1]/30 shadow-sm group cursor-pointer hover:z-10 hover:shadow-md transition-all"
+                        style={{
+                          top: `${top}px`,
+                          height: '50px',
+                          left: `calc(48px + ${(colIdx/colCount)*100}% - ${(colIdx/colCount)*48}px)`,
+                          width: `calc(${100/colCount}% - 48px/${colCount} - 4px)`,
+                          background: `linear-gradient(135deg, #fff 0%, ${CALENDAR_COLOR}18 100%)`,
+                          borderLeft: `3px solid ${CALENDAR_COLOR}`
+                        }}
+                        onClick={()=>openEditEvent(ev)}
+                      >
+                        <div className="px-2 py-1">
+                          <div className="text- font-bold truncate">{ev.time} {ev.title}</div>
+                          <div className="text- opacity-60 truncate">{extractDescription(ev.content).slice(0,60)}</div>
+                        </div>
+                      </div>
+                    )
+                  })
+                })()}
+                {selectedDate===today && (
+                  <div className="absolute left-0 right-0 h-0.5 bg-[#ae1710] z-20 pointer-events-none" style={{ top: `${(new Date().getHours()*60+new Date().getMinutes())/60*52}px` }}>
+                    <div className="absolute -left-1 -top-1 w-2 h-2 rounded-full bg-[#ae1710]"></div>
+                  </div>
+                )}
+              </div>
+              {selectedEvents.length===0 && <div className="text- opacity-50 p-3 text-center">Žádné události - přetah se nezobrazí</div>}
             </div>
           )}
 
           <button
             onClick={() => openNewEvent(selectedDate)}
-            className="w-full mt-4 py-2 text-[11px] tracking-[0.15em] font-bold border border-black/20 rounded-sm hover:bg-black/5 transition-colors"
+            className="w-full mt-4 py-2 text- tracking-[0.15em] font-bold border border-black/20 rounded-sm hover:bg-black/5 transition-colors"
           >
             + PŘIDAT NA TENTO DEN
           </button>
         </div>
       </div>
+
 
       {/* Modal */}
       {modal.open && (

@@ -1,14 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import * as git from 'isomorphic-git';
 // @ts-ignore - http client nemá typy pro ESM, ale runtime funguje
 import http from 'isomorphic-git/http/node';
+import { DATA_DIR, CAPABILITIES_DIR } from './dataPaths.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const GIT_ROOT = path.resolve(__dirname, '../../../..');
-const CAPABILITIES_REL = 'data/capabilities';
+const GIT_ROOT = path.resolve(DATA_DIR, '..');
+const CAPABILITIES_REL = path.relative(GIT_ROOT, CAPABILITIES_DIR).replace(/\\/g, '/');
 
 function walkManifests(dir: string, out: string[] = []): string[] {
   try {

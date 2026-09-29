@@ -8,10 +8,20 @@ const AGENTS_INDEX = join(DATA_DIR, 'capabilities/agents/index.json')
 const REP_FILE = join(DATA_DIR, 'activity/reputation.json')
 const ALPHA = 0.3
 
-type RepMap = Record<string,{ ewma:number; runs:number; fails:number; last:string }>
+type RepMap = Record<string,{ ewma:number; runs:number; fails:number; last:string; history?: Array<{ts:string; action:string; file?:string; added?:string[]}> }>
 
 async function loadRep(): Promise<RepMap>{ try{return JSON.parse(await readFile(REP_FILE,'utf-8'))}catch{return{}} }
 async function saveRep(m:RepMap){ await mkdir(join(DATA_DIR,'activity'),{recursive:true}); await writeFile(REP_FILE,JSON.stringify(m,null,2),'utf-8') }
+
+async function appendFixLog(fix: {agent:string; file:string; added:string[]}){
+  const LOG_FILE = join(DATA_DIR,'activity','kosterad-fixes.json')
+  try{
+    await mkdir(join(DATA_DIR,'activity'),{recursive:true})
+    let existing:any[]=[]; try{ existing=JSON.parse(await readFile(LOG_FILE,'utf-8')) }catch{}
+    existing.unshift({ts:new Date().toISOString(),...fix})
+    await writeFile(LOG_FILE, JSON.stringify(existing.slice(0,200), null, 2), 'utf-8')
+  }catch{}
+}
 
 function extractTools(txt:string){
   const tools=['fs_read','fs_write','web_search','rag','sms_send','cli_firmy','memory_search','fs','read_note','save_note']
@@ -74,7 +84,19 @@ export async function runKosterad(){
   }
 
   if(fixed>0){
-    try{ await writeFile(AGENTS_INDEX,JSON.stringify({...agentsIndex,last_sync:new Date().toISOString()},null,2),'utf-8') }catch{}
+    try{
+      await mkdir(join(DATA_DIR,'capabilities','agents'),{recursive:true})
+      await writeFile(AGENTS_INDEX,JSON.stringify({...agentsIndex,last_sync:new Date().toISOString()},null,2),'utf-8')
+    }catch{}
+    for(const fx of fixes){
+      const ag = fx.agent
+      if(rep[ag]){
+        if(!rep[ag].history) rep[ag].history=[]
+        rep[ag].history!.unshift({ts:new Date().toISOString(), action:'fix tools', file:fx.file, added:fx.added})
+        rep[ag].history = rep[ag].history!.slice(0,20)
+      }
+      await appendFixLog(fx).catch(()=>{})
+    }
     await saveRep(rep)
     await logActivity({agent:'Koštěrad',type:'system',action:`Koštěrad opravil ${fixed} manifesty`,meta:{fixed,fixes,reputation:rep}}).catch(()=>{})
   } else {

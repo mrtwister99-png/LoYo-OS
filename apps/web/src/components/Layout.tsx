@@ -1,7 +1,6 @@
 import { useReducer, useEffect, useCallback, useMemo } from 'react'
 import Header from './Header'
 import Bottom from './Bottom'
-import Mobil from './Mobil'
 import { Menu } from './Menu'
 import { useSaveStatus } from '../hooks/useSaveStatus'
 
@@ -16,21 +15,18 @@ type LayoutProps = {
   biosMode?: boolean
   setBiosMode?: (v: boolean) => void
   onOpenBuilderMenu?: () => void
-  onOpenMobil?: () => void
 }
 
 const TAB_STEPS = [
   { id: 'bios-menu',    label: 'BIOS menu'        },
-  { id: 'header-0',    label: 'Logo/Profil'       },
-  { id: 'header-1-1',  label: 'Notif: Nové'       },
-  { id: 'header-1-2',  label: 'Notif: Nutné'      },
-  { id: 'header-1-3',  label: 'Notif: Schválení'  },
-  { id: 'header-2',    label: 'Chat'              },
-  { id: 'header-3',    label: 'Čas'               },
-  { id: 'header-4',    label: 'Datum'             },
-  { id: 'header-5',    label: 'Aktivita'          },
-  { id: 'builder',     label: 'Builder menu'      },
-  { id: 'mobil',       label: 'Mobil'             },
+  { id: 'header-0',    label: 'Logo'              },
+  { id: 'header-1',    label: 'Notifikace'        },
+  { id: 'header-2',    label: 'Calendar'          },
+  { id: 'header-3',    label: 'Tasks'             },
+  { id: 'header-4',    label: 'Notes'             },
+  { id: 'header-5',    label: 'Builder'           },
+  { id: 'builder',     label: 'Builder panel'     },
+  { id: 'bottom',      label: 'Bottom bar'        },
 ] as const
 
 const HEADER_MAX = 5
@@ -39,30 +35,22 @@ type State = {
   biosMenuOpen: boolean
   biosMenuIdx: number
   headerFocus: number | null
-  notifSubFocus: 0 | 1 | 2 | null
-  profileSubFocus: 0 | 1 | 2 | 3 | null
+  notifSubFocus: 0|1|2|null
+  profileSubFocus: 0|1|2|3|null
   bottomFocus: boolean
   builderFocus: boolean
-  telefonOpen: boolean
 }
 
 type Action =
   | { type: 'SET_BIOS_OPEN'; v: boolean }
   | { type: 'SET_BIOS_IDX'; v: number }
-  | { type: 'SET_HEADER'; v: number | null }
-  | { type: 'SET_NOTIF'; v: 0 | 1 | 2 | null }
-  | { type: 'SET_PROFILE'; v: 0 | 1 | 2 | 3 | null }
-  | { type: 'SET_BOTTOM'; v: boolean }
-  | { type: 'SET_BUILDER'; v: boolean }
-  | { type: 'SET_TELEFON'; v: boolean }
-  | { type: 'TOGGLE_TELEFON' }
-  | { type: 'RESET_ALL' }
-  | { type: 'CYCLE_PROFILE' }
-  | { type: 'CYCLE_NOTIF' }
-  | { type: 'FOCUS'; header: number | null; notif?: 0 | 1 | 2 | null; profile?: 0 | 1 | 2 | 3 | null; builder?: boolean; bottom?: boolean }
+  | { type: 'FOCUS'; header?: number; notif?: 0|1|2|null; profile?: 0|1|2|3|null }
   | { type: 'TAB' }
   | { type: 'ESC' }
-  | { type: 'ENTER' }
+  | { type: 'CYCLE_PROFILE' }
+  | { type: 'CYCLE_NOTIF' }
+  | { type: 'SET_BUILDER'; v: boolean }
+  | { type: 'SET_BOTTOM'; v: boolean }
 
 const initialState: State = {
   biosMenuOpen: false,
@@ -72,53 +60,42 @@ const initialState: State = {
   profileSubFocus: null,
   bottomFocus: false,
   builderFocus: false,
-  telefonOpen: false,
 }
 
 function layoutReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'SET_BIOS_OPEN': return { ...state, biosMenuOpen: action.v }
     case 'SET_BIOS_IDX': return { ...state, biosMenuIdx: action.v }
-    case 'SET_HEADER': return { ...state, headerFocus: action.v, builderFocus: false, bottomFocus: false, biosMenuOpen: false }
-    case 'SET_NOTIF': return { ...state, notifSubFocus: action.v }
-    case 'SET_PROFILE': return { ...state, profileSubFocus: action.v }
-    case 'SET_BOTTOM': return { ...state, bottomFocus: action.v, builderFocus: false, headerFocus: null, biosMenuOpen: false }
-    case 'SET_BUILDER': return { ...state, builderFocus: action.v, bottomFocus: false, headerFocus: null, biosMenuOpen: false }
-    case 'SET_TELEFON': return { ...state, telefonOpen: action.v }
-    case 'TOGGLE_TELEFON': return { ...state, telefonOpen: !state.telefonOpen }
-    case 'RESET_ALL':
-      return { ...state, biosMenuOpen: false, headerFocus: null, notifSubFocus: null, profileSubFocus: null, bottomFocus: false, builderFocus: false, telefonOpen: false }
-    case 'CYCLE_PROFILE': {
-      const next = state.profileSubFocus === null ? 0 : (state.profileSubFocus + 1) % 4 as 0 | 1 | 2 | 3
-      return { ...state, profileSubFocus: next, headerFocus: 0, notifSubFocus: null, biosMenuOpen: false, builderFocus: false, bottomFocus: false }
-    }
-    case 'CYCLE_NOTIF': {
-      const next = state.notifSubFocus === null ? 0 : (state.notifSubFocus + 1) % 3 as 0 | 1 | 2
-      return { ...state, notifSubFocus: next, headerFocus: 1, biosMenuOpen: false, builderFocus: false, bottomFocus: false }
-    }
-    case 'FOCUS': {
+    case 'SET_BUILDER': return { ...state, builderFocus: action.v, headerFocus: null }
+    case 'SET_BOTTOM': return { ...state, bottomFocus: action.v, headerFocus: null }
+    case 'FOCUS':
       return {
         ...state,
-        headerFocus: action.header,
-        notifSubFocus: action.notif ?? (action.header === 1 ? state.notifSubFocus : null),
-        profileSubFocus: action.profile ?? (action.header === 0 ? (state.profileSubFocus ?? 0) : state.profileSubFocus),
-        builderFocus: action.builder ?? false,
-        bottomFocus: action.bottom ?? false,
+        headerFocus: action.header ?? state.headerFocus,
+        notifSubFocus: action.notif ?? null,
+        profileSubFocus: action.profile ?? state.profileSubFocus,
         biosMenuOpen: false,
       }
-    }
-    case 'TAB': {
-      if (!state.biosMenuOpen && state.headerFocus === null && !state.bottomFocus && !state.builderFocus) {
-        return { ...state, biosMenuOpen: true, biosMenuIdx: 0 }
+    case 'CYCLE_PROFILE':
+      if (state.headerFocus === 0) {
+        const next = state.profileSubFocus=== null? 0 : (state.profileSubFocus+1)%4
+        return { ...state, profileSubFocus: next as any }
       }
+      return state
+    case 'CYCLE_NOTIF':
+      if (state.headerFocus === 1) {
+        if (state.notifSubFocus=== null) return { ...state, notifSubFocus: 0 }
+        if (state.notifSubFocus === 0) return { ...state, notifSubFocus: 1 }
+        if (state.notifSubFocus === 1) return { ...state, notifSubFocus: 2 }
+        if (state.notifSubFocus === 2) return { ...state, notifSubFocus: null, headerFocus: 2 }
+      }
+      return state
+    case 'TAB':
       if (state.biosMenuOpen) {
-        return { ...state, biosMenuOpen: false, headerFocus: 0, profileSubFocus: state.profileSubFocus ?? 0, notifSubFocus: null, bottomFocus: false, builderFocus: false }
+        return { ...state, biosMenuIdx: (state.biosMenuIdx+1) % 10 }
       }
-      if (state.headerFocus !== null) {
-        if (state.headerFocus === 0) {
-          return { ...state, headerFocus: 1, notifSubFocus: 0 }
-        }
-        if (state.headerFocus === 1) {
+      if (state.headerFocus!== null) {
+        if (state.headerFocus === 1 && state.notifSubFocus!== null) {
           if (state.notifSubFocus === 0) return { ...state, notifSubFocus: 1 }
           if (state.notifSubFocus === 1) return { ...state, notifSubFocus: 2 }
           if (state.notifSubFocus === 2) return { ...state, notifSubFocus: null, headerFocus: 2 }
@@ -136,12 +113,8 @@ function layoutReducer(state: State, action: Action): State {
         return { ...state, bottomFocus: false, biosMenuOpen: true, biosMenuIdx: 0 }
       }
       return state
-    }
     case 'ESC':
-      return { ...state, biosMenuOpen: false, headerFocus: null, notifSubFocus: null, profileSubFocus: null, bottomFocus: false, builderFocus: false, telefonOpen: false }
-    case 'ENTER':
-      if (state.bottomFocus) return { ...state, telefonOpen: !state.telefonOpen }
-      return state
+      return { ...state, biosMenuOpen: false, headerFocus: null, notifSubFocus: null, profileSubFocus: null, bottomFocus: false, builderFocus: false }
     default:
       return state
   }
@@ -177,18 +150,15 @@ function linearToHeader(linear: number): { header: number; notif: 0|1|2|null } {
   return { header: m.header, notif: m.notif as any }
 }
 
-export default function Layout({ children, page, setPage, activeProfile, setActiveProfile, biosMode = false, setBiosMode, onOpenBuilderMenu, onOpenMobil }: LayoutProps) {
+export default function Layout({ children, page, setPage, activeProfile, setActiveProfile, biosMode = false, setBiosMode, onOpenBuilderMenu }: LayoutProps) {
   const [state, dispatch] = useReducer(layoutReducer, initialState)
   const { status: saveStatus, onSaveClick } = useSaveStatus()
-  const { biosMenuOpen, biosMenuIdx, headerFocus, notifSubFocus, profileSubFocus, bottomFocus, builderFocus, telefonOpen } = state
+  const { biosMenuOpen, biosMenuIdx, headerFocus, notifSubFocus, profileSubFocus, bottomFocus, builderFocus } = state
 
   const handleSetBiosIdx = useCallback((n: number) => dispatch({ type: 'SET_BIOS_IDX', v: n }), [])
   const handleCloseBios = useCallback(() => dispatch({ type: 'SET_BIOS_OPEN', v: false }), [])
+  const handleOpenBios = useCallback(() => dispatch({ type: 'SET_BIOS_OPEN', v: true }), [])
   const handleTabToHeader = useCallback(() => dispatch({ type: 'FOCUS', header: 0, profile: 0 }), [])
-  const setTelefonOpen = useCallback((v: boolean | ((prev:boolean)=>boolean)) => {
-    if (typeof v === 'function') dispatch({ type: 'TOGGLE_TELEFON' })
-    else dispatch({ type: 'SET_TELEFON', v })
-  }, [])
 
   useEffect(() => {
     if (builderFocus && onOpenBuilderMenu) onOpenBuilderMenu()
@@ -202,9 +172,7 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
       const lower = e.key.toLowerCase()
       const code = (e as any).code as string
 
-      // Shift + 1..8 - vždy povolit i když píše? ne, blokujeme v inputu
       if (isTyping(target) && !(e.shiftKey && code?.startsWith('Digit'))) {
-        // dovolíme shift+digit i v inputu? radši ne - uživatel chce psát
         if (!e.shiftKey) return
       }
 
@@ -228,7 +196,6 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
       if (e.shiftKey && code === 'Digit7') { e.preventDefault(); dispatch({ type: 'SET_BUILDER', v: true }); return }
       if (e.shiftKey && code === 'Digit8') { e.preventDefault(); dispatch({ type: 'SET_BOTTOM', v: true }); return }
 
-      // fallback pro e.key když code není (CZ klávesnice)
       if (e.shiftKey && e.key === '3') { e.preventDefault(); dispatch({ type: 'FOCUS', header: 2 }); return }
       if (e.shiftKey && e.key === '4') { e.preventDefault(); dispatch({ type: 'FOCUS', header: 3 }); return }
       if (e.shiftKey && e.key === '5') { e.preventDefault(); dispatch({ type: 'FOCUS', header: 4 }); return }
@@ -256,12 +223,10 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
       }
 
       if (e.key === 'Enter') {
-        if (bottomFocus) { e.preventDefault(); dispatch({ type: 'TOGGLE_TELEFON' }) }
         if (builderFocus && onOpenBuilderMenu) { e.preventDefault(); onOpenBuilderMenu() }
         return
       }
 
-      // Q/O = předchozí, A/P = další - jen když je fokus v headeru
       if (headerFocus !== null && !isTyping(target)) {
         if (lower === 'q' || lower === 'o') {
           e.preventDefault()
@@ -284,7 +249,7 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
 
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [state, headerFocus, bottomFocus, builderFocus, onOpenBuilderMenu])
+  }, [state, headerFocus, bottomFocus, builderFocus, onOpenBuilderMenu, activeProfile, setActiveProfile, setPage])
 
   const memoHeader = useMemo(() => (
     <Header
@@ -298,11 +263,10 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
       biosMode={biosMode}
       setBiosMode={setBiosMode}
       onOpenBuilderMenu={onOpenBuilderMenu}
-      onOpenMobil={onOpenMobil}
       saveStatus={saveStatus}
       onSaveClick={onSaveClick || undefined}
     />
-  ), [page, headerFocus, notifSubFocus, profileSubFocus, activeProfile, biosMode, setBiosMode, onOpenBuilderMenu, onOpenMobil, saveStatus, onSaveClick])
+  ), [page, headerFocus, notifSubFocus, profileSubFocus, activeProfile, biosMode, setBiosMode, onOpenBuilderMenu, saveStatus, onSaveClick])
 
   return (
     <div
@@ -320,6 +284,7 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
             forcedIdx={biosMenuIdx}
             onForcedIdxChange={handleSetBiosIdx}
             onClose={handleCloseBios}
+            onOpen={handleOpenBios}
             onTabToHeader={handleTabToHeader}
           />
           <main
@@ -333,7 +298,6 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
           </main>
         </div>
         <Bottom />
-        <Mobil open={telefonOpen} setOpen={setTelefonOpen} focused={bottomFocus} />
       </div>
     </div>
   )

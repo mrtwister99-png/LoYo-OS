@@ -1,23 +1,14 @@
-import Database from 'better-sqlite3';
 import type { Database as BetterDB } from 'better-sqlite3';
 import { join } from 'node:path';
-import { existsSync, mkdirSync } from 'node:fs';
 import { DATA_DIR } from './dataPaths.js';
+import { getDb as getSharedDb } from './connection.js';
 import type { CapabilityManifest } from '@loyo/core';
 
-const DB_PATH = join(DATA_DIR, 'index.db');
 let db: BetterDB | null = null;
 
 export function initDb(): BetterDB {
   if (db) return db;
-  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
-  db = new Database(DB_PATH);
-  db.pragma('journal_mode = WAL');
-  db.pragma('synchronous = NORMAL');
-  db.pragma('journal_size_limit = 67108864');
-  db.pragma('cache_size = -64000');
-  db.pragma('wal_autocheckpoint = 1000');
-  db.pragma('temp_store = MEMORY');
+  db = getSharedDb();
   db.exec(`
     CREATE TABLE IF NOT EXISTS capabilities (
       id TEXT PRIMARY KEY,

@@ -22,15 +22,15 @@ async function backupManifest(targetDir: string): Promise<void>
 }
 
 const TYPE_FOLDER: Record<string, string> = {
-  agent:    'agents',
-  team:     'teams',
-  skill:    'skills',
-  mcp:      'mcps',
-  cli:      'clis',
-  loop:     'loops',
+  agent: 'agents',
+  team: 'teams',
+  skill: 'skills',
+  mcp: 'mcp',
+  cli: 'cli',
+  loop: 'loops',
   workflow: 'workflows',
-  rag:      'rags',
-  api:      'apis',
+  rag: 'rag',
+  api: 'apis',
 };
 
 export const capabilitiesRoutes: FastifyPluginAsync = async (fastify) => {
