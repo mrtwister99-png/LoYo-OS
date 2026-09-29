@@ -1,18 +1,20 @@
 export const colors = {
 
-  bg: '#cccccc', 
-  bgSoft: '#cccccc', 
+  bg: '#f5f5f3',
+  bgSoft: '#e9e9e9',
   white: '#FFFFFF',
   black: '#0A0A0A',
-  border: 'rgba(4,11,141,0.08)',      
-  borderStrong: 'rgba(4,11,141,0.15)',
-  text: '#040b8d',       
-  textSoft: 'rgba(4,11,141,0.6)',
-  textFaint: 'rgba(4,11,141,0.3)',
-  accent: '#040b8d',      
-  red: '#ac0001',         
-  gold: '#CDA24D',         
+  border: 'rgba(10,10,10,0.08)',
+  borderStrong: 'rgba(10,10,10,0.15)',
+  text: '#0A0A0A',
+  textSoft: 'rgba(10,10,10,0.6)',
+  textFaint: 'rgba(10,10,10,0.3)',
+  accent: '#040b8d',
+  red: '#ac0001',
+  gold: '#CDA24D',
   green: '#00D084',
+  purple: '#6300c7',
+  blue: '#040b8d',
 }
 
 export const theme = {
@@ -24,11 +26,11 @@ export const theme = {
   tracking: { wide: '0.25em', wider: '0.3em' }
 }
 
-export const layout = { menuWidth: '280px', headerHeight: '64px' }
+export const layout = { menuWidth: '300px', headerHeight: '56px' }
 
 export const categoryColors = {
-  agents: '#a136ff',
-  agent: '#a136ff',
+  agents: '#6300c7',
+  agent: '#6300c7',
   teams: '#ff6f00',
   team: '#ff6f00',
   workflows: '#d9ff00',
@@ -40,10 +42,10 @@ export const categoryColors = {
   mcp: '#33a3ff',
   cli: '#40ff00',
   api: '#ffa600',
-  dashboard: '#CDA24D',
-  activity: '#ff1e00',
-  tasks: '#95a64b',
-  notes: '#ffea00',
+  dashboard: '#040b8d',
+  activity: '#ac0001',
+  tasks: '#CDA24D',
+  notes: '#6300c7',
   calendar: '#33a3ff',
 }
 
@@ -69,9 +71,9 @@ export const categoryNumbers = {
 }
 
 export const categoryGradients = {
-  activity: 'linear-gradient(135deg, #ededed 0%, #ededed 70%, #ff1e00 100%)',
-  tasks: 'linear-gradient(135deg, #ededed 0%, #ededed 70%, #95a64b 100%)',
-  notes: 'linear-gradient(135deg, #ededed 0%, #ededed 70%, #ffea00 100%)',
-  calendar: 'linear-gradient(135deg, #ededed 0%, #ededed 70%, #33a3ff 100%)',
-  dashboard: '#CDA24D',
+  activity: 'linear-gradient(135deg, #f5f5f3 0%, #f5f5f3 70%, #ac0001 100%)',
+  tasks: 'linear-gradient(135deg, #f5f5f3 0%, #f5f5f3 70%, #CDA24D 100%)',
+  notes: 'linear-gradient(135deg, #f5f5f3 0%, #f5f5f3 70%, #6300c7 100%)',
+  calendar: 'linear-gradient(135deg, #f5f5f3 0%, #f5f5f3 70%, #33a3ff 100%)',
+  dashboard: '#040b8d',
 }

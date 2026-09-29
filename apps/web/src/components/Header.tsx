@@ -4,6 +4,7 @@ import Chat from './Chat'
 import { useCalendarEvents } from '../hooks/useCalendarEvents'
 import { Builder } from './Builder'
 import { JA_UKOLY_AKTIVNI_DIR, JA_UKOLY_HOTOVE_DIR } from '../lib/dataPaths'
+import ProfileCube from './ProfileCube'
 
 import { useSaveStatusContext } from '../hooks/useSaveStatus'
 
@@ -12,6 +13,9 @@ type Props = {
   focusedIdx?: number | null
   notifSubFocus?: 0 | 1 | 2 | null
   profileSubFocus?: 0 | 1 | 2 | 3 | null
+  activeProfile: number
+  setActiveProfile: (n: number) => void
+  setPage: (p: any) => void
   biosMode?: boolean
   setBiosMode?: (v: boolean) => void
   onOpenBuilderMenu?: () => void
@@ -32,15 +36,16 @@ const monthYearLabel = (d: Date) =>
 
 // ── barvy ────────────────────────────────────────────────────
 const C = {
-  bg: '#cccccc',
-  headBg: '#cccccc',
-  border: '#7a7a7a',
+  bg: '#e9e9e9',
+  headBg: '#f5f5f3',
+  border: '#0a0a0a',
   blue: '#040b8d',
   red: '#ac0001',
   caramel: '#CDA24D',
-  neonGreen: '#d9ff00',
-  tileBg: '#d0d0d0',
-  black: '#000000',
+  neonGreen: '#6300c7',
+  purple: '#6300c7',
+  tileBg: '#ffffff',
+  black: '#0a0a0a',
   darkGray: '#3a3a3a',
 
 }
@@ -48,9 +53,9 @@ const C = {
 // ── profily ──────────────────────────────────────────────────
 const PROFILES = [
   { letter: 'L', color: C.blue,      label: 'Osobní'   },
-  { letter: 'O', color: C.red,       label: 'Pracovní' },
-  { letter: 'Y', color: C.caramel,   label: 'Projekty' },
-  { letter: 'O', color: C.neonGreen, label: 'Profil 4' },
+  { letter: 'O', color: C.caramel,   label: 'Pracovní' },
+  { letter: 'Y', color: C.red,       label: 'Projekty' },
+  { letter: 'O', color: '#6300c7',   label: '3D Design' },
 ]
 
 // ── notif typy ───────────────────────────────────────────────
@@ -114,6 +119,9 @@ export default function Header({
   focusedIdx,
   notifSubFocus,
   profileSubFocus,
+  activeProfile,
+  setActiveProfile,
+  setPage,
   biosMode,
   setBiosMode,
   onOpenBuilderMenu,
@@ -136,9 +144,8 @@ export default function Header({
   const [isTerminalOpen, setIsTerminalOpen] = useState(false)
   const [showSavedToast, setShowSavedToast] = useState(false)
 
-  // profil - řízený z Layoutu přes Shift+1, fallback na lokální
-  const [profileIdx, setProfileIdx] = useState(0)
-  const effectiveProfileIdx = profileSubFocus?? profileIdx
+  // profil - řízený z App/Layout přes activeProfile, Shift+1 cykluje
+  const effectiveProfileIdx = profileSubFocus?? activeProfile
 
   // notifikace
   const [notifications, setNotifications] = useState<SchedulerNotification[]>([])
@@ -288,7 +295,7 @@ export default function Header({
     useEffect(() => {
     const handleEnter = (e: KeyboardEvent) => {
       if (e.key !== 'Enter') return
-      if (focusedIdx === 0) { e.preventDefault(); setProfileIdx(v => (v + 1) % PROFILES.length) }
+      if (focusedIdx === 0) { e.preventDefault(); ((() => { const next = (activeProfile + 1) % PROFILES.length; setActiveProfile(next); setPage('dashboard' as any); return next })()) as any }
       if (focusedIdx === 1) { e.preventDefault(); setShowNotifPanel(v => !v) }
       if (focusedIdx === 2) { e.preventDefault(); openChat() }
       if (focusedIdx === 3) { e.preventDefault(); setShowDayPanel(v => !v); setShowCalendar(false) }
@@ -453,32 +460,16 @@ export default function Header({
           1. LOGO + PROFIL — 10% (zkráceno, končí u žluté čárky)
       ══════════════════════════════════════════════════════════ */}
       <div style={{ ...sectionBase(0), width: '10%', padding: '0 10px', gap: 8 }}>
-        {/* Logo čtverec - Shift+1 cykluje z Layoutu přes effectiveProfileIdx */}
-        <div
-          onClick={() => setProfileIdx(v => (v + 1) % PROFILES.length)}
-          style={{
-            width: 38,
-            height: 38,
-            background: profile.color,
-            color: effectiveProfileIdx === 3? '#000' : '#fff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 900,
-            fontSize: 16,
-            cursor: 'pointer',
-            userSelect: 'none',
-            flexShrink: 0,
-            border: '2px solid rgba(255,255,255,0.2)',
-            boxShadow: isFocused(0)? `0 0 0 3px ${profile.color}88, 0 2px 8px rgba(0,0,0,0.4)` : '0 2px 8px rgba(0,0,0,0.4)',
-            outline: focusedIdx === 0 && profileSubFocus!== null? `2px dashed ${profile.color}` : 'none',
-            outlineOffset: '2px',
-          } as any}
-          onContextMenu={e => { e.preventDefault(); setBiosMode && setBiosMode(!biosMode) }}
-          title={`Profil: ${profile.label} — klik = přepnout | pravý klik = BIOS`}
-        >
-          {profile.letter}
-        </div>
+                {/* 3D LOYO KOSTKA - L O Y O profily, klik -90°, hold = 4x rozprsk */}
+        <ProfileCube
+          activeProfile={activeProfile}
+          setActiveProfile={setActiveProfile}
+          setPage={setPage}
+          focused={isFocused(0)}
+          profileSubFocus={profileSubFocus}
+          biosMode={biosMode}
+          setBiosMode={setBiosMode}
+        />
 
         {/* Název + verze */}
         <div style={{ lineHeight: 1 }}>

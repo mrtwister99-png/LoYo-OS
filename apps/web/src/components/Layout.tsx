@@ -11,6 +11,8 @@ type LayoutProps = {
   children: any
   page: Page
   setPage: (id: Page) => void
+  activeProfile: number
+  setActiveProfile: (n: number) => void
   biosMode?: boolean
   setBiosMode?: (v: boolean) => void
   onOpenBuilderMenu?: () => void
@@ -175,7 +177,7 @@ function linearToHeader(linear: number): { header: number; notif: 0|1|2|null } {
   return { header: m.header, notif: m.notif as any }
 }
 
-export default function Layout({ children, page, setPage, biosMode = false, setBiosMode, onOpenBuilderMenu, onOpenMobil }: LayoutProps) {
+export default function Layout({ children, page, setPage, activeProfile, setActiveProfile, biosMode = false, setBiosMode, onOpenBuilderMenu, onOpenMobil }: LayoutProps) {
   const [state, dispatch] = useReducer(layoutReducer, initialState)
   const { status: saveStatus, onSaveClick } = useSaveStatus()
   const { biosMenuOpen, biosMenuIdx, headerFocus, notifSubFocus, profileSubFocus, bottomFocus, builderFocus, telefonOpen } = state
@@ -208,6 +210,9 @@ export default function Layout({ children, page, setPage, biosMode = false, setB
 
       if (e.shiftKey && (code === 'Digit1' || e.key === '1' || e.key === '!')) {
         e.preventDefault()
+        const next = ((activeProfile ?? 0) + 1) % 4
+        setActiveProfile(next)
+        setPage('dashboard' as any)
         dispatch({ type: 'CYCLE_PROFILE' })
         return
       }
@@ -287,6 +292,9 @@ export default function Layout({ children, page, setPage, biosMode = false, setB
       focusedIdx={headerFocus}
       notifSubFocus={notifSubFocus}
       profileSubFocus={profileSubFocus}
+      activeProfile={activeProfile}
+      setActiveProfile={setActiveProfile}
+      setPage={setPage}
       biosMode={biosMode}
       setBiosMode={setBiosMode}
       onOpenBuilderMenu={onOpenBuilderMenu}
@@ -294,7 +302,7 @@ export default function Layout({ children, page, setPage, biosMode = false, setB
       saveStatus={saveStatus}
       onSaveClick={onSaveClick || undefined}
     />
-  ), [page, headerFocus, notifSubFocus, profileSubFocus, biosMode, setBiosMode, onOpenBuilderMenu, onOpenMobil, saveStatus, onSaveClick])
+  ), [page, headerFocus, notifSubFocus, profileSubFocus, activeProfile, biosMode, setBiosMode, onOpenBuilderMenu, onOpenMobil, saveStatus, onSaveClick])
 
   return (
     <div
@@ -307,6 +315,7 @@ export default function Layout({ children, page, setPage, biosMode = false, setB
           <Menu
             page={page}
             setPage={setPage}
+            activeProfile={activeProfile}
             forcedOpen={biosMenuOpen}
             forcedIdx={biosMenuIdx}
             onForcedIdxChange={handleSetBiosIdx}
