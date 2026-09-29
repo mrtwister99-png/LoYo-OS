@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo, memo, useCallback } from 'react'
-import sipkaImg from '../images/sipka.png'
-import sipka2Img from '../images/sipka2.png'
+import sipkkkkaaImg from '../images/sipkkkkaa.png'
 import type { Page } from '../hooks/useAppState'
 import { categoryColors, categoryNumbers, categoryGradients } from '../styles/theme'
+import { MENU_STRUCTURE_P2, MENU_META_P2 } from '../pages/profile2/MenuP2'
+import { MENU_STRUCTURE_P3, MENU_META_P3 } from '../pages/profile3/MenuP3'
+import { MENU_STRUCTURE_P4, MENU_META_P4 } from '../pages/profile4/MenuP4'
 
 const MENU_META: Record<string, { color: string; num: string; gradient?: string }> = {
   dashboard: { color: categoryColors.dashboard, num: '0_01' },
@@ -19,10 +21,10 @@ const MENU_META: Record<string, { color: string; num: string; gradient?: string 
   cli: { color: categoryColors.cli, num: '4_01' },
 }
 
-
 type Props = {
   page: Page
   setPage: (id: Page) => void
+  activeProfile: number
   forcedOpen?: boolean
   forcedIdx?: number
   onForcedIdxChange?: (n: number) => void
@@ -63,8 +65,15 @@ const MENU_STRUCTURE: MenuNode[] = [
   },
 ]
 
-function MenuComponent({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange, onClose, onTabToHeader }: Props) {
-  const [open, setOpen] = useState({ firma: true, config: true })
+const getMenuConfig = (activeProfile: number) => {
+  if (activeProfile === 1) return { structure: MENU_STRUCTURE_P2 as any, meta: MENU_META_P2, accent: '#CDA24D' }
+  if (activeProfile === 2) return { structure: MENU_STRUCTURE_P3 as any, meta: MENU_META_P3, accent: '#ac0001' }
+  if (activeProfile === 3) return { structure: MENU_STRUCTURE_P4 as any, meta: MENU_META_P4, accent: '#6300c7' }
+  return { structure: MENU_STRUCTURE, meta: MENU_META, accent: '#040b8d' }
+}
+
+function MenuComponent({ page, setPage, activeProfile, forcedOpen, forcedIdx, onForcedIdxChange, onClose, onTabToHeader }: Props) {
+  const [open, setOpen] = useState({ firma: true, config: true, jobtools: true } as any)
   const [isHovered, setIsHovered] = useState(false)
   const [internalOpen, setInternalOpen] = useState(false)
   const [internalIdx, setInternalIdx] = useState(0)
@@ -73,28 +82,34 @@ function MenuComponent({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange
   const keyboardOpen = isControlled? forcedOpen! : internalOpen
   const selectedIdx = isControlled? (forcedIdx?? 0) : internalIdx
 
+  const menuConfig = useMemo(() => getMenuConfig(activeProfile), [activeProfile])
+  const currentStructure = menuConfig.structure
+  const currentMeta = menuConfig.meta as any
+  const profileAccent = menuConfig.accent
+
+  useEffect(() => {
+    setOpen({ firma: true, config: true, jobtools: true } as any)
+  }, [activeProfile])
+
   useEffect(() => {
     if (isControlled &&!forcedOpen) {
       setIsHovered(false)
     }
   }, [forcedOpen, isControlled])
 
-  const setSelectedIdx = useCallback((fn: any) => {
-    if (isControlled && onForcedIdxChange) {
-      if (typeof fn === 'function') {
-        const next = fn(forcedIdx?? 0)
-        onForcedIdxChange(next)
-      } else {
-        onForcedIdxChange(fn)
-      }
+  const setSelectedIdx = useCallback((n: number) => {
+    if (isControlled) {
+      onForcedIdxChange?.(n)
     } else {
-      setInternalIdx(fn)
+      setInternalIdx(n)
     }
-  }, [isControlled, onForcedIdxChange, forcedIdx])
+  }, [isControlled, onForcedIdxChange])
+
+  const isMenuVisible = isHovered || keyboardOpen
 
   const flatItems = useMemo(() => {
     const list: any[] = []
-    for (const node of MENU_STRUCTURE) {
+    for (const node of currentStructure) {
       if (node.type === 'item') {
         list.push({ type: 'item', id: node.id, label: node.label })
       } else {
@@ -107,96 +122,48 @@ function MenuComponent({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange
       }
     }
     return list
-  }, [open])
+  }, [open, currentStructure])
 
-  useEffect(() => {
-    if (selectedIdx >= flatItems.length) {
-      setSelectedIdx(Math.max(0, flatItems.length - 1))
-    }
-  }, [flatItems, selectedIdx, setSelectedIdx])
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      const k = e.key.toLowerCase()
-      const target = e.target as HTMLElement
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
-      if (!keyboardOpen) return
-      if (k === 'q' || e.key === 'ArrowUp') {
-        e.preventDefault()
-        setSelectedIdx((prev: number) => (prev - 1 + flatItems.length) % flatItems.length)
-      } else if (k === 'a' || e.key === 'ArrowDown') {
-        e.preventDefault()
-        setSelectedIdx((prev: number) => (prev + 1) % flatItems.length)
-      } else if (k === 'o' || e.key === 'ArrowLeft') {
-        e.preventDefault()
-        if (onClose) onClose()
-        else setInternalOpen(false)
-      } else if (k === 'p' || e.key === 'ArrowRight') {
-        e.preventDefault()
-        const cur = flatItems[selectedIdx]
-        if (!cur) return
-        if (cur.type === 'group') {
-          setOpen(s => ({...s, [cur.id]:!(s as any)[cur.id] }))
-        } else {
-          setPage(cur.id)
-        }
-      } else if (k === 'enter') {
-        e.preventDefault()
-        const cur = flatItems[selectedIdx]
-        if (!cur) return
-        if (cur.type === 'group') {
-          setOpen(s => ({...s, [cur.id]:!(s as any)[cur.id] }))
-        } else {
-          setPage(cur.id)
-        }
-      } else if (k === 'escape') {
-        e.preventDefault()
-        if (onClose) onClose()
-        else setInternalOpen(false)
-      }
-    }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [keyboardOpen, flatItems, selectedIdx, setPage, onClose, setSelectedIdx])
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      if (!target.closest('aside')) {
-        setSelectedIdx(-1)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [setSelectedIdx])
-
-  const isMenuVisible = isHovered || keyboardOpen
-
-   const Item = ({ id, label, focused }: any) => {
+  const Item = ({ id, label, focused }: any) => {
     const active = page === id
-    const meta = (MENU_META as any)[id] || { color: '#040b8d', num: '0_00' }
-    const isLoop = id === 'loops'
-    const [prefix, seq] = String(meta.num).split('_')
+    const meta = (currentMeta as any)[id] || (MENU_META as any)[id] || { color: profileAccent, num: '0_00' }
+    const [prefix, seq] = String(meta.num || '0_00').split('_')
+    const accent = meta.color || profileAccent
     return (
       <button
-        onClick={() => setPage(id)}
+        onClick={() => setPage(id as any)}
         onMouseEnter={() => { const idx = flatItems.findIndex((f: any) => f.id === id && f.type === 'item'); if (idx!== -1) setSelectedIdx(idx) }}
         onMouseLeave={() => { if (!keyboardOpen) setSelectedIdx(-1) }}
-        className={`w-full text-left px-3 py-2.5 text- tracking-[0.18em] font-bold border-b border-l-4 flex justify-between items-center box-border transition-colors duration-100 ${
-          focused? 'bg-[#ac0001] text-white border-white/20' :
-          active? 'bg-[#ac0001] text-white border-white/20' :
-          'bg-[#040b8d] text-white hover:bg-[#0a1ab4] border-white/10'
-        }`}
-        style={{ borderLeftColor: meta.color }}
+        style={{
+          width: '100%',
+          textAlign: 'left',
+          background: active? '#0a0a0a' : '#ffffff',
+          color: active? '#ffffff' : '#0a0a0a',
+          border: '3px solid #0a0a0a',
+          borderTop: `6px solid ${accent}`,
+          borderRadius: 14,
+          padding: '12px 14px',
+          fontWeight: 900,
+          letterSpacing: '0.08em',
+          fontSize: 12,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          boxShadow: focused? `6px 6px 0px ${accent}, 0 0 0 2px ${accent}` : '5px 5px 0px #0a0a0a',
+          transform: focused? 'translate(-1px,-1px)' : 'translate(0,0)',
+          transition: 'all 0.16s cubic-bezier(0.16,1,0.3,1)',
+          outline: 'none',
+          marginBottom: 10,
+        }}
       >
-        <span className="flex items-center gap-2 min-w-0">
-          <span className="font-mono flex items-center justify-center rounded bg-white text-black shrink-0 px-1.5 py-0.5 text- leading-none">
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+          <span style={{ fontFamily: 'ui-monospace', background: active? '#ffffff' : '#0a0a0a', color: active? '#0a0a0a' : '#ffffff', borderRadius: 999, padding: '2px 7px', fontSize: 10, fontWeight: 900, display: 'flex' }}>
             <span style={{ opacity: 0.6 }}>{prefix}_</span>{seq}
           </span>
-          <span className={`w-2 h-2 rounded-full shrink-0 ${isLoop? 'animate-pulse' : ''}`} style={{ background: meta.color }} />
-          <span className="truncate">{label}</span>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: accent, flexShrink: 0 }} />
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
         </span>
-        <span className={`w-1.5 h-1.5 rounded-full bg-white shrink-0 ${active? 'opacity-100' : 'opacity-0'}`} />
+        <span style={{ width: 8, height: 8, borderRadius: '50%', background: active? '#ffffff' : accent, opacity: active? 1 : 0.9, flexShrink: 0 }} />
       </button>
     )
   }
@@ -204,9 +171,9 @@ function MenuComponent({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange
   const Group = ({ id, label, children, focused }: any) => {
     const isOpen = (open as any)[id]
     return (
-      <div className="border-b border-white/10">
+      <div style={{ marginBottom: 12 }}>
         <button
-          onClick={() => setOpen(s => ({...s, [id]:!(s as any)[id] }))}
+          onClick={() => setOpen((s: any) => ({...s, [id]:!(s as any)[id] }))}
           onMouseEnter={() => {
             const idx = flatItems.findIndex((f: any) => f.id === id && f.type === 'group')
             if (idx!== -1) setSelectedIdx(idx)
@@ -214,21 +181,34 @@ function MenuComponent({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange
           onMouseLeave={() => {
             if (!keyboardOpen) setSelectedIdx(-1)
           }}
-          className={`w-full flex justify-between items-center px-6 py-3 text-[12px] tracking-[0.3em] font-black transition-all duration-150 ease-out hover:bg-[#cccccc]/80 ${
-            focused? 'bg-[#ac0001] text-white shadow-[inset_0_0_0_1px_white]' : 'bg-[#cccccc] text-black hover:bg-[#ac0001]/20'
-          }`}
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            background: '#0a0a0a',
+            color: '#ffffff',
+            border: '3px solid #0a0a0a',
+            borderRadius: 14,
+            padding: '12px 16px',
+            fontSize: 11,
+            letterSpacing: '0.18em',
+            fontWeight: 900,
+            boxShadow: focused? `5px 5px 0px ${profileAccent}` : '4px 4px 0px #0a0a0a',
+            transform: focused? 'translate(-1px,-1px)' : 'none',
+            transition: 'all 0.15s',
+          }}
         >
           <span>{label}</span>
-          <span className="flex items-center justify-center w-[20px] h-[20px] rounded-full bg-white/90 shadow-[0_0_4px_rgba(0,0,0,0.6)]">
-            <img 
-              src={sipkaImg} 
-              alt="sipka" 
-              className={`w-[12px] h-[12px] object-contain transition-transform duration-200 ${isOpen? 'rotate-90' : 'rotate-0'}`}
-              style={{ imageRendering: 'pixelated', filter: 'brightness(0) saturate(100%)' }}
+          <span style={{ width: 22, height: 22, borderRadius: '50%', background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <img
+              src={sipkkkkaaImg}
+              alt="sipka group"
+              style={{ width: 12, height: 12, objectFit: 'contain', transform: isOpen? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
             />
           </span>
         </button>
-        {isOpen && <div className="bg-[#040b8d]">{children}</div>}
+        {isOpen && <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column' }}>{children}</div>}
       </div>
     )
   }
@@ -247,66 +227,80 @@ function MenuComponent({ page, setPage, forcedOpen, forcedIdx, onForcedIdxChange
           setIsHovered(false)
           if (!keyboardOpen) setSelectedIdx(-1)
         }}
-                className="hidden md:flex w-[280px] bg-[#040b8d] flex-col fixed left-0 top-[56px] bottom-[42px] z-30 shadow-[4px_0_24px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] border-r border-white/10"
+        className="hidden md:flex w- bg-[#f5f5f3] flex-col fixed left-0 top- bottom- z-30 shadow-[8px_0_0_#0a0a0a] transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] border-r- border-[#0a0a0a]"
         style={{ transform: isMenuVisible? 'translateX(0)' : 'translateX(-90%)' }}
       >
-        <div
-                    onClick={() => {
+        {/* SEXY MENU – jen 10% kouká, šipka sipkkkkaa pouze nahoře v kolečku */}
+        <button
+          onClick={() => {
             setIsHovered(false)
-            if (onClose) onClose()
-            else setInternalOpen(false)
+            if (keyboardOpen) {
+              if (onClose) onClose()
+              else setInternalOpen(false)
+            } else {
+              setInternalOpen(true)
+            }
           }}
-          className="absolute right-0 top-0 bottom-0 w-[25px] bg-[#CDA24D] flex flex-col items-center justify-between py-4 border-l border-white/10 cursor-pointer"
+          style={{
+            position: 'absolute',
+            right: -18,
+            top: 18,
+            width: 42,
+            height: 42,
+            borderRadius: '50%',
+            background: '#ffffff',
+            border: '3px solid #0a0a0a',
+            boxShadow: '4px 4px 0px #0a0a0a',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            zIndex: 50,
+          }}
+          title={isMenuVisible? 'Zavřít menu' : 'Otevřít sexy menu – 10% peek'}
         >
-          <span className="flex items-center justify-center w-[18px] h-[18px] rounded-full bg-white shadow-[0_0_6px_rgba(0,87,247,0.7)]">
-            <img 
-              src={isMenuVisible? sipka2Img : sipkaImg} 
-              alt="toggle top" 
-              className="w-[11px] h-[11px] object-contain transition-all duration-200"
-              style={{ imageRendering: 'pixelated', filter: 'brightness(0) saturate(100%)' }}
-            />
-          </span>
-          <span className="flex items-center justify-center w-[18px] h-[18px] rounded-full bg-white shadow-[0_0_6px_rgba(0,87,247,0.7)]">
-            <img 
-              src={isMenuVisible? sipka2Img : sipkaImg} 
-              alt="toggle bottom" 
-              className="w-[11px] h-[11px] object-contain transition-all duration-200"
-              style={{ imageRendering: 'pixelated', filter: 'brightness(0) saturate(100%)' }}
-            />
-          </span>
-        </div>
+          <img
+            src={sipkkkkaaImg}
+            alt="toggle sexy sipkkkkaa"
+            style={{
+              width: 22,
+              height: 22,
+              objectFit: 'contain',
+              transform: isMenuVisible? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1)',
+            }}
+          />
+        </button>
 
-              <div className="flex-1 overflow-y-auto overflow-x-hidden pr-">
-          {MENU_STRUCTURE.map((node) =>
-            node.type === 'item' ? (
+        <div className="flex-1 overflow-y-auto overflow-x-hidden pr-2 pl-3 py-4">
+          {currentStructure.map((node: any) =>
+            node.type === 'item'? (
               <Item key={node.id} id={node.id} label={node.label} focused={getFocused(node.id, 'item')} />
             ) : (
               <Group key={node.id} id={node.id} label={node.label} focused={getFocused(node.id, 'group')}>
-                {node.children.map((child) => (
+                {node.children.map((child: any) => (
                   <Item key={child.id} id={child.id} label={child.label} focused={getFocused(child.id, 'item')} />
                 ))}
               </Group>
             )
           )}
         </div>
-      </aside>
 
-            <aside className="md:hidden w-full bg-black flex flex-col border-b border-white/10">
-        <div className="flex-1 overflow-y-auto">
-          <div className="text- tracking-[0.4em] text-white/50 px-6 py-3 font-bold bg-black">MENU</div>
-          {MENU_STRUCTURE.map((node) =>
-            node.type === 'item' ? (
-              <Item key={node.id} id={node.id} label={node.label} focused={false} />
-            ) : (
-              <Group key={node.id} id={node.id} label={node.label} focused={false}>
-                {node.children.map((child) => (
-                  <Item key={child.id} id={child.id} label={child.label} focused={false} />
-                ))}
-              </Group>
-            )
-          )}
+        <div style={{ padding: '8px 12px', borderTop: '3px solid #0a0a0a', background: profileAccent, color: profileAccent === '#CDA24D'? '#000' : '#fff', fontWeight: 900, fontSize: 10, letterSpacing: '0.15em', display: 'flex', justifyContent: 'space-between' }}>
+          <span>PROFIL {activeProfile + 1}/4</span>
+          <span>{['L OSOBNÍ','O DEV','Y JOB','O 3D'][activeProfile]}</span>
         </div>
       </aside>
+
+      {isMenuVisible && (
+        <div
+          className="hidden md:block fixed left- top- bottom- right-0 z-20 bg-black/20 backdrop-blur-"
+          onClick={() => {
+            if (onClose) onClose()
+            else setInternalOpen(false)
+          }}
+        />
+      )}
     </>
   )
 }
