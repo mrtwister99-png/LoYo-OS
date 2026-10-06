@@ -1,6 +1,7 @@
 // apps/web/src/lib/dataPaths.ts - frontend KONVENCE v3 + ÚKOL 19
 export const JA_DIR = 'ja'
 export const JA_POZNAMKY_DIR = `${JA_DIR}/poznamky`
+export const JA_CODING_POZNAMKY_DIR = `${JA_DIR}/coding-poznamky`
 export const JA_UKOLY_AKTIVNI_DIR = `${JA_DIR}/ukoly/aktivni`
 export const JA_UKOLY_HOTOVE_DIR = `${JA_DIR}/ukoly/hotove`
 export const JA_KALENDAR_DIR = `${JA_DIR}/kalendar`
@@ -16,6 +17,10 @@ export function resolveDataPath(subPath: string): string {
 
 export function getNotesPath(fileName: string): string {
   return `${JA_POZNAMKY_DIR}/${fileName}`
+}
+
+export function getCodingNotesPath(fileName: string): string {
+  return `${JA_CODING_POZNAMKY_DIR}/${fileName}`
 }
 
 export function getTasksPath(fileName: string, done = false): string {

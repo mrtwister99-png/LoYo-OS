@@ -1,4 +1,7 @@
 // D:\dev\loyo-os\apps\web\src\components\Builder.tsx
+// Builder rozdělený na dvě části:
+//  - BuilderMenu    = B tlačítko + výběr typu (jen v Headeru)
+//  - BuilderOverlay = jediné okno builderu (jen v App.tsx), stav drží App
 import { useState, useEffect } from 'react'
 import AgentBuilder    from './builder/AgentBuilder'
 import TeamBuilder     from './builder/TeamBuilder'
@@ -10,7 +13,7 @@ import WorkflowBuilder from './builder/WorkflowBuilder'
 import RagBuilder      from './builder/RagBuilder'
 import ApiBuilder      from './builder/ApiBuilder'
 
-type BuilderType = 'agent' | 'team' | 'skill' | 'mcp' | 'cli' | 'loop' | 'workflow' | 'rag' | 'api'
+export type BuilderType = 'agent' | 'team' | 'skill' | 'mcp' | 'cli' | 'loop' | 'workflow' | 'rag' | 'api'
 
 const BUILDER_ITEMS: { id: BuilderType; label: string }[] = [
   { id: 'agent',    label: 'AGENT'    },
@@ -24,7 +27,14 @@ const BUILDER_ITEMS: { id: BuilderType; label: string }[] = [
   { id: 'api',      label: 'API'      },
 ]
 
-const BUILDER_MAP: Record<BuilderType, React.ComponentType<BuilderProps>> = {
+export interface BuilderProps {
+  onComplete: (manifest: object) => void
+}
+
+// buildery navíc umí prefill (edit / nový z research)
+type BuilderComponentProps = BuilderProps & { initialData?: any; prefill?: any }
+
+const BUILDER_MAP: Record<BuilderType, React.ComponentType<BuilderComponentProps>> = {
   agent:    AgentBuilder,
   team:     TeamBuilder,
   skill:    SkillBuilder,
@@ -36,42 +46,22 @@ const BUILDER_MAP: Record<BuilderType, React.ComponentType<BuilderProps>> = {
   api:      ApiBuilder,
 }
 
-export interface BuilderProps {
-  onComplete: (manifest: object) => void
-}
-
-type BuilderInitial = { type: BuilderType; id?: string | number; extra?: string; prefill?: any }
-
-type Props = {
-  onManifestComplete?: (type: BuilderType, manifest: object) => void
+// ── MENU v hlavičce: B tlačítko + výběr typu ────────────────────────────────
+type MenuProps = {
   focused?: boolean
   externalOpen?: boolean
   onExternalClose?: () => void
-  initialRequest?: BuilderInitial | null
-  onInitialConsumed?: () => void
+  onPick: (type: BuilderType) => void
 }
 
-export function Builder({ onManifestComplete, focused, externalOpen, onExternalClose, initialRequest, onInitialConsumed }: Props) {
+export function BuilderMenu({ focused, externalOpen, onExternalClose, onPick }: MenuProps) {
   const [open, setOpen] = useState(false)
   const [closing, setClosing] = useState(false)
-  const [activeBuilder, setActiveBuilder] = useState<BuilderType | null>(null)
-  const [prefillData, setPrefillData] = useState<any>(null)
 
   // Sync s externím stavem (Tab focus z Layout)
   useEffect(() => {
     if (externalOpen) setOpen(true)
   }, [externalOpen])
-
-  useEffect(() => {
-    if (initialRequest?.type) {
-      const t = initialRequest.type as BuilderType
-      setActiveBuilder(t)
-      setOpen(true)
-      if (initialRequest.prefill) setPrefillData(initialRequest.prefill)
-      else setPrefillData({ _editId: initialRequest.id, _extra: initialRequest.extra })
-      onInitialConsumed?.()
-    }
-  }, [initialRequest])
 
   const closeMenu = () => {
     setClosing(true)
@@ -82,19 +72,9 @@ export function Builder({ onManifestComplete, focused, externalOpen, onExternalC
     }, 260)
   }
 
-  const handleComplete = (type: BuilderType, manifest: object) => {
-    onManifestComplete?.(type, manifest)
-    setActiveBuilder(null)
-    closeMenu()
-  }
-
-  const ActiveComponent = activeBuilder ? BUILDER_MAP[activeBuilder] : null
-
   return (
     <>
-      {/* ── Builder trigger + dropdown — řízeno z Headeru přes externalOpen ── */}
       <div style={{ position: 'relative' }}>
-        {/* Trigger tlačítko — viditelné v Header sekci */}
         <button
           onClick={() => { open ? closeMenu() : setOpen(true) }}
           title="Builder"
@@ -124,7 +104,6 @@ export function Builder({ onManifestComplete, focused, externalOpen, onExternalC
           B
         </button>
 
-        {/* ── seznam — vyjeде dolů, zelený obrys ─────────────────── */}
         {(open || closing) && (
           <div
             style={{
@@ -143,26 +122,15 @@ export function Builder({ onManifestComplete, focused, externalOpen, onExternalC
                 : 'builderSlideDown 0.38s cubic-bezier(0.16,1,0.3,1)',
             }}
           >
-            <div
-              style={{
-                padding: '10px 14px 8px',
-                borderBottom: '1px solid rgba(0,255,65,0.15)',
-              }}
-            >
-              <span style={{
-                fontSize: 9,
-                letterSpacing: '0.4em',
-                fontWeight: 700,
-                color: '#00ff41',
-                fontFamily: 'monospace',
-              }}>
+            <div style={{ padding: '10px 14px 8px', borderBottom: '1px solid rgba(0,255,65,0.15)' }}>
+              <span style={{ fontSize: 9, letterSpacing: '0.4em', fontWeight: 700, color: '#00ff41', fontFamily: 'monospace' }}>
                 BUILDER
               </span>
             </div>
             {BUILDER_ITEMS.map(item => (
               <button
                 key={item.id}
-                onClick={() => { setActiveBuilder(item.id) }}
+                onClick={() => { onPick(item.id); closeMenu() }}
                 style={{
                   display: 'block',
                   width: '100%',
@@ -172,7 +140,7 @@ export function Builder({ onManifestComplete, focused, externalOpen, onExternalC
                   letterSpacing: '0.25em',
                   fontWeight: 700,
                   fontFamily: 'monospace',
-                  color: activeBuilder === item.id ? '#00ff41' : 'rgba(255,255,255,0.55)',
+                  color: 'rgba(255,255,255,0.55)',
                   background: 'none',
                   border: 'none',
                   borderBottom: '1px solid rgba(255,255,255,0.04)',
@@ -185,7 +153,7 @@ export function Builder({ onManifestComplete, focused, externalOpen, onExternalC
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.background = 'none'
-                  e.currentTarget.style.color = activeBuilder === item.id ? '#00ff41' : 'rgba(255,255,255,0.55)'
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.55)'
                 }}
               >
                 {item.label}
@@ -205,34 +173,47 @@ export function Builder({ onManifestComplete, focused, externalOpen, onExternalC
           to   { opacity: 0; transform: translateY(-10px) scaleY(0.9); }
         }
       `}</style>
-
-      {/* ── aktivní builder overlay ───────────────────────── */}
-      {ActiveComponent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
-          <div
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 rounded-2xl"
-            style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
-          >
-            <button
-              onClick={() => { setActiveBuilder(null) }}
-              className="absolute top-4 right-4 text-xl leading-none transition-opacity opacity-30 hover:opacity-80 text-white"
-            >
-              ✕
-            </button>
-            <div className="text-[10px] tracking-[0.4em] font-bold mb-6" style={{ color: 'rgba(255,255,255,0.3)' }}>
-              {activeBuilder?.toUpperCase()} BUILDER
-            </div>
-            <ActiveComponent
-              onComplete={(manifest) => handleComplete(activeBuilder!, manifest)}
-              // @ts-ignore — ÚKOL 22-24 prefill pro edit/new
-              initialData={prefillData}
-              prefill={prefillData}
-            />
-          </div>
-        </div>
-      )}
     </>
   )
 }
 
-export default Builder
+// ── OVERLAY: jediné okno builderu (renderuje se jednou v App.tsx) ───────────
+export type BuilderRequest = { type: BuilderType; id?: string | number; extra?: string; prefill?: any }
+
+type OverlayProps = {
+  request: BuilderRequest | null
+  onClose: () => void
+  onManifestComplete?: (type: BuilderType, manifest: object) => void
+}
+
+export function BuilderOverlay({ request, onClose, onManifestComplete }: OverlayProps) {
+  const Active = request ? BUILDER_MAP[request.type] : null
+  if (!request || !Active) return null // žádný request nebo neznámý typ
+
+  // edit: prefill z requestu (nebo id/extra z /edit); nový builder z menu: bez prefillu
+  const prefill = request.prefill ?? ((request.id || request.extra) ? { _editId: request.id, _extra: request.extra } : null)
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
+      <div
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 rounded-2xl"
+        style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-xl leading-none transition-opacity opacity-30 hover:opacity-80 text-white"
+        >
+          ✕
+        </button>
+        <div className="text-[10px] tracking-[0.4em] font-bold mb-6" style={{ color: 'rgba(255,255,255,0.3)' }}>
+          {request.type.toUpperCase()} BUILDER
+        </div>
+        <Active
+          onComplete={(manifest) => { onManifestComplete?.(request.type, manifest); onClose() }}
+          initialData={prefill}
+          prefill={prefill}
+        />
+      </div>
+    </div>
+  )
+}

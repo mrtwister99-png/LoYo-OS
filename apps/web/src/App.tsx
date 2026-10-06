@@ -3,7 +3,10 @@ import Layout from './components/Layout'
 import { useAppState } from './hooks/useAppState'
 import { SaveStatusContext } from './hooks/useSaveStatus'
 import Background from './components/Background'
-import { Builder } from './components/Builder'
+import { BuilderOverlay } from './components/Builder'
+
+// Tab-stop „Builder panel" v Layoutu → otevře menu výběru typu v Headeru (stabilní reference, ať Layout efekt neopakuje volání)
+const openBuilderMenu = () => window.dispatchEvent(new CustomEvent('loyo:builder-menu'))
 
 // Lazy load stránek - <100ms přepnutí, React.memo na Menu, useReducer v Layoutu
 const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -119,8 +122,10 @@ export default function App() {
       const pageMap: Record<string, string> = { agent: 'agenti', mcp: 'mcp', skill: 'skills', cli: 'cli', team: 'tym', workflow: 'workflows', loop: 'loops', api: 'api' }
       if (pageMap[builderType]) setPage(pageMap[builderType] as any)
     }
+    const pickHandler = (e: any) => { const t = e.detail?.type; if (t) setBuilderInitial({ type: t, id: '' }) } // nový builder z menu, bez navigace na stránku
     window.addEventListener('loyo:open-builder', handler as any)
-    return () => window.removeEventListener('loyo:open-builder', handler as any)
+    window.addEventListener('loyo:builder-pick', pickHandler)
+    return () => { window.removeEventListener('loyo:open-builder', handler as any); window.removeEventListener('loyo:builder-pick', pickHandler) }
   }, [])
 
   useEffect(() => {
@@ -227,7 +232,7 @@ export default function App() {
         setActiveProfile={setActiveProfile}
         biosMode={biosMode}
         setBiosMode={setBiosMode}
-        onOpenBuilderMenu={openBuilder}
+        onOpenBuilderMenu={openBuilderMenu}
 
       >
         <Suspense fallback={<PageLoader />}>
@@ -240,13 +245,11 @@ export default function App() {
           {toast}
         </div>
       )}
-      <Builder
+      <BuilderOverlay
+        key={builderInitial ? `${builderInitial.type}:${builderInitial.id}:${builderInitial.extra ?? ''}` : 'none'}
+        request={builderInitial}
+        onClose={() => setBuilderInitial(null)}
         onManifestComplete={handleManifestComplete}
-        focused={builderOpen}
-        externalOpen={builderOpen}
-        onExternalClose={closeBuilder}
-        initialRequest={builderInitial}
-        onInitialConsumed={() => setBuilderInitial(null)}
       />
     </div>
     </SaveStatusContext.Provider>

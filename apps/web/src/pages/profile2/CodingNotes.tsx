@@ -109,7 +109,7 @@ export default function CodingNotes({ embedded = false }: Props) {
   const handleDelete = async () => {
     if (!selected) return
     if (!confirm(`Smazat ${selected.title}?`)) return
-    await deleteItem(selected.file_name)
+    await deleteItem(selected)
   }
 
   const handleSave = async () => {

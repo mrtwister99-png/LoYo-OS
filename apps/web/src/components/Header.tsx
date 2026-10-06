@@ -1,7 +1,7 @@
 // D:\dev\loyo-os\apps\web\src\components\Header.tsx
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useCalendarEvents } from '../hooks/useCalendarEvents'
-import { Builder } from './Builder'
+import { BuilderMenu } from './Builder'
 import { JA_UKOLY_AKTIVNI_DIR, JA_UKOLY_HOTOVE_DIR } from '../lib/dataPaths'
 import ProfileCube from './ProfileCube'
 
@@ -344,6 +344,13 @@ export default function Header({
     setClosingNotif(true)
     setTimeout(() => { setShowNotifPanel(false); setNotifFilter(null); setClosingNotif(false) }, 280)
   }
+  // Tab-stop „Builder panel" v Layoutu → otevře menu výběru typu
+  useEffect(() => {
+    const open = () => setShowBuilderMenu(true)
+    window.addEventListener('loyo:builder-menu', open)
+    return () => window.removeEventListener('loyo:builder-menu', open)
+  }, [])
+
   const closeBuilderPanel = () => {
     setClosingBuilder(true)
     setTimeout(() => { setShowBuilderMenu(false); setClosingBuilder(false) }, 280)
@@ -1028,14 +1035,11 @@ export default function Header({
         }}>
           Builder
         </span>
-        <Builder
+        <BuilderMenu
           focused={isFocused(6)}
           externalOpen={showBuilderMenu}
           onExternalClose={() => setShowBuilderMenu(false)}
-          onManifestComplete={(type, manifest) => {
-            // ukládání řeší App.tsx (hláška, přepsání, obnova stránky)
-            window.dispatchEvent(new CustomEvent('loyo:builder-complete', { detail: { type, manifest } }))
-          }}
+          onPick={(type) => window.dispatchEvent(new CustomEvent('loyo:builder-pick', { detail: { type } }))}
         />
       </div>
 
