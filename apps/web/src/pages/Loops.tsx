@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import { categoryColors, categoryNumbers } from '../styles/theme'
+import NumBadge from '../components/NumBadge'
 
 const ACCENT = '#00f2ff'
 const LOOP_COLOR = categoryColors.loops
@@ -14,6 +15,7 @@ type Loop = {
   schedule: string
   agent: string
   enabled: boolean
+  number?: number
 }
 
 export default function Loops() {
@@ -123,7 +125,7 @@ export default function Loops() {
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: LOOP_COLOR }} />
-                      <span className="font-mono text- px-1 py-0.5 rounded bg-black text-white">{LOOP_NUM}-{String(idx+1).padStart(2,'0')}</span>
+                      <NumBadge type={LOOP_NUM} n={l.number} idx={idx} />
                       {isScheduled && <span className="text-sm">⏰</span>}
                       <div className="text- font-black">{l.name}</div>
                     </div>

@@ -9,9 +9,10 @@ type Props = {
   onUnreadMessage?: () => void
   onSaved?: () => void
   chatLeftOffset?: string
+  docked?: boolean   // true = vložený do panelu (bez drag/resize, jen minimalizace)
 }
 
-export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Props): JSX.Element | null {
+export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked = false }: Props): JSX.Element | null {
   const [chatInput, setChatInput] = useState('')
   const [isChatLoading, setIsChatLoading] = useState(false)
   const [chatMessages, setChatMessages] = useState<ChatMsg[]>([
@@ -279,15 +280,10 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
       onClick={e => e.stopPropagation()}
       onMouseDown={e => e.stopPropagation()}
       style={{
-        position: 'fixed',
-        left: pos.x,
-        top: pos.y,
-        width: size.w,
-        height: size.h,
+        ...(docked
+          ? { position: 'relative' as const, width: '100%', height: '100%', border: 'none', boxShadow: 'none' }
+          : { position: 'fixed' as const, left: pos.x, top: pos.y, width: size.w, height: size.h, border: '2px solid black', boxShadow: '6px 6px 0px black', zIndex: 100 }),
         background: '#e1e2e3',
-        border: '2px solid black',
-        boxShadow: '6px 6px 0px black',
-        zIndex: 100,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
@@ -296,18 +292,18 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
     >
       {/* hlavička - DRAGGABLE */}
       <div
-        onMouseDown={onHeaderMouseDown}
+        onMouseDown={docked ? undefined : onHeaderMouseDown}
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 10px', height: 38,
           background: '#dbdbdb', borderBottom: '2px solid black',
           flexShrink: 0,
-          cursor: 'grab',
+          cursor: docked ? 'default' : 'grab',
           userSelect: 'none',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 12, cursor: 'grab' }}>⠿</span>
+          {!docked && <span style={{ fontSize: 12, cursor: 'grab' }}>⠿</span>}
           <span style={{
             width: 8, height: 8, borderRadius: '50%',
             background: '#040b8d',
@@ -315,10 +311,25 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
             animation: isChatLoading ? 'onlineBlink 0.5s step-start infinite' : 'onlinePulse 2.5s ease-in-out infinite',
           }} />
           <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.05em' }}>
-            Mary • {size.w}x{size.h}
+            Mary{docked? '' : ` • ${size.w}x${size.h}`}
           </span>
           {isChatLoading && <span style={{ fontSize: 10, color: '#ac0001', fontWeight: 700, animation: 'onlineBlink 0.8s step-start infinite' }}>píše…</span>}
         </div>
+        {docked ? (
+          <button
+            onClick={e => { e.stopPropagation(); onClose() }}
+            title="Minimalizovat"
+            style={{
+              width: 28, height: 22, border: '1.5px solid black',
+              background: 'white', color: 'black', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 14, fontWeight: 900, lineHeight: 1,
+              boxShadow: '1.5px 1.5px 0px black',
+            }}
+          >
+            –
+          </button>
+        ) : (
         <div style={{ display: 'flex', gap: 6 }}>
           <button
             onClick={() => {
@@ -346,6 +357,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
             ✕
           </button>
         </div>
+        )}
       </div>
 
       <div style={{
@@ -439,6 +451,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
       </div>
 
       {/* resize handle - přetáhni kam chceš velikost */}
+      {!docked && (
       <div
         onMouseDown={onResizeMouseDown}
         style={{
@@ -462,6 +475,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved }: Prop
       >
         ⤡
       </div>
+      )}
     </div>
   )
 }

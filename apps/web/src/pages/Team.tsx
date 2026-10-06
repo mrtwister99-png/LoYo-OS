@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import { categoryColors, categoryNumbers } from '../styles/theme'
+import NumBadge, { useCapNumbers } from '../components/NumBadge'
 
 const ACCENT = '#ff6f00'
 const TEAM_COLOR = categoryColors.teams
@@ -30,12 +31,15 @@ type Team = {
   workflows: string[]
   loops: string[]
   createdAt: string
+  number?: number
 }
 
 export default function Team() {
   const [teams, setTeams] = useState<Team[]>([])
   const [allAgents, setAllAgents] = useState<AgentLite[]>([])
   const [allLoops, setAllLoops] = useState<any[]>([])
+  const [allWorkflows, setAllWorkflows] = useState<any[]>([])
+  const capNums = useCapNumbers()
   const [syncStatus, setSyncStatus] = useState<'synced' | 'syncing' | 'error'>('synced')
   const [selectedId, setSelectedId] = useState<string>('')
   const [showNewTeam, setShowNewTeam] = useState(false)
@@ -81,6 +85,11 @@ export default function Team() {
       const data = await invoke<any>('sync_loops_from_fs')
       const raw = Array.isArray(data)? data : data.loops || []
       setAllLoops(raw)
+    } catch (e) { console.error(e) }
+    // workflows kvůli číslům štítků
+    try {
+      const wd = await invoke<any>('sync_workflows_from_fs')
+      setAllWorkflows(Array.isArray(wd)? wd : wd.workflows || [])
     } catch (e) { console.error(e) }
   }
 
@@ -224,7 +233,7 @@ export default function Team() {
                 <div key={t.id} onClick={() => setSelectedId(t.id)} className="p-5 cursor-pointer border-b-2 border-black flex justify-between border-l-4" style={{ background: isActive? BLUE : 'white', color: isActive? 'white' : 'black', borderLeftColor: TEAM_COLOR }}>
                   <div className="flex-1">
                     <div className="flex gap-2 items-center">
-                      <span className="font-mono text- px-1.5 py-0.5 rounded bg-black text-white">{TEAM_NUM}-{String(idx+1).padStart(2,'0')}</span>
+                      <NumBadge type={TEAM_NUM} n={t.number} idx={idx} />
                       <span className="font-black text-sm">{t.name}</span>
                       <span className="text- px-2 py-0.5 bg-white text-black border">{t.status}</span>
                       <span className="w-2 h-2 rounded-full" style={{ background: TEAM_COLOR }} />
@@ -282,7 +291,7 @@ export default function Team() {
                 )}
 
                 <div className="p-4 grid grid-cols-2 gap-3">
-                  {selected.agents.map(agentId => {
+                  {selected.agents.map((agentId, ai) => {
                     const agent = allAgents.find(a => a.id === agentId)
                     return (
                       <div key={agentId} className="border-2 border-black p-4 flex justify-between">
@@ -290,7 +299,7 @@ export default function Team() {
                           <div className="flex items-center gap-2">
                             <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-black text-xs">{(agent?.name || agentId)[0]}</div>
                             <div>
-                              <div className="font-black text-sm">{agent?.name || agentId}</div>
+                              <div className="font-black text-sm flex items-center gap-2">{agent?.name || agentId}<NumBadge type={categoryNumbers.agent} n={capNums.agent?.[agentId]} idx={ai} /></div>
                               <div className="text- opacity-60">{agent?.folder || agentId} • {agent?.role || 'Agent'}</div>
                             </div>
                           </div>
@@ -310,9 +319,9 @@ export default function Team() {
                 <div className="border-2 border-black p-4">
                   <div className="text- tracking-[0.3em] opacity-40">WORKFLOWS V TÝMU // AKCE + AGENTI + LOOPY</div>
                   <div className="mt-3 space-y-2">
-                    {selected.workflows.map(w => (
+                    {selected.workflows.map((w, wi) => (
                       <div key={w} className="flex justify-between items-center border-2 border-black p-3 bg-white">
-                        <span className="font-bold text-xs">{w}</span>
+                        <span className="font-bold text-xs flex items-center gap-2"><NumBadge type={categoryNumbers.workflow} n={allWorkflows.find((x: any) => x.id === w)?.number} idx={wi} />{w}</span>
                         <span className="text- px-2 py-1 bg-black text-white">WORKFLOW</span>
                       </div>
                     ))}
@@ -328,9 +337,9 @@ export default function Team() {
                 <div className="border-2 border-black p-4" style={{ background: '#fbfaf8' }}>
                   <div className="text- tracking-[0.3em] opacity-40">LOOPS V TÝMU // CRON • WEBHOOK</div>
                   <div className="mt-3 space-y-2">
-                    {selected.loops.map(l => (
+                    {selected.loops.map((l, li) => (
                       <div key={l} className="flex justify-between items-center border-2 border-black p-3 bg-white">
-                        <span className="font-bold text-xs">{l}</span>
+                        <span className="font-bold text-xs flex items-center gap-2"><NumBadge type={categoryNumbers.loop} n={allLoops.find((x: any) => x.id === l)?.number} idx={li} />{l}</span>
                         <span className="text- px-2 py-1" style={{ background: GOLD }}>LOOP</span>
                       </div>
                     ))}

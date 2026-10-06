@@ -147,17 +147,39 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [saveStatus, saveClick])
 
+  const [toast, setToast] = useState<string | null>(null)
+  const [refreshKey, setRefreshKey] = useState(0)
+  const showToast = (msg: string) => { setToast(msg); window.setTimeout(() => setToast(null), 3500) }
+
+  // uloží manifest přes API; 409 = už existuje → zeptá se na přepsání (záloha se vytvoří)
   const handleManifestComplete = async (type: string, manifest: object) => {
+    const save = (overwrite: boolean) => fetch('http://localhost:3001/api/capabilities', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, manifest, overwrite }),
+    })
     try {
-      await fetch('http://localhost:3001/api/capabilities', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type, manifest }),
-      })
+      let res = await save(false)
+      if (res.status === 409) {
+        const id = (manifest as any)?.id
+        if (!window.confirm(`${type} "${id}" už existuje. Přepsat? (starý manifest se zálohuje)`)) return
+        res = await save(true)
+      }
+      const data = await res.json().catch(() => ({}))
+      showToast(res.ok? (data.message || 'Uloženo.') : `Chyba: ${data.error || res.status}`)
+      if (res.ok) setRefreshKey(k => k + 1)   // znovu načte aktuální stránku
     } catch (err) {
       console.error('[Builder] Nepodařilo se uložit manifest:', err)
+      showToast('API neodpovídá (localhost:3001).')
     }
   }
+
+  // Builder v hlavičce jen pošle událost, ukládání řeší tady
+  useEffect(() => {
+    const h = (e: any) => { const { type, manifest } = e.detail || {}; if (type && manifest) handleManifestComplete(type, manifest) }
+    window.addEventListener('loyo:builder-complete', h as any)
+    return () => window.removeEventListener('loyo:builder-complete', h as any)
+  }, [])
 
   const currentPageNode = useMemo(() => {
     if (page === 'dashboard') {
@@ -206,13 +228,18 @@ export default function App() {
         biosMode={biosMode}
         setBiosMode={setBiosMode}
         onOpenBuilderMenu={openBuilder}
-        onOpenMobil={openMobil}
+
       >
         <Suspense fallback={<PageLoader />}>
-          {currentPageNode}
+          <div key={refreshKey} className="contents">{currentPageNode}</div>
         </Suspense>
       </Layout>
 
+      {toast && (
+        <div style={{ position: 'fixed', right: 24, bottom: 64, zIndex: 200, background: '#0a0a0a', color: '#fff', border: '3px solid #0a0a0a', borderRadius: 12, padding: '10px 16px', fontSize: 12, fontWeight: 700, boxShadow: '4px 4px 0 #00D084', maxWidth: 420 }}>
+          {toast}
+        </div>
+      )}
       <Builder
         onManifestComplete={handleManifestComplete}
         focused={builderOpen}

@@ -22,6 +22,8 @@ export const QUEUE_DIR = join(DATA_DIR, 'queue')
 export const QUEUE_PENDING_FILE = join(QUEUE_DIR, 'pending.json')
 export const QUEUE_LOCK_FILE = join(QUEUE_DIR, '.lock')
 export const TMP_DIR = join(DATA_DIR, 'tmp')
+// složka RAG v rootu projektu (vedle data/), verzovaná v gitu; jinde přes LOYO_RAG_DIR
+export const RAG_DIR = process.env.LOYO_RAG_DIR ? resolve(process.env.LOYO_RAG_DIR) : resolve(DATA_DIR, '..', 'RAG')
 
 
 // ÚKOL 19: UNDO HISTORY

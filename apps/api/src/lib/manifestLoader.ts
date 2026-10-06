@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { DATA_DIR } from './dataPaths.js';
 import { initDb, upsertCapabilities, syncDbWithIds, getByTypeFromDb, getByIdFromDb, getAgentsFromDb, getAllFromDb } from './manifestDb.js';
 import type { CapabilityManifest } from '@loyo/core';
+import { CapabilityManifestSchema } from '@loyo/core';
 
 const CAPABILITIES_DIR = join(DATA_DIR, 'capabilities');
 
@@ -55,11 +56,73 @@ export async function reindexCapabilities(): Promise<ManifestCache> {
         else if (f.includes('cli')) json.type = 'cli';
         else json.type = 'unknown';
       }
+      // Zod validace (měkká): nevalidní manifest zůstane načtený, ale objeví se v "errors" (/api/capabilities)
+      if (json.type !== 'api') {
+        const check = CapabilityManifestSchema.safeParse(json);
+        if (!check.success) errors.push({ path: f, error: 'schema: ' + check.error.issues.slice(0, 3).map((i: any) => `${i.path.join('.') || '(kořen)'}: ${i.message}`).join('; ') });
+      }
       caps.push(json as CapabilityManifest);
     } catch (e: any) {
       errors.push({ path: f, error: e?.message?? String(e) });
     }
   }
+
+  // týmy: členy bere z teams/index.json (zdroj pro stránku Team), manifest je jen záloha
+  try {
+    const tIdx = JSON.parse(readFileSync(join(CAPABILITIES_DIR, 'teams', 'index.json'), 'utf8'))
+    const tl: any[] = Array.isArray(tIdx?.teams) ? tIdx.teams : []
+    for (const c of caps as any[]) {
+      if (c.type !== 'team') continue
+      const t = tl.find((x: any) => x.id === c.id)
+      if (t && Array.isArray(t.agents)) c.members = t.agents
+    }
+  } catch {}
+
+  // VALIDACE number – podle času přidání (nejstarší 1,2..) + auto-increment
+  const byType: Record<string, any[]> = {}
+  for (const c of caps) {
+    const t = (c as any).type || 'unknown'
+    if (!byType[t]) byType[t] = []
+    byType[t].push(c)
+  }
+  for (const type of Object.keys(byType)) {
+    const list = byType[type]
+    list.sort((a,b) => {
+      const da = new Date((a as any).createdAt || (a as any).created || 0).getTime()
+      const db = new Date((b as any).createdAt || (b as any).created || 0).getTime()
+      if (da!== db) return da - db
+      return (a.id||'').localeCompare(b.id||'')
+    })
+    const used = new Set<number>()
+    let maxNum = 0
+    for (const c of list) {
+      if (typeof (c as any).number === 'number') {
+        maxNum = Math.max(maxNum, (c as any).number)
+        used.add((c as any).number)
+      }
+    }
+    let next = maxNum > 0? maxNum + 1 : 1
+    for (const c of list) {
+      if (typeof (c as any).number!== 'number') {
+        while (used.has(next)) next++
+        ;(c as any).number = next
+        used.add(next)
+        next++
+      }
+    }
+    const seen: Record<number, string[]> = {}
+    for (const c of list) {
+      const n = (c as any).number
+      if (!seen[n]) seen[n] = []
+      seen[n].push(c.id)
+    }
+    for (const [n, ids] of Object.entries(seen)) {
+      if (ids.length > 1) {
+        errors.push({ path: `type:${type}`, error: `Duplicitní number ${n} pro ids: ${ids.join(', ')}` })
+      }
+    }
+  }
+
   console.log(`[loader] found ${caps.length} caps, ${errors.length} errors`, caps.map(c=>c.id));
   upsertCapabilities(caps);
   syncDbWithIds(caps.map(c => c.id));

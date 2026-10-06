@@ -4,8 +4,8 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { DATA_DIR } from '../lib/dataPaths'
 
-const INDEX_PATH = join(DATA_DIR, 'loops/index.json')
-const COMMANDS_FILE = join(DATA_DIR, 'agents/Mary_Jane/commands.json')
+const INDEX_PATH = join(DATA_DIR, 'capabilities/loops/index.json')
+const COMMANDS_FILE = join(DATA_DIR, 'capabilities/agents/mary-jane/commands.json')
 
 export default async function loopsRoutes(app: FastifyInstance)
 {

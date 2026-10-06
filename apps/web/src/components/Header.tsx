@@ -1,6 +1,5 @@
 // D:\dev\loyo-os\apps\web\src\components\Header.tsx
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
-import Chat from './Chat'
 import { useCalendarEvents } from '../hooks/useCalendarEvents'
 import { Builder } from './Builder'
 import { JA_UKOLY_AKTIVNI_DIR, JA_UKOLY_HOTOVE_DIR } from '../lib/dataPaths'
@@ -159,9 +158,6 @@ export default function Header({
   const [notifBump, setNotifBump] = useState<Record<NotifType, boolean>>({ new: false, urgent: false, approval: false })
   const prevCounts = useRef<Record<NotifType, number>>({ new: 0, urgent: 0, approval: 0 })
 
-  // chat – poslední zpráva
-  const [lastChatMsg, setLastChatMsg] = useState<{ from: 'me' | 'mary'; text: string } | null>(null)
-
   // activity – poslední aktivita
   const [lastActivity, setLastActivity] = useState<ActivityEventLite | null>(null)
 
@@ -214,26 +210,6 @@ export default function Header({
     }, 3200)
     return () => clearInterval(interval)
   }, [notifications])
-
-  // ── fetch poslední chat zprávy ────────────────────────────────
-  const fetchLastChat = useCallback(async () => {
-    try {
-      const res = await fetch('http://localhost:3001/api/chat/history')
-      if (!res.ok) return
-      const data = await res.json()
-      const msgs = data.messages || []
-      if (msgs.length > 0) {
-        const last = msgs[msgs.length - 1]
-        setLastChatMsg({ from: last.from, text: last.text })
-      }
-    } catch {}
-  }, [])
-
-  useEffect(() => {
-    fetchLastChat()
-    const i = setInterval(fetchLastChat, 8_000)
-    return () => clearInterval(i)
-  }, [fetchLastChat])
 
   // ── fetch poslední aktivity ───────────────────────────────────
   const fetchLastActivity = useCallback(async () => {
@@ -419,7 +395,7 @@ export default function Header({
    // ── sdílené styly sekce ───────────────────────────────────────
   const sectionBase = (idx: number, extraStyle?: React.CSSProperties): React.CSSProperties => ({
     background: isFocused(idx) ? 'rgba(0,0,0,0.12)' : 'transparent',
-    borderRight: '1px solid rgba(0,0,0,0.18)',
+    borderRight: '1px solid #dbdbdb',
     display: 'flex',
     alignItems: 'center',
     height: '100%',
@@ -427,13 +403,6 @@ export default function Header({
     position: 'relative',
     ...extraStyle,
   })
-
-  // ── chat label ────────────────────────────────────────────────
-  const chatLabel = (() => {
-    if (!lastChatMsg) return 'Mary – sekretářka'
-    const who = lastChatMsg.from === 'mary' ? 'Mary' : 'Já'
-    return `${who}: ${lastChatMsg.text}`
-  })()
 
   const hh = time.getHours().toString().padStart(2, '0')
   const mm = time.getMinutes().toString().padStart(2, '0')
@@ -444,10 +413,11 @@ export default function Header({
     <header
       style={{
         height: 56,
+        boxSizing: 'border-box',
+        padding: '6px calc(2.5% + 3px) 11px',   // místo pro tlustý rámeček + stín karty
         display: 'flex',
         alignItems: 'stretch',
         background: '#cccccc',
-        borderBottom: '1px solid #6b6b6b',
         position: 'sticky',
         top: 0,
         zIndex: 40,
@@ -455,11 +425,20 @@ export default function Header({
         overflow: 'visible',
       }}
     >
+      {/* karta lišty ve stylu webu: tlustý rámeček + tvrdý stín (jen vzhled) */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute', left: '2.5%', right: '2.5%', top: 3, bottom: 8,
+          background: '#ffffff', border: '3px solid #0a0a0a', borderRadius: 12,
+          boxShadow: '4px 4px 0px 0px #0a0a0a', pointerEvents: 'none', zIndex: 0,
+        }}
+      />
 
       {/* ══════════════════════════════════════════════════════════
           1. LOGO + PROFIL — 10% (zkráceno, končí u žluté čárky)
       ══════════════════════════════════════════════════════════ */}
-      <div style={{ ...sectionBase(0), width: '10%', padding: '0 10px', gap: 8 }}>
+      <div style={{ ...sectionBase(0), width: '10%', padding: '0 10px', gap: 8, borderRadius: '9px 0 0 9px' }}>
                 {/* 3D LOYO KOSTKA - L O Y O profily, klik -90°, hold = 4x rozprsk */}
         <ProfileCube
           activeProfile={activeProfile}
@@ -474,9 +453,10 @@ export default function Header({
         {/* Název + verze */}
         <div style={{ lineHeight: 1 }}>
           <div style={{
-            fontWeight: 900,
-            fontSize: 13,
-            letterSpacing: '0.15em',
+            fontFamily: "'Syne', 'Inter', sans-serif",
+            fontWeight: 800,
+            fontSize: 14,
+            letterSpacing: '0.06em',
             color: '#000000',
             lineHeight: 1,
           }}>
@@ -553,13 +533,13 @@ export default function Header({
               }}>+1</sup>
             )}
           </div>
-          <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.45)', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: 9, color: 'rgba(0,0,0,0.5)', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
             NOVÉ
           </span>
         </div>
 
         {/* Oddělovač */}
-        <div style={{ width: 1, height: 28, background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
+        <div style={{ width: 1, height: 28, background: '#dbdbdb', flexShrink: 0 }} />
 
         {/* Jednotka: Nutné (karamelová) */}
         <div
@@ -604,13 +584,13 @@ export default function Header({
               }}>+1</sup>
             )}
           </div>
-          <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.45)', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: 9, color: 'rgba(0,0,0,0.5)', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
             NUTNÉ
           </span>
         </div>
 
         {/* Oddělovač */}
-        <div style={{ width: 1, height: 28, background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
+        <div style={{ width: 1, height: 28, background: '#dbdbdb', flexShrink: 0 }} />
 
         {/* Jednotka: Ke schválení (červená) */}
         <div
@@ -655,7 +635,7 @@ export default function Header({
               }}>+1</sup>
             )}
           </div>
-          <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.45)', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: 9, color: 'rgba(0,0,0,0.5)', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
             SCHVÁLENÍ
           </span>
         </div>
@@ -804,53 +784,17 @@ export default function Header({
       </div>
 
       {/* ══════════════════════════════════════════════════════════
-          3. CHAT — 40% (prodlouženo)
+          3. VOLNÝ SLOT — 40% (chat přesunut do Bottom.tsx)
       ══════════════════════════════════════════════════════════ */}
       <div
-        onClick={toggleChat}
         style={{
           ...sectionBase(2),
           width: '40%',
           padding: '0 16px',
-          cursor: 'pointer',
           gap: 8,
           overflow: 'hidden',
         }}
       >
-        {/* zelená tečka */}
-        <span style={{
-          width: 7,
-          height: 7,
-          borderRadius: '50%',
-          background: '#00D084',
-          boxShadow: '0 0 6px #00D084',
-          flexShrink: 0,
-        }} />
-
-        {/* label */}
-        <span style={{
-          fontSize: 11,
-          fontWeight: 700,
-          color: '#000000',
-          flexShrink: 0,
-          letterSpacing: '0.08em',
-        }}>
-          CHAT:
-        </span>
-
-        {/* poslední zpráva */}
-        <span style={{
-          fontSize: 12,
-          color: '#000000',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          flex: 1,
-          fontWeight: 500,
-        }}>
-          {chatLabel}
-        </span>
-
                {/* saveStatus - úplně pravo v chat sekci - klik = uložit */}
         <span
           onClick={() => { if (saveStatus!== 'dirty') return; onSaveClick?.() }}
@@ -874,34 +818,6 @@ export default function Header({
           }} />
           {saveStatus === 'saving' ? '🟡 ukládám' : saveStatus === 'saved' ? '🟢 uloženo' : saveStatus === 'dirty' ? '• neuloženo' : ''}
         </span>
-
-        {/* Chat komponenta */}
-        <Chat
-          isOpen={isTerminalOpen}
-          onClose={closeChat}
-          onUnreadMessage={() => {}}
-          onSaved={triggerSavedToast}
-        />
-
-        {showSavedToast && (
-          <span style={{
-            position: 'absolute',
-            top: '100%',
-            right: 16,
-            marginTop: 8,
-            padding: '6px 14px',
-            borderRadius: 999,
-            background: '#00D084',
-            color: '#000',
-            fontSize: 11,
-            fontWeight: 900,
-            letterSpacing: '0.05em',
-            whiteSpace: 'nowrap',
-            boxShadow: '0 4px 12px rgba(0,208,132,0.4)',
-          }}>
-            ✓ Uloženo
-          </span>
-        )}
       </div>
 
       {/* ══════════════════════════════════════════════════════════
@@ -1073,9 +989,10 @@ export default function Header({
         }}
       >
         <span style={{
+          fontFamily: "'Syne', 'Inter', sans-serif",
           fontSize: 15,
-          fontWeight: 900,
-          letterSpacing: '0.12em',
+          fontWeight: 800,
+          letterSpacing: '0.1em',
           color: C.red,
           textTransform: 'uppercase',
           whiteSpace: 'nowrap',
@@ -1095,13 +1012,15 @@ export default function Header({
           justifyContent: 'space-between',
           alignItems: 'center',
           borderRight: 'none',
+          borderRadius: '0 9px 9px 0',
           overflow: 'visible',
         }}
       >
         <span style={{
+          fontFamily: "'Syne', 'Inter', sans-serif",
           fontSize: 13,
-          fontWeight: 900,
-          letterSpacing: '0.18em',
+          fontWeight: 800,
+          letterSpacing: '0.16em',
           color: 'rgba(0,0,0,0.35)',
           textTransform: 'uppercase',
           userSelect: 'none',
@@ -1114,7 +1033,8 @@ export default function Header({
           externalOpen={showBuilderMenu}
           onExternalClose={() => setShowBuilderMenu(false)}
           onManifestComplete={(type, manifest) => {
-            console.log('Builder manifest:', type, manifest)
+            // ukládání řeší App.tsx (hláška, přepsání, obnova stránky)
+            window.dispatchEvent(new CustomEvent('loyo:builder-complete', { detail: { type, manifest } }))
           }}
         />
       </div>

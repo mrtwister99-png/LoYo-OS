@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
+import { categoryNumbers } from '../styles/theme'
+import NumBadge from '../components/NumBadge'
 
+const SKILL_NUM = categoryNumbers.skills
 const ACCENT = '#fff700'
 
 type Skill = {
@@ -12,6 +15,7 @@ type Skill = {
   category: string
   status: string
   version: string
+  number?: number
 }
 
 export default function Skills() {
@@ -92,14 +96,14 @@ export default function Skills() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="text- font-black">{s.name}</div>
                   <div className="flex items-center gap-1">
-                    <span className="px-2 py-0.5 rounded-full bg-black text-white text- font-mono tracking-widest">#{String(idx+1).padStart(2,'0')}</span>
+                    <NumBadge type={SKILL_NUM} n={s.number} idx={idx} pill />
                     <span className="px-2 py-0.5 rounded-full text- font-mono font-bold tracking-widest" style={{ background: ACCENT, color: '#000' }}>SKILLS</span>
                   </div>
                 </div>
                 <div className="mt-1 text- font-mono text-black/40">{s.desc||'Bez popisu'}</div>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text- font-mono text-black/30">{s.folder}/{s.file} • {s.version}</span>
-                  <span className="text- font-mono text-black/20">5-{String(idx+1).padStart(2,'0')} • {s.id}</span>
+                  <span className="text- font-mono text-black/20">{s.id}</span>
                 </div>
               </div>
             ))}

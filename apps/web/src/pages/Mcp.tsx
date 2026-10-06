@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import { categoryColors, categoryNumbers } from '../styles/theme'
+import NumBadge from '../components/NumBadge'
 
 const ACCENT = '#33a3ff'
 const MCP_COLOR = categoryColors.mcp
@@ -91,7 +92,7 @@ export default function Mcp() {
               <div key={s.id} className="col-span-12 md:col-span-6 xl:col-span-4 bg-white rounded- border border-black/5 p-7 border-l-4" style={{ borderLeftColor: MCP_COLOR }}>
                 <div className="flex items-start justify-between gap-2">
                   <div className="text- font-black">{s.name}</div>
-                  <div className="flex items-center gap-1"><span className="font-mono text- px-1.5 py-0.5 rounded bg-black text-white">#{s.number?? idx+22} {s.id}</span><span className="text- font-bold px-1.5 py-0.5 rounded" style={{ background: MCP_COLOR, color: '#000' }}>MCP</span></div>
+                  <div className="flex items-center gap-1"><NumBadge type={MCP_NUM} n={s.number} idx={idx} label={s.id} /><span className="text- font-bold px-1.5 py-0.5 rounded" style={{ background: MCP_COLOR, color: '#000' }}>MCP</span></div>
                 </div>
                 <div className="mt-1 text- font-mono text-black/40">{s.desc||'Bez popisu'}</div>
                 <div className="mt-4 text- font-mono text-black/30 flex justify-between"><span>{s.command} • {s.tools.length} tools</span><span className="text- opacity-30">{s.id}</span></div>

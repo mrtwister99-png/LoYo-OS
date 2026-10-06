@@ -7,6 +7,7 @@ export type CalendarEvent = {
   title: string
   date: string // YYYY-MM-DD
   time: string // HH:MM
+  duration: number // minuty
   content: string
 }
 
@@ -17,12 +18,14 @@ function parseEventFile(file_name: string, file_path: string, content: string): 
   const titleMatch = content.match(/^#\s*(.+)$/m)
   const dateMatch = content.match(/\*\*Datum:\*\*\s*(\d{4}-\d{2}-\d{2})/)
   const timeMatch = content.match(/\*\*Čas:\*\*\s*(\d{2}:\d{2})/)
+  const durMatch = content.match(/\*\*Délka:\*\*\s*(\d+)/)
   return {
     file_name,
     file_path,
-    title: titleMatch ? titleMatch[1].trim() : 'Bez názvu',
-    date: dateMatch ? dateMatch[1] : '',
-    time: timeMatch ? timeMatch[1] : '',
+    title: titleMatch? titleMatch[1].trim() : 'Bez názvu',
+    date: dateMatch? dateMatch[1] : '',
+    time: timeMatch? timeMatch[1] : '',
+    duration: durMatch? parseInt(durMatch[1]) : 60,
     content,
   }
 }

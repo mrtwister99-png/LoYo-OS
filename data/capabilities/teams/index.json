@@ -1,25 +1,20 @@
 {
   "version": "2.0",
+  "lastSync": "2026-09-28T00:00:00.000Z",
   "teams": [
     {
       "id": "iiaa-team",
+      "number": 1,
       "name": "IIAA TEAM",
-      "desc": "Hlavni tym pro IIAA - 11 specialistu pojmenovanych podle error stavu: Error, Cancel, Laggy, NoFPS, Camper, PWner, OP, cheater, Fatal, Eskejp, Delete",
+      "desc": "Novy tym pro IIAA - Kotlin + AI + integrace",
       "color": "#ff6f00",
       "status": "ACTIVE",
-      "purpose": "Kotlin + AI + integrace - elita tymu, prvni 4 agenti zustavaji bez tymu",
+      "purpose": "Hlavni tym pro vyvoj IIAA - spojuje Kotlin devs, AI agenty a integrace",
       "agents": [
-        "error",
-        "cancel",
-        "laggy",
-        "nofps",
-        "camper",
-        "pwner",
-        "op",
-        "cheater",
-        "fatal",
-        "eskejp",
-        "delete"
+        "julia-nehledalova",
+        "lubor-nehleda",
+        "mary-jane",
+        "kosterad-fuckstein"
       ],
       "ragFiles": [],
       "canCollaborateWith": [],
@@ -27,6 +22,5 @@
       "loops": [],
       "createdAt": "2026-09-28"
     }
-  ],
-  "lastSync": "2026-09-28T00:00:00.000Z"
+  ]
 }

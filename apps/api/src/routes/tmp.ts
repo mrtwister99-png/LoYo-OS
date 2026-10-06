@@ -9,26 +9,29 @@ const QuerySchema = z.object({
 })
 
 export default async function tmpRoutes(app: FastifyInstance) {
-  // GET /api/tmp/list - seznam souborů v data/tmp
-  app.get('/api/tmp/list', async () => {
+  // GET /api/tmp/list - seznam souborů v data/tmp - seřazeno nejnovější první, jen.json
+  app.get('/tmp/list', async (req) => {
+    const q = req.query as { ext?: string }
+    const filterExt = q?.ext || 'json'
     try {
       const files = await readdir(TMP_DIR)
-      const detailed = await Promise.all(files.map(async (name) => {
+      const detailed = await Promise.all(files.filter(f=> filterExt? f.endsWith('.'+filterExt) : true).map(async (name) => {
         try {
           const full = join(TMP_DIR, name)
           const s = await stat(full)
-          return { name, size: s.size, mtime: s.mtime.toISOString(), isFile: s.isFile() }
+          return { name, size: s.size, mtime: s.mtime.toISOString(), mtimeMs: s.mtime.getTime(), isFile: s.isFile() }
         } catch {
-          return { name, size: 0, mtime: '', isFile: true }
+          return { name, size: 0, mtime: '', mtimeMs: 0, isFile: true }
         }
       }))
-      return { files: detailed, dir: TMP_DIR }
+      detailed.sort((a,b)=> (b as any).mtimeMs - (a as any).mtimeMs)
+      return { files: detailed.map(({mtimeMs,...rest}:any)=>rest), dir: TMP_DIR, count: detailed.length }
     } catch (e: any) {
       return { files: [], dir: TMP_DIR, error: e.message }
     }
   })
 
-  app.get('/api/tmp', async (req, reply) => {
+  app.get('/tmp', async (req, reply) => {
     const parsed = QuerySchema.safeParse(req.query)
     if (!parsed.success) return reply.status(400).send({ error: 'invalid path', detail: parsed.error.flatten() })
     const inputPath = parsed.data.path

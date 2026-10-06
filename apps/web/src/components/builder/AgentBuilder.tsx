@@ -26,6 +26,7 @@ export default function AgentBuilder({ onComplete, initialData, prefill }: Exten
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isEditMode, setIsEditMode] = useState(false)
+  const [orig, setOrig] = useState<any>(null) // původní manifest z edit módu
 
   // ÚKOL 22: když přijde _extra = lubor-nehleda nebo _editId = 2, načti existující manifest
   useEffect(() => {
@@ -70,7 +71,7 @@ export default function AgentBuilder({ onComplete, initialData, prefill }: Exten
             permissions: (data.permissions || []).join('\n'),
             mcp_expose: data.mcp_expose?? f.mcp_expose,
           }))
-          setIsEditMode(true)
+          setOrig(data); setIsEditMode(true)
         }
       } catch (e) { console.error('edit load failed', e) }
     }
@@ -83,7 +84,7 @@ export default function AgentBuilder({ onComplete, initialData, prefill }: Exten
   const set = (key: string, val: any) => {
     setForm(f => {
       const next = { ...f, [key]: val }
-      if (key === 'displayName') next.id = toKebab(val)
+      if (key === 'displayName' && !isEditMode) next.id = toKebab(val)
       return next
     })
     setErrors(e => ({ ...e, [key]: '' }))
@@ -106,7 +107,7 @@ export default function AgentBuilder({ onComplete, initialData, prefill }: Exten
       id: form.id,
       type: 'agent',
       displayName: form.displayName,
-      version: '1.0.0',
+      version: orig?.version ?? '1.0.0',
       status: form.status,
       description: form.description,
       runtime: form.runtime,
@@ -118,9 +119,9 @@ export default function AgentBuilder({ onComplete, initialData, prefill }: Exten
       tags: form.tags.split(',').map(s => s.trim()).filter(Boolean),
       permissions: form.permissions.split('\n').map(s => s.trim()).filter(Boolean),
       mcp_expose: form.mcp_expose,
-      inputs: { message: 'string' },
-      outputs: { response: 'string' },
-      createdAt: new Date().toISOString(),
+      inputs: orig?.inputs ?? { message: 'string' },
+      outputs: orig?.outputs ?? { response: 'string' },
+      createdAt: orig?.createdAt ?? new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
 
@@ -154,7 +155,7 @@ export default function AgentBuilder({ onComplete, initialData, prefill }: Exten
       </Field>
 
       <Field label="ID (kebab-case) *" error={errors.id}>
-        <input className={inputCls} value={form.id} onChange={e => set('id', e.target.value)} placeholder="mary-jane" />
+        <input className={inputCls} value={form.id} readOnly={isEditMode} onChange={e => set('id', e.target.value)} placeholder="mary-jane" />
       </Field>
 
       <Field label="DESCRIPTION *" error={errors.description}>

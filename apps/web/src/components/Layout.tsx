@@ -291,7 +291,6 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
             className="flex-1 w-full overflow-y-auto overflow-x-hidden min-h-0 overscroll-contain transition-all duration-300 pb-"
             style={{
               background: biosMode? 'rgba(4,11,141,0.8)' : 'rgba(255,255,255,0.6)',
-              backdropFilter: 'blur(0.3px)',
             }}
           >
             <div className="min-h-full w-full pb-">{children}</div>

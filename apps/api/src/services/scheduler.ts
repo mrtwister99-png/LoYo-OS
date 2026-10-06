@@ -145,6 +145,14 @@ async function executeScheduled(cmd: CommandDef): Promise<string>
     return `☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n${statusText}\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?`
   }
 
+  // noční sumarizace paměti (ÚKOL 34.1)
+  if (cmd.handler === 'memory-nightly')
+  {
+    const { summarizeAgentMemory, summarizeChatDay } = await import('./orchestrator')
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+    return `🧠 ${await summarizeAgentMemory('Mary_Jane')}\n🗂 ${await summarizeChatDay(yesterday)}`
+  }
+
   return `[scheduler] neznámý handler: ${cmd.handler}`
 }
 

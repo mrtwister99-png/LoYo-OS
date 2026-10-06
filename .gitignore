@@ -61,6 +61,7 @@ data/leads/
 data/logs/
 data/cache/
 data/cache/blobs/
+data/qdrant/
 data/notifications/_pending.json
 data/ja/
 data/reports/

@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { categoryColors, categoryNumbers } from '../styles/theme'
+import NumBadge from '../components/NumBadge'
 
 const ACCENT = '#40ff00'
 const CLI_COLOR = categoryColors.cli
@@ -13,6 +14,7 @@ type CliTool = {
   hasPackageJson: boolean
   hasIndex: boolean
   commands: string[]
+  number?: number
 }
 
 type ScheduledCmd = {
@@ -108,7 +110,7 @@ export default function Cli() {
                   <div key={cli.id} onClick={() => setSelected(cli.id)} className="p-5 cursor-pointer border-b-2 border-black flex justify-between border-l-4" style={{ background: isActive? GOLD : 'white', borderLeftColor: CLI_COLOR }}>
                     <div className="flex-1 min-w-0">
                       <div className="flex gap-2 items-center">
-                        <span className="font-mono text- px-1 py-0.5 rounded bg-black text-white">{CLI_NUM}-{String(idx+1).padStart(2,'0')}</span>
+                        <NumBadge type={CLI_NUM} n={cli.number} idx={idx} />
                         <span className="font-black text-sm">$ {cli.name}</span>
                         <span className="w-2 h-2 rounded-full" style={{ background: CLI_COLOR }} />
                         {cli.hasIndex && <span className="text- px-2 py-0.5 bg-black text-white">READY</span>}

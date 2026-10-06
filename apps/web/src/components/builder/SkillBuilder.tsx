@@ -7,6 +7,16 @@ export default function SkillBuilder({ onComplete, initialData, prefill }: Exten
   const [isEditMode, setIsEditMode] = useState(false)
   const toKebab = (s: string) => s.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
   const set = (k: string, v: any) => setForm(f => { const n = {...f, [k]: v }; if (k === 'displayName') n.id = toKebab(v); return n })
+  // předvyplnění nového skillu z /new skill (manifest z research)
+  useEffect(() => {
+    if (editSource?._extra || editSource?._editId) return
+    if (!editSource?.id && !editSource?.displayName) return
+    setForm({
+      displayName: editSource.displayName || '', id: editSource.id || '', description: editSource.description || '',
+      entrypoint: editSource.entrypoint || './dist/index.js', runtime: editSource.runtime || 'node', pure: editSource.pure ?? true,
+      tags: Array.isArray(editSource.tags)? editSource.tags.join(', ') : (editSource.tags || ''),
+    })
+  }, [editSource?.id, editSource?.displayName])
   useEffect(() => {
     const raw = editSource?._extra || editSource?._editId
     if (!raw) return
@@ -17,7 +27,7 @@ export default function SkillBuilder({ onComplete, initialData, prefill }: Exten
     const load = async () => {
       try {
         let data: any = null
-        try { const r = await fetch(`http://localhost:3001/api/skills/${targetId}`); if (r.ok) data = await r.json() } catch {}
+        try { const r = await fetch(`http://localhost:3001/api/capabilities/${targetId}`); if (r.ok) data = await r.json() } catch {}
         if (data) { setForm({ displayName: data.displayName||targetId, id: data.id||targetId, description: data.description||'', entrypoint: data.entrypoint||'./dist/index.js', runtime: data.runtime||'node', pure: data.pure??true, tags: (data.tags||[]).join(', ') }); setIsEditMode(true) }
       } catch {}
     }; load()

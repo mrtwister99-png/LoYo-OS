@@ -4,6 +4,7 @@
   "agents": [
     {
       "id": "mary-jane",
+      "number": 1,
       "folder": "mary-jane",
       "name": "Mary Jane",
       "role": "Elite Executive Assistant & Command Router",
@@ -34,6 +35,7 @@
     },
     {
       "id": "lubor-nehleda",
+      "number": 2,
       "folder": "lubor-nehleda",
       "name": "Lubor Nehleda",
       "role": "Analytik / Lead Finder",
@@ -62,6 +64,7 @@
     },
     {
       "id": "julia-nehledalova",
+      "number": 3,
       "folder": "julia-nehledalova",
       "name": "Julia Nehledalová",
       "role": "Deep Research Analyst",
@@ -89,6 +92,7 @@
     },
     {
       "id": "kosterad-fuckstein",
+      "number": 4,
       "folder": "kosterad-fuckstein",
       "name": "Koštěrad Fuckstein",
       "role": "Builder Agent — manifest generation & validation",

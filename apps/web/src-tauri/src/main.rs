@@ -27,6 +27,11 @@ fn loops_base()     -> String { format!("{}/capabilities/loops",     data_root()
 fn teams_base()     -> String { format!("{}/capabilities/teams",     data_root()) }
 fn workflows_base() -> String { format!("{}/capabilities/workflows", data_root()) }
 
+// další volné pořadové číslo v typu (pro nové položky)
+fn next_number(used: impl Iterator<Item = Option<u32>>) -> u32 {
+    used.flatten().max().unwrap_or(0) + 1
+}
+
 // ÚKOL 19: history helpers
 fn history_root() -> String { format!("{}/history", data_root()) }
 fn history_notes_base(file_name: &str) -> PathBuf { PathBuf::from(history_root()).join("notes").join(file_name) }
@@ -90,8 +95,8 @@ struct EventFile {
     created_at: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct AgentRecord {
     id: String,
     folder: String,
@@ -121,6 +126,9 @@ struct AgentRecord {
     // last_run může být null (Koštěrad) nebo chybět
     #[serde(default, deserialize_with = "deserialize_nullable_string")]
     last_run: String,
+    // pořadové číslo v typu (1, 2, 3 ...)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    number: Option<u32>,
 }
 
 fn default_online() -> String { "online".to_string() }
@@ -132,8 +140,8 @@ where D: serde::Deserializer<'de>
     Ok(opt.unwrap_or_default())
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct AgentIndex {
     version: String,
     last_sync: String,
@@ -151,36 +159,42 @@ struct SkillRecord {
     category: String,
     status: String,
     version: String,
+    // pořadové číslo v typu (1, 2, 3 ...)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    number: Option<u32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct SkillIndex {
     version: String,
     last_sync: String,
     skills: Vec<SkillRecord>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct McpRecord {
     id: String,
     name: String,
     command: String,
     status: String,
     tools: Vec<String>,
+    // pořadové číslo v typu (1, 2, 3 ...)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    number: Option<u32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct McpIndex {
     version: String,
     last_sync: String,
     tools: Vec<McpRecord>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct LoopRecord {
     id: String,
     name: String,
@@ -190,18 +204,21 @@ struct LoopRecord {
     agent: String,
     enabled: bool,
     category: String,
+    // pořadové číslo v typu (1, 2, 3 ...)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    number: Option<u32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct LoopIndex {
     version: String,
     last_sync: String,
     loops: Vec<LoopRecord>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct TeamRecord {
     id: String,
     name: String,
@@ -215,10 +232,13 @@ struct TeamRecord {
     workflows: Vec<String>,
     loops: Vec<String>,
     created_at: String,
+    // pořadové číslo v typu (1, 2, 3 ...)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    number: Option<u32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct TeamIndex {
     version: String,
     last_sync: String,
@@ -234,8 +254,8 @@ struct WorkflowStepRecord {
     name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct WorkflowRecord {
     id: String,
     name: String,
@@ -244,10 +264,13 @@ struct WorkflowRecord {
     steps: Vec<WorkflowStepRecord>,
     last_run: String,
     created_at: String,
+    // pořadové číslo v typu (1, 2, 3 ...)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    number: Option<u32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct WorkflowIndex {
     version: String,
     last_sync: String,
@@ -537,6 +560,7 @@ fn sync_agents_from_fs() -> Result<AgentIndex, String> {
                     tools: existing.tools.clone(), workflow: existing.workflow.clone(),
                     prompt_file: existing.prompt_file.clone(), docs, tasks_today: existing.tasks_today, created: existing.created.clone(),
                     last_run: existing.last_run.clone(),
+                    number: existing.number,
                 });
             } else {
                 agents.push(AgentRecord {
@@ -547,6 +571,7 @@ fn sync_agents_from_fs() -> Result<AgentIndex, String> {
                     skills: vec![], tools: vec!["rag".into()], workflow: String::new(), prompt_file: String::new(),
                     docs, tasks_today: 0, created: chrono::Utc::now().to_rfc3339(),
                     last_run: String::new(),
+                    number: None,
                 });
             }
         }
@@ -556,7 +581,7 @@ fn sync_agents_from_fs() -> Result<AgentIndex, String> {
 }
 
 #[tauri::command]
-fn save_agent_to_fs(agent: AgentRecord) -> Result<(), String> {
+fn save_agent_to_fs(mut agent: AgentRecord) -> Result<(), String> {
     let base_path = get_base_path().join(&agent.folder);
     fs::create_dir_all(&base_path).map_err(|e| e.to_string())?;
     let identity_content = format!(
@@ -567,8 +592,13 @@ fn save_agent_to_fs(agent: AgentRecord) -> Result<(), String> {
     let index_path = get_base_path().join("index.json");
     let mut index: AgentIndex = if index_path.exists() {
         let content = fs::read_to_string(&index_path).map_err(|e| e.to_string())?;
-        serde_json::from_str(&content).unwrap_or(AgentIndex { version: "2.0".into(), last_sync: String::new(), agents: vec![] })
+        serde_json::from_str(&content).map_err(|e| format!("index.json je poškozený, ukládání zrušeno: {}", e))?
     } else { AgentIndex { version: "2.0".into(), last_sync: String::new(), agents: vec![] } };
+    // číslo: existující agent si ho nechá, nový dostane další volné
+    if agent.number.is_none() {
+        agent.number = index.agents.iter().find(|a| a.id == agent.id).and_then(|a| a.number)
+            .or_else(|| Some(next_number(index.agents.iter().map(|a| a.number))));
+    }
     if let Some(existing) = index.agents.iter_mut().find(|a| a.id == agent.id) { *existing = agent; } else { index.agents.push(agent); }
     index.last_sync = chrono::Utc::now().to_rfc3339();
     fs::write(&index_path, serde_json::to_string_pretty(&index).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
@@ -608,14 +638,19 @@ fn sync_skills_from_fs() -> Result<SkillIndex, String> {
 }
 
 #[tauri::command]
-fn save_skill_to_fs(skill: SkillRecord) -> Result<(), String> {
+fn save_skill_to_fs(mut skill: SkillRecord) -> Result<(), String> {
     let base = get_skills_base();
     fs::create_dir_all(&base).map_err(|e| e.to_string())?;
     let index_path = base.join("index.json");
     let mut idx = if index_path.exists() {
         let c = fs::read_to_string(&index_path).map_err(|e| e.to_string())?;
-        serde_json::from_str(&c).unwrap_or(SkillIndex { version: "2.0".into(), last_sync: String::new(), skills: vec![] })
+        serde_json::from_str(&c).map_err(|e| format!("index.json je poškozený, ukládání zrušeno: {}", e))?
     } else { SkillIndex { version: "2.0".into(), last_sync: String::new(), skills: vec![] } };
+    // číslo: existující položka si ho nechá, nová dostane další volné
+    if skill.number.is_none() {
+        skill.number = idx.skills.iter().find(|x| x.id == skill.id).and_then(|x| x.number)
+            .or_else(|| Some(next_number(idx.skills.iter().map(|x| x.number))));
+    }
     if let Some(ex) = idx.skills.iter_mut().find(|s| s.id == skill.id) { *ex = skill.clone(); } else { idx.skills.push(skill.clone()); }
     idx.last_sync = chrono::Utc::now().to_rfc3339();
     fs::write(&index_path, serde_json::to_string_pretty(&idx).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
@@ -640,14 +675,19 @@ fn sync_mcp_from_fs() -> Result<McpIndex, String> {
 }
 
 #[tauri::command]
-fn save_mcp_to_fs(tool: McpRecord) -> Result<(), String> {
+fn save_mcp_to_fs(mut tool: McpRecord) -> Result<(), String> {
     let base = get_mcp_base();
     fs::create_dir_all(&base).map_err(|e| e.to_string())?;
     let index_path = base.join("index.json");
     let mut idx = if index_path.exists() {
         let c = fs::read_to_string(&index_path).map_err(|e| e.to_string())?;
-        serde_json::from_str(&c).unwrap_or(McpIndex { version: "2.0".into(), last_sync: String::new(), tools: vec![] })
+        serde_json::from_str(&c).map_err(|e| format!("index.json je poškozený, ukládání zrušeno: {}", e))?
     } else { McpIndex { version: "2.0".into(), last_sync: String::new(), tools: vec![] } };
+    // číslo: existující položka si ho nechá, nová dostane další volné
+    if tool.number.is_none() {
+        tool.number = idx.tools.iter().find(|x| x.id == tool.id).and_then(|x| x.number)
+            .or_else(|| Some(next_number(idx.tools.iter().map(|x| x.number))));
+    }
     if let Some(ex) = idx.tools.iter_mut().find(|t| t.id == tool.id) { *ex = tool; } else { idx.tools.push(tool); }
     idx.last_sync = chrono::Utc::now().to_rfc3339();
     fs::write(&index_path, serde_json::to_string_pretty(&idx).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
@@ -671,14 +711,19 @@ fn sync_loops_from_fs() -> Result<LoopIndex, String> {
 }
 
 #[tauri::command]
-fn save_loop_to_fs(loop_item: LoopRecord) -> Result<(), String> {
+fn save_loop_to_fs(mut loop_item: LoopRecord) -> Result<(), String> {
     let base = get_loops_base();
     fs::create_dir_all(&base).map_err(|e| e.to_string())?;
     let index_path = base.join("index.json");
     let mut idx = if index_path.exists() {
         let c = fs::read_to_string(&index_path).map_err(|e| e.to_string())?;
-        serde_json::from_str(&c).unwrap_or(LoopIndex { version: "2.0".into(), last_sync: String::new(), loops: vec![] })
+        serde_json::from_str(&c).map_err(|e| format!("index.json je poškozený, ukládání zrušeno: {}", e))?
     } else { LoopIndex { version: "2.0".into(), last_sync: String::new(), loops: vec![] } };
+    // číslo: existující položka si ho nechá, nová dostane další volné
+    if loop_item.number.is_none() {
+        loop_item.number = idx.loops.iter().find(|x| x.id == loop_item.id).and_then(|x| x.number)
+            .or_else(|| Some(next_number(idx.loops.iter().map(|x| x.number))));
+    }
     if let Some(ex) = idx.loops.iter_mut().find(|l| l.id == loop_item.id) { *ex = loop_item; } else { idx.loops.push(loop_item); }
     idx.last_sync = chrono::Utc::now().to_rfc3339();
     fs::write(&index_path, serde_json::to_string_pretty(&idx).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
@@ -702,14 +747,19 @@ fn sync_teams_from_fs() -> Result<TeamIndex, String> {
 }
 
 #[tauri::command]
-fn save_team_to_fs(team: TeamRecord) -> Result<(), String> {
+fn save_team_to_fs(mut team: TeamRecord) -> Result<(), String> {
     let base = get_teams_base();
     fs::create_dir_all(&base).map_err(|e| e.to_string())?;
     let index_path = base.join("index.json");
     let mut idx = if index_path.exists() {
         let c = fs::read_to_string(&index_path).map_err(|e| e.to_string())?;
-        serde_json::from_str(&c).unwrap_or(TeamIndex { version: "2.0".into(), last_sync: String::new(), teams: vec![] })
+        serde_json::from_str(&c).map_err(|e| format!("index.json je poškozený, ukládání zrušeno: {}", e))?
     } else { TeamIndex { version: "2.0".into(), last_sync: String::new(), teams: vec![] } };
+    // číslo: existující položka si ho nechá, nová dostane další volné
+    if team.number.is_none() {
+        team.number = idx.teams.iter().find(|x| x.id == team.id).and_then(|x| x.number)
+            .or_else(|| Some(next_number(idx.teams.iter().map(|x| x.number))));
+    }
     if let Some(ex) = idx.teams.iter_mut().find(|t| t.id == team.id) { *ex = team.clone(); } else { idx.teams.push(team.clone()); }
     idx.last_sync = chrono::Utc::now().to_rfc3339();
     fs::write(&index_path, serde_json::to_string_pretty(&idx).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
@@ -750,14 +800,19 @@ fn sync_workflows_from_fs() -> Result<WorkflowIndex, String> {
 }
 
 #[tauri::command]
-fn save_workflow_to_fs(workflow: WorkflowRecord) -> Result<(), String> {
+fn save_workflow_to_fs(mut workflow: WorkflowRecord) -> Result<(), String> {
     let base = get_workflows_base();
     fs::create_dir_all(&base).map_err(|e| e.to_string())?;
     let index_path = base.join("index.json");
     let mut idx = if index_path.exists() {
         let c = fs::read_to_string(&index_path).map_err(|e| e.to_string())?;
-        serde_json::from_str(&c).unwrap_or(WorkflowIndex { version: "2.0".into(), last_sync: String::new(), workflows: vec![] })
+        serde_json::from_str(&c).map_err(|e| format!("index.json je poškozený, ukládání zrušeno: {}", e))?
     } else { WorkflowIndex { version: "2.0".into(), last_sync: String::new(), workflows: vec![] } };
+    // číslo: existující položka si ho nechá, nová dostane další volné
+    if workflow.number.is_none() {
+        workflow.number = idx.workflows.iter().find(|x| x.id == workflow.id).and_then(|x| x.number)
+            .or_else(|| Some(next_number(idx.workflows.iter().map(|x| x.number))));
+    }
     if let Some(ex) = idx.workflows.iter_mut().find(|w| w.id == workflow.id) { *ex = workflow.clone(); } else { idx.workflows.push(workflow.clone()); }
     idx.last_sync = chrono::Utc::now().to_rfc3339();
     fs::write(&index_path, serde_json::to_string_pretty(&idx).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;

@@ -1,10 +1,14 @@
 {
-  "items": [
+  "version": "2.0",
+  "lastSync": "2026-10-06T00:00:00.000Z",
+  "tools": [
     {
       "id": "filesystem",
-      "number": "2_01",
-      "displayName": "Filesystem",
-      "folder": "filesystem"
+      "number": 1,
+      "name": "Filesystem MCP",
+      "command": "node ../../../../tools/mcp/filesystem/index.ts",
+      "status": "active",
+      "tools": ["read_file", "write_file", "list_directory", "delete_file"]
     }
   ]
 }

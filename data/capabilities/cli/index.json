@@ -2,7 +2,7 @@
   "items": [
     {
       "id": "firmy",
-      "number": "4_01",
+      "number": 1,
       "displayName": "Firmy CLI",
       "folder": "firmy"
     }

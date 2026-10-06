@@ -1,5 +1,95 @@
 [
   {
+    "id": "15ed6e99-c2d3-4c0e-bdf9-5af0e799a7fd",
+    "ts": "2026-10-06T03:00:12.691Z",
+    "agent": "Mary_Jane",
+    "type": "routing",
+    "action": "edit agents #2",
+    "meta": {
+      "runId": "2026-10-06T03-00-12-691Z_99245641"
+    }
+  },
+  {
+    "id": "c9cf582f-52bb-456d-9bb2-2c0be9351419",
+    "ts": "2026-10-06T03:00:12.687Z",
+    "agent": "Mary_Jane",
+    "type": "routing",
+    "action": "edit mcp #1",
+    "meta": {
+      "runId": "2026-10-06T03-00-12-686Z_5cab16c8"
+    }
+  },
+  {
+    "id": "2d748e1b-b3b2-49ab-9613-cb0d184ac80d",
+    "ts": "2026-10-06T00:00:59.868Z",
+    "agent": "Koštěrad",
+    "type": "system",
+    "action": "Koštěrad: žádná failed runs ke kontrole",
+    "meta": {
+      "scanned": 0
+    }
+  },
+  {
+    "id": "5f1d18ac-7a9b-4d88-9ce4-fe6c831f6532",
+    "ts": "2026-10-03T14:00:25.505Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "41b90097-3160-40a5-8e70-ee1f7bfe811e",
+    "ts": "2026-10-03T13:00:25.028Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "f4ea3102-053a-4da4-94c1-e94ae2c04aea",
+    "ts": "2026-10-03T12:00:24.588Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "1713bc16-178d-48f2-9612-957f6c323a41",
+    "ts": "2026-09-29T20:00:25.444Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "5825b350-2752-4ec6-8496-9243ee9d4f0a",
+    "ts": "2026-09-29T12:00:38.776Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "e0f53078-5e6d-4312-b63d-3c8da7ee7ba8",
+    "ts": "2026-09-29T11:00:55.606Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
     "id": "6f44adb9-ec8f-47e2-b15c-429f9bbe009d",
     "ts": "2026-09-29T07:00:04.472Z",
     "agent": "Scheduler",

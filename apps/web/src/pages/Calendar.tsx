@@ -39,15 +39,27 @@ function slugify(text: string) {
 
 function extractDescription(content: string) {
   return content
-    .split('\n')
-    .filter(line => !/^#\s*/.test(line) && !line.includes('**Datum:**') && !line.includes('**Čas:**'))
-    .join('\n')
-    .trim()
+   .split('\n')
+   .filter(line =>!/^#\s*/.test(line) &&!line.includes('**Datum:**') &&!line.includes('**Čas:**') &&!line.includes('**Délka:**'))
+   .join('\n')
+   .trim()
 }
 
-function buildContent(title: string, date: string, time: string, description: string) {
+function buildContent(title: string, date: string, time: string, duration: number, description: string) {
   const desc = description.trim()
-  return `# ${title}\n\n**Datum:** ${date}\n**Čas:** ${time}\n\n${desc}`.trim() + '\n'
+  return `# ${title}\n\n**Datum:** ${date}\n**Čas:** ${time}\n**Délka:** ${duration}\n\n${desc}`.trim() + '\n'
+}
+
+function getWeekDays(iso: string) {
+  const d = new Date(iso)
+  const day = d.getDay() === 0? 7 : d.getDay()
+  const monday = new Date(d)
+  monday.setDate(d.getDate() - (day - 1))
+  return Array.from({length:7}).map((_,i)=>{
+    const cur = new Date(monday)
+    cur.setDate(monday.getDate()+i)
+    return toIso(cur.getFullYear(), cur.getMonth(), cur.getDate())
+  })
 }
 
 async function hasTauri() {
@@ -60,10 +72,11 @@ type ModalState = {
   title: string
   date: string
   time: string
+  duration: number
   description: string
 }
 
-const EMPTY_MODAL: ModalState = { open: false, editing: null, title: '', date: '', time: '', description: '' }
+const EMPTY_MODAL: ModalState = { open: false, editing: null, title: '', date: '', time: '', duration: 60, description: '' }
 
 export default function Calendar() {
   const { events, eventsForDate, reload } = useCalendarEvents()
@@ -71,7 +84,7 @@ export default function Calendar() {
   const [viewYear, setViewYear] = useState(new Date().getFullYear())
   const [viewMonth, setViewMonth] = useState(new Date().getMonth())
   const [selectedDate, setSelectedDate] = useState(today)
-  const [viewMode, setViewMode] = useState<'grid' | 'timeline'>('grid')
+  const [viewMode, setViewMode] = useState<'grid' | 'timeline' | 'week'>('grid')
   const [modal, setModal] = useState<ModalState>(EMPTY_MODAL)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -113,19 +126,19 @@ export default function Calendar() {
 
   const openNewEvent = useCallback((iso?: string) => {
     setError('')
-    setModal({ open: true, editing: null, title: '', date: iso || selectedDate, time: '12:00', description: '' })
+    setModal({ open: true, editing: null, title: '', date: iso || selectedDate, time: '12:00', duration: 60, description: '' })
   }, [selectedDate])
 
   const openEditEvent = useCallback((ev: CalendarEvent) => {
     setError('')
-    setModal({ open: true, editing: ev, title: ev.title, date: ev.date, time: ev.time, description: extractDescription(ev.content) })
+    setModal({ open: true, editing: ev, title: ev.title, date: ev.date, time: ev.time, duration: ev.duration||60, description: extractDescription(ev.content) })
   }, [])
 
   const closeModal = useCallback(() => setModal(EMPTY_MODAL), [])
 
-  const persistEvent = useCallback(async (ev: CalendarEvent) => {
-    const content = buildContent(ev.title, ev.date, ev.time, extractDescription(ev.content))
-    const full: CalendarEvent = { ...ev, content }
+   const persistEvent = useCallback(async (ev: CalendarEvent) => {
+    const content = buildContent(ev.title, ev.date, ev.time, ev.duration||60, extractDescription(ev.content))
+    const full: CalendarEvent = {...ev, content }
     if (await hasTauri()) {
       const { invoke } = await import('@tauri-apps/api/core')
       await invoke('save_event', { path: full.file_path, content })
@@ -176,6 +189,7 @@ export default function Calendar() {
           title: modal.title.trim(),
           date: modal.date,
           time: modal.time,
+          duration: modal.duration,
           content: '',
         })
       }
@@ -188,6 +202,51 @@ export default function Calendar() {
   }, [modal, persistEvent, closeModal])
 
   const selectedEvents = eventsForDate(selectedDate).sort((a, b) => a.time.localeCompare(b.time))
+  const weekDays = useMemo(()=> getWeekDays(selectedDate), [selectedDate])
+  const [dragging, setDragging] = useState<CalendarEvent | null>(null)
+  const [resizing, setResizing] = useState<{ev:CalendarEvent, startY:number, startDur:number, previewDur?:number} | null>(null)
+
+  const handleDrop = useCallback(async (e: React.DragEvent, targetDate: string, container: HTMLElement) => {
+    e.preventDefault()
+    if(!dragging) return
+    const rect = container.getBoundingClientRect()
+    const y = e.clientY - rect.top + container.scrollTop
+    const minutes = Math.round((y/52)*60/15)*15
+    const hh = Math.floor(Math.max(0, Math.min(1439, minutes))/60)
+    const mm = Math.max(0, Math.min(1439, minutes))%60
+    const newTime = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`
+    const updated = {...dragging, date: targetDate, time: newTime }
+    setDragging(null)
+    await persistEvent(updated)
+  }, [dragging, persistEvent])
+
+  const handleResizeMove = useCallback((e: MouseEvent)=>{
+    if(!resizing) return
+    const deltaY = e.clientY - resizing.startY
+    const deltaMin = Math.round((deltaY/52)*60/15)*15
+    const newDur = Math.max(15, resizing.startDur + deltaMin)
+    setResizing(r=> r? {...r, previewDur: newDur} : r)
+  }, [resizing])
+
+  const handleResizeEnd = useCallback(async ()=>{
+    if(!resizing) return
+    const finalDur = resizing.previewDur || resizing.startDur
+    const ev = resizing.ev
+    setResizing(null)
+    window.removeEventListener('mousemove', handleResizeMove as any)
+    window.removeEventListener('mouseup', handleResizeEnd as any)
+    if(finalDur!== resizing.startDur){
+      await persistEvent({...ev, duration: finalDur})
+    }
+  }, [resizing, persistEvent, handleResizeMove])
+
+  const startResizing = useCallback((e: React.MouseEvent, ev: CalendarEvent)=>{
+    e.stopPropagation()
+    e.preventDefault()
+    setResizing({ev, startY: e.clientY, startDur: ev.duration||60})
+    window.addEventListener('mousemove', handleResizeMove as any)
+    window.addEventListener('mouseup', handleResizeEnd as any)
+  }, [handleResizeMove, handleResizeEnd])
 
   return (
       <div className="flex items-center justify-between mb-6">
@@ -195,7 +254,8 @@ export default function Calendar() {
         <div className="flex items-center gap-2">
           <div className="flex border border-black/20 rounded-sm overflow-hidden">
             <button onClick={() => setViewMode('grid')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='grid'? 'bg-black text-white' : 'bg-white hover:bg-black/5'}`}>GRID</button>
-            <button onClick={() => setViewMode('timeline')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='timeline'? 'bg-black text-white' : 'bg-white hover:bg-black/5'}`}>TIMELINE</button>
+            <button onClick={() => setViewMode('timeline')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='timeline'? 'bg-black text-white' : 'bg-white hover:bg-black/5'}`}>DEN</button>
+            <button onClick={() => setViewMode('week')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='week'? 'bg-black text-white' : 'bg-white hover:bg-black/5'}`}>TÝDEN</button>
           </div>
           <button
             onClick={() => openNewEvent()}
@@ -300,35 +360,64 @@ export default function Calendar() {
                   const cols: typeof sorted[] = []
                   const placed = sorted.map(ev=>{
                     const start = toMin(ev.time)
+                    const dur = ev.duration||60
                     let colIdx = cols.findIndex(col=>{
                       const last = col[col.length-1]
-                      return last? toMin(last.time)+60 <= start : true
+                      return last? toMin(last.time)+(last.duration||60) <= start : true
                     })
                     if(colIdx===-1){ colIdx=cols.length; cols.push([]) }
                     cols[colIdx].push(ev)
-                    return {ev, colIdx, start}
+                    return {ev, colIdx, start, dur}
+                  })
+                  // konflikt detekce >50% překryvu
+                  const hasConflict = (a:any,b:any)=>{
+                    const aEnd = a.start + a.dur
+                    const bEnd = b.start + b.dur
+                    const overlap = Math.max(0, Math.min(aEnd,bEnd) - Math.max(a.start,b.start))
+                    const shorter = Math.min(a.dur,b.dur)
+                    return overlap > shorter*0.5
+                  }
+                  const conflicts = new Set<string>()
+                  placed.forEach((p,i)=>{
+                    placed.forEach((q,j)=>{
+                      if(i!==j && p.ev.date===q.ev.date && hasConflict(p,q)) conflicts.add(p.ev.file_path)
+                    })
                   })
                   const colCount = Math.max(1, cols.length)
-                  return placed.map(({ev, colIdx, start})=>{
+                  return placed.map(({ev, colIdx, start, dur})=>{
                     const top = (start/60)*52
+                    const isResizingThis = resizing?.ev.file_path===ev.file_path
+                    const h = ((isResizingThis? (resizing.previewDur||dur) : dur)/60)*52
+                    const isConflict = conflicts.has(ev.file_path)
                     return (
                       <div
                         key={ev.file_path}
-                        className="absolute rounded-sm border border-[#1000a1]/30 shadow-sm group cursor-pointer hover:z-10 hover:shadow-md transition-all"
+                        draggable
+                        onDragStart={()=> setDragging(ev)}
+                        onDragEnd={()=> setDragging(null)}
+                        className={`absolute rounded-sm border shadow-sm group cursor-grab active:cursor-grabbing hover:z-10 hover:shadow-md transition-all ${isConflict? 'border-[#ae1710]/60 bg-[#ae1710]/10' : 'border-[#1000a1]/30'}`}
                         style={{
                           top: `${top}px`,
-                          height: '50px',
+                          height: `${Math.max(22,h)}px`,
                           left: `calc(48px + ${(colIdx/colCount)*100}% - ${(colIdx/colCount)*48}px)`,
                           width: `calc(${100/colCount}% - 48px/${colCount} - 4px)`,
-                          background: `linear-gradient(135deg, #fff 0%, ${CALENDAR_COLOR}18 100%)`,
-                          borderLeft: `3px solid ${CALENDAR_COLOR}`
+                          background: isConflict? `linear-gradient(135deg, #fff 0%, #ae1710 22 100%)` : `linear-gradient(135deg, #fff 0%, ${CALENDAR_COLOR}18 100%)`,
+                          borderLeft: `3px solid ${isConflict? '#ae1710' : CALENDAR_COLOR}`,
+                          opacity: dragging?.file_path===ev.file_path? 0.5 : 1
                         }}
                         onClick={()=>openEditEvent(ev)}
                       >
                         <div className="px-2 py-1">
-                          <div className="text- font-bold truncate">{ev.time} {ev.title}</div>
-                          <div className="text- opacity-60 truncate">{extractDescription(ev.content).slice(0,60)}</div>
+                          <div className="text- font-bold truncate flex items-center gap-1">
+                            {ev.time} {ev.title}
+                            {isConflict && <span className="text- bg-[#ae1710] text-white px-1 rounded-sm">KONFLIKT</span>}
+                          </div>
+                          <div className="text- opacity-60 truncate">{ev.duration||60}m · {extractDescription(ev.content).slice(0,40)}</div>
                         </div>
+                        <div
+                          className="absolute bottom-0 left-0 right-0 h-2 cursor-ns-resize bg-black/0 hover:bg-black/10"
+                          onMouseDown={(e)=> startResizing(e, ev)}
+                        />
                       </div>
                     )
                   })
@@ -339,7 +428,59 @@ export default function Calendar() {
                   </div>
                 )}
               </div>
-              {selectedEvents.length===0 && <div className="text- opacity-50 p-3 text-center">Žádné události - přetah se nezobrazí</div>}
+                  {selectedEvents.length===0 && <div className="text- opacity-50 p-3 text-center">Žádné události - přetah se nezobrazí</div>}
+            </div>
+          )}
+
+          {viewMode==='week' && (
+            <div className="mt-4 border border-black/10 rounded-sm bg-white overflow-hidden">
+              <div className="grid grid-cols-7 border-b border-black/10 bg-black/5">
+                {weekDays.map(d=>{
+                  const isSel = d===selectedDate
+                  const dayEvents = events.filter(ev=>ev.date===d)
+                  return (
+                    <div key={d} className={`p-2 text-center border-r last:border-r-0 ${isSel? 'bg-[#1000a1] text-white' : ''}`}>
+                      <div className="text- opacity-60">{new Date(d).toLocaleDateString('cs-CZ',{weekday:'short'})}</div>
+                      <div className="text- font-bold">{new Date(d).getDate()}</div>
+                      <div className="text- opacity-50">{dayEvents.length}×</div>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="grid grid-cols-7 h- overflow-y-auto">
+                {weekDays.map(dayIso=>(
+                  <div
+                    key={dayIso}
+                    className="relative border-r last:border-r-0 border-black/5"
+                    onDragOver={e=> e.preventDefault()}
+                    onDrop={e=>{
+                      const cont = e.currentTarget as HTMLElement
+                      handleDrop(e, dayIso, cont)
+                    }}
+                  >
+                    {Array.from({length:24}).map((_,h)=>(
+                      <div key={h} className="absolute left-0 right-0 border-t border-black/5" style={{top:`${h*52}px`}} />
+                    ))}
+                    {events.filter(ev=>ev.date===dayIso).map(ev=>{
+                      const toMin = (t:string)=>{ const [hh,mm]=t.split(':').map(Number); return hh*60+mm }
+                      const start = toMin(ev.time)
+                      const h = ((ev.duration||60)/60)*52
+                      return (
+                        <div
+                          key={ev.file_path}
+                          draggable
+                          onDragStart={()=> setDragging(ev)}
+                          className="absolute left-0 right-1 rounded-sm border-l-2 bg-white shadow-sm text- px-1 py-0.5 truncate cursor-grab"
+                          style={{top:`${(start/60)*52}px`, height:`${h}px`, borderLeftColor: CALENDAR_COLOR}}
+                          onClick={()=>openEditEvent(ev)}
+                        >
+                          {ev.time} {ev.title}
+                        </div>
+                      )
+                    })}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -373,17 +514,40 @@ export default function Calendar() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+                     <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="text-[10px] tracking-[0.1em] opacity-60 block mb-1">DATUM</label>
+                  <label className="text- tracking-[0.1em] opacity-60 block mb-1">DATUM</label>
                   <input
                     type="date"
                     value={modal.date}
-                    onChange={e => setModal(m => ({ ...m, date: e.target.value }))}
-                    className="w-full px-3 py-2 text-[13px] border border-black/20 rounded-sm outline-none focus:border-[#1000a1]"
+                    onChange={e => setModal(m => ({...m, date: e.target.value }))}
+                    className="w-full px-3 py-2 text- border border-black/20 rounded-sm outline-none focus:border-[#1000a1]"
                   />
                 </div>
                 <div>
+                  <label className="text- tracking-[0.1em] opacity-60 block mb-1">ČAS</label>
+                  <input
+                    type="time"
+                    value={modal.time}
+                    onChange={e => setModal(m => ({...m, time: e.target.value }))}
+                    className="w-full px-3 py-2 text- border border-black/20 rounded-sm outline-none focus:border-[#1000a1]"
+                  />
+                </div>
+                <div>
+                  <label className="text- tracking-[0.1em] opacity-60 block mb-1">DÉLKA</label>
+                  <select
+                    value={modal.duration}
+                    onChange={e => setModal(m => ({...m, duration: parseInt(e.target.value) }))}
+                    className="w-full px-3 py-2 text- border border-black/20 rounded-sm outline-none focus:border-[#1000a1]"
+                  >
+                    <option value={15}>15 min</option>
+                    <option value={30}>30 min</option>
+                    <option value={60}>60 min</option>
+                    <option value={90}>90 min</option>
+                    <option value={120}>120 min</option>
+                  </select>
+                </div>
+              </div>
                   <label className="text-[10px] tracking-[0.1em] opacity-60 block mb-1">ČAS</label>
                   <input
                     type="time"
@@ -420,8 +584,6 @@ export default function Calendar() {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
       )}
     </div>
   )

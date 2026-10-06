@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { DATA_DIR } from '../lib/dataPaths'
 
-const INDEX_PATH = join(DATA_DIR, 'teams/index.json')
+const INDEX_PATH = join(DATA_DIR, 'capabilities/teams/index.json')
 
 export default async function teamsRoutes(app: FastifyInstance) {
   app.get('/teams', async () => {

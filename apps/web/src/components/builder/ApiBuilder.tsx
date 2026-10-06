@@ -12,7 +12,7 @@ export default function ApiBuilder({ onComplete, initialData, prefill }: Extende
     if (!targetId) return
     const load = async () => {
       try {
-        const r = await fetch(`http://localhost:3001/api/api/${targetId}`); if (r.ok) { const d = await r.json(); setForm({ displayName: d.displayName||targetId, id: d.id||targetId, description: d.description||'', entrypoint: d.entrypoint||'./src/routes', baseUrl: d.baseUrl||'', tags: (d.tags||[]).join(', ') }); setIsEditMode(true) }
+        const r = await fetch(`http://localhost:3001/api/capabilities/${targetId}`); if (r.ok) { const d = await r.json(); setForm({ displayName: d.displayName||targetId, id: d.id||targetId, description: d.description||'', entrypoint: d.entrypoint||'./src/routes', baseUrl: d.baseUrl||'', tags: (d.tags||[]).join(', ') }); setIsEditMode(true) }
       } catch {}
     }; load()
   }, [editSource?._extra, editSource?._editId])

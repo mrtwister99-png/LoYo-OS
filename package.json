@@ -5,6 +5,11 @@
   "scripts": {
     "manifest:check": "tsx tools/scripts/manifest-check.ts",
     "agent:new": "tsx tools/scripts/agent-new.ts",
+    "smoke": "tsx tools/scripts/smoke.ts",
+    "rag:init": "tsx tools/scripts/rag.ts init",
+    "rag:index": "tsx tools/scripts/rag.ts index",
+    "rag:search": "tsx tools/scripts/rag.ts search",
+    "rag:status": "tsx tools/scripts/rag.ts status",
     "dev": "turbo run dev",
     "dev:api": "pnpm --filter api dev",
     "dev:api:clean": "tsx tools/scripts/dev-api-clean.ts",

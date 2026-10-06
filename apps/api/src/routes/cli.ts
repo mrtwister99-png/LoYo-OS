@@ -5,10 +5,11 @@ import { FastifyInstance } from 'fastify'
 import { readdir, readFile, stat } from 'node:fs/promises'
 import { resolve, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { getCapabilities } from '../lib/manifestLoader.js'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const CLI_DIR = resolve(__dirname, '../../../../tools/cli')
-const COMMANDS_FILE = resolve(__dirname, '../../../../data/agents/Mary_Jane/commands.json')
+const COMMANDS_FILE = resolve(__dirname, '../../../../data/capabilities/agents/mary-jane/commands.json')
 
 interface CliTool
 {
@@ -18,6 +19,7 @@ interface CliTool
   hasPackageJson: boolean
   hasIndex: boolean
   commands: string[]
+  number?: number
 }
 
 async function discoverCliTools(): Promise<CliTool[]>
@@ -112,6 +114,17 @@ export default async function cliRoutes(app: FastifyInstance)
   app.get('/cli', async () =>
   {
     const tools = await discoverCliTools()
+    // číslo z manifestu (data/capabilities/cli/<id>/manifest.json)
+    try
+    {
+      const caps = (await getCapabilities()).capabilities.filter((x: any) => x.type === 'cli')
+      for (const t of tools)
+      {
+        const cap: any = caps.find((x: any) => x.id === t.id)
+        if (cap && typeof cap.number === 'number') t.number = cap.number
+      }
+    }
+    catch {}
     const scheduled = await getScheduledCommands()
     return { tools, scheduled, dir: 'tools/cli/' }
   })

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import AgentBuilder from '../components/builder/AgentBuilder'
 import { categoryColors, categoryNumbers } from '../styles/theme'
+import NumBadge, { useCapNumbers } from '../components/NumBadge'
 
 const ACCENT = '#a136ff'
 const AGENT_COLOR = categoryColors.agents
@@ -25,6 +26,8 @@ type Agent = {
   docs: string[]
   folder: string
   number?: number
+  dependencies?: string[]
+  loops?: string[]
 }
 
 const ALL_SKILLS: Skill[] = [
@@ -69,6 +72,7 @@ export default function AgentsPro() {
   const [selectedCat, setSelectedCat] = useState('all')
   const [search, setSearch] = useState('')
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
+  const capNums = useCapNumbers()
   const [showNew, setShowNew] = useState(false)
 
   useEffect(() => {
@@ -112,6 +116,8 @@ export default function AgentsPro() {
         docs: a.docs || [],
         tasksToday: a.tasksToday?? 0,
         number: a.number?? a.manifest?.number,
+        dependencies: a.dependencies || a.manifest?.dependencies || [],
+        loops: a.loops || a.manifest?.loops || [],
       }))
       setAgents(normalized)
       setSelectedAgent(prev => {
@@ -248,7 +254,7 @@ export default function AgentsPro() {
                   className="group relative aspect-square bg-black text-white rounded- border border-black/10 overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-[#1000a1] hover:border-white/20 transition-all duration-200 shadow-[0_0_0_1px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y- border-l-4"
                   style={{ borderLeftColor: AGENT_COLOR }}
                 >
-                  <span className="absolute top-2 left-2 font-mono text- px-1.5 py-0.5 rounded bg-white text-black">#{agent.number?? idx+1} {agent.id}</span>
+                  <NumBadge type={AGENT_NUM} n={agent.number} idx={idx} label={agent.id} tone="light" className="absolute top-2 left-2" />
                   {/* status tečka */}
                   <span className={`absolute top-3 right-3 w-2.5 h-2.5 rounded-full ${isOnline?'bg-[#FF3B30]':isBusy?'bg-yellow-400':'bg-white/20'} shadow-[0_0_8px_rgba(0,0,0,0.4)]`} />
 
@@ -377,6 +383,28 @@ export default function AgentsPro() {
                       </button>
                     )
                   })}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="text-[11px] font-bold tracking-[0.2em]">PŘIŘAZENO • typ-číslo</div>
+                  <div className="text-[10px] font-mono text-black/30">/add 3-1 skill • /add 5-1 CLI • /add 4-1 MCP • /remove</div>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {selectedAgent.skills.filter(s => capNums.skill?.[s] != null).map((s, i) => (
+                    <NumBadge key={'s' + s} type={categoryNumbers.skill} n={capNums.skill?.[s]} idx={i} label={s} />
+                  ))}
+                  {selectedAgent.tools.filter(t => t.startsWith('cli:')).map((t, i) => (
+                    <NumBadge key={'c' + t} type={categoryNumbers.cli} n={capNums.cli?.[t.slice(4)]} idx={i} label={t.slice(4)} />
+                  ))}
+                  {(selectedAgent.dependencies || []).map((d, i) => {
+                    const mcpId = d.split(':')[0]
+                    return <NumBadge key={'m' + d} type={categoryNumbers.mcp} n={capNums.mcp?.[mcpId]} idx={i} label={mcpId} />
+                  })}
+                  {(selectedAgent.loops || []).map((l, i) => (
+                    <NumBadge key={'l' + l} type={categoryNumbers.loop} n={capNums.loop?.[l]} idx={i} label={l} />
+                  ))}
                 </div>
               </div>
 
