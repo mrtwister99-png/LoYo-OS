@@ -1,25 +1,43 @@
 {
   "id": "iiaa-team",
   "type": "team",
-  "displayName": "IIAA Team",
+  "displayName": "IIAA Team - Kotlin Factory",
   "version": "1.0.0",
   "status": "active",
-  "description": "IIAA Team - auto-fixed",
-  "runtime": "node",
-  "entrypoint": "../../../../teams/iiaa-team/index.ts",
-  "packageDir": "teams/iiaa-team",
+  "description": "11 specialistu pro Kotlin/KMP vyvoj - pipeline od PRD po release, s Ponytail minimalismem, file-trigger orchestration",
+  "runtime": "composite",
+  "entrypoint": "teams/iiaa-team/index.ts",
+  "model": "qwen3:8b",
+  "permissions": [
+    "fs:read:data/capabilities/teams/iiaa-team",
+    "fs:write:data/capabilities/teams/iiaa-team",
+    "fs:read:data/capabilities/teams/iiaa-team/1start",
+    "fs:write:data/capabilities/teams/iiaa-team/1start",
+    "fs:read:data/capabilities/agents",
+    "fs:write:data/capabilities/agents"
+  ],
   "members": [
-    "julia-nehledalova",
-    "kosterad-fuckstein",
-    "lubor-nehleda",
-    "mary-jane"
+    "nofps",
+    "delete",
+    "cheater",
+    "camper",
+    "laggy",
+    "error",
+    "fatal",
+    "cancel",
+    "pwner",
+    "eskejp",
+    "op"
   ],
-  "permissions": [],
+  "coordination": "sequential",
+  "sharedMemory": "data/capabilities/teams/iiaa-team/shared/memory.md",
   "tags": [
-    "team",
-    "iiaa"
+    "kotlin",
+    "kmp",
+    "factory",
+    "ponytail",
+    "file-trigger"
   ],
-  "createdAt": "2026-09-02T00:00:00Z",
-  "updatedAt": "2026-09-02T00:00:00Z",
-  "number": 1
+  "createdAt": "2026-10-27T16:38:46.062343Z",
+  "updatedAt": "2026-10-27T16:38:46.062350Z"
 }
