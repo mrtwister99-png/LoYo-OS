@@ -1,61 +1,45 @@
 {
   "id": "blender",
-  "type": "mcp",
-  "displayName": "Blender Lab MCP",
+  "number": "4_01",
+  "displayName": "Blender MCP Official",
+  "description": "Official Blender MCP from https://projects.blender.org/lab/blender_mcp.git - provides Blender automation for Bender agent",
   "version": "1.0.3",
-  "status": "active",
-  "description": "Oficiální Blender Lab MCP server - 28 tools pro ovládání Blenderu přes bpy, render thumbnail/viewport, inspect scény. Vyžaduje Blender 5.1+ addon MCP na portu 9876",
+  "type": "mcp",
+  "status": "live",
   "runtime": "python",
-  "entrypoint": "./upstream/mcp/src/server.py",
-  "packageDir": "capabilities/mcp/blender",
-  "command": "uv --directory D:/dev/loyo-os/data/capabilities/mcp/blender/upstream/mcp run blender-mcp",
+  "entrypoint": "upstream/mcp",
   "transport": "stdio",
+  "command": {
+    "cmd": "uv",
+    "args": [
+      "--directory",
+      "D:\\dev\\loyo-os\\data\\capabilities\\mcp\\blender",
+      "run",
+      "blender-mcp"
+    ]
+  },
+  "host": "127.0.0.1",
+  "port": 9876,
   "tools": [
-    {
-      "name": "get_blendfile_summary_path_info",
-      "description": "Cesta k souboru, unsaved changes, render engine"
-    },
-    {
-      "name": "get_objects_summary",
-      "description": "List objektů ve scéně"
-    },
-    {
-      "name": "get_object_detail_summary",
-      "description": "Detail jednoho objektu"
-    },
-    {
-      "name": "execute_blender_code",
-      "description": "Spustí Python bpy kód v živé scéně, vrať result dict"
-    },
-    {
-      "name": "render_thumbnail_to_path",
-      "description": "Draft render 320px"
-    },
-    {
-      "name": "render_viewport_to_path",
-      "description": "Full render"
-    },
-    {
-      "name": "get_screenshot_of_area_as_image",
-      "description": "Screenshot pro vision model"
-    }
-  ],
-  "permissions": [
-    "net:local:9876",
-    "fs:read:data/capabilities/mcp/blender/*",
-    "fs:write:data/reports/bender/*",
-    "mcp:blender:*"
+    "get_blendfile_summary_path_info",
+    "get_objects_summary",
+    "get_object_detail_summary",
+    "execute_blender_code",
+    "render_thumbnail_to_path",
+    "render_viewport_to_path"
   ],
   "tags": [
     "blender",
     "3d",
-    "bpy",
-    "official",
-    "lab",
     "mcp"
   ],
-  "createdAt": "2026-11-05T00:00:00Z",
-  "updatedAt": "2026-11-05T00:00:00Z",
-  "number": 22,
-  "source": "https://projects.blender.org/lab/blender_mcp.git"
+  "blender": {
+    "version": "5.2.2 LTS",
+    "addon_version": "1.0.3",
+    "addon_path": "C:\\Users\\loyo-\\AppData\\Roaming\\Blender Foundation\\Blender\\5.2\\extensions\\lab_blender_org\\mcp",
+    "mcp_repo": "https://projects.blender.org/lab/blender_mcp.git"
+  },
+  "dependencies": [],
+  "createdAt": "2026-11-05T14:32:00Z",
+  "updatedAt": "2026-11-05T14:32:00Z"
 }
