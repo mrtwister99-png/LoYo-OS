@@ -9,9 +9,14 @@
   "entrypoint": "./01_CORE_IDENTITY.md",
   "packageDir": "agents/bender",
   "model": "devstral-small-2:latest",
+  "modelConfig": {
+    "num_ctx": 2048,
+    "timeoutMs": 180000,
+    "note": "2048 ctx = 3-4GB VRAM ušetřeno pro RTX 4080 12GB, 8192 je moc"
+  },
   "fallbackModels": [
-    "qwen2.5-coder:32b",
-    "qwen3.5:27b"
+    "qwen2.5vl:7b",
+    "moondream:latest"
   ],
   "visionModel": "qwen2.5vl:7b",
   "permissions": [
