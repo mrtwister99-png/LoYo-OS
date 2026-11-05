@@ -13,7 +13,7 @@
     "cmd": "uv",
     "args": [
       "--directory",
-      "D:\\dev\\loyo-os\\data\\capabilities\\mcp\\blender",
+      "D:\\dev\\loyo-os\\data\\capabilities\\mcp\\blender\\upstream\\mcp",
       "run",
       "blender-mcp"
     ]
