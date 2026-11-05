@@ -1,44 +1,14 @@
 {
-  "id": "bender",
-  "type": "agent",
-  "displayName": "Bender - Blender Specialist",
-  "version": "1.0.0",
+  "id": "blender",
+  "type": "mcp",
+  "displayName": "Blender Lab MCP",
+  "version": "1.0.3",
   "status": "active",
-  "description": "Blender 3D specialist - staví scény přes bpy, ovládá oficiální Blender Lab MCP (projects.blender.org/lab/blender_mcp), generuje materiály, světla, rendery. Futurama vibe.",
-  "runtime": "prompt",
-  "entrypoint": "./01_CORE_IDENTITY.md",
-  "packageDir": "agents/bender",
-  "model": "devstral-small-2:latest",
-  "modelConfig": {
-    "num_ctx": 2048,
-    "timeoutMs": 180000,
-    "note": "2048 ctx = 3-4GB VRAM ušetřeno pro RTX 4080 12GB, 8192 je moc"
-  },
-  "fallbackModels": [
-    "qwen2.5vl:7b",
-    "moondream:latest"
-  ],
-  "visionModel": "qwen2.5vl:7b",
-  "permissions": [
-    "fs:read:data/capabilities/agents/bender/*",
-    "fs:write:data/capabilities/agents/bender/*",
-    "mcp:blender:*",
-    "net:local:9876",
-    "fs:write:data/reports/bender/*",
-    "fs:read:data/capabilities/mcp/blender/*"
-  ],
-  "tools": [
-    "blender-mcp"
-  ],
-  "tags": [
-    "blender",
-    "3d",
-    "bpy",
-    "mcp",
-    "graphics",
-    "bender"
-  ],
-  "createdAt": "2026-11-05T00:00:00Z",
-  "updatedAt": "2026-11-05T00:00:00Z",
-  "number": 16
+  "description": "Oficiální Blender Lab MCP server - 28 tools",
+  "runtime": "python",
+  "entrypoint": "./upstream/mcp/src/server.py",
+  "packageDir": "capabilities/mcp/blender",
+  "command": "uv --directory D:/dev/loyo-os/data/capabilities/mcp/blender/upstream/mcp run blender-mcp",
+  "transport": "stdio",
+  "number": "4_02"
 }

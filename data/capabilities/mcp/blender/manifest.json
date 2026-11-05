@@ -1,45 +1,25 @@
 {
   "id": "blender",
-  "number": "4_01",
-  "displayName": "Blender MCP Official",
-  "description": "Official Blender MCP from https://projects.blender.org/lab/blender_mcp.git - provides Blender automation for Bender agent",
-  "version": "1.0.3",
   "type": "mcp",
-  "status": "live",
+  "displayName": "Blender Lab MCP",
+  "version": "1.0.3",
+  "status": "active",
+  "description": "Oficiální Blender Lab MCP server - 28 tools, bpy, render, inspect - projects.blender.org/lab/blender_mcp",
   "runtime": "python",
-  "entrypoint": "upstream/mcp",
+  "entrypoint": "./upstream/mcp/src/server.py",
+  "packageDir": "capabilities/mcp/blender",
+  "command": "uv --directory D:/dev/loyo-os/data/capabilities/mcp/blender/upstream/mcp run blender-mcp",
   "transport": "stdio",
-  "command": {
-    "cmd": "uv",
-    "args": [
-      "--directory",
-      "D:\\dev\\loyo-os\\data\\capabilities\\mcp\\blender\\upstream\\mcp",
-      "run",
-      "blender-mcp"
-    ]
-  },
-  "host": "127.0.0.1",
-  "port": 9876,
+  "number": "4_02",
   "tools": [
     "get_blendfile_summary_path_info",
     "get_objects_summary",
     "get_object_detail_summary",
     "execute_blender_code",
     "render_thumbnail_to_path",
-    "render_viewport_to_path"
+    "render_viewport_to_path",
+    "get_screenshot_of_area_as_image"
   ],
-  "tags": [
-    "blender",
-    "3d",
-    "mcp"
-  ],
-  "blender": {
-    "version": "5.2.2 LTS",
-    "addon_version": "1.0.3",
-    "addon_path": "C:\\Users\\loyo-\\AppData\\Roaming\\Blender Foundation\\Blender\\5.2\\extensions\\lab_blender_org\\mcp",
-    "mcp_repo": "https://projects.blender.org/lab/blender_mcp.git"
-  },
-  "dependencies": [],
-  "createdAt": "2026-11-05T14:32:00Z",
-  "updatedAt": "2026-11-05T14:32:00Z"
+  "upstream": "https://projects.blender.org/lab/blender_mcp.git",
+  "addedAt": "2026-11-05"
 }
