@@ -1,0 +1,30 @@
+{
+  "id": "tridil",
+  "type": "agent",
+  "displayName": "Třídil - Downloads Sorter",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Každou noc v 00:00 roztřídí nové soubory ve Stažených souborech podle přípony do mp3 / zip / obrazky / pdf / ostatni. Jen přesouvá, nikdy nemaže.",
+  "runtime": "node",
+  "entrypoint": "./01_CORE_IDENTITY.md",
+  "packageDir": "agents/tridil",
+  "permissions": [
+    "fs:read:%USERPROFILE%/Downloads/*",
+    "fs:write:%USERPROFILE%/Downloads/*",
+    "fs:write:data/capabilities/agents/tridil/*"
+  ],
+  "tools": [
+    "fs_read",
+    "fs_move"
+  ],
+  "tags": [
+    "tridil",
+    "downloads",
+    "soubory",
+    "scheduler",
+    "agent"
+  ],
+  "createdAt": "2026-11-13T00:00:00Z",
+  "updatedAt": "2026-11-13T00:00:00Z",
+  "number": 17
+}
