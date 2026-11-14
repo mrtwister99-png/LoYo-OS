@@ -120,27 +120,27 @@ export default function Dashboard2() {
   };
 
   return (
-    <div className="min-h-full bg-[#ededed] text-black p-4 md:p-6">
+    <div className="min-h-full bg-[#2b2b2b] text-[#f0f0f0] p-4 md:p-6">
       <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* LEVÝ SLOUPEC - LoYo OS Progress */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="bg-[#040b8d] border-2 border-black p-5 text-white border-l-4" style={{ borderLeftColor: DASHBOARD_COLOR }}>
+          <div className="bg-[#353535] border border-[#444] p-5 text-[#f0f0f0] border-l-2" style={{ borderLeftColor: DASHBOARD_COLOR }}>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-white text-black">{DASHBOARD_NUM}-DASH2</span>
+              <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-[#3a3a3a] text-[#f0f0f0]">{DASHBOARD_NUM}-DASH2</span>
               <span className="w-2 h-2 rounded-full" style={{ background: DASHBOARD_COLOR }} />
               <span className="text-[11px] tracking-widest opacity-60">LOYO OS PROGRESS • {DASHBOARD_COLOR}</span>
             </div>
             <h2 className="font-black text-lg mt-2 tracking-tight">LoYo OS progress : {overallDone} / {overallTotal} • {overallProgress}%</h2>
-            <div className="mt-3 w-full h-2 bg-[#dbdbdb] border border-white">
-              <div className="h-full bg-[#CDA24D] transition-all" style={{ width: `${overallProgress}%` }} />
+            <div className="mt-3 w-full h-2 bg-[#444] border border-[#444]">
+              <div className="h-full bg-[#444] transition-all" style={{ width: `${overallProgress}%` }} />
             </div>
           </div>
 
-          <div className="bg-[#dbdbdb] border-2 border-black p-4">
+          <div className="bg-[#444] border border-[#444] p-4">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-black text-xs tracking-widest">0 - 60 • ČTVEREČKY • KLIK = SPLNĚNO</h3>
-              <span className="text-[10px] font-bold bg-black text-white px-2 py-1">{overallDone} / 60 HOTOVO</span>
+              <span className="text-[10px] font-bold bg-[#444] text-[#f0f0f0] px-2 py-1">{overallDone} / 60 HOTOVO</span>
             </div>
             <div className="grid grid-cols-10 gap-2">
               {Array.from({ length: 60 }, (_, i) => {
@@ -150,8 +150,8 @@ export default function Dashboard2() {
                   <button
                     key={id}
                     onClick={() => toggleSquare(id)}
-                    className={`aspect-square border-2 border-black flex items-center justify-center text-[10px] font-black transition-all
-                      ${done ? 'bg-[#040b8d] text-white hover:bg-black' : 'bg-white hover:bg-[#CDA24D] text-black'}`}
+                    className={`aspect-square border border-[#444] flex items-center justify-center text-[10px] font-black transition-all
+                      ${done ? 'bg-[#12a4ff] text-[#f0f0f0] hover:bg-[#444]' : 'bg-[#3a3a3a] hover:bg-[#444] text-[#f0f0f0]'}`}
                     title={`#${id} ${done ? 'hotovo' : 'todo'}`}
                   >
                     {id}
@@ -159,7 +159,7 @@ export default function Dashboard2() {
                 );
               })}
             </div>
-            <div className="mt-4 bg-black text-[#ededed] p-2 text-[10px] font-mono flex gap-4">
+            <div className="mt-4 bg-[#444] text-[#f0f0f0] p-2 text-[10px] font-mono flex gap-4">
               <span>MODRÁ = HOTOVO (12 z 60)</span>
               <span>BÍLÁ = TODO</span>
               <span className="ml-auto">KLIK přepíná stav</span>
@@ -171,7 +171,7 @@ export default function Dashboard2() {
         <div className="lg:col-span-5 space-y-6">
           
           {/* NÁPADY */}
-          <div className="bg-white border-2 border-black p-4">
+          <div className="bg-[#3a3a3a] border border-[#444] p-4">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-black text-xs tracking-[0.2em]">NÁPADY • {ideas.length}</h3>
               <span className="text-[10px] opacity-50">NÁZEV + OK = PŘIDAT</span>
@@ -184,18 +184,18 @@ export default function Dashboard2() {
                 onChange={e => setIdeaName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleAddIdea()}
                 placeholder="Název nápadu..."
-                className="flex-1 bg-[#ededed] border-2 border-black px-3 py-2 text-xs outline-none focus:bg-white"
+                className="flex-1 bg-[#2b2b2b] border border-[#444] px-3 py-2 text-xs outline-none focus:bg-[#3a3a3a]"
               />
               <button
                 onClick={handleAddIdea}
-                className="bg-black text-white px-5 py-2 text-xs font-black tracking-widest border-2 border-black hover:bg-[#040b8d]"
+                className="bg-[#444] text-[#f0f0f0] px-5 py-2 text-xs font-black tracking-widest border border-[#444] hover:bg-[#12a4ff]"
               >
                 OK
               </button>
             </div>
 
             {/* Seznam */}
-            <div className="max-h-[260px] overflow-auto border border-black/10 divide-y divide-black/10 bg-[#F8F6F1]">
+            <div className="max-h-[260px] overflow-auto border border-[#444] divide-y divide-[#444] bg-[#353535]">
               {ideas.length === 0 ? (
                 <div className="p-6 text-center text-xs opacity-40">Žádné nápady - přidej první</div>
               ) : ideas.map(idea => {
@@ -204,16 +204,16 @@ export default function Dashboard2() {
                   <div
                     key={idea.id}
                     onClick={() => setSelectedIdeaId(idea.id)}
-                    className={`p-3 cursor-pointer flex justify-between gap-2 border-l-4 ${active ? 'bg-black text-white' : 'bg-white hover:bg-[#ededed]'}`}
-                    style={{ borderLeftColor: active ? '#CDA24D' : DASHBOARD_COLOR }}
+                    className={`p-3 cursor-pointer flex justify-between gap-2 border-l ${active ? 'bg-[#12a4ff] text-white' : 'bg-[#3a3a3a] hover:bg-[#2b2b2b]'}`}
+                    style={{ borderLeftColor: active ? '#12a4ff' : '#444' }}
                   >
                     <div className="min-w-0">
                       <div className="font-bold text-xs truncate">{idea.title}</div>
-                      <div className={`text-[10px] truncate ${active ? 'text-white/60' : 'opacity-60'}`}>{idea.content.slice(0,60) || 'bez popisu'}</div>
+                      <div className={`text-[10px] truncate ${active ? 'text-[#f0f0f0]' : 'opacity-60'}`}>{idea.content.slice(0,60) || 'bez popisu'}</div>
                     </div>
                     <button
                       onClick={e => { e.stopPropagation(); handleDeleteIdea(idea.id); }}
-                      className={`text-[10px] px-2 py-1 h-fit ${active ? 'bg-white text-black' : 'bg-black text-white'}`}
+                      className={`text-[10px] px-2 py-1 h-fit ${active ? 'bg-[#3a3a3a] text-[#f0f0f0]' : 'bg-[#444] text-[#f0f0f0]'}`}
                     >
                       X
                     </button>
@@ -224,24 +224,24 @@ export default function Dashboard2() {
 
             {/* Detail + editace */}
             {selectedIdea && (
-              <div className="mt-4 bg-[#ededed] border-2 border-black p-3 space-y-3">
+              <div className="mt-4 bg-[#2b2b2b] border border-[#444] p-3 space-y-3">
                 <div className="text-[10px] font-black tracking-widest opacity-60">DETAIL • EDITACE</div>
                 <input
                   value={editTitle}
                   onChange={e => setEditTitle(e.target.value)}
-                  className="w-full bg-white border border-black px-3 py-2 text-xs font-bold outline-none"
+                  className="w-full bg-[#3a3a3a] border border-[#444] px-3 py-2 text-xs font-bold outline-none"
                   placeholder="Název"
                 />
                 <textarea
                   value={editContent}
                   onChange={e => setEditContent(e.target.value)}
                   placeholder="Popis nápadu, poznámky, co s tím..."
-                  className="w-full bg-white border border-black px-3 py-2 text-xs min-h-[100px] outline-none resize-none font-mono"
+                  className="w-full bg-[#3a3a3a] border border-[#444] px-3 py-2 text-xs min-h-[100px] outline-none resize-none font-mono"
                 />
                 <div className="flex justify-end">
                   <button
                     onClick={handleSaveIdea}
-                    className="bg-[#040b8d] text-white px-6 py-2 text-xs font-black tracking-widest border-2 border-black hover:bg-black"
+                    className="bg-[#12a4ff] text-[#f0f0f0] px-6 py-2 text-xs font-black tracking-widest border border-[#444] hover:bg-[#444]"
                   >
                     SAVE
                   </button>
@@ -251,12 +251,12 @@ export default function Dashboard2() {
           </div>
 
           {/* ROZDĚLANÉ PROJEKTY */}
-          <div className="bg-[#dbdbdb] border-2 border-black p-4">
+          <div className="bg-[#444] border border-[#444] p-4">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-black text-xs tracking-[0.2em]">ROZDĚLANÉ PROJEKTY • {projects.length}</h3>
               <button
                 onClick={handleAddProject}
-                className="bg-black text-white w-7 h-7 flex items-center justify-center text-sm font-black border-2 border-black hover:bg-[#040b8d]"
+                className="bg-[#444] text-[#f0f0f0] w-7 h-7 flex items-center justify-center text-sm font-black border border-[#444] hover:bg-[#12a4ff]"
                 title="Přidat projekt"
               >
                 +
@@ -268,22 +268,22 @@ export default function Dashboard2() {
                 onChange={e => setNewProjectTitle(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleAddProject()}
                 placeholder="Nový projekt..."
-                className="flex-1 bg-white border border-black px-3 py-2 text-xs outline-none"
+                className="flex-1 bg-[#3a3a3a] border border-[#444] px-3 py-2 text-xs outline-none"
               />
-              <button onClick={handleAddProject} className="bg-[#CDA24D] border-2 border-black px-3 text-xs font-black">+</button>
+              <button onClick={handleAddProject} className="bg-[#444] border border-[#444] px-3 text-xs font-black">+</button>
             </div>
             <div className="space-y-2 max-h-[240px] overflow-auto">
               {projects.map(p => (
-                <div key={p.id} className="bg-white border-2 border-black p-3 flex justify-between items-center">
+                <div key={p.id} className="bg-[#3a3a3a] border border-[#444] p-3 flex justify-between items-center">
                   <div>
                     <div className="font-bold text-xs">#{p.id.toString().slice(-4)} {p.title}</div>
                     <div className="text-[10px] mt-1 flex gap-2">
-                      <span className={`px-2 py-0.5 border border-black font-bold ${p.status==='doing' ? 'bg-[#CDA24D]' : p.status==='done' ? 'bg-black text-white' : 'bg-white'}`}>{p.status.toUpperCase()}</span>
+                      <span className={`px-2 py-0.5 border border-[#444] font-bold ${p.status==='doing' ? 'bg-[#444]' : p.status==='done' ? 'bg-[#12a4ff] text-white' : 'bg-[#3a3a3a]'}`}>{p.status.toUpperCase()}</span>
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => setProjects(prev => prev.map(x=>x.id===p.id?{...x, status: x.status==='doing'?'done':'doing'}:x))} className="text-[10px] px-2 py-1 bg-[#ededed] border border-black">TOGGLE</button>
-                    <button onClick={() => setProjects(prev => prev.filter(x=>x.id!==p.id))} className="text-[10px] px-2 py-1 bg-[#ac0001] text-white border border-black">X</button>
+                    <button onClick={() => setProjects(prev => prev.map(x=>x.id===p.id?{...x, status: x.status==='doing'?'done':'doing'}:x))} className="text-[10px] px-2 py-1 bg-[#2b2b2b] border border-[#444]">TOGGLE</button>
+                    <button onClick={() => setProjects(prev => prev.filter(x=>x.id!==p.id))} className="text-[10px] px-2 py-1 bg-[#444] text-[#f0f0f0] border border-[#444]">X</button>
                   </div>
                 </div>
               ))}

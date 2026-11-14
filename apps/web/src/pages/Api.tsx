@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react'
 import { categoryColors, categoryNumbers } from '../styles/theme'
 
-const BLUE = '#000000'
-const GOLD = '#EEEAE1'
-const ACCENT = '#ffa600'
+const BLUE = '#444'
+const GOLD = '#444'
+const ACCENT = '#12a4ff'
 const API_COLOR = categoryColors.api
 const API_NUM = categoryNumbers.api
 
@@ -114,20 +114,20 @@ export default function Api() {
   }, [search])
 
   return (
-    <div className="p-8 bg-[#F8F6F1] font-mono">
+    <div className="p-8 bg-[#353535]">
       {/* HEADER */}
-      <div className="bg-white border-2 border-white p-6 flex justify-between items-center mb-6">
+      <div className="bg-[#3a3a3a] border border-[#444] p-6 flex justify-between items-center mb-6">
         <div>
-          <div className="text-[10px] tracking-[0.4em] text-black/40">API OS // LOYO-OS • localhost:3001 • TAURI READY</div>
+          <div className="text-[10px] tracking-[0.4em] text-[#9a9a9a]">API OS // LOYO-OS • localhost:3001 • TAURI READY</div>
           <h1 className="text-3xl font-black mt-1 tracking-tighter">API CENTRUM // {INTERNAL_ENDPOINTS.length} INTERNÍ + {EXTERNAL_APIS.length} EXTERNÍ</h1>
           <div className="mt-2 flex gap-2">
-            <span className="text-[10px] px-2 py-1 bg-black text-white">REQ TODAY: 1,247</span>
-            <span className="text-[10px] px-2 py-1 border-2 border-black">AVG LATENCY: 124ms</span>
-            <span className="text-[10px] px-2 py-1 border-2" style={{ borderColor: GOLD, background: GOLD }}>COST MONTH: $82.40</span>
+            <span className="text-[10px] px-2 py-1 bg-[#444] text-[#f0f0f0]">REQ TODAY: 1,247</span>
+            <span className="text-[10px] px-2 py-1 border border-[#444]">AVG LATENCY: 124ms</span>
+            <span className="text-[10px] px-2 py-1 border" style={{ borderColor: GOLD, background: GOLD }}>COST MONTH: $82.40</span>
           </div>
         </div>
         <div className="flex gap-2 items-center">
-          <div className="text-[10px] px-3 py-1 bg-black text-white">ONLINE • 2 ERRORS</div>
+          <div className="text-[10px] px-3 py-1 bg-[#444] text-[#f0f0f0]">ONLINE • <span className="text-[#ff1e00]">2 ERRORS</span></div>
           <div className="w-3 h-3 animate-pulse" style={{ background: BLUE }}></div>
         </div>
       </div>
@@ -145,8 +145,8 @@ export default function Api() {
           <button
             key={t.id}
             onClick={() => setTab(t.id as Tab)}
-            className="px-4 py-2 text-xs font-black tracking-widest border-2 border-black transition-all"
-            style={{ background: tab === t.id ? (t as any).color || 'black' : 'white', color: tab === t.id ? (t.id === 'internal' ? 'black' : t.id === 'external' ? 'black' : 'white') : 'black' }}
+            className="px-4 py-2 text-xs font-black tracking-widest border border-[#444] transition-all"
+            style={{ background: tab === t.id ? (t as any).color || '#444' : '#3a3a3a', color: tab === t.id ? (t.id === 'internal' ? '#f0f0f0' : t.id === 'external' ? '#f0f0f0' : '#f0f0f0') : '#f0f0f0' }}
           >
             {t.label}
           </button>
@@ -155,14 +155,14 @@ export default function Api() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="HLEDAT ENDPOINT / PROVIDERA..."
-          className="ml-auto px-3 py-2 text-xs bg-black text-white border-2 border-black outline-none placeholder:text-white/40 w-[260px]"
+          className="ml-auto px-3 py-2 text-xs bg-[#444] text-[#f0f0f0] border border-[#444] outline-none placeholder:text-[#9a9a9a] w-[260px]"
         />
       </div>
 
       <div className="grid grid-cols-12 gap-6">
         {/* LEFT LIST */}
-        <div className="col-span-5 bg-white border-2 border-black h-[calc(100vh-220px)] flex flex-col">
-          <div className="p-4 text-[10px] tracking-[0.4em] text-black/40 border-b-2 border-black">
+        <div className="col-span-5 bg-[#3a3a3a] border border-[#444] h-[calc(100vh-220px)] flex flex-col">
+          <div className="p-4 text-[10px] tracking-[0.4em] text-[#9a9a9a] border-b border-[#444]">
             {tab === 'internal' && `INTERNÍ ENDPOINTS // ${filteredInternal.length}`}
             {tab === 'external' && `EXTERNÍ API // ${filteredExternal.length} PROVIDERŮ`}
             {tab === 'keys' && `VAULT // ŠIFROVANÉ KLÍČE`}
@@ -178,20 +178,20 @@ export default function Api() {
                 <div
                   key={ep.id}
                   onClick={() => setSelectedInternal(ep.id)}
-                  className="p-5 cursor-pointer border-b-2 border-black flex justify-between items-center border-l-4"
-                  style={isActive? { background: BLUE, borderLeftColor: API_COLOR } : { background: 'white', borderLeftColor: API_COLOR }}
+                  className="p-5 cursor-pointer border-b border-[#444] flex justify-between items-center border-l"
+                  style={isActive? { background: BLUE, borderLeftColor: API_COLOR } : { background: '#3a3a3a', borderLeftColor: API_COLOR }}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex gap-2 items-center">
-                      <span className="text-[10px] px-2 py-1 bg-black text-white font-black">{ep.method}</span>
-                      <span className="text-[10px] px-2 py-0.5 border border-black/20">{ep.category}</span>
+                      <span className="text-[10px] px-2 py-1 bg-[#444] text-[#f0f0f0] font-black">{ep.method}</span>
+                      <span className="text-[10px] px-2 py-0.5 border border-[#444]">{ep.category}</span>
                       <span className="text-[10px] opacity-60">{ep.latency}</span>
                     </div>
                     <div className="font-black text-sm mt-1 truncate">{ep.path}</div>
                     <div className="text-[11px] mt-1 opacity-60 truncate">{ep.desc}</div>
                   </div>
                   <div className="ml-3 text-right">
-                    <div className="text-[10px] font-black px-2 py-1 bg-black text-white">{ep.status}</div>
+                    <div className="text-[10px] font-black px-2 py-1 bg-[#444] text-[#f0f0f0]">{ep.status}</div>
                     <div className="text-[9px] mt-1 opacity-50">{ep.uses} uses</div>
                   </div>
                 </div>
@@ -200,18 +200,18 @@ export default function Api() {
 
                         {tab === 'external' && filteredExternal.map((ex, idx) => {
               const isActive = selectedExternal === ex.id
-              const statusColor = ex.status === 'CONNECTED'? '#22c55e' : ex.status === 'QUOTA'? GOLD : '#ef4444'
+              const statusColor = ex.status === 'CONNECTED'? '#12a4ff' : ex.status === 'QUOTA'? '#c9a646' : '#ff1e00'
               return (
                 <div
                   key={ex.id}
                   onClick={() => setSelectedExternal(ex.id)}
-                  className="p-5 cursor-pointer border-b-2 border-black flex justify-between border-l-4"
-                  style={isActive? { background: GOLD, borderLeftColor: API_COLOR } : { background: 'white', borderLeftColor: API_COLOR }}
+                  className="p-5 cursor-pointer border-b border-[#444] flex justify-between border-l"
+                  style={isActive? { background: GOLD, borderLeftColor: API_COLOR } : { background: '#3a3a3a', borderLeftColor: API_COLOR }}
                 >
                   <div>
                     <div className="flex gap-2 items-center">
                       <span className="text-xs font-black">{ex.provider.toUpperCase()}</span>
-                      <span className="text-[9px] px-1.5 py-0.5 bg-black text-white">{ex.category}</span>
+                      <span className="text-[9px] px-1.5 py-0.5 bg-[#444] text-[#f0f0f0]">{ex.category}</span>
                       <span className="w-2 h-2 rounded-full" style={{ background: statusColor }}></span>
                     </div>
                     <div className="font-bold text-sm mt-1">{ex.name}</div>
@@ -223,11 +223,11 @@ export default function Api() {
             })}
 
             {tab === 'keys' && API_KEYS.map(k => (
-              <div key={k.id} className="p-4 border-b-2 border-black flex justify-between items-center">
+              <div key={k.id} className="p-4 border-b border-[#444] flex justify-between items-center">
                 <div>
                   <div className="flex gap-2 items-center">
                     <span className="font-black text-xs">{k.provider}</span>
-                    <span className="text-[9px] px-2 py-0.5 bg-black text-white">{k.status}</span>
+                    <span className="text-[9px] px-2 py-0.5 bg-[#444] text-[#f0f0f0]">{k.status}</span>
                   </div>
                   <div className="text-xs mt-1 font-mono">{k.name}</div>
                   <div className="text-[11px] font-mono mt-1 opacity-60">{k.masked}</div>
@@ -240,20 +240,20 @@ export default function Api() {
             ))}
 
             {tab === 'logs' && LOGS.map((l, i) => (
-              <div key={i} className="p-3 border-b border-black/10 font-mono text-[11px] flex gap-2">
+              <div key={i} className="p-3 border-b border-[#444] font-mono text-[11px] flex gap-2">
                 <span className="opacity-40">{l.time}</span>
-                <span className="font-black px-1 bg-black text-white">{l.method}</span>
+                <span className="font-black px-1 bg-[#444] text-[#f0f0f0]">{l.method}</span>
                 <span className="truncate flex-1">{l.path}</span>
-                <span className={l.status === 200 ? 'text-green-600' : 'text-red-600 font-black'}>{l.status}</span>
+                <span className={l.status === 200 ? 'text-[#9a9a9a]' : 'text-[#9a9a9a] font-black'}>{l.status}</span>
                 <span className="opacity-40">{l.ms}ms</span>
               </div>
             ))}
 
             {tab === 'webhooks' && WEBHOOKS.map(w => (
-              <div key={w.id} className="p-4 border-b-2 border-black">
+              <div key={w.id} className="p-4 border-b border-[#444]">
                 <div className="flex justify-between">
                   <span className="font-black text-xs">{w.name}</span>
-                  <span className="text-[9px] px-2 py-0.5 bg-black text-white">{w.direction} • {w.status}</span>
+                  <span className="text-[9px] px-2 py-0.5 bg-[#444] text-[#f0f0f0]">{w.direction} • {w.status}</span>
                 </div>
                 <div className="text-[11px] mt-1 font-mono opacity-60 truncate">{w.url}</div>
                 <div className="text-[10px] mt-1 opacity-50">{w.events.join(', ')} • {w.last}</div>
@@ -261,29 +261,29 @@ export default function Api() {
             ))}
 
             {tab === 'mcp' && MCP_SERVERS.map(m => (
-              <div key={m.id} className="p-4 border-b-2 border-black flex justify-between">
+              <div key={m.id} className="p-4 border-b border-[#444] flex justify-between">
                 <div>
                   <div className="font-black text-xs">{m.name} <span className="text-[10px] opacity-40">• {m.transport}</span></div>
                   <div className="text-[11px] opacity-60 mt-1">{m.desc}</div>
                   <div className="text-[10px] mt-1">{m.tools} tools</div>
                 </div>
-                <div className="text-[10px] font-black px-2 py-1 h-fit bg-black text-white">{m.status}</div>
+                <div className="text-[10px] font-black px-2 py-1 h-fit bg-[#444] text-[#f0f0f0]">{m.status}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* RIGHT DETAIL */}
-        <div className="col-span-7 bg-white p-8 border-2 border-black h-[calc(100vh-220px)] overflow-y-auto">
+        <div className="col-span-7 bg-[#3a3a3a] p-8 border border-[#444] h-[calc(100vh-220px)] overflow-y-auto">
           {tab === 'internal' && (
             <>
-              <div className="text-[10px] tracking-[0.4em] text-black/40">DETAIL // {activeInternal.method} // {activeInternal.category}</div>
+              <div className="text-[10px] tracking-[0.4em] text-[#9a9a9a]">DETAIL // {activeInternal.method} // {activeInternal.category}</div>
               <div className="text-2xl font-black mt-2 tracking-tighter">{activeInternal.path}</div>
-              <div className="text-sm text-black/60 mt-1">{activeInternal.desc} • Agent: {activeInternal.agent || 'SYSTEM'} • Auth: {activeInternal.auth} • {activeInternal.uses} použití</div>
+              <div className="text-sm text-[#f0f0f0] mt-1">{activeInternal.desc} • Agent: {activeInternal.agent || 'SYSTEM'} • Auth: {activeInternal.auth} • {activeInternal.uses} použití</div>
 
-              <div className="mt-8 grid grid-cols-2 gap-0 border-2 border-black">
-                <div className="p-4 bg-black text-white">
-                  <div className="text-[10px] tracking-widest text-white/60">REQUEST EXAMPLE</div>
+              <div className="mt-8 grid grid-cols-2 gap-0 border border-[#444]">
+                <div className="p-4 bg-[#444] text-[#f0f0f0]">
+                  <div className="text-[10px] tracking-widest text-[#f0f0f0]">REQUEST EXAMPLE</div>
                   <pre className="text-xs mt-3 font-mono whitespace-pre-wrap">
 {activeInternal.id === 'get-agents' ? `curl localhost:3001${activeInternal.path} \\
   -H "x-api-key: $LOYO_KEY"` : 
@@ -321,21 +321,21 @@ export default function Api() {
               </div>
 
               <div className="mt-6 grid grid-cols-3 gap-3">
-                <div className="border-2 border-black p-3">
+                <div className="border border-[#444] p-3">
                   <div className="text-[9px] opacity-40">AUTH</div>
                   <div className="font-black text-xs mt-1">{activeInternal.auth}</div>
                 </div>
-                <div className="border-2 border-black p-3">
+                <div className="border border-[#444] p-3">
                   <div className="text-[9px] opacity-40">AGENT</div>
                   <div className="font-black text-xs mt-1">{activeInternal.agent || 'SYSTEM'}</div>
                 </div>
-                <div className="border-2 border-black p-3" style={{ background: BLUE }}>
+                <div className="border border-[#444] p-3" style={{ background: BLUE }}>
                   <div className="text-[9px] opacity-60">LATENCY P95</div>
                   <div className="font-black text-xs mt-1">{activeInternal.latency}</div>
                 </div>
               </div>
 
-              <div className="mt-6 bg-black text-white p-4 text-xs font-mono">
+              <div className="mt-6 bg-[#444] text-[#f0f0f0] p-4 text-xs font-mono">
                 <div className="opacity-40">[LIVE LOG • {activeInternal.path}]</div>
                 {LOGS.filter(l => l.path.includes(activeInternal.path.split('/')[2] || '')).slice(0,3).map((l,i) => (
                   <div key={i}>{l.method} {l.path} → {l.status} • {l.ms}ms • {l.agent}</div>
@@ -347,20 +347,20 @@ export default function Api() {
 
           {tab === 'external' && (
             <>
-              <div className="text-[10px] tracking-[0.4em] text-black/40">EXTERNÍ API // {activeExternal.provider.toUpperCase()} // {activeExternal.category}</div>
+              <div className="text-[10px] tracking-[0.4em] text-[#9a9a9a]">EXTERNÍ API // {activeExternal.provider.toUpperCase()} // {activeExternal.category}</div>
               <div className="flex justify-between items-start mt-2">
                 <div>
                   <div className="text-2xl font-black tracking-tighter">{activeExternal.name}</div>
-                  <div className="text-sm text-black/60 mt-1">{activeExternal.endpoint} • Docs: {activeExternal.docs}</div>
+                  <div className="text-sm text-[#f0f0f0] mt-1">{activeExternal.endpoint} • Docs: {activeExternal.docs}</div>
                 </div>
-                <div className="w-3 h-3" style={{ background: activeExternal.status === 'CONNECTED' ? '#22c55e' : GOLD }}></div>
+                <div className="w-3 h-3" style={{ background: activeExternal.status === 'CONNECTED' ? '#12a4ff' : GOLD }}></div>
               </div>
 
-              <div className="mt-8 border-2 border-black p-6">
-                <div className="text-[10px] tracking-[0.4em] text-black/40">MODELY / SLUŽBY</div>
+              <div className="mt-8 border border-[#444] p-6">
+                <div className="text-[10px] tracking-[0.4em] text-[#9a9a9a]">MODELY / SLUŽBY</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {activeExternal.models?.map(m => (
-                    <span key={m} className="text-xs px-3 py-1 border-2 border-black font-bold" style={{ background: BLUE }}>{m}</span>
+                    <span key={m} className="text-xs px-3 py-1 border border-[#444] font-bold" style={{ background: BLUE }}>{m}</span>
                   )) || <span className="text-xs">Jedna služba</span>}
                 </div>
 
@@ -374,14 +374,14 @@ export default function Api() {
                 </div>
 
                 <div className="mt-6 flex gap-2">
-                  <button className="px-4 py-2 bg-black text-white text-xs font-black">TEST PŘIPOJENÍ</button>
-                  <button className="px-4 py-2 border-2 border-black text-xs font-bold">ZOBRAZIT DOKUMENTACI</button>
-                  <button className="px-4 py-2 border-2 border-black text-xs font-bold" style={{ borderColor: GOLD }}>ROTATE KEY</button>
+                  <button className="px-4 py-2 bg-[#444] text-[#f0f0f0] text-xs font-black">TEST PŘIPOJENÍ</button>
+                  <button className="px-4 py-2 border border-[#444] text-xs font-bold">ZOBRAZIT DOKUMENTACI</button>
+                  <button className="px-4 py-2 border border-[#444] text-xs font-bold" style={{ borderColor: GOLD }}>ROTATE KEY</button>
                 </div>
               </div>
 
-              <div className="mt-6 text-[10px] text-black/40 leading-relaxed">
-                <b className="text-black">PROČ TO MÁŠ V OS:</b> Externí API ti umožňují aby agenti používali GPT/Claude/Groq místo aby vše běželo lokálně. 
+              <div className="mt-6 text-[10px] text-[#9a9a9a] leading-relaxed">
+                <b className="text-[#f0f0f0]">PROČ TO MÁŠ V OS:</b> Externí API ti umožňují aby agenti používali GPT/Claude/Groq místo aby vše běželo lokálně. 
                 Tavily = Finder bez webu. ElevenLabs = hlas sekretářky. Google = kalendář. Tady vidíš kolik tě to stojí a jestli ti nedošla kvóta (jako u ElevenLabs teď).
               </div>
             </>

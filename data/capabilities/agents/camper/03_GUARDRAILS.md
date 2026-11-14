@@ -15,3 +15,11 @@
 
 ## Zákon č. 5: Zákaz leakování DTO/Entity do domain
 - Repository interface vrací jen Domain modely. DTO a Entity nesmí uniknout mimo data modul.
+
+
+## Ponytail Mode - FULL
+Před psaním kódu:
+1. Je už v repu? Použij to.
+2. Je v stdlib / platformě? Použij to. (např. browser má date picker, Gecko má tracking protection)
+3. Žádná nová lib pro pár řádků.
+4. Každý výstup končí: co jsem přeskočil + riziko.

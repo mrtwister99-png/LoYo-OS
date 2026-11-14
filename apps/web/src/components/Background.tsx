@@ -35,9 +35,9 @@ export default function Background({ biosMode = false }: Props) {
     );
   }
   
-  // NORMAL MODE - #cccccc aby seděl s header/bottom
+  // NORMAL MODE - Royal Dark #2b2b2b
   return (
-    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', backgroundColor: '#cccccc', overflow: 'hidden', pointerEvents: 'none', zIndex: -1 }} />
+    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', backgroundColor: '#2b2b2b', overflow: 'hidden', pointerEvents: 'none', zIndex: -1 }} />
   );
 }
 

@@ -82,12 +82,12 @@ export function BuilderMenu({ focused, externalOpen, onExternalClose, onPick }: 
             width: 32,
             height: 32,
             borderRadius: '50%',
-            background: open ? '#1a1a1a' : '#000000',
-            color: '#ffffff',
-            border: open ? '2px solid #00ff41' : '2px solid #000000',
+            background: open ? '#3a3a3a' : '#353535',
+            color: '#f0f0f0',
+            border: open ? '1px solid #12a4ff' : '1px solid #444',
             fontSize: 13,
             fontWeight: 900,
-            fontFamily: 'monospace',
+            fontFamily: "'JetBrains Mono', monospace",
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -95,7 +95,7 @@ export function BuilderMenu({ focused, externalOpen, onExternalClose, onPick }: 
             boxShadow: focused
               ? '0 0 0 3px rgba(0,255,65,0.4), 0 4px 16px rgba(0,0,0,0.4)'
               : open
-                ? '0 0 0 2px #00ff41, 0 4px 12px rgba(0,0,0,0.3)'
+                ? '0 0 0 1px #12a4ff, 0 4px 12px rgba(0,0,0,0.3)'
                 : '0 2px 8px rgba(0,0,0,0.3)',
             transition: 'all 0.15s',
             letterSpacing: '0.02em',
@@ -110,8 +110,8 @@ export function BuilderMenu({ focused, externalOpen, onExternalClose, onPick }: 
               position: 'absolute',
               top: 'calc(100% + 8px)',
               right: 0,
-              background: '#111111',
-              border: '2px solid #00ff41',
+              background: '#444',
+              border: '1px solid #444',
               borderRadius: 10,
               overflow: 'hidden',
               boxShadow: '0 0 0 1px rgba(0,255,65,0.15), 0 16px 48px rgba(0,0,0,0.7)',
@@ -123,7 +123,7 @@ export function BuilderMenu({ focused, externalOpen, onExternalClose, onPick }: 
             }}
           >
             <div style={{ padding: '10px 14px 8px', borderBottom: '1px solid rgba(0,255,65,0.15)' }}>
-              <span style={{ fontSize: 9, letterSpacing: '0.4em', fontWeight: 700, color: '#00ff41', fontFamily: 'monospace' }}>
+              <span style={{ fontSize: 9, letterSpacing: '0.4em', fontWeight: 700, color: '#9a9a9a', fontFamily: "'JetBrains Mono', monospace" }}>
                 BUILDER
               </span>
             </div>
@@ -139,7 +139,7 @@ export function BuilderMenu({ focused, externalOpen, onExternalClose, onPick }: 
                   fontSize: 11,
                   letterSpacing: '0.25em',
                   fontWeight: 700,
-                  fontFamily: 'monospace',
+                  fontFamily: "'JetBrains Mono', monospace",
                   color: 'rgba(255,255,255,0.55)',
                   background: 'none',
                   border: 'none',
@@ -149,7 +149,7 @@ export function BuilderMenu({ focused, externalOpen, onExternalClose, onPick }: 
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.background = 'rgba(0,255,65,0.06)'
-                  e.currentTarget.style.color = '#00ff41'
+                  e.currentTarget.style.color = '#12a4ff'
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.background = 'none'
@@ -197,11 +197,11 @@ export function BuilderOverlay({ request, onClose, onManifestComplete }: Overlay
     <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
       <div
         className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 rounded-2xl"
-        style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
+        style={{ background: '#444', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-xl leading-none transition-opacity opacity-30 hover:opacity-80 text-white"
+          className="absolute top-4 right-4 text-xl leading-none transition-opacity opacity-30 hover:opacity-80 text-[#f0f0f0]"
         >
           ✕
         </button>

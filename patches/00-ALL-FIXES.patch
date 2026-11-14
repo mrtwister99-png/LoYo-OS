@@ -1,0 +1,43 @@
+
+# FIX 1: TYPE_FOLDER bug capabilities.ts:28
+# BEFORE: mcp: 'mcps'  -> Koštěrad zapíše do mcps/ a loader to nikdy nenajde
+# AFTER:  mcp: 'mcp'
+
+--- a/apps/api/src/routes/capabilities.ts
++++ b/apps/api/src/routes/capabilities.ts
+-  mcp: 'mcps',
++  mcp: 'mcp',
+
+# FIX 2: SQL bug MATCH? bez mezery
+# BEFORE: WHERE notes_fts MATCH?  -> syntax error, shazuje celý FTS
+# AFTER:  WHERE notes_fts MATCH ?
+
+--- a/apps/api/src/lib/notesTasksFts.ts
+- WHERE notes_fts MATCH?
++ WHERE notes_fts MATCH ?
+
+--- a/apps/api/src/routes/search.ts
+- WHERE capabilities_fts MATCH?
++ WHERE capabilities_fts MATCH ?
+
+# FIX 3: DB race - singleton
+# BEFORE: každý soubor new Database() -> WAL zamrzá na Windows
+# AFTER: connection.ts singleton getDb()
+
+# manifestDb.ts
+- import Database from 'better-sqlite3'; const db = new Database(...)
++ import { getDb as getSharedDb } from './connection.js'; db = getSharedDb();
+
+# notesTasksFts.ts, search.ts
+- const db = new Database(...)
++ import { getDb } from './connection.js'; const db = getDb();
+
+# FIX 4: Dir traversal tmp.ts
+# BEFORE: if (path.includes('tmp')) -> projde data/tmp/../../.env
+# AFTER: resolved = path.resolve(DATA_DIR, query.path); if (!resolved.startsWith(DATA_DIR)) return 403
+
+--- a/apps/api/src/routes/tmp.ts
+- if (query.path.includes('tmp')) { allow }
++ const resolved = resolve(DATA_DIR, query.path);
++ const safeData = DATA_DIR.endsWith(sep) ? DATA_DIR : DATA_DIR + sep;
++ if (!resolved.startsWith(safeData)) return reply.status(403).send({ error: 'forbidden' });

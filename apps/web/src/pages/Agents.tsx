@@ -4,8 +4,9 @@ import { invoke } from '@tauri-apps/api/core'
 import AgentBuilder from '../components/builder/AgentBuilder'
 import { categoryColors, categoryNumbers } from '../styles/theme'
 import NumBadge, { useCapNumbers } from '../components/NumBadge'
+import TridilPanel from '../components/TridilPanel'
 
-const ACCENT = '#a136ff'
+const ACCENT = '#12a4ff'
 const AGENT_COLOR = categoryColors.agents
 const AGENT_NUM = categoryNumbers.agents
 
@@ -163,6 +164,7 @@ export default function AgentsPro() {
 
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
+
   const saveAgent = async () => {
     if (!selectedAgent) return
     setSaveStatus('saving')
@@ -187,24 +189,24 @@ export default function AgentsPro() {
   }
 
   return (
-    <div className="min-h-full bg-[#fbfaf8] text-black selection:bg-[#ff4400] selection:text-white">
+    <div className="min-h-full bg-[#353535] text-[#f0f0f0] selection:bg-[#444] selection:text-[#f0f0f0]">
       {/* HEADER */}
       <div className="px-6 md:px-10 pt-8 pb-6">
         <div className="flex items-start justify-between gap-6">
           <div>
             <div className="flex items-baseline gap-3">
               <h1 className="text-[56px] leading-[0.85] font-black tracking-tighter">AGENTI</h1>
-              <span className="text-[20px] font-mono text-black/20">/ {String(filtered.length).padStart(2,'0')}</span>
+              <span className="text-[20px] font-mono text-[#9a9a9a]/70">/ {String(filtered.length).padStart(2,'0')}</span>
             </div>  
-              <div className="mt-3 text- font-mono tracking-wide text-black/40 max-w-">
-              Index <span className="font-bold text-black">data/index.db ({agents.length} z DB)</span> • zdroj: <span className="font-mono">data/capabilities/agents/*/manifest.json</span> • FTS5 search <span className="font-mono">&lt;5ms</span>
+              <div className="mt-3 text- font-mono tracking-wide text-[#9a9a9a] max-w-">
+              Index <span className="font-bold text-[#f0f0f0]">data/index.db ({agents.length} z DB)</span> • zdroj: <span className="font-mono">data/capabilities/agents/*/manifest.json</span> • FTS5 search <span className="font-mono">&lt;5ms</span>
               <span className="ml-3 inline-flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${syncStatus==='synced'?'bg-green-500':syncStatus==='syncing'?'bg-yellow-500 animate-pulse':'bg-red-500'}`} />
+                <span className={`w-2 h-2 rounded-full ${syncStatus==='synced'?'bg-[#444]':syncStatus==='syncing'?'bg-[#444] animate-pulse':'bg-[#444]'}`} />
                 <span className="text-[10px] uppercase tracking-widest">{syncStatus}</span>
               </span>
             </div>
           </div>
-          <button onClick={()=>setShowNew(true)} className="shrink-0 px-5 py-3 bg-black text-white text-[11px] font-black tracking-[0.2em] rounded-full hover:bg-[#ae1710] transition">+ NOVÝ AGENT</button>
+          <button onClick={()=>setShowNew(true)} className="shrink-0 px-5 py-3 bg-[#444] text-[#f0f0f0] text-[11px] font-black tracking-[0.2em] rounded-full hover:bg-[#444] transition">+ NOVÝ AGENT</button>
         </div>
 
         {/* FILTRY */}
@@ -216,9 +218,9 @@ export default function AgentsPro() {
                 <button
                   key={cat.id}
                   onClick={()=>setSelectedCat(cat.id)}
-                  className={`px-4 py-2 rounded-full text-[11px] font-black tracking-widest border transition ${active?'bg-black text-white border-black':'bg-white text-black/40 border-black/10 hover:border-black/30'}`}
+                  className={`px-4 py-2 rounded-full text-[11px] font-black tracking-widest border transition ${active? 'bg-[#12a4ff] text-white border-[#12a4ff]':'bg-[#3a3a3a] text-[#9a9a9a] border-[#444] hover:border-[#444]'}`}
                 >
-                  <span className={`inline-block w-2 h-2 rounded-full mr-2 ${active?'bg-[#FF3B30]':'bg-black/20'}`} />
+                  <span className={`inline-block w-2 h-2 rounded-full mr-2 ${active?'bg-[#444]':'bg-black/20'}`} />
                   {cat.name}
                 </button>
               )
@@ -228,7 +230,7 @@ export default function AgentsPro() {
             value={search}
             onChange={e=>setSearch(e.target.value)}
             placeholder="HLEDAT AGENTA..."
-            className="ml-auto w-[240px] px-4 py-2 rounded-full bg-white border border-black/10 text-[11px] font-mono tracking-wide outline-none focus:border-black/30"
+            className="ml-auto w-[240px] px-4 py-2 rounded-full bg-[#3a3a3a] border border-[#444] text-[11px] font-mono tracking-wide outline-none focus:border-[#444]"
           />
         </div>
       </div>
@@ -238,7 +240,7 @@ export default function AgentsPro() {
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {Array.from({length:6}).map((_,i)=>(
-              <div key={i} className="aspect-square bg-black/5 animate-pulse rounded-[12px]" />
+              <div key={i} className="aspect-square bg-white/5 animate-pulse rounded-[12px]" />
             ))}
           </div>
         ) : (
@@ -251,12 +253,12 @@ export default function AgentsPro() {
                 <button
                   key={agent.id}
                   onClick={()=>setSelectedAgent(agent)}
-                  className="group relative aspect-square bg-black text-white rounded- border border-black/10 overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-[#1000a1] hover:border-white/20 transition-all duration-200 shadow-[0_0_0_1px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y- border-l-4"
+                  className="group relative aspect-square bg-[#444] text-[#f0f0f0] rounded- border border-[#444] overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-[#12a4ff] hover:border-white/20 transition-all duration-200 shadow-[0_0_0_1px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y- border-l"
                   style={{ borderLeftColor: AGENT_COLOR }}
                 >
                   <NumBadge type={AGENT_NUM} n={agent.number} idx={idx} label={agent.id} tone="light" className="absolute top-2 left-2" />
                   {/* status tečka */}
-                  <span className={`absolute top-3 right-3 w-2.5 h-2.5 rounded-full ${isOnline?'bg-[#FF3B30]':isBusy?'bg-yellow-400':'bg-white/20'} shadow-[0_0_8px_rgba(0,0,0,0.4)]`} />
+                  <span className={`absolute top-3 right-3 w-2.5 h-2.5 rounded-full ${isOnline?'bg-[#444]':isBusy?'bg-[#444]':'bg-white/10'} shadow-[0_0_8px_rgba(0,0,0,0.4)]`} />
 
                   {/* iniciála velká na pozadí */}
                   <span className="absolute inset-0 flex items-center justify-center text-[72px] font-black leading-none opacity-[0.04] group-hover:opacity-[0.08] transition select-none">
@@ -274,7 +276,7 @@ export default function AgentsPro() {
                   </span>
 
                   {/* spodní linka */}
-                  <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#FF3B30] opacity-0 group-hover:opacity-100 transition" />
+                  <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#444] opacity-0 group-hover:opacity-100 transition" />
                 </button>
               )
             })}
@@ -282,7 +284,7 @@ export default function AgentsPro() {
             {/* přidat */}
             <button
               onClick={()=>setShowNew(true)}
-              className="aspect-square rounded-[12px] border border-dashed border-black/20 bg-white hover:bg-black hover:text-white hover:border-black flex flex-col items-center justify-center gap-2 transition"
+              className="aspect-square rounded-[12px] border border-dashed border-[#444] bg-[#3a3a3a] hover:bg-[#444] hover:text-[#f0f0f0] hover:border-[#444] flex flex-col items-center justify-center gap-2 transition"
             >
               <span className="text-[32px] leading-none">+</span>
               <span className="text-[10px] font-black tracking-[0.2em]">NOVÝ</span>
@@ -292,7 +294,7 @@ export default function AgentsPro() {
 
         {filtered.length===0 && !loading && (
           <div className="mt-20 text-center">
-            <div className="text-[14px] font-mono text-black/30">Žádní agenti pro tento filtr</div>
+            <div className="text-[14px] font-mono text-[#9a9a9a]/70">Žádní agenti pro tento filtr</div>
           </div>
         )}
       </div>
@@ -301,37 +303,38 @@ export default function AgentsPro() {
       {selectedAgent && (
         <div className="fixed inset-0 z-[100] flex">
           <div className="flex-1 bg-black/60 backdrop-blur-[2px]" onClick={()=>setSelectedAgent(null)} />
-          <div className="w-[520px] max-w-[92vw] bg-[#fbfaf8] h-full overflow-y-auto shadow-[-12px_0_48px_rgba(0,0,0,0.3)] border-l border-black/10 flex flex-col animate-[slideIn_0.35s_cubic-bezier(0.25,0.1,0.25,1)]">
+          <div className="w-[520px] max-w-[92vw] bg-[#353535] h-full overflow-y-auto shadow-[-12px_0_48px_rgba(0,0,0,0.3)] border-l border-[#444] flex flex-col animate-[slideIn_0.35s_cubic-bezier(0.25,0.1,0.25,1)]">
             {/* hlavička detailu */}
-            <div className="sticky top-0 z-10 bg-[#fbfaf8]/90 backdrop-blur border-b border-black/10">
+            <div className="sticky top-0 z-10 bg-[#353535]/90 backdrop-blur border-b border-[#444]">
               <div className="p-7 flex items-start justify-between gap-4">
                 <div className="flex gap-4">
-                  <div className="w-14 h-14 rounded-full bg-black text-white flex items-center justify-center text-[20px] font-black">
+                  <div className="w-14 h-14 rounded-full bg-[#444] text-[#f0f0f0] flex items-center justify-center text-[20px] font-black">
                     {firstName(selectedAgent.name)[0]?.toUpperCase()}
                   </div>
                   <div>
                     <div className="text-[22px] font-black leading-[0.9] tracking-tight">{selectedAgent.name}</div>
-                    <div className="mt-1 text-[11px] font-mono text-black/40">{selectedAgent.role}</div>
+                    <div className="mt-1 text-[11px] font-mono text-[#9a9a9a]">{selectedAgent.role}</div>
                     <div className="mt-2 flex gap-2">
-                      <span className="text-[10px] px-2.5 py-1 rounded-full text-white font-bold tracking-widest" style={{ background: ACCENT }}>{selectedAgent.status.toUpperCase()}</span>
-                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-black/5 font-mono">{selectedAgent.team}</span>
+                      <span className="text-[10px] px-2.5 py-1 rounded-full text-[#f0f0f0] font-bold tracking-widest" style={{ background: ACCENT }}>{selectedAgent.status.toUpperCase()}</span>
+                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-white/5 font-mono">{selectedAgent.team}</span>
                     </div>
                   </div>
                 </div>
-                <button onClick={()=>setSelectedAgent(null)} className="w-9 h-9 rounded-full bg-black/5 flex items-center justify-center hover:bg-black hover:text-white transition">✕</button>
+                <button onClick={()=>setSelectedAgent(null)} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#444] hover:text-[#f0f0f0] transition">✕</button>
               </div>
             </div>
 
             <div className="p-7 space-y-8">
+              {selectedAgent.id === 'tridil' && <TridilPanel />}
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-4 rounded-2xl bg-white border border-black/5">
-                  <div className="text-[10px] font-mono tracking-widest text-black/30">KATEGORIE</div>
+                <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
+                  <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">KATEGORIE</div>
                   <select value={selectedAgent.category} onChange={e=>{const upd={...selectedAgent, category:e.target.value}; setSelectedAgent(upd);}} className="mt-2 w-full bg-transparent font-bold text-[13px] outline-none">
                     {CATS.filter(c=>c.id!=='all').map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
                 </div>
-                <div className="p-4 rounded-2xl bg-white border border-black/5">
-                  <div className="text-[10px] font-mono tracking-widest text-black/30">TÝM</div>
+                <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
+                  <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">TÝM</div>
                   <select value={selectedAgent.team} onChange={e=>{const upd={...selectedAgent, team:e.target.value}; setSelectedAgent(upd);}} className="mt-2 w-full bg-transparent font-bold text-[13px] outline-none">
                     {TEAMS.map(t=><option key={t} value={t}>{t}</option>)}
                   </select>
@@ -341,11 +344,11 @@ export default function AgentsPro() {
               <div>
                 <div className="flex items-center justify-between">
                   <div className="text-[11px] font-bold tracking-[0.2em]">DOKUMENTY • {selectedAgent.folder}</div>
-                  <div className="text-[10px] font-mono text-black/30">{selectedAgent.docs.length} souborů</div>
+                  <div className="text-[10px] font-mono text-[#9a9a9a]/70">{selectedAgent.docs.length} souborů</div>
                 </div>
                 <div className="mt-3 space-y-2">
                   {selectedAgent.docs.map((doc, idx)=>(
-                    <div key={idx} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-black/5">
+                    <div key={idx} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#3a3a3a] border border-[#444]">
                       <span className="text-[14px]">📄</span>
                       <span className="text-[12px] font-mono font-bold">{doc}</span>
                     </div>
@@ -356,13 +359,13 @@ export default function AgentsPro() {
               <div>
                 <div className="flex items-center justify-between">
                   <div className="text-[11px] font-bold tracking-[0.2em]">SKILLS</div>
-                  <div className="text-[10px] font-mono text-black/30">{selectedAgent.skills.length} aktivních</div>
+                  <div className="text-[10px] font-mono text-[#9a9a9a]/70">{selectedAgent.skills.length} aktivních</div>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {ALL_SKILLS.map(s=>{
                     const active = selectedAgent.skills.includes(s.id)
                     return (
-                      <button key={s.id} onClick={()=>toggleSkill(s.id)} className={`px-4 py-2 rounded-full text-[11px] font-bold tracking-widest border transition ${active?'bg-black text-white border-black':'bg-white border-black/10 text-black/40 hover:border-black/30'}`}>
+                      <button key={s.id} onClick={()=>toggleSkill(s.id)} className={`px-4 py-2 rounded-full text-[11px] font-bold tracking-widest border transition ${active? 'bg-[#12a4ff] text-white border-[#12a4ff]':'bg-[#3a3a3a] border-[#444] text-[#9a9a9a] hover:border-[#444]'}`}>
                         {s.name.toUpperCase()} {active?'✓':'+'}
                       </button>
                     )
@@ -378,7 +381,7 @@ export default function AgentsPro() {
                   {ALL_TOOLS.map(t=>{
                     const active = selectedAgent.tools.includes(t.id)
                     return (
-                      <button key={t.id} onClick={()=>toggleTool(t.id)} className={`px-3.5 py-2 rounded-full text-[11px] font-mono border flex items-center gap-1.5 transition ${active?'bg-black text-white border-black':'bg-white border-black/10 text-black/40'}`}>
+                      <button key={t.id} onClick={()=>toggleTool(t.id)} className={`px-3.5 py-2 rounded-full text-[11px] font-mono border flex items-center gap-1.5 transition ${active? 'bg-[#12a4ff] text-white border-[#12a4ff]':'bg-[#3a3a3a] border-[#444] text-[#9a9a9a]'}`}>
                         <span>{t.icon}</span>{t.id} {active?'•':''}
                       </button>
                     )
@@ -389,7 +392,7 @@ export default function AgentsPro() {
               <div>
                 <div className="flex items-center justify-between">
                   <div className="text-[11px] font-bold tracking-[0.2em]">PŘIŘAZENO • typ-číslo</div>
-                  <div className="text-[10px] font-mono text-black/30">/add 3-1 skill • /add 5-1 CLI • /add 4-1 MCP • /remove</div>
+                  <div className="text-[10px] font-mono text-[#9a9a9a]/70">/add 3-1 skill • /add 5-1 CLI • /add 4-1 MCP • /remove</div>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {selectedAgent.skills.filter(s => capNums.skill?.[s] != null).map((s, i) => (
@@ -411,8 +414,8 @@ export default function AgentsPro() {
               <div>
                 <div className="text-[11px] font-bold tracking-[0.2em]">WORKFLOW & PROMPT</div>
                 <div className="mt-3 space-y-3">
-                  <input value={selectedAgent.workflow} onChange={e=>{const upd={...selectedAgent, workflow:e.target.value}; setSelectedAgent(upd);}} className="w-full px-4 py-3 rounded-xl border border-black/10 text-[12px] font-mono" placeholder="workflow id" />
-                  <textarea value={selectedAgent.prompt} onChange={e=>{const upd={...selectedAgent, prompt:e.target.value}; setSelectedAgent(upd);}} rows={6} className="w-full px-4 py-3 rounded-xl border border-black/10 text-[12px] font-mono" placeholder="System prompt..." />
+                  <input value={selectedAgent.workflow} onChange={e=>{const upd={...selectedAgent, workflow:e.target.value}; setSelectedAgent(upd);}} className="w-full px-4 py-3 rounded-xl border border-[#444] text-[12px] font-mono" placeholder="workflow id" />
+                  <textarea value={selectedAgent.prompt} onChange={e=>{const upd={...selectedAgent, prompt:e.target.value}; setSelectedAgent(upd);}} rows={6} className="w-full px-4 py-3 rounded-xl border border-[#444] text-[12px] font-mono" placeholder="System prompt..." />
                 </div>
               </div>
 
@@ -420,14 +423,14 @@ export default function AgentsPro() {
                 <button
                   onClick={saveAgent}
                   disabled={saveStatus === 'saving'}
-                  className="flex-1 py-3.5 rounded-full bg-black text-white text-[11px] font-black tracking-widest hover:bg-black/80 transition disabled:opacity-50"
+                  className="flex-1 py-3.5 rounded-full bg-[#444] text-[#f0f0f0] text-[11px] font-black tracking-widest hover:bg-black/80 transition disabled:opacity-50"
                 >
                   {saveStatus === 'saving' && 'UKLÁDÁM...'}
                   {saveStatus === 'saved'  && '✓ ULOŽENO'}
                   {saveStatus === 'error'  && '✕ CHYBA'}
                   {saveStatus === 'idle'   && 'ULOŽIT ZMĚNY → data/agents/'}
                 </button>
-                <button onClick={()=>deleteAgent(selectedAgent.id)} className="px-6 py-3.5 rounded-full border border-black/10 text-[11px] font-bold tracking-widest text-black/40 hover:text-[#ff4400] hover:border-[#ff4400]/30 transition">
+                <button onClick={()=>deleteAgent(selectedAgent.id)} className="px-6 py-3.5 rounded-full border border-[#444] text-[11px] font-bold tracking-widest text-[#9a9a9a] hover:text-[#9a9a9a] hover:border-[#444]/30 transition">
                   SMAZAT
                 </button>
               </div>
@@ -441,14 +444,14 @@ export default function AgentsPro() {
       {/* NOVÝ AGENT — AgentBuilder overlay */}
       {showNew && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-6">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 rounded-2xl bg-[#0a0a0a] border border-white/10 shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 rounded-2xl bg-[#444] border border-white/10 shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
             <button
               onClick={() => setShowNew(false)}
-              className="absolute top-4 right-4 text-xl leading-none transition-opacity opacity-30 hover:opacity-80 text-white"
+              className="absolute top-4 right-4 text-xl leading-none transition-opacity opacity-30 hover:opacity-80 text-[#f0f0f0]"
             >
               ✕
             </button>
-            <div className="text-[10px] tracking-[0.4em] font-bold mb-6 text-white/30">
+            <div className="text-[10px] tracking-[0.4em] font-bold mb-6 text-[#9a9a9a]/70">
               AGENT BUILDER
             </div>
             <AgentBuilder

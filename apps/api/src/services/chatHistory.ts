@@ -1,13 +1,12 @@
 // D:\dev\loyo-os\apps\api\src\services\chatHistory.ts
 // LOYO OS // 14denní rotující historie chatu + audit log
 import { readFile, writeFile, mkdir, appendFile } from 'node:fs/promises'
-import { join, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 import { getDb } from '../lib/connection'
+import { DATA_DIR } from '../lib/dataPaths.js'
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
-const HISTORY_DIR = resolve(__dirname, '../../../../data/chat_history')
-const AUDIT_FILE  = resolve(__dirname, '../../../../data/chat_history/audit.jsonl')
+const HISTORY_DIR = join(DATA_DIR, 'chat_history')
+const AUDIT_FILE  = join(HISTORY_DIR, 'audit.jsonl')
 
 const DAY_NAMES = ['nedele', 'pondeli', 'utery', 'streda', 'ctvrtek', 'patek', 'sobota']
 

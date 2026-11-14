@@ -1,9 +1,9 @@
 // apps/api/src/services/queue.ts
-// ÚKOL 10: Fronta úkolů file-based - data/queue/pending.json - bez Redis
+// ÚKOL 10 + 11: Fronta s p-queue (concurrency 1) + file persistence pro recovery
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
-import { join } from 'node:path'
 import { randomUUID } from 'node:crypto'
-import { QUEUE_DIR, QUEUE_PENDING_FILE } from '../lib/dataPaths'
+import { QUEUE_DIR, QUEUE_PENDING_FILE } from '../lib/dataPaths.js'
+import PQueue from 'p-queue'
 
 export type JobStatus = 'pending' | 'running' | 'done' | 'failed'
 export interface QueuedJob {
@@ -14,6 +14,8 @@ export interface QueuedJob {
   status: JobStatus
   runId?: string
 }
+
+export const jobQueue = new PQueue({ concurrency: 1, autoStart: true })
 
 async function ensureDir() { await mkdir(QUEUE_DIR, { recursive: true }) }
 
@@ -51,8 +53,7 @@ export async function markJobStatus(id: string, status: JobStatus, runId?: strin
 }
 
 export async function getQueueLength(): Promise<number> {
-  const jobs = await loadQueue()
-  return jobs.filter(j => j.status === 'pending').length
+  return jobQueue.size + jobQueue.pending
 }
 
 export async function cleanupDoneJobs(): Promise<void> {
@@ -61,7 +62,22 @@ export async function cleanupDoneJobs(): Promise<void> {
   if (filtered.length!== jobs.length) await saveQueue(filtered)
 }
 
-// in-memory lock - file je jen persistence
-let _isProcessing = false
-export function isQueueBusy(): boolean { return _isProcessing }
-export function setQueueBusy(v: boolean) { _isProcessing = v }
+export function isQueueBusy(): boolean { return jobQueue.pending > 0 }
+export function setQueueBusy(_v: boolean) {}
+export function getQueueStats() { return { size: jobQueue.size, pending: jobQueue.pending, isIdle: jobQueue.size === 0 && jobQueue.pending === 0 } }
+
+export async function rehydrateQueueFromDisk(runCore: (msg: string, runId: string, steps: string[]) => Promise<any>) {
+  const jobs = (await loadQueue()).filter(j => j.status === 'pending')
+  for (const job of jobs) {
+    jobQueue.add(async () => {
+      const runId = job.runId || `${new Date().toISOString()}_${job.id.slice(0,8)}`
+      try {
+        await markJobStatus(job.id, 'running', runId)
+        await runCore(job.message, runId, [])
+        await markJobStatus(job.id, 'done', runId)
+      } catch {
+        await markJobStatus(job.id, 'failed', runId)
+      }
+    }, { priority: 10 - job.priority })
+  }
+}

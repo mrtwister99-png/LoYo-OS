@@ -1,17 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* LoYo OS — ROYAL DARK
+   Plochy:  #2b2b2b pozadí · #353535 panel · #3a3a3a karta · #444 border
+   Text:    #f0f0f0 primární · #9a9a9a sekundární
+   Akcent:  #12a4ff (~10 %: primární tlačítko, aktivní stav, progress, jedno slovo)
+   Červená: #ff1e00 (~4 %: live tečka, upozornění, chyby, mazání)
+   Zlatá:   #c9a646 (~1 %: drobné royal detaily – verze, odznaky, podpis)
+   Font:    Playfair Display = nadpisy + logo, Inter = UI, JetBrains Mono = kód/čísla */
 
 :root {
-  --bg: #ededed;
-  --panel: #dbdbdb;
-  --blue: #040b8d;
-  --red: #ac0001;
-  --gold: #CDA24D;
-  --card: #FFFFFF;
-  --black: #0A0A0A;
+  --bg: #2b2b2b;
+  --surface: #353535;
+  --card: #3a3a3a;
+  --line: #444444;
+  --text: #f0f0f0;
+  --text-soft: #9a9a9a;
+  --blue: #12a4ff;
+  --live: #ff1e00;
+  --royal-gold: #c9a646;
+
+  /* zpětná kompatibilita se starými názvy */
+  --panel: var(--surface);
+  --red: var(--live);
+  --gold: var(--royal-gold);
+  --black: var(--text);
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-ui: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  color-scheme: dark;
 }
 
 /* KURZOR */
@@ -21,13 +36,60 @@
 
 html, body, #root {
   background: var(--bg);
-  color: var(--blue);
-  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.mono { font-family: 'JetBrains Mono', monospace; }
+/* Royal serif – nadpisy a logo */
+h1, h2, h3, h4, .font-display, .royal-title {
+  font-family: var(--font-display) !important;
+  letter-spacing: 0.01em;
+  font-weight: 700;
+}
+h1, h2, h3, h4 { text-transform: none; }
 
-* { scrollbar-width: thin; scrollbar-color: var(--blue) transparent; }
+.mono { font-family: var(--font-mono); }
+
+/* zlatý royal detail (~1 %) */
+.royal-gold { color: var(--royal-gold); }
+
+/* červená – alert / chyba / smazat (~4 %) */
+.royal-danger { color: var(--live); }
+.royal-danger:hover { color: #fff; background: var(--live); border-color: var(--live) !important; }
+
+/* zvýrazněné slovo */
+.royal-accent { color: var(--blue); }
+
+/* live tečka */
+.live-dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 999px;
+  background: var(--live); box-shadow: 0 0 6px rgba(255,30,0,0.6);
+  animation: livePulse 1.6s ease-in-out infinite;
+}
+@keyframes livePulse { 0%,100% { opacity: 1 } 50% { opacity: 0.35 } }
+
+/* formuláře */
+input, textarea, select {
+  background-color: var(--card);
+  color: var(--text);
+  border-color: var(--line);
+}
+input::placeholder, textarea::placeholder { color: var(--text-soft); opacity: 0.7; }
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--blue) !important; box-shadow: 0 0 0 1px var(--blue); }
+::selection { background: rgba(18,164,255,0.35); color: #fff; }
+
+/* scrollbar – šedý, modrý jen při hoveru */
+* { scrollbar-width: thin; scrollbar-color: #4a4a4a transparent; }
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-thumb { background: #040b8d; border-radius: 999px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #4a4a4a; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--blue); }
+
+/* Playfair nesnese 900 + široký tracking – nadpisy držíme elegantní */
+h1, h2, h3, h4, .font-display {
+  font-weight: 700 !important;
+  letter-spacing: 0.005em !important;
+}
+h1 { line-height: 1.1; }

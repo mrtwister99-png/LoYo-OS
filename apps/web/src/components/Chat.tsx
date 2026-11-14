@@ -282,8 +282,8 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
       style={{
         ...(docked
           ? { position: 'relative' as const, width: '100%', height: '100%', border: 'none', boxShadow: 'none' }
-          : { position: 'fixed' as const, left: pos.x, top: pos.y, width: size.w, height: size.h, border: '2px solid black', boxShadow: '6px 6px 0px black', zIndex: 100 }),
-        background: '#e1e2e3',
+          : { position: 'fixed' as const, left: pos.x, top: pos.y, width: size.w, height: size.h, border: '1px solid black', boxShadow: '6px 6px 0px black', zIndex: 100 }),
+        background: '#3a3a3a',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
@@ -296,7 +296,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 10px', height: 38,
-          background: '#dbdbdb', borderBottom: '2px solid black',
+          background: '#444', borderBottom: '1px solid black',
           flexShrink: 0,
           cursor: docked ? 'default' : 'grab',
           userSelect: 'none',
@@ -306,22 +306,22 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
           {!docked && <span style={{ fontSize: 12, cursor: 'grab' }}>⠿</span>}
           <span style={{
             width: 8, height: 8, borderRadius: '50%',
-            background: '#040b8d',
+            background: '#12a4ff',
             display: 'inline-block',
             animation: isChatLoading ? 'onlineBlink 0.5s step-start infinite' : 'onlinePulse 2.5s ease-in-out infinite',
           }} />
           <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.05em' }}>
             Mary{docked? '' : ` • ${size.w}x${size.h}`}
           </span>
-          {isChatLoading && <span style={{ fontSize: 10, color: '#ac0001', fontWeight: 700, animation: 'onlineBlink 0.8s step-start infinite' }}>píše…</span>}
+          {isChatLoading && <span style={{ fontSize: 10, color: '#9a9a9a', fontWeight: 700, animation: 'onlineBlink 0.8s step-start infinite' }}>píše…</span>}
         </div>
         {docked ? (
           <button
             onClick={e => { e.stopPropagation(); onClose() }}
             title="Minimalizovat"
             style={{
-              width: 28, height: 22, border: '1.5px solid black',
-              background: 'white', color: 'black', cursor: 'pointer',
+              width: 28, height: 22, border: '1.1px solid black',
+              background: '#3a3a3a', color: '#f0f0f0', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 14, fontWeight: 900, lineHeight: 1,
               boxShadow: '1.5px 1.5px 0px black',
@@ -341,7 +341,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
               localStorage.removeItem('loyo-chat-pos-size')
             }}
             title="Reset pozice"
-            style={{ width: 24, height: 20, border: '1px solid black', background: '#CDA24D', fontSize: 10, fontWeight: 900, cursor: 'pointer' }}
+            style={{ width: 24, height: 20, border: '1px solid black', background: '#444', fontSize: 10, fontWeight: 900, cursor: 'pointer' }}
           >
             ⊙
           </button>
@@ -349,7 +349,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
             onClick={e => { e.stopPropagation(); onClose() }}
             style={{
               width: 24, height: 20, border: '1px solid black',
-              background: '#ac0001', color: 'white', cursor: 'pointer',
+              background: '#444', color: '#f0f0f0', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 11, fontWeight: 900,
             }}
@@ -363,16 +363,16 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
       <div style={{
         flex: 1, overflowY: 'auto', padding: '10px',
         display: 'flex', flexDirection: 'column', gap: 8,
-        fontFamily: 'monospace', fontSize: 11, lineHeight: 1.4,
-        background: '#ededed',
+        fontFamily: "'JetBrains Mono', monospace", fontSize: 11, lineHeight: 1.4,
+        background: '#2b2b2b',
       }}>
         {chatMessages.map((msg, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: msg.from === 'me' ? 'flex-end' : 'flex-start' }}>
             <div style={{
-              maxWidth: '82%', padding: '6px 10px', border: '1.5px solid black',
+              maxWidth: '82%', padding: '6px 10px', border: '1.1px solid black',
               whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-              background: msg.from === 'me' ? '#040b8d' : 'white',
-              color: msg.from === 'me' ? 'white' : 'black',
+              background: msg.from === 'me' ? '#12a4ff' : '#3a3a3a',
+              color: msg.from === 'me' ? '#f0f0f0' : '#f0f0f0',
               boxShadow: '2px 2px 0px black',
               fontSize: 11,
             }}>
@@ -381,10 +381,10 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
           </div>
         ))}
         {picker && (
-          <div style={{ border: '2px solid #040b8d', background: 'white', boxShadow: '3px 3px 0px black', maxHeight: 220, overflowY: 'auto' }}>
-            <div style={{ padding: '6px 8px', background: '#040b8d', color: 'white', fontWeight: 900, fontSize: 10 }}>↑↓ vyber • Enter potvrdí • Esc zavře — {picker.type} ({picker.items.length})</div>
+          <div style={{ border: '1px solid #12a4ff', background: '#3a3a3a', boxShadow: '3px 3px 0px black', maxHeight: 220, overflowY: 'auto' }}>
+            <div style={{ padding: '6px 8px', background: '#12a4ff', color: '#f0f0f0', fontWeight: 900, fontSize: 10 }}>↑↓ vyber • Enter potvrdí • Esc zavře — {picker.type} ({picker.items.length})</div>
             {picker.items.map((it: any, idx: number) => (
-              <div key={idx} onClick={() => { const v = it.number || it.id; sendWithValue(v) }} style={{ padding: '5px 8px', cursor: 'pointer', background: idx === pickerIdx? '#CDA24D' : 'white', borderBottom: '1px solid #ddd', fontWeight: idx === pickerIdx? 900 : 400 }}>
+              <div key={idx} onClick={() => { const v = it.number || it.id; sendWithValue(v) }} style={{ padding: '5px 8px', cursor: 'pointer', background: idx === pickerIdx? '#444' : '#3a3a3a', borderBottom: '1px solid #444', fontWeight: idx === pickerIdx? 900 : 400 }}>
                 <span style={{ opacity: 0.6 }}>[{it.number}]</span> {it.id} {it.displayName && it.displayName!== it.id? `— ${it.displayName}` : ''}
               </div>
             ))}
@@ -392,7 +392,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
         )}
         {isChatLoading && (
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-            <div style={{ padding: '6px 10px', border: '1.5px solid black', background: 'white', fontSize: 10 }}>píše…</div>
+            <div style={{ padding: '6px 10px', border: '1.1px solid black', background: '#3a3a3a', fontSize: 10 }}>píše…</div>
           </div>
         )}
         <div ref={chatEndRef} />
@@ -404,8 +404,8 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
           to   { opacity: 1; transform: translateY(0) scale(1); }
         }
         @keyframes onlinePulse {
-          0%, 100% { box-shadow: 0 0 4px #040b8d; opacity: 1; }
-          50%       { box-shadow: 0 0 10px #040b8d; opacity: 0.8; }
+          0%, 100% { box-shadow: 0 0 4px #12a4ff; opacity: 1; }
+          50%       { box-shadow: 0 0 10px #12a4ff; opacity: 0.8; }
         }
         @keyframes onlineBlink {
           0%, 49% { opacity: 1; }
@@ -415,8 +415,8 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
 
       <div style={{
         display: 'flex', alignItems: 'center', gap: 6,
-        padding: '8px', borderTop: '2px solid black',
-        background: '#dbdbdb', flexShrink: 0,
+        padding: '8px', borderTop: '1px solid black',
+        background: '#444', flexShrink: 0,
       }}>
         <input
           ref={chatInputRef}
@@ -433,17 +433,17 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
           }}
           placeholder={picker? `Vyber ${picker.type} ↑↓ Enter — nebo piš...` : "Napiš… /note /task /find /edit"}
           style={{
-            flex: 1, background: 'white', color: 'black',
-            fontSize: 11, fontFamily: 'monospace', padding: '6px 8px',
-            border: '1.5px solid black', outline: 'none',
+            flex: 1, background: '#3a3a3a', color: '#f0f0f0',
+            fontSize: 11, fontFamily: "'JetBrains Mono', monospace", padding: '6px 8px',
+            border: '1.1px solid black', outline: 'none',
           }}
         />
         <button
           onClick={sendChatMessage}
           style={{
-            background: 'black', color: '#ededed', fontSize: 10, fontWeight: 900,
-            padding: '6px 10px', border: '1.5px solid black', cursor: 'pointer',
-            boxShadow: '2px 2px 0px #040b8d',
+            background: '#444', color: '#f0f0f0', fontSize: 10, fontWeight: 900,
+            padding: '6px 10px', border: '1.1px solid black', cursor: 'pointer',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
           }}
         >
           SEND
@@ -461,9 +461,9 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
           width: 18,
           height: 18,
           cursor: 'nwse-resize',
-          background: '#CDA24D',
-          borderLeft: '1.5px solid black',
-          borderTop: '1.5px solid black',
+          background: '#444',
+          borderLeft: '1.1px solid black',
+          borderTop: '1.1px solid black',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

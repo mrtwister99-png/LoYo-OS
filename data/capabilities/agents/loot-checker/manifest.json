@@ -1,0 +1,31 @@
+{
+  "id": "loot-checker",
+  "type": "agent",
+  "displayName": "Loot Checker - Duplicity & Loot Sorter",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "KROK 1 (hotový, BEZ modelu): duplicity podle názvu (1)(2) -> přesun do data/kos + presunute_*.txt. KROK 2 (příště): vision třídění přes Ollama podle názvu + popisu složek z UI.",
+  "runtime": "node",
+  "entrypoint": "./01_CORE_IDENTITY.md",
+  "packageDir": "agents/loot-checker",
+  "permissions": [
+    "fs:read:source_folder/*",
+    "fs:write:data/kos/*",
+    "fs:write:data/capabilities/agents/loot-checker/*"
+  ],
+  "tools": [
+    "fs_read",
+    "fs_move"
+  ],
+  "tags": [
+    "loot-checker",
+    "loot",
+    "duplicity",
+    "kos",
+    "soubory",
+    "agent"
+  ],
+  "createdAt": "2026-11-14T00:00:00Z",
+  "updatedAt": "2026-11-14T00:00:00Z",
+  "number": 18
+}

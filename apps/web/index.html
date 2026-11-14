@@ -1,4 +1,25 @@
 <!doctype html>
-<html><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>HUNTER OS</title>
+<html lang="cs"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>LOYO OS</title>
+<meta name="theme-color" content="#2b2b2b" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <script src="https://cdn.tailwindcss.com"></script>
-</head><body class="bg-[#0a0a0a]"><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>
+<script>
+  // LoYo OS — Royal Dark
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          royal: { bg: '#2b2b2b', surface: '#353535', card: '#3a3a3a', line: '#444444', text: '#f0f0f0', soft: '#9a9a9a', blue: '#12a4ff', live: '#ff1e00', gold: '#c9a646' },
+        },
+        fontFamily: {
+          display: ['"Playfair Display"', 'Georgia', 'serif'],
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  }
+</script>
+</head><body class="bg-[#2b2b2b] text-[#f0f0f0]"><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>

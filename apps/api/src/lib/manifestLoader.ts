@@ -48,7 +48,7 @@ export async function reindexCapabilities(): Promise<ManifestCache> {
   for (const f of files) {
     try {
       const raw = readFileSync(f, 'utf8');
-      const json = JSON.parse(raw) as any;
+      let json = JSON.parse(raw) as any;
       json._filePath = f;
       if (!json.id) json.id = f.split(/[\\/]/).slice(-2, -1)[0];
       if (!json.type) {
@@ -56,10 +56,14 @@ export async function reindexCapabilities(): Promise<ManifestCache> {
         else if (f.includes('cli')) json.type = 'cli';
         else json.type = 'unknown';
       }
-      // Zod validace (měkká): nevalidní manifest zůstane načtený, ale objeví se v "errors" (/api/capabilities)
+      // Zod validace z @loyo/core - jediný zdroj pravdy
       if (json.type !== 'api') {
         const check = CapabilityManifestSchema.safeParse(json);
-        if (!check.success) errors.push({ path: f, error: 'schema: ' + check.error.issues.slice(0, 3).map((i: any) => `${i.path.join('.') || '(kořen)'}: ${i.message}`).join('; ') });
+        if (!check.success) {
+          errors.push({ path: f, error: 'schema: ' + check.error.issues.slice(0, 3).map((i: any) => `${i.path.join('.') || '(kořen)'}: ${i.message}`).join('; ') });
+        } else {
+          json = check.data as any;
+        }
       }
       caps.push(json as CapabilityManifest);
     } catch (e: any) {
@@ -175,3 +179,4 @@ export function getAllSync(): CapabilityManifest[] {
   ensureDb();
   return getAllFromDb();
 }
+  

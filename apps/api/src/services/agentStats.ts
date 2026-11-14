@@ -1,12 +1,8 @@
-// D:\dev\loyo-os\apps\api\src\services\agentStats.ts
-// LOYO OS // Živé statistiky agentů — počet úkolů dnes + čas posledního běhu
 import * as fs from 'fs/promises'
-import { resolve } from 'path'
-import { fileURLToPath } from 'url'
+import { join } from 'node:path'
+import { DATA_DIR } from '../lib/dataPaths.js'
 
-// Cesta odvozená od umístění souboru — žádný hardcoded disk
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
-const INDEX_PATH = resolve(__dirname, '../../../../data/capabilities/agents/index.json')
+const INDEX_PATH = join(DATA_DIR, 'capabilities/agents/index.json')
 
 interface AgentRecord {
   id: string

@@ -16,9 +16,9 @@ type ActivityEvent = {
 }
 
 const AGENT_COLORS: Record<string, string> = {
-  Mary_Jane: '#1000a1',
-  Lubor_Nehleda: '#ae1710',
-  SYSTEM: '#7a7a7a',
+  Mary_Jane: '#12a4ff',
+  Lubor_Nehleda: '#f0f0f0',
+  SYSTEM: '#9a9a9a',
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -112,7 +112,7 @@ export default function Activity() {
   const agents = Array.from(new Set(events.map(e => e.agent)))
 
   return (
-    <div className="p-6 md:p-10 text-white">
+    <div className="p-6 md:p-10 text-[#f0f0f0]">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-black tracking-[0.15em]">ACTIVITY</h1>
@@ -122,20 +122,20 @@ export default function Activity() {
           <select
             value={filterAgent}
             onChange={e => setFilterAgent(e.target.value)}
-            className="bg-white/10 text-white text-xs font-mono px-3 py-2 rounded outline-none border border-white/10"
+            className="bg-white/10 text-[#f0f0f0] text-xs font-mono px-3 py-2 rounded outline-none border border-white/10"
           >
             <option value="all">Všichni agenti</option>
             {agents.map(a => <option key={a} value={a}>{a.replace('_', ' ')}</option>)}
           </select>
           <button
             onClick={load}
-            className="text-xs font-bold px-3 py-2 rounded bg-white/10 hover:bg-white/20 transition-colors"
+            className="text-xs font-bold px-3 py-2 rounded bg-white/10 hover:bg-white/10 transition-colors"
           >
             ⟳ Obnovit
           </button>
           <button
             onClick={clearFeed}
-            className="text-xs font-bold px-3 py-2 rounded bg-[#ae1710] hover:bg-[#8a1108] transition-colors"
+            className="text-xs font-bold px-3 py-2 rounded bg-[#444] hover:bg-[#444] transition-colors"
           >
             Vymazat
           </button>
@@ -143,7 +143,7 @@ export default function Activity() {
       </div>
 
       {loading && <div className="text-sm opacity-50 font-mono">Načítám...</div>}
-      {error && <div className="text-sm text-[#ae1710] font-mono">{error}</div>}
+      {error && <div className="text-sm text-[#9a9a9a] font-mono">{error}</div>}
       {!loading && !error && events.length === 0 && (
         <div className="text-sm opacity-40 font-mono border border-white/10 rounded p-6 text-center">
           Zatím žádná aktivita. Napiš Mary zprávu v chatu a objeví se tady.
@@ -154,12 +154,12 @@ export default function Activity() {
         {events.map((ev, idx) => (
           <div
             key={ev.id}
-            className="flex items-start gap-4 px-4 py-3 bg-white/[0.03] border border-white/10 rounded hover:border-white/30 transition-colors border-l-4"
+            className="flex items-start gap-4 px-4 py-3 bg-white/[0.03] border border-white/10 rounded hover:border-white/30 transition-colors border-l"
             style={{ borderLeftColor: ACTIVITY_COLOR, background: `linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.03) 70%, ${ACTIVITY_COLOR}22 100%)` }}
           >
             <span
               className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0"
-              style={{ background: AGENT_COLORS[ev.agent] || '#7a7a7a' }}
+              style={{ background: AGENT_COLORS[ev.agent] || '#9a9a9a' }}
             />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
@@ -191,7 +191,7 @@ export default function Activity() {
           onClick={() => setLogModal(null)}
         >
           <div
-            className="bg-[#111] border border-white/20 rounded-lg max-w-3xl w-full max-h-[80vh] overflow-auto p-6"
+            className="bg-[#444] border border-white/20 rounded-lg max-w-3xl w-full max-h-[80vh] overflow-auto p-6"
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -199,20 +199,20 @@ export default function Activity() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => deleteRunLog(logModal.runId)}
-                  className="text-xs font-bold px-2 py-1 rounded bg-[#ae1710] hover:bg-[#8a1108]"
+                  className="text-xs font-bold px-2 py-1 rounded bg-[#444] hover:bg-[#444]"
                 >
                   🗑 Smazat log
                 </button>
                 <button
                   onClick={() => setLogModal(null)}
-                  className="text-xs font-bold px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+                  className="text-xs font-bold px-2 py-1 rounded bg-white/10 hover:bg-white/10"
                 >
                   ✕
                 </button>
               </div>
             </div>
             {logModal.loading && <div className="text-sm opacity-50 font-mono">Načítám...</div>}
-            {logModal.error && <div className="text-sm text-[#ae1710] font-mono">{logModal.error}</div>}
+            {logModal.error && <div className="text-sm text-[#9a9a9a] font-mono">{logModal.error}</div>}
             {logModal.data && (
               <pre className="text-xs font-mono whitespace-pre-wrap break-words opacity-90">
                 {JSON.stringify(logModal.data, null, 2)}

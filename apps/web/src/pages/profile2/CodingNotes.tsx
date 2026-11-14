@@ -128,12 +128,12 @@ export default function CodingNotes({ embedded = false }: Props) {
       <div className="grid grid-cols-12 gap-3">
         <div className="col-span-5">
           <div className="flex gap-2 mb-2">
-            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="hledat coding..." className="flex-1 px-2 py-2 bg-[#ededed] border-2 border-black text-xs outline-none" />
-            <button onClick={handleNew} className="px-3 bg-black text-white text-xs font-black border-2 border-black" style={{ background: profile2Colors.accent }}>+ NEW</button>
+            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="hledat coding..." className="flex-1 px-2 py-2 bg-[#2b2b2b] border border-[#444] text-xs outline-none" />
+            <button onClick={handleNew} className="px-3 bg-[#444] text-[#f0f0f0] text-xs font-black border border-[#444]" style={{ background: profile2Colors.accent }}>+ NEW</button>
           </div>
-          <div className="max-h-[300px] overflow-auto border-2 border-black divide-y divide-black/10 bg-white">
+          <div className="max-h-[300px] overflow-auto border border-[#444] divide-y divide-[#444] bg-[#3a3a3a]">
             {filtered.map(n=>(
-              <div key={n.file_name} onClick={()=>safeSetSelectedId(n.file_name)} className={`p-2 cursor-pointer text-xs border-l-4 ${selectedId===n.file_name?'bg-black text-white':'hover:bg-[#ededed] bg-white'}`} style={{ borderLeftColor: profile2Colors.accent }}>
+              <div key={n.file_name} onClick={()=>safeSetSelectedId(n.file_name)} className={`p-2 cursor-pointer text-xs border-l ${selectedId===n.file_name? 'bg-[#12a4ff] text-white':'hover:bg-[#2b2b2b] bg-[#3a3a3a]'}`} style={{ borderLeftColor: profile2Colors.accent }}>
                 <div className="font-bold truncate">{n.title}</div>
                 <div className="text-[10px] opacity-60 truncate">{n.file_name}</div>
               </div>
@@ -142,29 +142,29 @@ export default function CodingNotes({ embedded = false }: Props) {
         </div>
         <div className="col-span-7">
           {selected ? (
-            <div className="bg-[#ededed] border-2 border-black p-3">
+            <div className="bg-[#2b2b2b] border border-[#444] p-3">
               <input value={editingTitle} onChange={e=>setEditingTitle(e.target.value)} className="w-full font-black text-sm bg-transparent outline-none mb-2" />
-              <textarea value={editingContent} onChange={e=>setEditingContent(e.target.value)} className="w-full h-[200px] text-xs font-mono bg-white border border-black p-2 outline-none resize-none" />
-              <div className="flex justify-between mt-2 text-[10px]"><span>{autoSaveState}</span><button onClick={handleSave} className="px-3 py-1 text-white font-bold" style={{ background: profile2Colors.accent }}>ULOŽIT</button></div>
+              <textarea value={editingContent} onChange={e=>setEditingContent(e.target.value)} className="w-full h-[200px] text-xs font-mono bg-[#3a3a3a] border border-[#444] p-2 outline-none resize-none" />
+              <div className="flex justify-between mt-2 text-[10px]"><span>{autoSaveState}</span><button onClick={handleSave} className="px-3 py-1 text-[#f0f0f0] font-bold" style={{ background: profile2Colors.accent }}>ULOŽIT</button></div>
             </div>
-          ) : <div className="h-[240px] flex items-center justify-center border-2 border-dashed text-xs opacity-30">Vyber coding note</div>}
+          ) : <div className="h-[240px] flex items-center justify-center border border-dashed text-xs opacity-30">Vyber coding note</div>}
         </div>
       </div>
     )
   }
 
   return (
-    <div className="bg-white border-2 border-black p-4">
+    <div className="bg-[#3a3a3a] border border-[#444] p-4">
       <div className="flex justify-between items-center mb-3">
         <h3 className="font-black text-xs" style={{ color: profile2Colors.accent }}>CODING NOTES • P2 • {notes.length}</h3>
-        <button onClick={handleNew} className="px-4 py-2 text-xs font-black text-white border-2 border-black" style={{ background: profile2Colors.accent }}>+ NOVÁ CODING</button>
+        <button onClick={handleNew} className="px-4 py-2 text-xs font-black text-[#f0f0f0] border border-[#444]" style={{ background: profile2Colors.accent }}>+ NOVÁ CODING</button>
       </div>
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-4">
-          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Hledat..." className="w-full px-3 py-2 bg-[#ededed] border-2 border-black text-xs mb-2 outline-none" />
-          <div className="divide-y border-2 border-black max-h-[500px] overflow-auto">
+          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Hledat..." className="w-full px-3 py-2 bg-[#2b2b2b] border border-[#444] text-xs mb-2 outline-none" />
+          <div className="divide-y border border-[#444] max-h-[500px] overflow-auto">
             {filtered.map(n=>(
-              <div key={n.file_name} onClick={()=>safeSetSelectedId(n.file_name)} className={`p-3 cursor-pointer border-l-4 ${selectedId===n.file_name?'bg-black text-white':'bg-white hover:bg-[#ededed]'}`} style={{ borderLeftColor: profile2Colors.accent }}>
+              <div key={n.file_name} onClick={()=>safeSetSelectedId(n.file_name)} className={`p-3 cursor-pointer border-l ${selectedId===n.file_name? 'bg-[#12a4ff] text-white':'bg-[#3a3a3a] hover:bg-[#2b2b2b]'}`} style={{ borderLeftColor: profile2Colors.accent }}>
                 <div className="font-bold text-xs truncate">{n.title}</div>
                 <div className="text-[10px] opacity-60">{n.file_name}</div>
               </div>
@@ -173,12 +173,12 @@ export default function CodingNotes({ embedded = false }: Props) {
         </div>
         <div className="col-span-8">
           {selected ? (
-            <div className="bg-[#ededed] border-2 border-black p-4 min-h-[400px] flex flex-col">
+            <div className="bg-[#2b2b2b] border border-[#444] p-4 min-h-[400px] flex flex-col">
               <input value={editingTitle} onChange={e=>setEditingTitle(e.target.value)} className="text-lg font-black outline-none bg-transparent mb-2" />
-              <textarea value={editingContent} onChange={e=>setEditingContent(e.target.value)} className="flex-1 w-full font-mono text-xs outline-none resize-none min-h-[300px] bg-white border border-black p-3" />
-              <div className="flex justify-between mt-3"><button onClick={handleDelete} className="text-[#ac0001] text-xs font-bold">SMAZAT</button><button onClick={handleSave} className="px-6 py-2 text-xs font-black text-white border-2 border-black" style={{ background: profile2Colors.accent }}>ULOŽIT</button></div>
+              <textarea value={editingContent} onChange={e=>setEditingContent(e.target.value)} className="flex-1 w-full font-mono text-xs outline-none resize-none min-h-[300px] bg-[#3a3a3a] border border-[#444] p-3" />
+              <div className="flex justify-between mt-3"><button onClick={handleDelete} className="text-[#ff1e00] text-xs font-bold">SMAZAT</button><button onClick={handleSave} className="px-6 py-2 text-xs font-black text-[#f0f0f0] border border-[#444]" style={{ background: profile2Colors.accent }}>ULOŽIT</button></div>
             </div>
-          ) : <div className="border-2 border-dashed min-h-[400px] flex items-center justify-center text-xs opacity-30">Vyber poznámku</div>}
+          ) : <div className="border border-dashed min-h-[400px] flex items-center justify-center text-xs opacity-30">Vyber poznámku</div>}
         </div>
       </div>
     </div>

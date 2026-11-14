@@ -25,7 +25,7 @@ import {
   RAG_DIR,
 } from '../lib/dataPaths'
 import { pickModel, getPriority, MODELS, type ModelSpec } from './modelRouter'
-import { enqueueJob, getNextPendingJob, markJobStatus, getQueueLength, isQueueBusy, setQueueBusy, loadQueue } from './queue'
+import { enqueueJob, markJobStatus, jobQueue } from './queue'
 
 const execFileAsync = promisify(execFile)
 // KONVENCE v3 - jediný zdroj pravdy je dataPaths.ts, žádný D:/ hardcode
@@ -37,14 +37,13 @@ const COMMANDS_FILE = join(AGENTS_DIR, 'mary-jane', 'commands.json')
 const ROOT = resolve(DATA_DIR, '..')
 
 const ollama = new Ollama({ host: 'http://localhost:11434' })
-const MODEL = 'qwen3:8b'
+const MODEL = 'devstral-small-2:latest' // FIX 12GB RTX 4080
 const FAST_MODEL = MODELS.FAST.model
 const MAX_MEMORY_MESSAGES = 20 // posledních 10 výměn drženo v kontextu
 const OLLAMA_TIMEOUT_MS = 90000 // ochrana proti zaseklému/pomalému modelu
 const DEEP_TIMEOUT_MS = 120000 // deep research smí trvat déle
 
-// fronta - in-memory guard proti paralelním běhům
-let queueProcessing = false
+// fronta řeší p-queue, žádný in-memory boolean
 
 type ChatMsg = { role: 'system' | 'user' | 'assistant'; content: string }
 
@@ -463,7 +462,7 @@ async function runFind(userMessage: string, runId: string, steps: string[]) {
         { role: 'system', content: luborSystem },
         { role: 'user', content: `${mjHandoff}\n\nVýstup CLI:\n${cliOut}\n\nData leadů (JSON):\n${leadsJson.slice(0, 6000)}\n\nSestav report podle svého formátu (Klíčové nálezy → Detailní shrnutí → Zdroje). Pokud je 0 leadů bez webu, řekni to na rovinu a navrhni jiný obor nebo město.` },
       ],
-      options: { temperature: 0.3, num_ctx: 8192 },
+      options: { temperature: 0.3, num_ctx: 2048 } // FIX 12GB,
     })
     luborReplyText = res.message.content
   } catch (e: any) {
@@ -529,7 +528,7 @@ async function runResearch(userMessage: string, runId: string, steps: string[]) 
             content: `Zadání: ${query}\n\nŽIVÁ DATA Z WEBU (použij je jako primární zdroj, cituj přesné URL v sekci Zdroje):\n${zdrojeBlock.slice(0, 9000)}\n\nSestav report podle svého protokolu (Klíčové nálezy → Detailní shrnutí → Zdroje/omezení). Pokud data z webu k tématu nestačí nebo chybí, řekni to na rovinu a doplň jen to, co je ověřitelné. Nikdy netvrď fakt, který není podložený zdrojem výše.`,
           },
         ],
-        options: { temperature: 0.4, num_ctx: 8192 },
+        options: { temperature: 0.4, num_ctx: 2048 },
       },
       DEEP_TIMEOUT_MS,
     )
@@ -939,6 +938,74 @@ async function runResume(userMessage: string, runId: string, steps: string[])
 // ============================================================
 // ÚKOL 21-24 + NOVÉ ČÍSLOVÁNÍ 1_01, 2_01, 3_01...
 // ============================================================
+
+// ---------- BENDER - Blender specialist - FIXED 12GB + ukládání do kod/ ----------
+async function runBender(userMessage: string, runId: string, steps: string[]) {
+  // FIX: async + správná cesta + 3x md
+  let bible = ''
+  try {
+    const biblePath = path.join(process.cwd(), '../../data/capabilities/agents/bender/knowledge.md')
+    bible = await readFile(biblePath, 'utf-8')
+  } catch {
+    bible = 'Jsi Bender, Blender specialist. BLENDER_EEVEE, make_mat(), ico_sphere hlava, cylinder 8 ruce/nohy, bevel 0.03.'
+  }
+
+  const query = userMessage.replace(/^(bendere,|\/bender|\/blender)\s*/i, '').trim() || userMessage
+  const benderDocs = await loadAgentDocs('bender')
+  const benderModel = await loadAgentModel('bender')
+  steps.push(`Bender: ${query.slice(0, 80)} [model=${benderModel} ctx=4096 + bible ${bible.length} chars]`)
+
+  let ragContext = ''
+  try { const hits = await ragSearch(query, 4); if (hits?.length) ragContext = hits.map((h:any) => h.text).join('\n').slice(0, 3000) } catch {}
+
+  const history = await loadMemory('bender')
+  const systemPrompt = `${benderDocs || 'Jsi Bender, Blender specialist v LOYO OS. Vše v metrech, Principled BSDF.'}
+
+${bible}
+
+${ragContext ? 'RAG:\n'+ragContext : ''}
+
+MCP tools: get_blendfile_summary_path_info, get_objects_summary, get_object_detail_summary, execute_blender_code (vždy vrať result dict), render_thumbnail_to_path.
+
+DŮLEŽITÉ: Po každé odpovědi ulož celý kód do D:/dev/loyo-os/data/reports/bender/kod/ jako .txt soubor.`
+
+  const messages: ChatMsg[] = [{ role: 'system', content: systemPrompt }, ...history.slice(-10), { role: 'user', content: query }]
+
+  let reply: string
+  try {
+    const res = await chatWithTimeout({
+      model: benderModel,
+      messages,
+      options: { temperature: 0.2, num_ctx: 4096 }
+    } as any, 180000)
+    reply = res.message.content
+  } catch (e:any) {
+    reply = `⚠ Bender (${benderModel}) neodpověděl: ${e.message} - zkus 'ollama stop ${benderModel}' a znovu`
+    return { reply, steps }
+  }
+
+  // Uložení do kod/ složky
+  try {
+    const kodDir = join(REPORTS_DIR, 'bender', 'kod')
+    await mkdir(kodDir, { recursive: true })
+    const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19)
+    const safeQuery = slugify(query).slice(0, 40) || 'bender_task'
+    const fileName = `${stamp}_${safeQuery}.txt`
+    const filePath = join(kodDir, fileName)
+    const content = `# Bender task: ${query}\n# Date: ${new Date().toISOString()}\n# Model: ${benderModel}\n\n${reply}\n`
+    await writeFile(filePath, content, 'utf-8')
+    steps.push(`Bender: uložen kod → ${filePath}`)
+  } catch (e:any) {
+    steps.push(`Bender: chyba ukládání do kod/ - ${e.message}`)
+  }
+
+  await saveMemory('bender', [...history, { role: 'user', content: query }, { role: 'assistant', content: reply }])
+  await bumpAgentStats('bender').catch(()=>{})
+  await logRun(runId, { userMessage, mode: 'bender', model: benderModel, reply })
+  return { reply, steps }
+}
+
+
 type CapabilityType = 'agents' | 'mcp' | 'skills' | 'cli' | 'teams' | 'workflows' | 'loops' | 'api' | 'rag'
 
 const TYPE_PREFIX: Record<CapabilityType, number> = {   // číslo typu: 1 agenti, 2 týmy, 3 skills, 4 MCP, 5 CLI, 6 loops, 7 workflows, 8 API
@@ -1868,6 +1935,16 @@ async function runOrchestratorCore(userMessage: string, runId: string, steps: st
         s.push(`Mary Jane: "${msg}" → daily-brief`)
         return runDailyBrief(msg, rid, s)
       },
+      tridil: async (msg, rid, s) =>
+      {
+        // /tridil [--dry-run] [--all] — ruční běh Třídila (Stažené soubory → podsložky)
+        s.push(`Mary Jane: "${msg}" → Třídil`)
+        const { runTridil } = await import('./tridil.js')
+        const { message } = await runTridil({ dryRun: /--dry-run/.test(msg), all: /--all/.test(msg) })
+        s.push('Třídil: hotovo')
+        await logRun(rid, { userMessage: msg, mode: 'tridil' })
+        return { reply: message, steps: s }
+      },
       add: async (msg, rid, s) =>
       {
         s.push(`Mary Jane: "${msg}" → přidání příkazu`)
@@ -1906,13 +1983,21 @@ async function runOrchestratorCore(userMessage: string, runId: string, steps: st
     }
   }
 
+
+  // BENDER ROUTING - musí být před Mary Jane fallback, ať Mary není zmatená
+  const lowerForBender = trimmed.toLowerCase()
+  if (lowerForBender.includes('bender') || lowerForBender.includes('blender') || lowerForBender.startsWith('bendere') || lowerForBender.startsWith('/bender') || lowerForBender.startsWith('/blender')) {
+    return runBender(trimmed, runId, steps)
+  }
+
   // ---------- žádný příkaz — MJ řeší sama s pamětí + MODEL ROUTER ----------
+
   const mjDocs = await loadAgentDocs('Mary_Jane')
   const baseModel = await loadAgentModel('Mary_Jane')
   const picked: ModelSpec = pickModel(userMessage, 'chat')
   // fast path <120 znaků -> 3b, jinak meta.json nebo normal 8b
-  const finalModel = picked.label === 'fast-3b'? picked.model : (baseModel || picked.model)
-  const finalCtx = picked.num_ctx || 4096
+  const finalModel = picked.model || baseModel // FIX: respektuj router, 12GB optimalizace
+  const finalCtx = picked.num_ctx || 2048 // FIX 12GB
   const systemPrompt = mjDocs || 'Jsi Mary Jane, sekretářka v LOYO OS. Odpovídej stručně a věcně česky.'
 
   const history = await loadMemory('Mary_Jane')
@@ -1951,48 +2036,35 @@ async function runOrchestratorCore(userMessage: string, runId: string, steps: st
   return { reply: recalled? `${reply}\n\n🗂 Zdroj z dlouhé paměti: ${recalled.dates}` : reply, steps }
 }
 
-// ============================================================
-// HLAVNÍ TOK S FRONTOU
-// ============================================================
-async function processPendingQueue() {
-  while (true) {
-    const next = await getNextPendingJob()
-    if (!next) break
-    await markJobStatus(next.id, 'running', next.runId)
-    const steps: string[] = []
-    const runId = next.runId || `${new Date().toISOString().replace(/[:.]/g, '-')}_${next.id.slice(0, 8)}`
-    try {
-      await runOrchestratorCore(next.message, runId, steps)
-      await markJobStatus(next.id, 'done', runId)
-    } catch {
-      await markJobStatus(next.id, 'failed', runId)
-    }
-  }
-}
 
+// ============================================================
+// HLAVNÍ TOK S P-QUEUE (žádný while(true) polling)
+// ============================================================
 export async function runOrchestrator(userMessage: string): Promise<{ reply: string; steps: string[] }>
 {
   const steps: string[] = []
   const runId = `${new Date().toISOString().replace(/[:.]/g, '-')}_${randomUUID().slice(0, 8)}`
   const trimmed = userMessage.trim()
   const priority = getPriority(trimmed)
+  const pQueuePriority = 10 - priority
 
-  // pokud už něco běží, zařaď do fronty - akceptace ÚKOL 10
-  if (queueProcessing || isQueueBusy()) {
+  if (jobQueue.pending > 0 || jobQueue.size > 0) {
     const job = await enqueueJob(trimmed, priority)
-    const len = await getQueueLength()
-    return { reply: `⏳ Fronta: úkol #${job.id.slice(0, 6)} zařazen (priorita ${priority}), před tebou ${len - 1} úkolů.`, steps: [`Queue enqueued ${job.id} prio=${priority} len=${len}`] }
+    jobQueue.add(async () => {
+      const s: string[] = []
+      try {
+        await markJobStatus(job.id, 'running', runId)
+        await runOrchestratorCore(job.message, runId, s)
+        await markJobStatus(job.id, 'done', runId)
+      } catch {
+        await markJobStatus(job.id, 'failed', runId)
+      }
+    }, { priority: pQueuePriority })
+    return {
+      reply: `⏳ Fronta: úkol #${job.id.slice(0, 6)} zařazen (priorita ${priority}), před tebou ${jobQueue.size} úkolů.`,
+      steps: [`p-queue enqueued ${job.id} prio=${priority} size=${jobQueue.size}`]
+    }
   }
 
-  queueProcessing = true
-  setQueueBusy(true)
-  try {
-    const result = await runOrchestratorCore(trimmed, runId, steps)
-    // po doběhu zpracuj co se mezitím nahromadilo
-    await processPendingQueue()
-    return result
-  } finally {
-    queueProcessing = false
-    setQueueBusy(false)
-  }
+  return jobQueue.add(() => runOrchestratorCore(trimmed, runId, steps), { priority: pQueuePriority }) as Promise<{ reply: string; steps: string[] }>
 }

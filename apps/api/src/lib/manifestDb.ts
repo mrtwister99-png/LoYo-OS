@@ -4,11 +4,12 @@ import { DATA_DIR } from './dataPaths.js';
 import { getDb as getSharedDb } from './connection.js';
 import type { CapabilityManifest } from '@loyo/core';
 
+// FIX F3-3: singleton - používá getSharedDb() z connection.ts, ne new Database()
 let db: BetterDB | null = null;
 
 export function initDb(): BetterDB {
   if (db) return db;
-  db = getSharedDb();
+  db = getSharedDb(); // FIX: sdílená instance
   db.exec(`
     CREATE TABLE IF NOT EXISTS capabilities (
       id TEXT PRIMARY KEY,

@@ -35,16 +35,16 @@ const monthYearLabel = (d: Date) =>
 
 // ── barvy ────────────────────────────────────────────────────
 const C = {
-  bg: '#e9e9e9',
-  headBg: '#f5f5f3',
-  border: '#0a0a0a',
-  blue: '#040b8d',
-  red: '#ac0001',
-  caramel: '#CDA24D',
-  neonGreen: '#6300c7',
-  purple: '#6300c7',
-  tileBg: '#ffffff',
-  black: '#0a0a0a',
+  bg: '#2b2b2b',
+  headBg: '#2b2b2b',
+  border: '#444',
+  blue: '#12a4ff',
+  red: '#ff1e00',
+  caramel: '#f0f0f0',
+  neonGreen: '#9a9a9a',
+  purple: '#9a9a9a',
+  tileBg: '#3a3a3a',
+  black: '#f0f0f0',
   darkGray: '#3a3a3a',
 
 }
@@ -52,9 +52,9 @@ const C = {
 // ── profily ──────────────────────────────────────────────────
 const PROFILES = [
   { letter: 'L', color: C.blue,      label: 'Osobní'   },
-  { letter: 'O', color: C.caramel,   label: 'Pracovní' },
-  { letter: 'Y', color: C.red,       label: 'Projekty' },
-  { letter: 'O', color: '#6300c7',   label: '3D Design' },
+  { letter: 'O', color: '#4a4a4a',   label: 'Pracovní' },
+  { letter: 'Y', color: '#444',      label: 'Projekty' },
+  { letter: 'O', color: '#3a3a3a',   label: '3D Design' },
 ]
 
 // ── notif typy ───────────────────────────────────────────────
@@ -402,7 +402,7 @@ export default function Header({
    // ── sdílené styly sekce ───────────────────────────────────────
   const sectionBase = (idx: number, extraStyle?: React.CSSProperties): React.CSSProperties => ({
     background: isFocused(idx) ? 'rgba(0,0,0,0.12)' : 'transparent',
-    borderRight: '1px solid #dbdbdb',
+    borderRight: '1px solid #444',
     display: 'flex',
     alignItems: 'center',
     height: '100%',
@@ -424,7 +424,7 @@ export default function Header({
         padding: '6px calc(2.5% + 3px) 11px',   // místo pro tlustý rámeček + stín karty
         display: 'flex',
         alignItems: 'stretch',
-        background: '#cccccc',
+        background: '#2b2b2b',
         position: 'sticky',
         top: 0,
         zIndex: 40,
@@ -437,8 +437,8 @@ export default function Header({
         aria-hidden="true"
         style={{
           position: 'absolute', left: '2.5%', right: '2.5%', top: 3, bottom: 8,
-          background: '#ffffff', border: '3px solid #0a0a0a', borderRadius: 12,
-          boxShadow: '4px 4px 0px 0px #0a0a0a', pointerEvents: 'none', zIndex: 0,
+          background: '#3a3a3a', border: '1px solid #444', borderRadius: 12,
+          boxShadow: '0 8px 24px rgba(0,0,0,0.35)', pointerEvents: 'none', zIndex: 0,
         }}
       />
 
@@ -460,20 +460,21 @@ export default function Header({
         {/* Název + verze */}
         <div style={{ lineHeight: 1 }}>
           <div style={{
-            fontFamily: "'Syne', 'Inter', sans-serif",
-            fontWeight: 800,
-            fontSize: 14,
-            letterSpacing: '0.06em',
-            color: '#000000',
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontWeight: 700,
+            fontSize: 17,
+            letterSpacing: '0.01em',
+            color: '#f0f0f0',
             lineHeight: 1,
           }}>
-            LOYO OS
+            LoYo <span style={{ color: '#12a4ff', fontStyle: 'italic' }}>OS</span>
           </div>
           <div style={{
             fontSize: 8,
-            fontFamily: 'monospace',
-            color: '#3a3a3a',
-            marginTop: 2,
+            fontFamily: "'JetBrains Mono', monospace",
+            color: '#c9a646',
+            marginTop: 3,
+            letterSpacing: '0.12em',
           }}>
             v3.0
           </div>
@@ -513,7 +514,7 @@ export default function Header({
             background: notifFilter === 'new' && showNotifPanel
               ? 'rgba(4,11,141,0.18)'
               : notifSubFocus === 0 ? 'rgba(4,11,141,0.22)' : 'transparent',
-            outline: notifSubFocus === 0 ? `2px solid ${C.blue}` : 'none',
+            outline: notifSubFocus === 0 ? `1px solid ${C.blue}` : 'none',
             transition: 'background 0.15s',
           }}
         >
@@ -526,7 +527,7 @@ export default function Header({
               animation: notifBump.new ? 'notifPulse 0.7s ease' : 'none',
             }} />
             <span style={{
-              fontFamily: 'monospace', fontSize: 14, fontWeight: 900,
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 14, fontWeight: 900,
               color: C.blue, lineHeight: 1,
               animation: notifBump.new ? 'notifBump 0.7s cubic-bezier(0.16,1,0.3,1)' : 'none',
             }}>
@@ -534,19 +535,19 @@ export default function Header({
             </span>
             {notifBump.new && (
               <sup style={{
-                fontSize: 9, color: C.blue, fontWeight: 900, fontFamily: 'monospace',
+                fontSize: 9, color: C.blue, fontWeight: 900, fontFamily: "'JetBrains Mono', monospace",
                 animation: 'notifPlusOne 0.7s cubic-bezier(0.16,1,0.3,1) forwards',
                 position: 'absolute', marginLeft: 20, marginTop: -8,
               }}>+1</sup>
             )}
           </div>
-          <span style={{ fontSize: 9, color: 'rgba(0,0,0,0.5)', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: 9, color: '#9a9a9a', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
             NOVÉ
           </span>
         </div>
 
         {/* Oddělovač */}
-        <div style={{ width: 1, height: 28, background: '#dbdbdb', flexShrink: 0 }} />
+        <div style={{ width: 1, height: 28, background: '#444', flexShrink: 0 }} />
 
         {/* Jednotka: Nutné (karamelová) */}
         <div
@@ -564,7 +565,7 @@ export default function Header({
             background: notifFilter === 'urgent' && showNotifPanel
               ? 'rgba(205,162,77,0.15)'
               : notifSubFocus === 1 ? 'rgba(205,162,77,0.18)' : 'transparent',
-            outline: notifSubFocus === 1 ? `2px solid ${C.caramel}` : 'none',
+            outline: notifSubFocus === 1 ? `1px solid ${C.caramel}` : 'none',
             transition: 'background 0.15s',
           }}
         >
@@ -577,7 +578,7 @@ export default function Header({
               animation: notifBump.urgent ? 'notifPulse 0.7s ease' : 'none',
             }} />
             <span style={{
-              fontFamily: 'monospace', fontSize: 14, fontWeight: 900,
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 14, fontWeight: 900,
               color: C.caramel, lineHeight: 1,
               animation: notifBump.urgent ? 'notifBump 0.7s cubic-bezier(0.16,1,0.3,1)' : 'none',
             }}>
@@ -585,19 +586,19 @@ export default function Header({
             </span>
             {notifBump.urgent && (
               <sup style={{
-                fontSize: 9, color: C.caramel, fontWeight: 900, fontFamily: 'monospace',
+                fontSize: 9, color: C.caramel, fontWeight: 900, fontFamily: "'JetBrains Mono', monospace",
                 animation: 'notifPlusOne 0.7s cubic-bezier(0.16,1,0.3,1) forwards',
                 position: 'absolute', marginLeft: 20, marginTop: -8,
               }}>+1</sup>
             )}
           </div>
-          <span style={{ fontSize: 9, color: 'rgba(0,0,0,0.5)', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: 9, color: '#9a9a9a', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
             NUTNÉ
           </span>
         </div>
 
         {/* Oddělovač */}
-        <div style={{ width: 1, height: 28, background: '#dbdbdb', flexShrink: 0 }} />
+        <div style={{ width: 1, height: 28, background: '#444', flexShrink: 0 }} />
 
         {/* Jednotka: Ke schválení (červená) */}
         <div
@@ -615,7 +616,7 @@ export default function Header({
             background: notifFilter === 'approval' && showNotifPanel
               ? 'rgba(172,0,1,0.15)'
               : notifSubFocus === 2 ? 'rgba(172,0,1,0.18)' : 'transparent',
-            outline: notifSubFocus === 2 ? `2px solid ${C.red}` : 'none',
+            outline: notifSubFocus === 2 ? `1px solid ${C.red}` : 'none',
             transition: 'background 0.15s',
           }}
         >
@@ -628,7 +629,7 @@ export default function Header({
               animation: notifBump.approval ? 'notifPulse 0.7s ease' : 'none',
             }} />
             <span style={{
-              fontFamily: 'monospace', fontSize: 14, fontWeight: 900,
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 14, fontWeight: 900,
               color: C.red, lineHeight: 1,
               animation: notifBump.approval ? 'notifBump 0.7s cubic-bezier(0.16,1,0.3,1)' : 'none',
             }}>
@@ -636,13 +637,13 @@ export default function Header({
             </span>
             {notifBump.approval && (
               <sup style={{
-                fontSize: 9, color: C.red, fontWeight: 900, fontFamily: 'monospace',
+                fontSize: 9, color: C.red, fontWeight: 900, fontFamily: "'JetBrains Mono', monospace",
                 animation: 'notifPlusOne 0.7s cubic-bezier(0.16,1,0.3,1) forwards',
                 position: 'absolute', marginLeft: 20, marginTop: -8,
               }}>+1</sup>
             )}
           </div>
-          <span style={{ fontSize: 9, color: 'rgba(0,0,0,0.5)', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: 9, color: '#9a9a9a', fontWeight: 600, letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
             SCHVÁLENÍ
           </span>
         </div>
@@ -666,9 +667,9 @@ export default function Header({
                 left: 0,
                 marginTop: 8,
                 width: 360,
-                background: '#1a1a1a',
-                border: `1.5px solid ${accentColor}44`,
-                borderTop: `3px solid ${accentColor}`,
+                background: '#444',
+                border: `1.1px solid ${accentColor}44`,
+                borderTop: `1px solid ${accentColor}`,
                 borderRadius: 12,
                 boxShadow: `0 24px 64px rgba(0,0,0,0.65), 0 0 0 1px ${accentColor}22`,
                 zIndex: 50,
@@ -698,7 +699,7 @@ export default function Header({
                     {filterLabel}
                   </span>
                   <span style={{
-                    fontSize: 10, fontFamily: 'monospace', fontWeight: 700,
+                    fontSize: 10, fontFamily: "'JetBrains Mono', monospace", fontWeight: 700,
                     color: 'rgba(255,255,255,0.3)',
                   }}>
                     {filtered.length} celkem
@@ -758,7 +759,7 @@ export default function Header({
                           }}>
                             {notifLabel(n.type)}
                           </span>
-                          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace' }}>
+                          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: "'JetBrains Mono', monospace" }}>
                             {n.command}
                           </span>
                         </div>
@@ -809,9 +810,9 @@ export default function Header({
           style={{
             marginLeft: 'auto',
             fontSize: 10,
-            fontFamily: 'monospace',
+            fontFamily: "'JetBrains Mono', monospace",
             fontWeight: 700,
-            color: saveStatus === 'saving'? '#FFC700' : saveStatus === 'saved'? '#00D084' : saveStatus === 'dirty'? '#FF9500' : 'transparent',
+            color: saveStatus === 'saving'? '#9a9a9a' : saveStatus === 'saved'? '#12a4ff' : saveStatus === 'dirty'? '#f0f0f0' : 'transparent',
             display: 'flex',
             alignItems: 'center',
             gap: 4,
@@ -820,10 +821,10 @@ export default function Header({
           }}>
           <span style={{
             width: 6, height: 6, borderRadius: '50%',
-            background: saveStatus === 'saving' ? '#FFC700' : saveStatus === 'saved' ? '#00D084' : saveStatus === 'dirty' ? '#FF9500' : 'transparent',
+            background: saveStatus === 'saving' ? '#9a9a9a' : saveStatus === 'saved' ? '#12a4ff' : saveStatus === 'dirty' ? '#f0f0f0' : 'transparent',
             display: saveStatus === 'idle' ? 'none' : 'inline-block',
           }} />
-          {saveStatus === 'saving' ? '🟡 ukládám' : saveStatus === 'saved' ? '🟢 uloženo' : saveStatus === 'dirty' ? '• neuloženo' : ''}
+          {saveStatus === 'saving' ? 'ukládám' : saveStatus === 'saved' ? 'uloženo' : saveStatus === 'dirty' ? '• neuloženo' : ''}
         </span>
       </div>
 
@@ -831,7 +832,7 @@ export default function Header({
           4. ČAS — 7% — karamelová + vteřiny červeně (PRVNÍ)
       ══════════════════════════════════════════════════════════ */}
       <div ref={timeBoxRef} style={{ ...sectionBase(3), width: '7%', padding: '0 4px', cursor: 'pointer', justifyContent: 'center', alignItems: 'center' }} onClick={() => { if (showDayPanel) { closeDayPanel() } else { setShowDayPanel(true); if (showCalendar) closeCalendar() } }}>
-        <span style={{ fontSize: 30, fontWeight: 900, fontFamily: 'monospace', color: C.caramel, letterSpacing: '-0.04em', textAlign: 'center', lineHeight: 1, display: 'flex', alignItems: 'baseline', gap: 1 } as any}>
+        <span style={{ fontSize: 30, fontWeight: 900, fontFamily: "'JetBrains Mono', monospace", color: C.caramel, letterSpacing: '-0.04em', textAlign: 'center', lineHeight: 1, display: 'flex', alignItems: 'baseline', gap: 1 } as any}>
           <span>{hh}</span>
           <span style={{ opacity: colonBlinkOn ? 1 : 0.15, transition: 'opacity 0.1s', margin: '0 1px' }}>:</span>
           <span>{mm}</span>
@@ -846,7 +847,7 @@ export default function Header({
             left: 0,
             marginTop: 8,
             width: 320,
-            background: '#1e1e1e',
+            background: '#444',
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 12,
             padding: 16,
@@ -858,7 +859,7 @@ export default function Header({
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
               <button onClick={() => shiftDay(-1)} style={navBtnStyle}>‹</button>
-              <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.8)', textTransform: 'capitalize' }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.8)', textTransform: 'capitalize' }}>
                 {dayLabel(selectedDate)}
               </span>
               <button onClick={() => shiftDay(1)} style={navBtnStyle}>›</button>
@@ -870,7 +871,7 @@ export default function Header({
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
                 {dayEvents.map(ev => (
                   <div key={ev.file_name} style={panelRow}>
-                    <span style={{ fontFamily: 'monospace', fontWeight: 700, color: '#00D084' }}>{ev.time || '--:--'}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, color: '#9a9a9a' }}>{ev.time || '--:--'}</span>
                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'rgba(255,255,255,0.8)' }}>{ev.title}</span>
                   </div>
                 ))}
@@ -897,7 +898,7 @@ export default function Header({
           5. DATUM — 7%
       ══════════════════════════════════════════════════════════ */}
           <div ref={dateBoxRef} style={{ ...sectionBase(4), width: '7%', padding: '0 4px', cursor: 'pointer', justifyContent: 'center', alignItems: 'center' }} onClick={() => { if (showCalendar) { closeCalendar() } else { setShowCalendar(true); if (showDayPanel) closeDayPanel() } }}>
-        <span style={{ fontSize: 18, fontWeight: 900, fontFamily: 'monospace', color: '#000000', letterSpacing: '0.02em', textAlign: 'center', lineHeight: 1 }}>
+        <span style={{ fontSize: 18, fontWeight: 900, fontFamily: "'JetBrains Mono', monospace", color: '#f0f0f0', letterSpacing: '0.02em', textAlign: 'center', lineHeight: 1 }}>
           {dateFormatted.d}.{dateFormatted.m}.<sup style={{ fontSize: 11, verticalAlign: 'super', lineHeight: 0, fontWeight: 700, color: C.red }}>{dateFormatted.yy}</sup>
         </span>
 
@@ -909,7 +910,7 @@ export default function Header({
             right: 0,
             marginTop: 8,
             width: 280,
-            background: '#1e1e1e',
+            background: '#444',
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 12,
             padding: 16,
@@ -924,7 +925,7 @@ export default function Header({
                 onClick={e => { e.stopPropagation(); setCalendarViewDate(d => new Date(d.getFullYear(), d.getMonth() - 1, 1)) }}
                 style={navBtnStyle}
               >‹</button>
-              <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.8)', textTransform: 'capitalize' }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.8)', textTransform: 'capitalize' }}>
                 {monthYearLabel(calendarViewDate)}
               </span>
               <button
@@ -934,7 +935,7 @@ export default function Header({
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2, marginBottom: 4 }}>
               {['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'].map(d => (
-                <div key={d} style={{ textAlign: 'center', fontSize: 9, fontFamily: 'monospace', color: 'rgba(255,255,255,0.3)' }}>{d}</div>
+                <div key={d} style={{ textAlign: 'center', fontSize: 9, fontFamily: "'JetBrains Mono', monospace", color: 'rgba(255,255,255,0.3)' }}>{d}</div>
               ))}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }}>
@@ -956,8 +957,8 @@ export default function Header({
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      background: isSelected ? '#fff' : isToday ? C.blue : 'transparent',
-                      color: isSelected ? '#000' : isToday ? '#fff' : 'rgba(255,255,255,0.8)',
+                      background: isSelected ? '#f0f0f0' : isToday ? C.blue : 'transparent',
+                      color: isSelected ? '#2b2b2b' : isToday ? '#f0f0f0' : 'rgba(240,240,240,0.8)',
                       fontWeight: (isSelected || isToday) ? 700 : 400,
                       border: 'none',
                       cursor: 'pointer',
@@ -971,7 +972,7 @@ export default function Header({
                         width: 4,
                         height: 4,
                         borderRadius: '50%',
-                        background: '#00D084',
+                        background: '#444',
                       }} />
                     )}
                   </button>
@@ -996,7 +997,7 @@ export default function Header({
         }}
       >
         <span style={{
-          fontFamily: "'Syne', 'Inter', sans-serif",
+          fontFamily: "'Playfair Display', Georgia, serif",
           fontSize: 15,
           fontWeight: 800,
           letterSpacing: '0.1em',
@@ -1024,11 +1025,11 @@ export default function Header({
         }}
       >
         <span style={{
-          fontFamily: "'Syne', 'Inter', sans-serif",
+          fontFamily: "'Playfair Display', Georgia, serif",
           fontSize: 13,
           fontWeight: 800,
           letterSpacing: '0.16em',
-          color: 'rgba(0,0,0,0.35)',
+          color: 'rgba(240,240,240,0.35)',
           textTransform: 'uppercase',
           userSelect: 'none',
           pointerEvents: 'none',
@@ -1112,7 +1113,7 @@ const navBtnStyle: React.CSSProperties = {
 }
 
 const panelSectionLabel: React.CSSProperties = {
-  fontFamily: 'monospace',
+  fontFamily: "'JetBrains Mono', monospace",
   fontSize: 9,
   letterSpacing: '0.15em',
   color: 'rgba(255,255,255,0.3)',

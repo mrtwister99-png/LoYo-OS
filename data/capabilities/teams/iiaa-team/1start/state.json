@@ -1,0 +1,211 @@
+{
+  "runId": "run-0000-template",
+  "idea": "",
+  "ideaFile": "1start/zadani.txt",
+  "createdAt": "2026-10-27T16:38:46.062356Z",
+  "currentStep": "idle",
+  "protocol": {
+    "watchFolder": "1start/triggers",
+    "outputRoot": "1start/02files",
+    "triggerNaming": "<agent-id>.txt",
+    "outputNaming": "{order}_{DESCRIPTIVE_NAME}.md - napr 01_PRD.md, 01_ARCHITECTURE.md",
+    "onFinish": "vytvor soubor pro dalsiho agenta v 1start/triggers/"
+  },
+  "chain": [
+    "nofps",
+    "delete",
+    "cheater",
+    "camper",
+    "laggy",
+    "error",
+    "fatal",
+    "cancel",
+    "pwner",
+    "op"
+  ],
+  "steps": {
+    "01-nofps": {
+      "id": "nofps",
+      "name": "Kotlin CTO / Product Architect",
+      "order": 1,
+      "status": "pending",
+      "triggerFile": "1start/triggers/nofps.txt",
+      "outputDir": "1start/02files/01-nofps",
+      "dependsOn": [],
+      "next": "delete",
+      "expectedOutputs": [
+        "01_PRD.md",
+        "02_MVP.md",
+        "03_MODULES.md",
+        "04_ASSUMPTIONS.md"
+      ]
+    },
+    "02-delete": {
+      "id": "delete",
+      "name": "Kotlin System Architect",
+      "order": 2,
+      "status": "pending",
+      "triggerFile": "1start/triggers/delete.txt",
+      "outputDir": "1start/02files/02-delete",
+      "dependsOn": [
+        "nofps"
+      ],
+      "next": [
+        "cheater"
+      ],
+      "expectedOutputs": [
+        "01_ARCHITECTURE.md",
+        "02_modules.yaml",
+        "03_libs.versions.toml",
+        "04_DI_GRAPH.md"
+      ]
+    },
+    "03-cheater": {
+      "id": "cheater",
+      "name": "Kotlin Domain Logic",
+      "order": 3,
+      "status": "pending",
+      "triggerFile": "1start/triggers/cheater.txt",
+      "outputDir": "1start/02files/03-cheater",
+      "dependsOn": [
+        "delete"
+      ],
+      "next": "camper",
+      "expectedOutputs": [
+        "01_Entities.md",
+        "02_UseCases.md",
+        "03_RepositoryInterfaces.md"
+      ]
+    },
+    "04-camper": {
+      "id": "camper",
+      "name": "Kotlin Data Layer",
+      "order": 4,
+      "status": "pending",
+      "triggerFile": "1start/triggers/camper.txt",
+      "outputDir": "1start/02files/04-camper",
+      "dependsOn": [
+        "cheater"
+      ],
+      "next": "laggy",
+      "expectedOutputs": [
+        "01_RoomEntities.md",
+        "02_KtorClient.md",
+        "03_RepositoryImpl.md"
+      ]
+    },
+    "05-laggy": {
+      "id": "laggy",
+      "name": "Kotlin Compose UI",
+      "order": 5,
+      "status": "pending",
+      "triggerFile": "1start/triggers/laggy.txt",
+      "outputDir": "1start/02files/05-laggy",
+      "dependsOn": [
+        "camper"
+      ],
+      "next": "error",
+      "expectedOutputs": [
+        "01_Theme.md",
+        "02_Screens.md",
+        "03_Navigation.md"
+      ]
+    },
+    "06-error": {
+      "id": "error",
+      "name": "Kotlin Build & Platform",
+      "order": 6,
+      "status": "pending",
+      "triggerFile": "1start/triggers/error.txt",
+      "outputDir": "1start/02files/06-error",
+      "dependsOn": [
+        "laggy"
+      ],
+      "next": "fatal",
+      "expectedOutputs": [
+        "01_settings.gradle.kts.md",
+        "02_build-logic.md",
+        "03_gradle.properties.md"
+      ]
+    },
+    "07-fatal": {
+      "id": "fatal",
+      "name": "Kotlin QA / Test",
+      "order": 7,
+      "status": "pending",
+      "triggerFile": "1start/triggers/fatal.txt",
+      "outputDir": "1start/02files/07-fatal",
+      "dependsOn": [
+        "error"
+      ],
+      "next": "cancel",
+      "expectedOutputs": [
+        "01_UnitTests.md",
+        "02_UiTests.md",
+        "03_DetektConfig.md"
+      ]
+    },
+    "08-cancel": {
+      "id": "cancel",
+      "name": "Kotlin Code Reviewer",
+      "order": 8,
+      "status": "pending",
+      "triggerFile": "1start/triggers/cancel.txt",
+      "outputDir": "1start/02files/08-cancel",
+      "dependsOn": [
+        "fatal"
+      ],
+      "next": "pwner",
+      "expectedOutputs": [
+        "01_CODE_REVIEW.md"
+      ]
+    },
+    "09-pwner": {
+      "id": "pwner",
+      "name": "Kotlin DevOps & Security",
+      "order": 9,
+      "status": "pending",
+      "triggerFile": "1start/triggers/pwner.txt",
+      "outputDir": "1start/02files/09-pwner",
+      "dependsOn": [
+        "cancel"
+      ],
+      "next": "op",
+      "expectedOutputs": [
+        "01_ci.yml.md",
+        "02_release.yml.md",
+        "03_proguard-rules.md"
+      ]
+    },
+    "10-op": {
+      "id": "op",
+      "name": "Kotlin Doc Agent",
+      "order": 10,
+      "status": "pending",
+      "triggerFile": "1start/triggers/op.txt",
+      "outputDir": "1start/02files/10-op",
+      "dependsOn": [
+        "pwner"
+      ],
+      "next": null,
+      "expectedOutputs": [
+        "01_README.md",
+        "02_ARCHITECTURE_FINAL.md",
+        "03_SETUP.md"
+      ]
+    }
+  },
+  "onDemand": {
+    "eskejp": {
+      "id": "eskejp",
+      "name": "Kotlin Research Agent",
+      "triggerFile": "1start/triggers/eskejp.txt",
+      "outputDir": "1start/02files/00-eskejp",
+      "usage": "Kdokoliv vytvoří eskejp.txt s obsahem 'hledej: Ktor 3.2 verze' -> eskejp udělá research a zapíše do 00-eskejp/01_research_{query}.md"
+    }
+  },
+  "exampleFlow": {
+    "browser": "rychly prohlizec bez reklam gesta vpn",
+    "steps": "zadani.txt -> watcher vytvori nofps.txt -> nofps vytvori 01-nofps/01_PRD.md atd + vytvori delete.txt -> delete vytvori 02-delete/... + cheater.txt -> ..."
+  }
+}

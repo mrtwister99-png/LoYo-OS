@@ -69,10 +69,10 @@ const MENU_STRUCTURE: MenuNode[] = [
 ]
 
 const getMenuConfig = (activeProfile: number) => {
-  if (activeProfile === 1) return { structure: MENU_STRUCTURE_P2 as any, meta: MENU_META_P2, accent: '#CDA24D' }
-  if (activeProfile === 2) return { structure: MENU_STRUCTURE_P3 as any, meta: MENU_META_P3, accent: '#ac0001' }
-  if (activeProfile === 3) return { structure: MENU_STRUCTURE_P4 as any, meta: MENU_META_P4, accent: '#6300c7' }
-  return { structure: MENU_STRUCTURE, meta: MENU_META, accent: '#040b8d' }
+  if (activeProfile === 1) return { structure: MENU_STRUCTURE_P2 as any, meta: MENU_META_P2, accent: '#12a4ff' }
+  if (activeProfile === 2) return { structure: MENU_STRUCTURE_P3 as any, meta: MENU_META_P3, accent: '#12a4ff' }
+  if (activeProfile === 3) return { structure: MENU_STRUCTURE_P4 as any, meta: MENU_META_P4, accent: '#12a4ff' }
+  return { structure: MENU_STRUCTURE, meta: MENU_META, accent: '#12a4ff' }
 }
 
 function darken(hex: string, amount = 0.28) {
@@ -96,18 +96,19 @@ type ClayItemProps = {
   accent: string
   num: string
   itemCount: number
+  idx: number
   onPressStart: () => void
   onPressEnd: () => void
   onHover: () => void
   onActivate: () => void
 }
 
-function ClayItem({ label, active, focused, pressed, accent, num, itemCount, onPressStart, onPressEnd, onHover, onActivate }: ClayItemProps) {
+function ClayItem({ label, active, focused, pressed, accent, num, itemCount, idx, onPressStart, onPressEnd, onHover, onActivate }: ClayItemProps) {
   const catNum = num.split('_')[0]
   const catSuffix = num.split('_')[1] || '01'
-  const isYellow = ['#fff308','#ffcc00','#fff1d4','#CDA24D'].includes(accent.toLowerCase())
-  const textColor = active? (isYellow? '#111' : '#fff') : '#121212'
-  const triangleColor = active? (isYellow? '#111' : '#fff') : accent
+  const isYellow = false // Royal Dark: akcent je vždy modrý #12a4ff
+  const textColor = active? '#ffffff' : '#f0f0f0'
+  const triangleColor = active? '#ffffff' : '#9a9a9a'
 
   return (
     <button
@@ -119,8 +120,9 @@ function ClayItem({ label, active, focused, pressed, accent, num, itemCount, onP
       onTouchEnd={onPressEnd}
       onMouseEnter={onHover}
       onClick={onActivate}
-      className="group relative w-full text-left outline-none select-none"
+      className="menu-stagger group relative w-full text-left outline-none select-none"
       style={{
+        ['--i' as any]: idx,   // pořadí položky pro kaskádu animace
         transform: pressed? 'scale(0.97) translateY(2px)' : focused? 'scale(1.02) translateY(-1px)' : 'scale(1) translateY(0)',
         transition: 'transform 160ms cubic-bezier(0.34,1.56,0.64,1)',
       }}
@@ -132,7 +134,7 @@ function ClayItem({ label, active, focused, pressed, accent, num, itemCount, onP
           backgroundColor: active? accent : clay.ink,
           borderRadius: clay.radiusOuter,
           boxShadow: active
-            ? `0 ${clay.depth}px 0 ${darken(accent,0.28)}, 0 0 0 1px ${darken(accent,0.15)}, 0 10px 18px rgba(0,0,0,0.18), 0 0 18px ${accent}80`
+            ? `0 ${clay.depth}px 0 ${darken(accent,0.35)}, 0 8px 18px rgba(0,0,0,0.35), 0 0 16px ${accent}40`
             : clay.shadowIdle,
           transform: active? 'translateY(-1px) scale(1.015)' : undefined,
         }}
@@ -155,7 +157,7 @@ function ClayItem({ label, active, focused, pressed, accent, num, itemCount, onP
                 height: 10,
                 backgroundColor: triangleColor,
                 clipPath: 'polygon(0 0, 100% 50%, 0 100%)',
-                filter: active? 'drop-shadow(0 1px 0 rgba(0,0,0,0.15))' : `drop-shadow(0 1px 0 ${accent}66)`,
+                filter: 'none',
                 transform: active? 'translateX(1px)' : undefined,
               }}
             />
@@ -165,11 +167,11 @@ function ClayItem({ label, active, focused, pressed, accent, num, itemCount, onP
                 fontSize: 12,
                 letterSpacing: '0.08em',
                 color: textColor,
-                textShadow: active? (isYellow? '0 1px 0 rgba(255,255,255,0.6)' : '0 1px 0 rgba(0,0,0,0.18)') : '0 1px 0 rgba(255,255,255,0.9)',
+                textShadow: 'none',
               }}
             >{label}</span>
             {itemCount > 0 && (
-              <span className="rounded-full font-black flex items-center justify-center" style={{ backgroundColor: '#6300c7', color: '#fff', minWidth: 16, height: 16, padding: '0 4px', fontSize: 10 }}>{itemCount}</span>
+              <span className="rounded-full font-black flex items-center justify-center" style={{ backgroundColor: '#444', color: '#f0f0f0', minWidth: 16, height: 16, padding: '0 4px', fontSize: 10 }}>{itemCount}</span>
             )}
           </div>
           {itemCount === 0? (
@@ -178,23 +180,23 @@ function ClayItem({ label, active, focused, pressed, accent, num, itemCount, onP
               style={{
                 height: 22,
                 padding: '0 8px',
-                backgroundColor: active? (isYellow? '#111' : '#fff') : '#FFFFFF',
-                borderColor: active? (isYellow? '#111' : '#fff') : '#111',
-                borderWidth: 1.5,
-                boxShadow: active? '0 1px 0 rgba(0,0,0,0.12)' : '0 1.5px 0 #111, inset 0 1px 0 rgba(255,255,255,0.9)',
+                backgroundColor: active? 'rgba(255,255,255,0.18)' : '#2b2b2b',
+                borderColor: active? 'rgba(255,255,255,0.35)' : '#444',
+                borderWidth: 1,
+                boxShadow: 'none',
               }}
             >
-              <span className="font-bold tracking-wide leading-none" style={{ fontSize: 11, color: active? (isYellow? '#fff' : '#111') : '#111' }}>
+              <span className="font-bold tracking-wide leading-none" style={{ fontSize: 11, color: active? '#f0f0f0' : '#9a9a9a' }}>
                 <span className="font-medium opacity-40" style={{ marginRight: 1 }}>{catNum}_</span><span>{catSuffix}</span>
               </span>
             </div>
           ) : (
-            <span className="font-black leading-none" style={{ fontSize: 11, color: active? (isYellow? '#111' : '#fff') : '#6300c7' }}>{catNum}</span>
+            <span className="font-black leading-none" style={{ fontSize: 11, color: active? '#f0f0f0' : '#9a9a9a' }}>{catNum}</span>
           )}
           {!active && (
             <div
               className="pointer-events-none absolute opacity-60"
-              style={{ top: 3, left: '10%', right: '10%', height: 6, borderRadius: 9999, backgroundColor: 'rgba(255,255,255,0.7)', filter: 'blur(2px)' }}
+              style={{ top: 3, left: '10%', right: '10%', height: 6, borderRadius: 9999, backgroundColor: 'rgba(255,255,255,0.04)', filter: 'blur(2px)' }}
             />
           )}
         </div>
@@ -209,7 +211,7 @@ function MenuComponent({ page, setPage, activeProfile, forcedOpen, forcedIdx, on
   const [internalOpen, setInternalOpen] = useState(false)
   const [internalIdx, setInternalIdx] = useState(0)
   const [pressedId, setPressedId] = useState<string | null>(null)
-  const [menuAnim, setMenuAnim] = useState<'in' | 'out' | null>(null)   // glitch při příchodu, pixelizace při odchodu
+  const [menuAnim, setMenuAnim] = useState<'in' | 'out' | null>(null)   // 'in' = kaskáda + přejezd světla, 'out' = náklon + sjetí
   const prevVisibleRef = useRef(false)
   const [counts, setCounts] = useState<Record<string, number>>({ notes: 8, tasks: 5, agenti: 15, tym: 1, mcp: 1, cli: 1, skills: 0, loops: 0, workflows: 0, api: 0, dashboard: 0, kalendar: 0, activity: 0 })
 
@@ -268,7 +270,7 @@ function MenuComponent({ page, setPage, activeProfile, forcedOpen, forcedIdx, on
     if (prevVisibleRef.current === isMenuVisible) return
     prevVisibleRef.current = isMenuVisible
     setMenuAnim(isMenuVisible? 'in' : 'out')
-    const t = window.setTimeout(() => setMenuAnim(null), isMenuVisible? 480 : 360)
+    const t = window.setTimeout(() => setMenuAnim(null), isMenuVisible? 900 : 520)   // musí být delší než nejdelší animace
     return () => window.clearTimeout(t)
   }, [isMenuVisible])
 
@@ -305,6 +307,7 @@ function MenuComponent({ page, setPage, activeProfile, forcedOpen, forcedIdx, on
       accent: (meta.color || profileAccent) as string,
       num: (meta.num || '0_00') as string,
       itemCount: ((counts as any)[id] ?? 0) as number,
+      idx: Math.min(12, Math.max(0, flatItems.findIndex((f: any) => f.id === id))),   // max 12 = strop zpoždění kaskády
       onPressStart: () => setPressedId(id),
       onPressEnd: () => setPressedId(null),
       onHover: () => { const idx = flatItems.findIndex((f: any) => f.id === id && f.type === 'item'); if (idx!== -1) setSelectedIdx(idx) },
@@ -320,54 +323,60 @@ function MenuComponent({ page, setPage, activeProfile, forcedOpen, forcedIdx, on
           setIsHovered(false)
           if (!keyboardOpen) setSelectedIdx(-1)
         }}
-        className="hidden md:flex w-[300px] flex-col fixed left-0 top-[56px] bottom-[42px] z-30 transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+        data-anim={menuAnim ?? undefined}
+        className="hidden md:flex w-[300px] flex-col fixed left-0 top-[56px] bottom-[42px] z-30"
         style={{
           transform: isMenuVisible? 'translateX(0)' : 'translateX(-90%)',
-          animation: menuAnim === 'in'? 'menuGlitchIn 460ms step-end' : menuAnim === 'out'? 'menuPixelOut 340ms step-end' : undefined,
+          // příchod: dlouhý expo-out dojezd, odchod: plynulý ease-in-out
+          transition: isMenuVisible? 'transform 640ms cubic-bezier(0.16,1,0.3,1)' : 'transform 460ms cubic-bezier(0.65,0,0.35,1)',
+          willChange: 'transform',
+          animation: menuAnim === 'out'? 'menuNudgeOut 460ms cubic-bezier(0.4,0,0.2,1)' : undefined,
         }}
       >
         <style>{`
           .clay-noscroll::-webkit-scrollbar { display: none; }
-          /* PŘÍCHOD: glitch (RGB posun, řezy, cukání) */
-          @keyframes menuGlitchIn {
-            0%   { opacity: 0; clip-path: inset(0 -60px 100% -60px); translate: -18px 0; filter: none; }
-            8%   { opacity: 1; clip-path: inset(8% -60px 62% -60px); translate: 12px 0; filter: drop-shadow(-5px 0 #ff0044) drop-shadow(5px 0 #00f2ff); }
-            16%  { clip-path: inset(58% -60px 12% -60px); translate: -10px 0; filter: drop-shadow(6px 0 #ff0044) drop-shadow(-6px 0 #00f2ff); }
-            24%  { clip-path: inset(-40px -60px -60px -60px); translate: 7px 0; filter: hue-rotate(70deg) saturate(2); }
-            32%  { clip-path: inset(30% -60px 40% -60px); translate: -6px 0; filter: drop-shadow(-4px 0 #ff0044) drop-shadow(4px 0 #00f2ff); }
-            40%  { clip-path: inset(-40px -60px -60px -60px); translate: 4px 0; filter: none; }
-            52%  { translate: -3px 0; filter: drop-shadow(3px 0 #ff0044) drop-shadow(-3px 0 #00f2ff); }
-            64%  { translate: 2px 0; filter: none; }
-            76%  { translate: 0 0; filter: hue-rotate(25deg); }
-            88%  { filter: none; }
-            100% { opacity: 1; clip-path: inset(-40px -60px -60px -60px); translate: 0 0; filter: none; }
+          /* PŘÍCHOD: kaskáda položek s jemným přestřelením (overshoot) */
+          @keyframes menuItemIn {
+            from { opacity: 0; translate: -34px 0; scale: 0.94; }
+            to   { opacity: 1; translate: 0 0; scale: 1; }
           }
-          /* ODCHOD: pixelizace po krocích (+ posun doleva řeší transform) */
-          @keyframes menuPixelOut {
-            0%   { filter: none; }
-            15%  { filter: url(#clayPx4); }
-            32%  { filter: url(#clayPx8); }
-            50%  { filter: url(#clayPx14); }
-            72%  { filter: url(#clayPx22); }
-            100% { filter: url(#clayPx22); }
+          [data-anim='in'] .menu-stagger {
+            animation: menuItemIn 520ms cubic-bezier(0.34,1.56,0.64,1) backwards;
+            animation-delay: calc(var(--i) * 24ms + 90ms);
+          }
+          /* PŘÍCHOD: jednorázový světelný přejezd přes panel */
+          .menu-sheen::after {
+            content: ''; position: absolute; top: -10%; bottom: -10%; left: 0; width: 55%;
+            background: linear-gradient(105deg, transparent 0%, rgba(255,255,255,0) 25%, rgba(255,255,255,0.55) 50%, rgba(255,255,255,0) 75%, transparent 100%);
+            opacity: 0; translate: -130% 0;
+          }
+          [data-anim='in'] .menu-sheen::after { animation: menuSheen 820ms cubic-bezier(0.4,0,0.2,1) 160ms both; }
+          @keyframes menuSheen {
+            0%   { translate: -130% 0; opacity: 0; }
+            20%  { opacity: 1; }
+            80%  { opacity: 1; }
+            100% { translate: 230% 0; opacity: 0; }
+          }
+          /* ODCHOD: krátké "nadechnutí" doprava a pak sjetí doleva (samotný posun řeší transition) */
+          @keyframes menuNudgeOut {
+            0%   { translate: 0 0; }
+            20%  { translate: 16px 0; }
+            100% { translate: 0 0; }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            [data-anim] .menu-stagger, [data-anim] .menu-sheen::after { animation: none !important; }
           }
         `}</style>
-        <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
-          <filter id="clayPx4" x="0" y="0" width="100%" height="100%"><feFlood x="1" y="1" width="2" height="2" /><feComposite width="4" height="4" /><feTile result="a" /><feComposite in="SourceGraphic" in2="a" operator="in" /><feMorphology operator="dilate" radius="2" /></filter>
-          <filter id="clayPx8" x="0" y="0" width="100%" height="100%"><feFlood x="3" y="3" width="2" height="2" /><feComposite width="8" height="8" /><feTile result="a" /><feComposite in="SourceGraphic" in2="a" operator="in" /><feMorphology operator="dilate" radius="4" /></filter>
-          <filter id="clayPx14" x="0" y="0" width="100%" height="100%"><feFlood x="6" y="6" width="2" height="2" /><feComposite width="14" height="14" /><feTile result="a" /><feComposite in="SourceGraphic" in2="a" operator="in" /><feMorphology operator="dilate" radius="7" /></filter>
-          <filter id="clayPx22" x="0" y="0" width="100%" height="100%"><feFlood x="10" y="10" width="2" height="2" /><feComposite width="22" height="22" /><feTile result="a" /><feComposite in="SourceGraphic" in2="a" operator="in" /><feMorphology operator="dilate" radius="11" /></filter>
-        </svg>
         <div
-          className="relative rounded-[32px] border-[5px] border-black p-[14px] pt-[16px] pb-[18px] h-full overflow-y-auto overflow-x-hidden clay-noscroll"
+          className="relative rounded-[32px] border border-[#444] p-[14px] pt-[16px] pb-[18px] h-full overflow-y-auto overflow-x-hidden clay-noscroll"
           style={{
             backgroundColor: clay.panelBg,
             backgroundImage: clay.pattern,
-            boxShadow: '10px 10px 0 #1A1A1A, 16px 22px 36px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(255,255,255,0.6)',   // stín doprava dolů
+            boxShadow: '0 18px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)',   // měkká hloubka
             scrollbarWidth: 'none',
           }}
         >
-          <div className="pointer-events-none absolute inset-0 rounded-[26px] shadow-[inset_0_2px_8px_rgba(255,255,255,0.9),inset_0_-6px_12px_rgba(0,0,0,0.06)]" />
+          <div className="pointer-events-none absolute inset-0 rounded-[26px] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]" />
 
           <div className="relative flex flex-col gap-[8px]">
             {currentStructure.map((node: any) =>
@@ -375,10 +384,13 @@ function MenuComponent({ page, setPage, activeProfile, forcedOpen, forcedIdx, on
                 <ClayItem key={node.id} {...clayProps(node.id, node.label)} />
               ) : (
                 <div key={node.id} className="contents">
-                  <div className="mt-[10px] mb-[-2px] px-[8px] flex items-center gap-2">
-                    <div className="h-[1.5px] w-4 bg-black/20 rounded-full" />
-                    <span className="text-[10.5px] font-black tracking-[0.32em] text-[#7A7B80] uppercase">{node.label}</span>
-                    <div className="h-[1.5px] flex-1 bg-black/10 rounded-full" />
+                  <div
+                    className="menu-stagger mt-[10px] mb-[-2px] px-[8px] flex items-center gap-2"
+                    style={{ ['--i' as any]: Math.min(12, Math.max(0, flatItems.findIndex((f: any) => f.id === node.id))) }}
+                  >
+                    <div className="h-px w-4 bg-[#444] rounded-full" />
+                    <span className="text-[10.5px] font-black tracking-[0.32em] text-[#9a9a9a] uppercase">{node.label}</span>
+                    <div className="h-px flex-1 bg-[#444] rounded-full" />
                   </div>
                   {(open as any)[node.id] && (
                     <div className="flex flex-col gap-[8px] mt-[4px]">
@@ -393,15 +405,18 @@ function MenuComponent({ page, setPage, activeProfile, forcedOpen, forcedIdx, on
           </div>
 
           <div className="mt-[18px] flex justify-center gap-[8px] opacity-50">
-            <div className="w-[28px] h-[8px] rounded-full bg-black/15 border border-black/10" />
-            <div className="w-[28px] h-[8px] rounded-full bg-black/15 border border-black/10" />
-            <div className="w-[28px] h-[8px] rounded-full bg-black/15 border border-black/10" />
+            <div className="w-[28px] h-[8px] rounded-full bg-black/15 border border-[#444]" />
+            <div className="w-[28px] h-[8px] rounded-full bg-black/15 border border-[#444]" />
+            <div className="w-[28px] h-[8px] rounded-full bg-black/15 border border-[#444]" />
           </div>
 
           <div className="mt-4 flex items-center justify-between px-2">
-            <span className="text-[10px] font-bold tracking-widest text-black/40 border border-black/15 rounded-full px-2.5 py-1 bg-white/70">CLAY • PUFFY</span>
-            <span className="text-[10px] font-bold tracking-widest text-black/50">PROFIL {activeProfile + 1}/4</span>
+            <span className="text-[10px] font-bold tracking-widest text-[#c9a646] border border-[#c9a646]/40 rounded-full px-2.5 py-1 bg-[#2b2b2b]">ROYAL • DARK</span>
+            <span className="text-[10px] font-bold tracking-widest text-[#9a9a9a]">PROFIL {activeProfile + 1}/4</span>
           </div>
+
+          {/* jednorázový světelný přejezd při příchodu */}
+          <div className="menu-sheen pointer-events-none absolute inset-0 overflow-hidden rounded-[26px]" />
         </div>
 
         {/* SEXY 10% peek – šipka pouze nahoře v kolečku, jen sipkkkkaa */}
@@ -426,9 +441,9 @@ function MenuComponent({ page, setPage, activeProfile, forcedOpen, forcedIdx, on
             width: 42,
             height: 42,
             borderRadius: '50%',
-            background: '#ffffff',
-            border: '3px solid #0a0a0a',
-            boxShadow: '4px 4px 0px #0a0a0a',
+            background: '#3a3a3a',
+            border: '1px solid #444',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -444,7 +459,7 @@ function MenuComponent({ page, setPage, activeProfile, forcedOpen, forcedIdx, on
               width: 22,
               height: 22,
               objectFit: 'contain',
-              transform: isMenuVisible? 'rotate(180deg)' : 'rotate(0deg)',
+              transform: isMenuVisible? 'rotate(180deg)' : 'rotate(0deg)', filter: 'grayscale(1) brightness(1.8)',
               transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1)',
             }}
           />

@@ -20,6 +20,7 @@
     "fs:allow-write-file",
     "fs:allow-rename",
     "fs:allow-stat",
+    "dialog:allow-open",
     "shell:default",
     "shell:allow-open"
   ]

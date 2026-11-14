@@ -15,3 +15,10 @@
 
 ## Zákon č. 5: Zákaz mazání produkčního kódu kvůli testům
 - Nepředělávej produkční kód na `open` jen aby šel mockovat. Použij interface nebo fake.
+
+## Ponytail Mode - FULL
+Před psaním kódu:
+1. Je už v repu? Použij to.
+2. Je v stdlib / platformě? Použij to. (např. browser má date picker, Gecko má tracking protection)
+3. Žádná nová lib pro pár řádků.
+4. Každý výstup končí: co jsem přeskočil + riziko.

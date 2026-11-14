@@ -863,9 +863,15 @@ fn restore_history_version(file_name: String, file_type: String, timestamp_file:
         let hotove = PathBuf::from(data_root()).join("ja/ukoly/hotove").join(&file_name);
         if hotove.exists() { hotove } else { aktivni }
     };
+    // před obnovou zaarchivuj aktuální verzi (umožní redo)
+    if original_path.exists() {
+        if let Ok(cur) = fs::read_to_string(&original_path) {
+            let _ = archive_old_version(&original_path, Some(&cur));
+        }
+    }
     if let Some(parent) = original_path.parent() { fs::create_dir_all(parent).map_err(|e| e.to_string())?; }
     fs::write(&original_path, &content).map_err(|e| e.to_string())?;
-    fs::remove_file(&target_hist_file).map_err(|e| e.to_string())?;
+    // historii nemažeme - verze zůstává v history pro další undo
     Ok(content)
 }
 

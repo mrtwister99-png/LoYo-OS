@@ -10,8 +10,8 @@ export const MENU_STRUCTURE_P4: MenuNodeP4[] = [
 ]
 export const MENU_META_P4: Record<string, { color: string; num: string }> = {
   dashboard: { color: profile4Colors.accent, num: '4_01' },
-  grnotes: { color: '#d9ff00', num: '4_02' },
-  helenevim: { color: '#ff6f00', num: '4_03' },
-  shaders: { color: '#00f2ff', num: '4_04' },
-  threed: { color: '#ac0001', num: '4_05' },
+  grnotes: { color: '#9a9a9a', num: '4_02' },
+  helenevim: { color: '#9a9a9a', num: '4_03' },
+  shaders: { color: '#12a4ff', num: '4_04' },
+  threed: { color: '#9a9a9a', num: '4_05' },
 }

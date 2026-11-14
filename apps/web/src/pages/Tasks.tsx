@@ -20,9 +20,9 @@ type Task = {
 type KanbanStatus = 'todo' | 'doing' | 'done'
 const KANBAN_STORAGE_KEY = 'loyo-kanban-status'
 const KANBAN_COLUMNS: { id: KanbanStatus; label: string; color: string }[] = [
-  { id: 'todo', label: 'ToDo', color: 'bg-[#F8F6F1]' },
-  { id: 'doing', label: 'Doing', color: 'bg-[#FFF3E0]' },
-  { id: 'done', label: 'Done', color: 'bg-[#E8F5E9]' },
+  { id: 'todo', label: 'ToDo', color: 'bg-[#353535]' },
+  { id: 'doing', label: 'Doing', color: 'bg-[#353535]' },
+  { id: 'done', label: 'Done', color: 'bg-[#353535]' },
 ]
 
 const slugify = (s: string): string =>
@@ -30,12 +30,12 @@ const slugify = (s: string): string =>
 
 const TaskRow = memo(function TaskRow({ task, isActive, onSelect, onToggle, stripHeader }: { task: Task; isActive: boolean; onSelect: (id: string) => void; onToggle: (t: Task) => void; stripHeader: (c: string) => string }) {
   return (
-    <div onClick={() => onSelect(task.file_name)} className={`p-5 cursor-pointer transition hover:bg-[#F8F6F1] flex gap-3 items-start border-l-4 ${isActive? 'bg-black text-white hover:bg-black' : 'bg-white'}`} style={{ borderLeftColor: TASK_COLOR }}>
-      <input type="checkbox" checked={task.done} onClick={e => e.stopPropagation()} onChange={() => onToggle(task)} className="mt-1 w-4 h-4 accent-[#00D084] cursor-pointer flex-shrink-0" />
+    <div onClick={() => onSelect(task.file_name)} className={`p-5 cursor-pointer transition hover:bg-[#353535] flex gap-3 items-start border-l ${isActive? 'bg-[#12a4ff] text-white hover:bg-[#444]' : 'bg-[#3a3a3a]'}`} style={{ borderLeftColor: TASK_COLOR }}>
+      <input type="checkbox" checked={task.done} onClick={e => e.stopPropagation()} onChange={() => onToggle(task)} className="mt-1 w-4 h-4 accent-[#12a4ff] cursor-pointer flex-shrink-0" />
       <div className="flex-1 min-w-0">
         <div className={`font-bold text-[14px] leading-tight line-clamp-1 ${task.done? 'line-through opacity-50' : ''}`}>{task.title}</div>
-        <div className={`text-[12px] mt-2 line-clamp-2 leading-relaxed ${isActive? 'text-white/60' : 'text-black/50'}`}>{stripHeader(task.content).slice(0, 120)}</div>
-        <div className={`mono text-[10px] mt-3 ${isActive? 'text-white/30' : 'text-black/30'}`}>{task.created_at} • {task.file_name}</div>
+        <div className={`text-[12px] mt-2 line-clamp-2 leading-relaxed ${isActive? 'text-[#f0f0f0]' : 'text-[#9a9a9a]'}`}>{stripHeader(task.content).slice(0, 120)}</div>
+        <div className={`mono text-[10px] mt-3 ${isActive? 'text-[#9a9a9a]/70' : 'text-[#9a9a9a]/70'}`}>{task.created_at} • {task.file_name}</div>
       </div>
     </div>
   )
@@ -48,13 +48,13 @@ const KanbanCard = memo(function KanbanCard({ task, onSelect, isDragging, onDrag
       onDragStart={(e) => onDragStart(e, task.file_name)}
       onDragEnd={onDragEnd}
       onClick={() => onSelect(task.file_name)}
-      className={`p-4 rounded- border bg-white cursor-grab active:cursor-grabbing transition-all select-none border-l-4
-        ${isDragging? 'opacity-40 scale-[0.97] border-black/20 shadow-lg' : 'border-black/[0.06] hover:border-black/15 hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)]'}`}
+      className={`p-4 rounded- border bg-[#3a3a3a] cursor-grab active:cursor-grabbing transition-all select-none border-l
+        ${isDragging? 'opacity-40 scale-[0.97] border-[#444] shadow-lg' : 'border-black/[0.06] hover:border-[#444] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)]'}`}
       style={{ borderLeftColor: TASK_COLOR }}
     >
       <div className={`font-bold text-[13px] leading-tight line-clamp-2 ${task.done ? 'line-through opacity-50' : ''}`}>{task.title}</div>
-      <div className="text-[11px] mt-2 line-clamp-2 leading-relaxed text-black/40">{stripHeader(task.content).slice(0, 100)}</div>
-      <div className="mono text-[9px] mt-3 text-black/25 flex justify-between">
+      <div className="text-[11px] mt-2 line-clamp-2 leading-relaxed text-[#9a9a9a]">{stripHeader(task.content).slice(0, 100)}</div>
+      <div className="mono text-[9px] mt-3 text-[#9a9a9a]/70 flex justify-between">
         <span>{task.created_at}</span>
         <span className="truncate max-w-[90px]">{task.file_name.split('_').slice(-1)[0]?.slice(0,12)}</span>
       </div>
@@ -463,43 +463,43 @@ export default function Tasks() {
   }, [filtered, getKanbanStatus])
 
   return (
-    <div className="min-h-full bg-[#F8F6F1]/80 p-8">
+    <div className="min-h-full bg-[#353535]/80 p-8">
       <div className="max-w-[1400px] mx-auto space-y-6">
         <div className="flex justify-between items-end">
           <div>
-            <div className="mono text-[10px] tracking-[0.3em] text-black/40">LOYO OS • TASKS • {openCount} OTEVŘENÝCH • {isTauri? 'TAURI FS' : 'LOCAL MOCK'}</div>
+            <div className="mono text-[10px] tracking-[0.3em] text-[#9a9a9a]">LOYO OS • TASKS • {openCount} OTEVŘENÝCH • {isTauri? 'TAURI FS' : 'LOCAL MOCK'}</div>
             <h1 className="text-5xl font-black tracking-tighter mt-2">Úkoly</h1>
-            <div className="text-sm text-black/50 mt-2 flex flex-wrap gap-2 items-center">
+            <div className="text-sm text-[#9a9a9a] mt-2 flex flex-wrap gap-2 items-center">
               <span>{filtered.length} z {tasks.length} • ukládá se do</span>
-              <span className="font-mono text-[11px] bg-white border border-black/10 px-2.5 py-1 rounded-full">{ACTIVE_DIR},{DONE_DIR}</span>
-              <span className={`text-[11px] px-2.5 py-1 rounded-full ${isTauri? 'bg-[#00D084] text-black' : 'bg-[#FF3B30] text-white'}`}>{isTauri? '✓ napojeno na disk' : '× spusť pnpm tauri dev'}</span>
-              {lastSync && <span className="text-[10px] mono text-black/30">poslední sync: {lastSync.toLocaleTimeString()}</span>}
+              <span className="font-mono text-[11px] bg-[#3a3a3a] border border-[#444] px-2.5 py-1 rounded-full">{ACTIVE_DIR},{DONE_DIR}</span>
+              <span className={`text-[11px] px-2.5 py-1 rounded-full ${isTauri? 'bg-[#444] text-[#f0f0f0]' : 'bg-[#444] text-[#f0f0f0]'}`}>{isTauri? '✓ napojeno na disk' : '× spusť pnpm tauri dev'}</span>
+              {lastSync && <span className="text-[10px] mono text-[#9a9a9a]/70">poslední sync: {lastSync.toLocaleTimeString()}</span>}
             </div>
-            {status && <div className="mt-2 text-[11px] mono bg-black text-white px-3 py-1.5 rounded-full inline-block">{status}</div>}
+            {status && <div className="mt-2 text-[11px] mono bg-[#444] text-[#f0f0f0] px-3 py-1.5 rounded-full inline-block">{status}</div>}
                    </div>
           <div className="flex gap-3 items-center">
-            <div className="flex bg-white rounded-[12px] border border-black/[0.06] p-1">
-              <button onClick={() => setViewMode('list')} className={`px-4 py-2 rounded-[8px] text-[11px] font-black tracking-widest transition ${viewMode==='list' ? 'bg-black text-white' : 'text-black/40 hover:text-black'}`}>LIST</button>
-              <button onClick={() => setViewMode('kanban')} className={`px-4 py-2 rounded-[8px] text-[11px] font-black tracking-widest transition ${viewMode==='kanban' ? 'bg-black text-white' : 'text-black/40 hover:text-black'}`}>KANBAN</button>
+            <div className="flex bg-[#3a3a3a] rounded-[12px] border border-black/[0.06] p-1">
+              <button onClick={() => setViewMode('list')} className={`px-4 py-2 rounded-[8px] text-[11px] font-black tracking-widest transition ${viewMode==='list' ? 'bg-[#444] text-[#f0f0f0]' : 'text-[#9a9a9a] hover:text-[#f0f0f0]'}`}>LIST</button>
+              <button onClick={() => setViewMode('kanban')} className={`px-4 py-2 rounded-[8px] text-[11px] font-black tracking-widest transition ${viewMode==='kanban' ? 'bg-[#444] text-[#f0f0f0]' : 'text-[#9a9a9a] hover:text-[#f0f0f0]'}`}>KANBAN</button>
             </div>
-            <div className={`w-2 h-2 rounded-full ${isTauri? 'bg-[#00D084] animate-pulse' : 'bg-[#FF3B30]'}`} />
-            <button onClick={undo} disabled={!canUndo} className={`px-5 py-3 rounded- text- font-black tracking-[0.2em] border transition ${canUndo? 'bg-white border-black text-black hover:bg-black hover:text-white' : 'bg-[#F8F6F1] border-black/10 text-black/20'}`} title="Ctrl+Z">↩️ UNDO {canUndo? `(${historyCount})` : ''}</button>
-            <button onClick={handleNew} className="bg-black text-white px-6 py-3 rounded- text- font-black tracking-[0.2em] hover:bg-zinc-900 transition">+ NOVÝ ÚKOL</button>
+            <div className={`w-2 h-2 rounded-full ${isTauri? 'bg-[#444] animate-pulse' : 'bg-[#444]'}`} />
+            <button onClick={undo} disabled={!canUndo} className={`px-5 py-3 rounded- text- font-black tracking-[0.2em] border transition ${canUndo? 'bg-[#3a3a3a] border-[#444] text-[#f0f0f0] hover:bg-[#444] hover:text-[#f0f0f0]' : 'bg-[#353535] border-[#444] text-[#9a9a9a]/70'}`} title="Ctrl+Z">↩️ UNDO {canUndo? `(${historyCount})` : ''}</button>
+            <button onClick={handleNew} className="bg-[#444] text-[#f0f0f0] px-6 py-3 rounded- text- font-black tracking-[0.2em] hover:bg-[#353535] transition">+ NOVÝ ÚKOL</button>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-white rounded-[16px] p-6 border border-black/[0.06]"><div className="mono text-[10px] tracking-widest text-black/30">OTEVŘENÉ</div><div className="text-4xl font-black mt-3">{openCount}</div><div className="text-[11px] text-black/40 mt-1">čekají na vyřízení</div></div>
-          <div className="bg-black text-white rounded-[16px] p-6"><div className="mono text-[10px] tracking-widest text-white/30">HOTOVÉ</div><div className="text-4xl font-black mt-3">{doneCount}</div><div className="text-[11px] text-white/50 mt-1">splněných úkolů celkem</div></div>
-          <div className="bg-white rounded-[16px] p-6 border border-black/[0.06]"><div className="mono text-[10px] tracking-widest text-black/30">AKTIVNÍ ÚKOL</div><div className="text-[14px] font-black mt-3 truncate">{selected?.title || '—'}</div><div className="text-[11px] text-black/40 mt-1 mono truncate">{selected?.file_name} • {selected?.created_at}</div></div>
+          <div className="bg-[#3a3a3a] rounded-[16px] p-6 border border-black/[0.06]"><div className="mono text-[10px] tracking-widest text-[#9a9a9a]/70">OTEVŘENÉ</div><div className="text-4xl font-black mt-3">{openCount}</div><div className="text-[11px] text-[#9a9a9a] mt-1">čekají na vyřízení</div></div>
+          <div className="bg-[#444] text-[#f0f0f0] rounded-[16px] p-6"><div className="mono text-[10px] tracking-widest text-[#9a9a9a]/70">HOTOVÉ</div><div className="text-4xl font-black mt-3">{doneCount}</div><div className="text-[11px] text-[#9a9a9a] mt-1">splněných úkolů celkem</div></div>
+          <div className="bg-[#3a3a3a] rounded-[16px] p-6 border border-black/[0.06]"><div className="mono text-[10px] tracking-widest text-[#9a9a9a]/70">AKTIVNÍ ÚKOL</div><div className="text-[14px] font-black mt-3 truncate">{selected?.title || '—'}</div><div className="text-[11px] text-[#9a9a9a] mt-1 mono truncate">{selected?.file_name} • {selected?.created_at}</div></div>
         </div>
 
         {/* KANBAN BOARD */}
         {viewMode === 'kanban' && (
           <div className="space-y-4">
-            <div className="bg-white rounded-[16px] border border-black/[0.06] p-4 flex gap-3">
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Hledat v úkolech..." className="flex-1 px-4 py-3 bg-[#F8F6F1] border border-black/[0.06] rounded-[10px] text-[13px] outline-none focus:border-black focus:bg-white transition placeholder:text-black/20" />
+            <div className="bg-[#3a3a3a] rounded-[16px] border border-black/[0.06] p-4 flex gap-3">
+              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Hledat v úkolech..." className="flex-1 px-4 py-3 bg-[#353535] border border-black/[0.06] rounded-[10px] text-[13px] outline-none focus:border-[#444] focus:bg-[#3a3a3a] transition placeholder:text-[#9a9a9a]/70" />
               <div className="flex gap-2">
-                {(['open', 'done', 'all'] as const).map(f => (<button key={f} onClick={() => setFilterDone(f)} className={`px-4 text-[10px] font-black tracking-widest py-2 rounded-[8px] transition ${filterDone=== f? 'bg-black text-white' : 'bg-[#F8F6F1] text-black/40 hover:text-black/70'}`}>{f=== 'open'? 'OTEVŘENÉ' : f=== 'done'? 'HOTOVÉ' : 'VŠE'}</button>))}
+                {(['open', 'done', 'all'] as const).map(f => (<button key={f} onClick={() => setFilterDone(f)} className={`px-4 text-[10px] font-black tracking-widest py-2 rounded-[8px] transition ${filterDone=== f? 'bg-[#444] text-[#f0f0f0]' : 'bg-[#353535] text-[#9a9a9a] hover:text-[#f0f0f0]'}`}>{f=== 'open'? 'OTEVŘENÉ' : f=== 'done'? 'HOTOVÉ' : 'VŠE'}</button>))}
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
@@ -515,15 +515,15 @@ export default function Tasks() {
                     setDragOverCol(null)
                     setDraggedId(null)
                   }}
-                  className={`rounded-[16px] border-2 border-dashed p-3 min-h-[60vh] transition-all ${dragOverCol===col.id ? 'border-black bg-black/[0.03] scale-[1.01]' : 'border-black/[0.06] bg-white/60'}`}
+                  className={`rounded-[16px] border border-dashed p-3 min-h-[60vh] transition-all ${dragOverCol===col.id ? 'border-[#444] bg-black/[0.03] scale-[1.01]' : 'border-black/[0.06] bg-[#3a3a3a]'}`}
                 >
                   <div className="flex justify-between items-center mb-3 px-2">
                     <span className="mono text-[11px] tracking-[0.2em] font-black">{col.label}</span>
-                    <span className="text-[10px] bg-black text-white rounded-full px-2 py-0.5 mono">{kanbanGroups[col.id].length}</span>
+                    <span className="text-[10px] bg-[#444] text-[#f0f0f0] rounded-full px-2 py-0.5 mono">{kanbanGroups[col.id].length}</span>
                   </div>
                   <div className="space-y-3">
                     {kanbanGroups[col.id].length===0 ? (
-                      <div className="p-6 text-center mono text-[10px] text-black/20 border border-dashed border-black/10 rounded-[12px]">přetáhni sem</div>
+                      <div className="p-6 text-center mono text-[10px] text-[#9a9a9a]/70 border border-dashed border-[#444] rounded-[12px]">přetáhni sem</div>
                     ) : kanbanGroups[col.id].map(task => (
                       <KanbanCard key={task.file_name} task={task} onSelect={safeSetSelectedId} isDragging={draggedId===task.file_name} onDragStart={handleDragStart} onDragEnd={handleDragEnd} stripHeader={stripHeader} />
                     ))}
@@ -532,17 +532,17 @@ export default function Tasks() {
               ))}
             </div>
             {selected && (
-              <div className="bg-white rounded-[20px] border border-black/[0.06] overflow-hidden flex flex-col min-h-[40vh] shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
+              <div className="bg-[#3a3a3a] rounded-[20px] border border-black/[0.06] overflow-hidden flex flex-col min-h-[40vh] shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
                 <div className="p-6 border-b border-black/[0.06]">
                   <div className="flex items-center gap-4">
-                    <input type="checkbox" checked={editingDone} onChange={handleToggleDone} className="w-5 h-5 accent-[#00D084] cursor-pointer" />
+                    <input type="checkbox" checked={editingDone} onChange={handleToggleDone} className="w-5 h-5 accent-[#12a4ff] cursor-pointer" />
                     <input value={editingTitle} onChange={e => setEditingTitle(e.target.value)} placeholder="Název úkolu" className={`w-full text-2xl font-black tracking-tighter bg-transparent outline-none ${editingDone? 'line-through opacity-50':''}`} />
                   </div>
                 </div>
                 <textarea value={editingContent} onChange={e => setEditingContent(e.target.value)} placeholder="Popis..." className="flex-1 w-full p-6 text-[13px] leading-[1.7] bg-transparent outline-none resize-none min-h-[200px] font-mono" />
-                <div className="p-4 border-t border-black/[0.06] flex justify-between bg-[#F8F6F1]">
-                  <button onClick={handleDelete} className="text-[11px] px-4 py-2 rounded-full border border-[#FF3B30]/30 text-[#FF3B30] hover:bg-[#FF3B30] hover:text-white transition font-bold">SMAZAT</button>
-                  <button onClick={handleSave} className="px-6 py-2 bg-black text-white text-[11px] font-black tracking-[0.2em] rounded-[10px]">ULOŽIT</button>
+                <div className="p-4 border-t border-black/[0.06] flex justify-between bg-[#353535]">
+                  <button onClick={handleDelete} className="text-[11px] px-4 py-2 rounded-full border border-[#ff1e00]/40 royal-danger transition font-bold">SMAZAT</button>
+                  <button onClick={handleSave} className="px-6 py-2 bg-[#444] text-[#f0f0f0] text-[11px] font-black tracking-[0.2em] rounded-[10px]">ULOŽIT</button>
                 </div>
               </div>
             )}
@@ -551,55 +551,55 @@ export default function Tasks() {
 
         <div className={`${viewMode==='kanban' ? 'hidden' : ''} grid grid-cols-12 gap-6`}>
           <div className="col-span-4 space-y-4">
-            <div className="bg-white rounded-[16px] border border-black/[0.06] p-4 space-y-3">
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Hledat v úkolech..." className="w-full px-4 py-3 bg-[#F8F6F1] border border-black/[0.06] rounded-[10px] text-[13px] outline-none focus:border-black focus:bg-white transition placeholder:text-black/20" />
+            <div className="bg-[#3a3a3a] rounded-[16px] border border-black/[0.06] p-4 space-y-3">
+              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Hledat v úkolech..." className="w-full px-4 py-3 bg-[#353535] border border-black/[0.06] rounded-[10px] text-[13px] outline-none focus:border-[#444] focus:bg-[#3a3a3a] transition placeholder:text-[#9a9a9a]/70" />
               <div className="flex gap-2">
-                {(['open', 'done', 'all'] as const).map(f => (<button key={f} onClick={() => setFilterDone(f)} className={`flex-1 text-[10px] font-black tracking-widest py-2 rounded-[8px] transition ${filterDone=== f? 'bg-black text-white' : 'bg-[#F8F6F1] text-black/40 hover:text-black/70'}`}>{f=== 'open'? 'OTEVŘENÉ' : f=== 'done'? 'HOTOVÉ' : 'VŠE'}</button>))}
+                {(['open', 'done', 'all'] as const).map(f => (<button key={f} onClick={() => setFilterDone(f)} className={`flex-1 text-[10px] font-black tracking-widest py-2 rounded-[8px] transition ${filterDone=== f? 'bg-[#444] text-[#f0f0f0]' : 'bg-[#353535] text-[#9a9a9a] hover:text-[#f0f0f0]'}`}>{f=== 'open'? 'OTEVŘENÉ' : f=== 'done'? 'HOTOVÉ' : 'VŠE'}</button>))}
               </div>
             </div>
-            <div className="bg-white rounded-[16px] border border-black/[0.06] overflow-hidden">
+            <div className="bg-[#3a3a3a] rounded-[16px] border border-black/[0.06] overflow-hidden">
               <div className="p-4 border-b border-black/[0.06] flex justify-between items-center">
-                <span className="mono text-[10px] tracking-[0.3em] text-black/30">SEZNAM • {filtered.length}</span>
+                <span className="mono text-[10px] tracking-[0.3em] text-[#9a9a9a]/70">SEZNAM • {filtered.length}</span>
                 <span className="text-[10px] opacity-30">.md</span>
               </div>
                             <div className="max-h- overflow-y-auto divide-y divide-black/[0.04]">
-                {filtered.length=== 0? (<div className="p-8 text-center text- text-black/30 mono">Žádné úkoly</div>) : filtered.map(task => (<TaskRow key={task.file_name} task={task} isActive={task.file_name=== selectedId} onSelect={safeSetSelectedId} onToggle={toggleDoneQuick} stripHeader={stripHeader} />))}
+                {filtered.length=== 0? (<div className="p-8 text-center text- text-[#9a9a9a]/70 mono">Žádné úkoly</div>) : filtered.map(task => (<TaskRow key={task.file_name} task={task} isActive={task.file_name=== selectedId} onSelect={safeSetSelectedId} onToggle={toggleDoneQuick} stripHeader={stripHeader} />))}
               </div>
             </div>
           </div>
 
           <div className="col-span-8">
             {selected? (
-              <div className="bg-white rounded-[20px] border border-black/[0.06] overflow-hidden flex flex-col min-h-[70vh] shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
+              <div className="bg-[#3a3a3a] rounded-[20px] border border-black/[0.06] overflow-hidden flex flex-col min-h-[70vh] shadow-[0_20px_60px_rgba(0,0,0,0.04)]">
                 <div className="p-8 border-b border-black/[0.06]">
                   <div className="flex items-center gap-4">
-                    <input type="checkbox" checked={editingDone} onChange={handleToggleDone} className="w-6 h-6 accent-[#00D084] cursor-pointer flex-shrink-0" />
+                    <input type="checkbox" checked={editingDone} onChange={handleToggleDone} className="w-6 h-6 accent-[#12a4ff] cursor-pointer flex-shrink-0" />
                     <input value={editingTitle} onChange={e => setEditingTitle(e.target.value)} placeholder="Název úkolu" className={`w-full text-4xl font-black tracking-tighter bg-transparent outline-none placeholder:opacity-20 ${editingDone? 'line-through opacity-50' : ''}`} />
                   </div>
-                  <div className="mt-3 flex gap-2 mono text-[11px] text-black/40">
-                    <span className="px-2.5 py-1 bg-[#F8F6F1] rounded-full border border-black/[0.06] truncate max-w-[340px]">{selected.file_path}</span>
-                    <span className="px-2.5 py-1 bg-black text-white rounded-full">{selected.created_at}</span>
-                    <span className={`px-2.5 py-1 rounded-full ${editingDone? 'bg-[#00D084] text-black' : 'bg-[#FF9500] text-white'}`}>{editingDone? 'HOTOVO' : 'OTEVŘENÉ'}</span>
+                  <div className="mt-3 flex gap-2 mono text-[11px] text-[#9a9a9a]">
+                    <span className="px-2.5 py-1 bg-[#353535] rounded-full border border-black/[0.06] truncate max-w-[340px]">{selected.file_path}</span>
+                    <span className="px-2.5 py-1 bg-[#444] text-[#f0f0f0] rounded-full">{selected.created_at}</span>
+                    <span className={`px-2.5 py-1 rounded-full ${editingDone? 'bg-[#444] text-[#f0f0f0]' : 'bg-[#444] text-[#f0f0f0]'}`}>{editingDone? 'HOTOVO' : 'OTEVŘENÉ'}</span>
                   </div>
                 </div>
                 {checklistItems.length> 0 && (
                   <div className="px-8 pt-6 flex flex-col gap-2 border-b border-black/[0.06] pb-6">
-                    <div className="mono text-[10px] tracking-widest text-black/30 mb-1">POLOŽKY • {checklistItems.filter(i => i.checked).length}/{checklistItems.length}</div>
-                    {checklistItems.map(item => (<label key={item.lineIdx} className="flex items-center gap-3 text-[14px] cursor-pointer"><input type="checkbox" checked={item.checked} onChange={() => toggleChecklistItem(item.lineIdx)} className="w-5 h-5 accent-[#00D084] cursor-pointer flex-shrink-0" /><span className={item.checked? 'line-through opacity-50' : ''}>{item.text}</span></label>))}
+                    <div className="mono text-[10px] tracking-widest text-[#9a9a9a]/70 mb-1">POLOŽKY • {checklistItems.filter(i => i.checked).length}/{checklistItems.length}</div>
+                    {checklistItems.map(item => (<label key={item.lineIdx} className="flex items-center gap-3 text-[14px] cursor-pointer"><input type="checkbox" checked={item.checked} onChange={() => toggleChecklistItem(item.lineIdx)} className="w-5 h-5 accent-[#12a4ff] cursor-pointer flex-shrink-0" /><span className={item.checked? 'line-through opacity-50' : ''}>{item.text}</span></label>))}
                   </div>
                 )}
                 <textarea value={editingContent} onChange={e => setEditingContent(e.target.value)} placeholder="Popis úkolu..." className="flex-1 w-full p-8 text-[14px] leading-[1.7] bg-transparent outline-none resize-none min-h-[420px] font-mono placeholder:opacity-30" />
-                <div className="p-5 border-t border-black/[0.06] flex justify-between items-center bg-[#F8F6F1]">
-                  <button onClick={handleDelete} className="text-[11px] px-4 py-2 rounded-full border border-[#FF3B30]/30 text-[#FF3B30] hover:bg-[#FF3B30] hover:text-white transition font-bold tracking-widest">SMAZAT</button>
+                <div className="p-5 border-t border-black/[0.06] flex justify-between items-center bg-[#353535]">
+                  <button onClick={handleDelete} className="text-[11px] px-4 py-2 rounded-full border border-[#ff1e00]/40 royal-danger transition font-bold tracking-widest">SMAZAT</button>
                   <div className="flex gap-3 items-center">
                     <span className="mono text-[10px] opacity-40">{saving? 'Ukládám...' : isTauri? 'Uloží se na disk • Rust FS' : 'localStorage'}</span>
-                    <button onClick={handleSave} disabled={saving} className="px-8 py-3 bg-black text-white text-[11px] font-black tracking-[0.2em] rounded-[12px] hover:bg-zinc-900 disabled:opacity-30 transition">{saving? '...' : 'ULOŽIT'}</button>
+                    <button onClick={handleSave} disabled={saving} className="px-8 py-3 bg-[#444] text-[#f0f0f0] text-[11px] font-black tracking-[0.2em] rounded-[12px] hover:bg-[#353535] disabled:opacity-30 transition">{saving? '...' : 'ULOŽIT'}</button>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-[20px] border border-dashed border-black/10 min-h-[70vh] flex items-center justify-center">
-                <div className="text-center"><div className="text-5xl font-black text-black/10">∅</div><div className="mt-4 text-sm text-black/30 mono">{tasks.length=== 0? 'Žádné úkoly • klikni + NOVÝ ÚKOL' : 'Vyber úkol vlevo'}</div></div>
+              <div className="bg-[#3a3a3a] rounded-[20px] border border-dashed border-[#444] min-h-[70vh] flex items-center justify-center">
+                <div className="text-center"><div className="text-5xl font-black text-[#9a9a9a]/70">∅</div><div className="mt-4 text-sm text-[#9a9a9a]/70 mono">{tasks.length=== 0? 'Žádné úkoly • klikni + NOVÝ ÚKOL' : 'Vyber úkol vlevo'}</div></div>
               </div>
             )}
           </div>

@@ -241,7 +241,7 @@ export default function App() {
       </Layout>
 
       {toast && (
-        <div style={{ position: 'fixed', right: 24, bottom: 64, zIndex: 200, background: '#0a0a0a', color: '#fff', border: '3px solid #0a0a0a', borderRadius: 12, padding: '10px 16px', fontSize: 12, fontWeight: 700, boxShadow: '4px 4px 0 #00D084', maxWidth: 420 }}>
+        <div style={{ position: 'fixed', right: 24, bottom: 64, zIndex: 200, background: '#444', color: '#f0f0f0', border: '1px solid #444', borderRadius: 12, padding: '10px 16px', fontSize: 12, fontWeight: 700, boxShadow: '0 8px 24px rgba(0,0,0,0.35)', maxWidth: 420 }}>
           {toast}
         </div>
       )}

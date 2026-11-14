@@ -3,10 +3,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 
 export const PROFILES = [
-  { letter: 'L', color: '#040b8d', label: 'Osobní', sub: 'L • Dashboard' },
-  { letter: 'O', color: '#CDA24D', label: 'Programování', sub: 'O • Dev' },
-  { letter: 'Y', color: '#ac0001', label: 'JOB', sub: 'Y • Job tools' },
-  { letter: 'O', color: '#6300c7', label: '3D Design', sub: 'O • Grafik' },
+  { letter: 'L', color: '#12a4ff', label: 'Osobní', sub: 'L • Dashboard' },
+  { letter: 'O', color: '#9a9a9a', label: 'Programování', sub: 'O • Dev' },
+  { letter: 'Y', color: '#9a9a9a', label: 'JOB', sub: 'Y • Job tools' },
+  { letter: 'O', color: '#9a9a9a', label: '3D Design', sub: 'O • Grafik' },
 ] as const
 
 type Props = {
@@ -133,14 +133,14 @@ export default function ProfileCube({ activeProfile, setActiveProfile, setPage, 
                 width: 38,
                 height: 38,
                 background: p.color,
-                color: i === 1? '#000' : '#fff',
+                color: '#f0f0f0',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 900,
                 fontSize: 16,
-                fontFamily: 'monospace',
-                border: '2px solid rgba(255,255,255,0.22)',
+                fontFamily: "'JetBrains Mono', monospace",
+                border: '1px solid rgba(255,255,255,0.22)',
                 backfaceVisibility: 'hidden',
                 transform: `rotateY(${i * 90}deg) translateZ(19px)`,
               }}
@@ -158,18 +158,18 @@ export default function ProfileCube({ activeProfile, setActiveProfile, setPage, 
             top: 48,
             left: 0,
             width: 268,
-            background: '#f5f5f3',
-            border: '3px solid #0a0a0a',
+            background: '#2b2b2b',
+            border: '1px solid #444',
             borderRadius: 14,
             padding: 8,
             zIndex: 100,
-            boxShadow: '8px 8px 0px #0a0a0a, 0 20px 40px rgba(0,0,0,0.25)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
             animation: 'loyoPop 0.42s cubic-bezier(0.16,1,0.3,1)',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2px 6px 8px', borderBottom: '1px solid rgba(10,10,10,0.1)' }}>
-            <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.18em', color: 'rgba(10,10,10,0.5)' }}>KASKÁDA → ŠIKMO DOLŮ</span>
-            <span style={{ fontSize: 9, fontFamily: 'monospace', background: '#0a0a0a', color: '#fff', padding: '2px 6px', borderRadius: 999, fontWeight: 900 }}>{activeProfile + 1}/4</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2px 6px 8px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+            <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.18em', color: 'rgba(240,240,240,0.5)' }}>KASKÁDA → ŠIKMO DOLŮ</span>
+            <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", background: '#444', color: '#f0f0f0', padding: '2px 6px', borderRadius: 999, fontWeight: 900 }}>{activeProfile + 1}/4</span>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12 }}>
@@ -187,8 +187,8 @@ export default function ProfileCube({ activeProfile, setActiveProfile, setPage, 
                     width: 164,
                     height: 56,
                     background: p.color,
-                    color: idx === 1? '#000' : '#fff',
-                    border: active? '3px solid #0a0a0a' : '3px solid #0a0a0a',
+                    color: '#f0f0f0',
+                    border: active? '1px solid #12a4ff' : '1px solid #444',
                     borderRadius: 12,
                     display: 'flex',
                     flexDirection: 'row',
@@ -197,7 +197,7 @@ export default function ProfileCube({ activeProfile, setActiveProfile, setPage, 
                     padding: '0 14px',
                     fontWeight: 900,
                     cursor: selectingIdx!== null? 'default' : 'pointer',
-                    boxShadow: active? `0 0 0 2px ${p.color}, 5px 5px 0px #0a0a0a` : '4px 4px 0px #0a0a0a',
+                    boxShadow: active? '0 0 0 1px #12a4ff, 0 8px 20px rgba(0,0,0,0.4)' : '0 6px 16px rgba(0,0,0,0.35)',
                     animation: isUnselectedSucking
                     ? `loyoSuckBack 0.32s cubic-bezier(0.6,0,0.8,1) forwards`
                       : isSelecting
@@ -207,7 +207,7 @@ export default function ProfileCube({ activeProfile, setActiveProfile, setPage, 
                   } as any}
                 >
                   <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ width: 32, height: 32, background: '#0a0a0a', color: '#fff', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>{p.letter}</span>
+                    <span style={{ width: 32, height: 32, background: '#444', color: '#f0f0f0', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>{p.letter}</span>
                     <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1 }}>
                       <span style={{ fontSize: 12 }}>{p.label.toUpperCase()}</span>
                       <span style={{ fontSize: 9, opacity: 0.8, fontWeight: 700 }}>{p.sub}</span>
@@ -219,7 +219,7 @@ export default function ProfileCube({ activeProfile, setActiveProfile, setPage, 
             })}
           </div>
 
-          <div style={{ marginTop: 8, fontSize: 9, color: 'rgba(10,10,10,0.4)', fontFamily: 'monospace', textAlign: 'center' }}>
+          <div style={{ marginTop: 8, fontSize: 9, color: 'rgba(240,240,240,0.45)', fontFamily: "'JetBrains Mono', monospace", textAlign: 'center' }}>
             V2 • 3 KOSTKY SE NASAJÍ ZPĚT • VYBRANÁ ZŮSTANE
           </div>
         </div>

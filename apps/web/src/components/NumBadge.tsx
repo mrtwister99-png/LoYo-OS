@@ -26,8 +26,8 @@ export default function NumBadge({ type, n, idx, label, tone = 'dark', pill = fa
         padding: pill ? '2px 8px' : '2px 6px',
         borderRadius: pill ? 999 : 4,
         letterSpacing: pill ? '0.1em' : undefined,
-        background: tone === 'dark' ? '#000' : '#fff',
-        color: tone === 'dark' ? '#fff' : '#000',
+        background: tone === 'dark' ? '#444' : '#3a3a3a', border: '1px solid #4a4a4a',
+        color: tone === 'dark' ? '#f0f0f0' : '#9a9a9a',
         ...style,
       }}
     >

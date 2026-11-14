@@ -130,24 +130,24 @@ export default function AgentBuilder({ onComplete, initialData, prefill }: Exten
 
   const Field = ({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) => (
     <div className="mb-4">
-      <label className="block text-[10px] tracking-[0.2em] text-white/50 mb-1 font-bold">{label}</label>
+      <label className="block text-[10px] tracking-[0.2em] text-[#9a9a9a] mb-1 font-bold">{label}</label>
       {children}
-      {error && <div className="text-[#ae1710] text-[10px] mt-1">{error}</div>}
+      {error && <div className="text-[#9a9a9a] text-[10px] mt-1">{error}</div>}
     </div>
   )
 
-  const inputCls = "w-full bg-white/5 border border-white/10 text-white text-xs font-mono px-3 py-2 outline-none focus:border-[#f5c518]/60 transition-colors"
+  const inputCls = "w-full bg-white/5 border border-white/10 text-[#f0f0f0] text-xs font-mono px-3 py-2 outline-none focus:border-[#444]/60 transition-colors"
   const selectCls = inputCls + " cursor-pointer"
 
    return (
-    <div className="text-white">
+    <div className="text-[#f0f0f0]">
       {isEditMode && (
-        <div className="mb-4 px-3 py-2 bg-[#f5c518]/20 border border-[#f5c518]/40 text- tracking-[0.2em] text-[#f5c518] font-bold">
+        <div className="mb-4 px-3 py-2 bg-[#444]/20 border border-[#444]/40 text- tracking-[0.2em] text-[#9a9a9a] font-bold">
           EDIT MÓD: #{editSource?._editId} {editSource?._extra} — načteno z manifest.json
         </div>
       )}
-      <p className="text- text-white/40 mb-6 font-mono">
-        {isEditMode? 'Uprav pole → uloží se do stejné složky' : 'Vyplň formulář'} → Koštěrad vygeneruje <code className="text-[#f5c518]">manifest.json</code>
+      <p className="text- text-[#9a9a9a] mb-6 font-mono">
+        {isEditMode? 'Uprav pole → uloží se do stejné složky' : 'Vyplň formulář'} → Koštěrad vygeneruje <code className="text-[#9a9a9a]">manifest.json</code>
       </p>
 
       <Field label="DISPLAY NAME *" error={errors.displayName}>
@@ -209,17 +209,17 @@ export default function AgentBuilder({ onComplete, initialData, prefill }: Exten
       <div className="mb-6 flex items-center gap-3">
         <button
           onClick={() => set('mcp_expose', !form.mcp_expose)}
-          className={`w-10 h-5 rounded-full transition-colors relative ${form.mcp_expose ? 'bg-[#f5c518]' : 'bg-white/10'}`}
+          className={`w-10 h-5 rounded-full transition-colors relative ${form.mcp_expose ? 'bg-[#444]' : 'bg-white/10'}`}
         >
-          <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-black transition-all ${form.mcp_expose ? 'left-5' : 'left-0.5'}`} />
+          <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-[#444] transition-all ${form.mcp_expose ? 'left-5' : 'left-0.5'}`} />
         </button>
-        <span className="text-[11px] text-white/60 tracking-[0.1em]">MCP EXPOSE</span>
+        <span className="text-[11px] text-[#f0f0f0] tracking-[0.1em]">MCP EXPOSE</span>
       </div>
 
       {/* Preview */}
       <div className="mb-6 border border-white/10 bg-black/40 p-4">
-        <div className="text-[10px] tracking-[0.3em] text-white/30 mb-2">PREVIEW manifest.json</div>
-        <pre className="text-[10px] text-[#f5c518]/80 font-mono overflow-x-auto whitespace-pre-wrap">
+        <div className="text-[10px] tracking-[0.3em] text-[#9a9a9a]/70 mb-2">PREVIEW manifest.json</div>
+        <pre className="text-[10px] text-[#9a9a9a]/80 font-mono overflow-x-auto whitespace-pre-wrap">
           {JSON.stringify({
             id: form.id || '…',
             type: 'agent',
@@ -234,7 +234,7 @@ export default function AgentBuilder({ onComplete, initialData, prefill }: Exten
 
       <button
         onClick={handleSubmit}
-        className="w-full py-3 bg-[#f5c518] text-black font-black text-[12px] tracking-[0.3em] hover:bg-white transition-colors"
+        className="w-full py-3 bg-[#444] text-[#f0f0f0] font-black text-[12px] tracking-[0.3em] hover:bg-[#3a3a3a] transition-colors"
       >
         VYGENEROVAT MANIFEST
       </button>

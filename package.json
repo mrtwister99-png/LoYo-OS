@@ -16,6 +16,7 @@
     "build": "turbo run build",
     "db:push": "turbo run db:push",
     "cli:firmy": "tsx tools/cli/firmy/index.ts",
+    "cli:tridil": "tsx tools/cli/tridil/index.ts",
     "prepare": "husky"
   },
   "devDependencies": {

@@ -33,3 +33,9 @@
 3. 10. 2026 14:00 — připomenuto
 3. 10. 2026 15:00 — připomenuto
 3. 10. 2026 16:00 — připomenuto
+5. 11. 2026 09:00 — připomenuto
+5. 11. 2026 15:00 — připomenuto
+5. 11. 2026 16:00 — připomenuto
+5. 11. 2026 17:00 — připomenuto
+5. 11. 2026 20:00 — připomenuto
+5. 11. 2026 21:00 — připomenuto

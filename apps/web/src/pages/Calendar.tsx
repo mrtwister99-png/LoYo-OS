@@ -252,14 +252,14 @@ export default function Calendar() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-lg md:text-xl font-black tracking-[0.2em]">KALENDÁŘ</h1>
         <div className="flex items-center gap-2">
-          <div className="flex border border-black/20 rounded-sm overflow-hidden">
-            <button onClick={() => setViewMode('grid')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='grid'? 'bg-black text-white' : 'bg-white hover:bg-black/5'}`}>GRID</button>
-            <button onClick={() => setViewMode('timeline')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='timeline'? 'bg-black text-white' : 'bg-white hover:bg-black/5'}`}>DEN</button>
-            <button onClick={() => setViewMode('week')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='week'? 'bg-black text-white' : 'bg-white hover:bg-black/5'}`}>TÝDEN</button>
+          <div className="flex border border-[#444] rounded-sm overflow-hidden">
+            <button onClick={() => setViewMode('grid')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='grid'? 'bg-[#12a4ff] text-white' : 'bg-[#3a3a3a] hover:bg-white/5'}`}>GRID</button>
+            <button onClick={() => setViewMode('timeline')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='timeline'? 'bg-[#12a4ff] text-white' : 'bg-[#3a3a3a] hover:bg-white/5'}`}>DEN</button>
+            <button onClick={() => setViewMode('week')} className={`px-3 py-1.5 text- tracking-[0.15em] font-bold ${viewMode==='week'? 'bg-[#12a4ff] text-white' : 'bg-[#3a3a3a] hover:bg-white/5'}`}>TÝDEN</button>
           </div>
           <button
             onClick={() => openNewEvent()}
-            className="px-4 py-2 text- tracking-[0.15em] font-bold bg-[#1000a1] text-white hover:opacity-90 transition-opacity"
+            className="px-4 py-2 text- tracking-[0.15em] font-bold bg-[#12a4ff] text-[#f0f0f0] hover:opacity-90 transition-opacity"
           >
             + PŘIDAT UDÁLOST
           </button>
@@ -267,7 +267,7 @@ export default function Calendar() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
         {/* Kalendářní mřížka */}
-        <div className="bg-black text-white p-4 md:p-6 rounded-sm">
+        <div className="bg-[#444] text-[#f0f0f0] p-4 md:p-6 rounded-sm">
           <div className="flex items-center justify-between mb-4">
             <button onClick={goPrevMonth} className="px-3 py-1 text-lg hover:bg-white/10 rounded-sm transition-colors">‹</button>
             <div className="flex items-center gap-3">
@@ -279,7 +279,7 @@ export default function Calendar() {
 
           <div className="grid grid-cols-7 gap-1 mb-1">
             {DAYS_CZ.map(d => (
-              <div key={d} className="text-center text-[10px] tracking-[0.15em] text-white/50 py-1">{d}</div>
+              <div key={d} className="text-center text-[10px] tracking-[0.15em] text-[#9a9a9a] py-1">{d}</div>
             ))}
           </div>
 
@@ -295,14 +295,14 @@ export default function Calendar() {
                   onClick={() => setSelectedDate(cell.iso!)}
                   onDoubleClick={() => openNewEvent(cell.iso!)}
                   className={`relative aspect-square flex flex-col items-center justify-center rounded-sm text-[12px] font-semibold transition-colors ${
-                    isSelected ? 'bg-[#1000a1] text-white' :
-                    isToday ? 'bg-white/10 text-white border border-white/30' :
-                    'hover:bg-white/10 text-white/80'
+                    isSelected ? 'bg-[#12a4ff] text-[#f0f0f0]' :
+                    isToday ? 'bg-white/10 text-[#f0f0f0] border border-white/30' :
+                    'hover:bg-white/10 text-[#f0f0f0]'
                   }`}
                 >
                   <span>{cell.day}</span>
                   {count > 0 && (
-                    <span className={`w-1.5 h-1.5 rounded-full mt-1 ${isSelected ? 'bg-white' : 'bg-[#ae1710]'}`} />
+                    <span className={`w-1.5 h-1.5 rounded-full mt-1 ${isSelected ? 'bg-[#3a3a3a]' : 'bg-[#444]'}`} />
                   )}
                 </button>
               )
@@ -311,7 +311,7 @@ export default function Calendar() {
         </div>
 
                {/* Přehled dne / Timeline - ÚKOL 17 */}
-        <div className="bg-white/80 backdrop-blur-sm p-4 md:p-5 rounded-sm border border-black/10">
+        <div className="bg-[#3a3a3a] backdrop-blur-sm p-4 md:p-5 rounded-sm border border-[#444]">
           <div className="flex items-center justify-between mb-3">
             <div className="text- font-bold tracking-[0.15em] opacity-70">
               {new Date(selectedDate).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}
@@ -326,7 +326,7 @@ export default function Calendar() {
               ) : (
                 <div className="flex flex-col gap-2">
                   {selectedEvents.map((ev) => (
-                    <div key={ev.file_path} className="p-3 bg-white rounded-sm border border-black/10 group border-l-4" style={{ borderLeftColor: CALENDAR_COLOR, background: `linear-gradient(90deg, #fff 70%, ${CALENDAR_COLOR}22 100%)` }}>
+                    <div key={ev.file_path} className="p-3 bg-[#3a3a3a] rounded-sm border border-[#444] group border-l" style={{ borderLeftColor: CALENDAR_COLOR, background: `linear-gradient(90deg, #3a3a3a 70%, ${CALENDAR_COLOR}22 100%)` }}>
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <div className="text- font-bold tracking-[0.1em] opacity-60">{ev.time}</div>
@@ -336,8 +336,8 @@ export default function Calendar() {
                           )}
                         </div>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                          <button onClick={() => openEditEvent(ev)} className="text- px-2 py-1 border border-black/20 rounded-sm hover:bg-black/5">EDIT</button>
-                          <button onClick={() => deleteEvent(ev)} className="text- px-2 py-1 border border-[#ae1710]/40 text-[#ae1710] rounded-sm hover:bg-[#ae1710]/10">SMAZAT</button>
+                          <button onClick={() => openEditEvent(ev)} className="text- px-2 py-1 border border-[#444] rounded-sm hover:bg-white/5">EDIT</button>
+                          <button onClick={() => deleteEvent(ev)} className="text- px-2 py-1 border border-[#ff1e00]/40 rounded-sm royal-danger">SMAZAT</button>
                         </div>
                       </div>
                     </div>
@@ -346,12 +346,12 @@ export default function Calendar() {
               )}
             </>
           ) : (
-            <div className="relative border border-black/10 rounded-sm bg-white overflow-hidden">
+            <div className="relative border border-[#444] rounded-sm bg-[#3a3a3a] overflow-hidden">
               <div className="h- overflow-y-auto relative">
                 {Array.from({ length: 24 }).map((_, h) => (
                   <div key={h} className="absolute left-0 right-0 flex" style={{ top: `${h * 52}px`, height: '52px' }}>
-                    <div className="w-12 text- opacity-40 pr-2 text-right pt-1 border-r border-black/5">{String(h).padStart(2,'0')}:00</div>
-                    <div className="flex-1 border-t border-black/5"></div>
+                    <div className="w-12 text- opacity-40 pr-2 text-right pt-1 border-r border-[#444]">{String(h).padStart(2,'0')}:00</div>
+                    <div className="flex-1 border-t border-[#444]"></div>
                   </div>
                 ))}
                 {(() => {
@@ -395,14 +395,14 @@ export default function Calendar() {
                         draggable
                         onDragStart={()=> setDragging(ev)}
                         onDragEnd={()=> setDragging(null)}
-                        className={`absolute rounded-sm border shadow-sm group cursor-grab active:cursor-grabbing hover:z-10 hover:shadow-md transition-all ${isConflict? 'border-[#ae1710]/60 bg-[#ae1710]/10' : 'border-[#1000a1]/30'}`}
+                        className={`absolute rounded-sm border shadow-sm group cursor-grab active:cursor-grabbing hover:z-10 hover:shadow-md transition-all ${isConflict? 'border-[#444]/60 bg-[#444]/10' : 'border-[#12a4ff]/30'}`}
                         style={{
                           top: `${top}px`,
                           height: `${Math.max(22,h)}px`,
                           left: `calc(48px + ${(colIdx/colCount)*100}% - ${(colIdx/colCount)*48}px)`,
                           width: `calc(${100/colCount}% - 48px/${colCount} - 4px)`,
-                          background: isConflict? `linear-gradient(135deg, #fff 0%, #ae1710 22 100%)` : `linear-gradient(135deg, #fff 0%, ${CALENDAR_COLOR}18 100%)`,
-                          borderLeft: `3px solid ${isConflict? '#ae1710' : CALENDAR_COLOR}`,
+                          background: isConflict? `linear-gradient(135deg, #3a3a3a 0%, #444 100%)` : `linear-gradient(135deg, #3a3a3a 0%, ${CALENDAR_COLOR}18 100%)`,
+                          borderLeft: `2px solid ${isConflict? '#ff1e00' : CALENDAR_COLOR}`,
                           opacity: dragging?.file_path===ev.file_path? 0.5 : 1
                         }}
                         onClick={()=>openEditEvent(ev)}
@@ -410,12 +410,12 @@ export default function Calendar() {
                         <div className="px-2 py-1">
                           <div className="text- font-bold truncate flex items-center gap-1">
                             {ev.time} {ev.title}
-                            {isConflict && <span className="text- bg-[#ae1710] text-white px-1 rounded-sm">KONFLIKT</span>}
+                            {isConflict && <span className="text- bg-[#444] text-[#f0f0f0] px-1 rounded-sm">KONFLIKT</span>}
                           </div>
                           <div className="text- opacity-60 truncate">{ev.duration||60}m · {extractDescription(ev.content).slice(0,40)}</div>
                         </div>
                         <div
-                          className="absolute bottom-0 left-0 right-0 h-2 cursor-ns-resize bg-black/0 hover:bg-black/10"
+                          className="absolute bottom-0 left-0 right-0 h-2 cursor-ns-resize bg-white/5 hover:bg-white/5"
                           onMouseDown={(e)=> startResizing(e, ev)}
                         />
                       </div>
@@ -423,8 +423,8 @@ export default function Calendar() {
                   })
                 })()}
                 {selectedDate===today && (
-                  <div className="absolute left-0 right-0 h-0.5 bg-[#ae1710] z-20 pointer-events-none" style={{ top: `${(new Date().getHours()*60+new Date().getMinutes())/60*52}px` }}>
-                    <div className="absolute -left-1 -top-1 w-2 h-2 rounded-full bg-[#ae1710]"></div>
+                  <div className="absolute left-0 right-0 h-0.5 bg-[#444] z-20 pointer-events-none" style={{ top: `${(new Date().getHours()*60+new Date().getMinutes())/60*52}px` }}>
+                    <div className="absolute -left-1 -top-1 w-2 h-2 rounded-full bg-[#444]"></div>
                   </div>
                 )}
               </div>
@@ -433,13 +433,13 @@ export default function Calendar() {
           )}
 
           {viewMode==='week' && (
-            <div className="mt-4 border border-black/10 rounded-sm bg-white overflow-hidden">
-              <div className="grid grid-cols-7 border-b border-black/10 bg-black/5">
+            <div className="mt-4 border border-[#444] rounded-sm bg-[#3a3a3a] overflow-hidden">
+              <div className="grid grid-cols-7 border-b border-[#444] bg-white/5">
                 {weekDays.map(d=>{
                   const isSel = d===selectedDate
                   const dayEvents = events.filter(ev=>ev.date===d)
                   return (
-                    <div key={d} className={`p-2 text-center border-r last:border-r-0 ${isSel? 'bg-[#1000a1] text-white' : ''}`}>
+                    <div key={d} className={`p-2 text-center border-r last:border-r-0 ${isSel? 'bg-[#12a4ff] text-[#f0f0f0]' : ''}`}>
                       <div className="text- opacity-60">{new Date(d).toLocaleDateString('cs-CZ',{weekday:'short'})}</div>
                       <div className="text- font-bold">{new Date(d).getDate()}</div>
                       <div className="text- opacity-50">{dayEvents.length}×</div>
@@ -451,7 +451,7 @@ export default function Calendar() {
                 {weekDays.map(dayIso=>(
                   <div
                     key={dayIso}
-                    className="relative border-r last:border-r-0 border-black/5"
+                    className="relative border-r last:border-r-0 border-[#444]"
                     onDragOver={e=> e.preventDefault()}
                     onDrop={e=>{
                       const cont = e.currentTarget as HTMLElement
@@ -459,7 +459,7 @@ export default function Calendar() {
                     }}
                   >
                     {Array.from({length:24}).map((_,h)=>(
-                      <div key={h} className="absolute left-0 right-0 border-t border-black/5" style={{top:`${h*52}px`}} />
+                      <div key={h} className="absolute left-0 right-0 border-t border-[#444]" style={{top:`${h*52}px`}} />
                     ))}
                     {events.filter(ev=>ev.date===dayIso).map(ev=>{
                       const toMin = (t:string)=>{ const [hh,mm]=t.split(':').map(Number); return hh*60+mm }
@@ -470,7 +470,7 @@ export default function Calendar() {
                           key={ev.file_path}
                           draggable
                           onDragStart={()=> setDragging(ev)}
-                          className="absolute left-0 right-1 rounded-sm border-l-2 bg-white shadow-sm text- px-1 py-0.5 truncate cursor-grab"
+                          className="absolute left-0 right-1 rounded-sm border-l bg-[#3a3a3a] shadow-sm text- px-1 py-0.5 truncate cursor-grab"
                           style={{top:`${(start/60)*52}px`, height:`${h}px`, borderLeftColor: CALENDAR_COLOR}}
                           onClick={()=>openEditEvent(ev)}
                         >
@@ -486,7 +486,7 @@ export default function Calendar() {
 
           <button
             onClick={() => openNewEvent(selectedDate)}
-            className="w-full mt-4 py-2 text- tracking-[0.15em] font-bold border border-black/20 rounded-sm hover:bg-black/5 transition-colors"
+            className="w-full mt-4 py-2 text- tracking-[0.15em] font-bold border border-[#444] rounded-sm hover:bg-white/5 transition-colors"
           >
             + PŘIDAT NA TENTO DEN
           </button>
@@ -497,7 +497,7 @@ export default function Calendar() {
       {/* Modal */}
       {modal.open && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={closeModal}>
-          <div className="bg-white rounded-sm w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
+          <div className="bg-[#3a3a3a] rounded-sm w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
             <div className="text-[13px] font-bold tracking-[0.15em] mb-4">
               {modal.editing ? 'UPRAVIT UDÁLOST' : 'NOVÁ UDÁLOST'}
             </div>
@@ -509,7 +509,7 @@ export default function Calendar() {
                   autoFocus
                   value={modal.title}
                   onChange={e => setModal(m => ({ ...m, title: e.target.value }))}
-                  className="w-full px-3 py-2 text-[13px] border border-black/20 rounded-sm outline-none focus:border-[#1000a1]"
+                  className="w-full px-3 py-2 text-[13px] border border-[#444] rounded-sm outline-none focus:border-[#12a4ff]"
                   placeholder="Např. Schůzka s klientem"
                 />
               </div>
@@ -521,7 +521,7 @@ export default function Calendar() {
                     type="date"
                     value={modal.date}
                     onChange={e => setModal(m => ({...m, date: e.target.value }))}
-                    className="w-full px-3 py-2 text- border border-black/20 rounded-sm outline-none focus:border-[#1000a1]"
+                    className="w-full px-3 py-2 text- border border-[#444] rounded-sm outline-none focus:border-[#12a4ff]"
                   />
                 </div>
                 <div>
@@ -530,7 +530,7 @@ export default function Calendar() {
                     type="time"
                     value={modal.time}
                     onChange={e => setModal(m => ({...m, time: e.target.value }))}
-                    className="w-full px-3 py-2 text- border border-black/20 rounded-sm outline-none focus:border-[#1000a1]"
+                    className="w-full px-3 py-2 text- border border-[#444] rounded-sm outline-none focus:border-[#12a4ff]"
                   />
                 </div>
                 <div>
@@ -538,7 +538,7 @@ export default function Calendar() {
                   <select
                     value={modal.duration}
                     onChange={e => setModal(m => ({...m, duration: parseInt(e.target.value) }))}
-                    className="w-full px-3 py-2 text- border border-black/20 rounded-sm outline-none focus:border-[#1000a1]"
+                    className="w-full px-3 py-2 text- border border-[#444] rounded-sm outline-none focus:border-[#12a4ff]"
                   >
                     <option value={15}>15 min</option>
                     <option value={30}>30 min</option>
@@ -553,7 +553,7 @@ export default function Calendar() {
                     type="time"
                     value={modal.time}
                     onChange={e => setModal(m => ({ ...m, time: e.target.value }))}
-                    className="w-full px-3 py-2 text-[13px] border border-black/20 rounded-sm outline-none focus:border-[#1000a1]"
+                    className="w-full px-3 py-2 text-[13px] border border-[#444] rounded-sm outline-none focus:border-[#12a4ff]"
                   />
                 </div>
               </div>
@@ -564,21 +564,21 @@ export default function Calendar() {
                   value={modal.description}
                   onChange={e => setModal(m => ({ ...m, description: e.target.value }))}
                   rows={3}
-                  className="w-full px-3 py-2 text-[13px] border border-black/20 rounded-sm outline-none focus:border-[#1000a1] resize-none"
+                  className="w-full px-3 py-2 text-[13px] border border-[#444] rounded-sm outline-none focus:border-[#12a4ff] resize-none"
                   placeholder="Volitelná poznámka k události..."
                 />
               </div>
 
-              {error && <div className="text-[11px] text-[#ae1710]">{error}</div>}
+              {error && <div className="text-[11px] text-[#9a9a9a]">{error}</div>}
 
               <div className="flex justify-end gap-2 mt-2">
-                <button onClick={closeModal} className="px-4 py-2 text-[11px] tracking-[0.1em] font-bold border border-black/20 rounded-sm hover:bg-black/5">
+                <button onClick={closeModal} className="px-4 py-2 text-[11px] tracking-[0.1em] font-bold border border-[#444] rounded-sm hover:bg-white/5">
                   ZRUŠIT
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={saving}
-                  className="px-4 py-2 text-[11px] tracking-[0.1em] font-bold bg-[#1000a1] text-white rounded-sm hover:opacity-90 disabled:opacity-50"
+                  className="px-4 py-2 text-[11px] tracking-[0.1em] font-bold bg-[#12a4ff] text-[#f0f0f0] rounded-sm hover:opacity-90 disabled:opacity-50"
                 >
                   {saving ? 'UKLÁDÁM...' : 'ULOŽIT'}
                 </button>

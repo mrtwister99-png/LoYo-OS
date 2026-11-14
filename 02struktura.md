@@ -42,7 +42,7 @@ D:\dev\loyo-os\
 │ │ ├── index.ts ✅ routes: agents/activity/runs/teams/workflows/loops/mcp/rag/notifications/capabilities/cli + SSE /api/chat/watch + /api/events
 │ │ ├── lib\
 │ │ │ ├── dataPaths.ts ✅ DATA_DIR jediný zdroj cest, resolve z __dirname + LOYO_DATA_DIR env
-│ │ │ ├── manifestDb.ts ✅ ÚKOL 7 HOTOVO: node:sqlite experimental, WAL, capabilities table, capabilities_fts FTS5, triggers insert/update/delete, search() MATCH, count:1 fix
+│ │ │ ├── manifestDb.ts ✅ ÚKOL 7 HOTOVO: better-sqlite3 s WAL, capabilities table, capabilities_fts FTS5, triggers insert/update/delete, search() MATCH, count fix - native binding povoleno v pnpm-workspace.yaml
 │ │ │ ├── gitAutoCommit.ts ✅ ÚKOL 8 HOTOVO: isomorphic-git add + statusMatrix STAGE 2/3 + commit LOYO OS Bot + optional push http/node + debounce 5s + autoCommitInBackground()
 │ │ │ └── manifestLoader.ts ✅ loader s Zod validací
 │ │ ├── routes\

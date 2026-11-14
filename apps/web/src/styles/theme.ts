@@ -1,52 +1,55 @@
-export const colors = {
+// LoYo OS — ROYAL DARK
+// Šedé plochy (90 %), modrá #12a4ff jen pro primární akci / aktivní stav / progress (~10 %),
+// červená #ff1e00 (~4 %): live tečka, upozornění, chyby, mazání; zlatá #c9a646 (~1 %): drobné royal detaily.
+// Nadpisy + logo: Playfair Display.
+export const royal = {
+  bg: '#2b2b2b',        // pozadí aplikace
+  surface: '#353535',   // panely, sidebary
+  card: '#3a3a3a',      // karty, inputy
+  line: '#444444',      // bordery, oddělovače, neaktivní plochy
+  text: '#f0f0f0',      // primární text
+  textSoft: '#9a9a9a',  // sekundární text
+  blue: '#12a4ff',      // jediný akcent
+  live: '#ff1e00',      // ~4 %: live tečka, alert, chyba, smazat
+  gold: '#c9a646',      // ~1 %: royal detail (verze, podpis, odznak)
+}
 
-  bg: '#f5f5f3',
-  bgSoft: '#e9e9e9',
-  white: '#FFFFFF',
-  black: '#0A0A0A',
-  border: 'rgba(10,10,10,0.08)',
-  borderStrong: 'rgba(10,10,10,0.15)',
-  text: '#0A0A0A',
-  textSoft: 'rgba(10,10,10,0.6)',
-  textFaint: 'rgba(10,10,10,0.3)',
-  accent: '#040b8d',
-  red: '#ac0001',
-  gold: '#CDA24D',
-  green: '#00D084',
-  purple: '#6300c7',
-  blue: '#040b8d',
+export const colors = {
+  bg: royal.bg,
+  bgSoft: royal.surface,
+  white: royal.card,
+  black: royal.text,
+  border: royal.line,
+  borderStrong: '#555555',
+  text: royal.text,
+  textSoft: royal.textSoft,
+  textFaint: 'rgba(240,240,240,0.35)',
+  accent: royal.blue,
+  red: royal.live,
+  gold: royal.gold,
+  green: royal.blue,
+  purple: royal.textSoft,
+  blue: royal.blue,
 }
 
 export const theme = {
-  radius: { sm: '8px', md: '10px', lg: '16px', pill: '999px' },
+  radius: { sm: '6px', md: '10px', lg: '14px', pill: '999px' },
   font: {
-    mono: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-    sans: 'Inter, system-ui, sans-serif',
+    display: "'Playfair Display', Georgia, serif",
+    mono: "'JetBrains Mono', ui-monospace, monospace",
+    sans: "'Inter', system-ui, sans-serif",
   },
   tracking: { wide: '0.25em', wider: '0.3em' }
 }
 
 export const layout = { menuWidth: '300px', headerHeight: '56px' }
 
+// Royal Dark je monochromní – každá kategorie má stejný (modrý) aktivní akcent.
+const A = royal.blue
 export const categoryColors = {
-  agents: '#6300c7',
-  agent: '#6300c7',
-  teams: '#ff6f00',
-  team: '#ff6f00',
-  workflows: '#d9ff00',
-  workflow: '#d9ff00',
-  loops: '#00f2ff',
-  loop: '#00f2ff',
-  skills: '#fff700',
-  skill: '#fff700',
-  mcp: '#33a3ff',
-  cli: '#40ff00',
-  api: '#ffa600',
-  dashboard: '#040b8d',
-  activity: '#ac0001',
-  tasks: '#CDA24D',
-  notes: '#6300c7',
-  calendar: '#33a3ff',
+  agents: A, agent: A, teams: A, team: A, workflows: A, workflow: A,
+  loops: A, loop: A, skills: A, skill: A, mcp: A, cli: A, api: A,
+  dashboard: A, activity: A, tasks: A, notes: A, calendar: A,
 }
 
 export const categoryNumbers = {
@@ -70,26 +73,27 @@ export const categoryNumbers = {
   api: 8,
 }
 
+const G = `linear-gradient(135deg, ${royal.surface} 0%, ${royal.card} 100%)`
 export const categoryGradients = {
-  activity: 'linear-gradient(135deg, #f5f5f3 0%, #f5f5f3 70%, #ac0001 100%)',
-  tasks: 'linear-gradient(135deg, #f5f5f3 0%, #f5f5f3 70%, #CDA24D 100%)',
-  notes: 'linear-gradient(135deg, #f5f5f3 0%, #f5f5f3 70%, #6300c7 100%)',
-  calendar: 'linear-gradient(135deg, #f5f5f3 0%, #f5f5f3 70%, #33a3ff 100%)',
-  dashboard: '#040b8d',
+  activity: G,
+  tasks: G,
+  notes: G,
+  calendar: G,
+  dashboard: royal.surface,
 }
 
 export const clay = {
-  ink: '#1A1A1A',
-  face: '#FEFEFE',
-  panelBg: '#EFEFF2',
-  radiusOuter: 16,
-  radiusInner: 12,
-  depth: 4,
-  outerPad: 3,
+  ink: '#232323',
+  face: royal.card,
+  panelBg: royal.surface,
+  radiusOuter: 12,
+  radiusInner: 9,
+  depth: 2,
+  outerPad: 2,
   minH: 34,
   innerPad: '5px 12px',
-  shadowIdle: '0 4px 0 #1A1A1A, 0 8px 14px rgba(0,0,0,0.18)',
-  insetIdle: 'inset 0 2px 0 rgba(255,255,255,1), inset 0 -3px 5px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(0,0,0,0.04)',
-  insetActive: 'inset 0 2px 0 rgba(255,255,255,0.55), inset 0 -2px 6px rgba(0,0,0,0.16), inset 0 1px 1px rgba(255,255,255,0.9)',
-  pattern: `url("data:image/svg+xml,%3Csvg width='26' height='26' viewBox='0 0 26 26' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='9' y='9' width='8' height='8' rx='1.8' fill='%23A8A9AD' fill-opacity='0.95'/%3E%3C/svg%3E")`,
+  shadowIdle: '0 2px 0 #1f1f1f, 0 6px 14px rgba(0,0,0,0.35)',
+  insetIdle: 'inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px #444',
+  insetActive: 'inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -2px 6px rgba(0,0,0,0.18)',
+  pattern: `url("data:image/svg+xml,%3Csvg width='26' height='26' viewBox='0 0 26 26' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='11' y='11' width='4' height='4' rx='1' fill='%23444444'/%3E%3C/svg%3E")`,
 }

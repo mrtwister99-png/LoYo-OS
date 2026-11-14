@@ -3,13 +3,13 @@
 
 import { FastifyInstance } from 'fastify'
 import { readdir, readFile, stat } from 'node:fs/promises'
-import { resolve, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join, resolve } from 'node:path'
+import { DATA_DIR } from '../lib/dataPaths.js'
 import { getCapabilities } from '../lib/manifestLoader.js'
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
-const CLI_DIR = resolve(__dirname, '../../../../tools/cli')
-const COMMANDS_FILE = resolve(__dirname, '../../../../data/capabilities/agents/mary-jane/commands.json')
+const ROOT = resolve(DATA_DIR, '..')
+const CLI_DIR = join(ROOT, 'tools/cli')
+const COMMANDS_FILE = join(DATA_DIR, 'capabilities/agents/mary-jane/commands.json')
 
 interface CliTool
 {

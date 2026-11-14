@@ -1,0 +1,13 @@
+{
+  "dir": "%USERPROFILE%\\Downloads",
+  "fallbackFolder": "ostatni",
+  "mapping": {
+    "mp3": ["mp3", "wav", "m4a", "flac"],
+    "zip": ["zip", "rar", "7z", "tar", "gz"],
+    "obrazky": ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "heic"],
+    "pdf": ["pdf"]
+  },
+  "proposedExtensions": {},
+  "skipExtensions": ["crdownload", "part", "tmp", "download", "partial"],
+  "skipPrefixes": ["~$"]
+}

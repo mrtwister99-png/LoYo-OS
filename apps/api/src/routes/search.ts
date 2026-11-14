@@ -15,7 +15,7 @@ export async function searchRoutes(app: FastifyInstance) {
     const { q, limit, type } = parsed.data
     const db = getDb()
     try {
-      // better-sqlite3 sync + WAL - <10ms, FTS5 + bm25
+      // FIX F3-2: všude MATCH ? s mezerou, jinak SQLite FTS5 hází syntax error
       if (type === 'all') {
         const caps = db.prepare(`SELECT 'capability' as source, *, bm25(capabilities_fts) as rank FROM capabilities_fts WHERE capabilities_fts MATCH ? ORDER BY rank LIMIT ?`).all(q, limit) as any[]
         const notes = db.prepare(`SELECT 'note' as source, *, bm25(notes_fts) as rank FROM notes_fts WHERE notes_fts MATCH ? ORDER BY rank LIMIT ?`).all(q, Math.floor(limit/2)) as any[]

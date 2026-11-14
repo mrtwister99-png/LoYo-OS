@@ -1,0 +1,11 @@
+// PATCH for apps/api/src/services/orchestrator.ts - runBender with knowledge.md
+import fs from 'fs'
+async function runBender(prompt: string) {
+  const biblePath = "D:/dev/loyo-os/data/capabilities/agents/bender/knowledge.md"
+  let bible = ""
+  try { bible = fs.readFileSync(biblePath, 'utf-8') } catch {}
+  const fullPrompt = bible + "\n\nUSER TASK: " + prompt + "\n\nPravidla: Použij make_mat(), BLENDER_EEVEE, ico_sphere pro hlavu, cylinder vertices=8 pro ruce/nohy, bevel 0.03 pro sako, os.makedirs, save do D:/dev/loyo-os/data/reports/bender/"
+  // volání Ollama devstral-small-2:latest s num_ctx 4096
+  // model: "devstral-small-2:latest", options: {num_ctx: 4096, temperature: 0.2}
+  return callOllama(fullPrompt, "BENDER")
+}

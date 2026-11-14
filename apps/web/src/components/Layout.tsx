@@ -271,7 +271,7 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
   return (
     <div
       className="relative h-screen w-screen flex flex-col overflow-hidden overscroll-none transition-colors duration-150"
-      style={{ background: biosMode? '#040b8d' : '#cccccc' }}
+      style={{ background: biosMode? '#1000a1' : '#2b2b2b' }}
     >
       <div className="relative z-10 h-full w-full flex flex-col overflow-hidden">
         {memoHeader}
@@ -290,7 +290,7 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
           <main
             className="flex-1 w-full overflow-y-auto overflow-x-hidden min-h-0 overscroll-contain transition-all duration-300 pb-"
             style={{
-              background: biosMode? 'rgba(4,11,141,0.8)' : 'rgba(255,255,255,0.6)',
+              background: biosMode? 'rgba(16,0,161,0.8)' : '#2b2b2b',
             }}
           >
             <div className="min-h-full w-full pb-">{children}</div>

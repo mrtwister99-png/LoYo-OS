@@ -9,8 +9,8 @@ export const MENU_STRUCTURE_P3: MenuNodeP3[] = [
 ]
 export const MENU_META_P3: Record<string, { color: string; num: string }> = {
   dashboard: { color: profile3Colors.accent, num: '3_01' },
-  zapisky: { color: '#040b8d', num: '3_02' },
-  projekty: { color: '#ac0001', num: '3_03' },
-  tym: { color: '#ff6f00', num: '3_04' },
-  tasks: { color: '#95a64b', num: '3_05' },
+  zapisky: { color: '#12a4ff', num: '3_02' },
+  projekty: { color: '#9a9a9a', num: '3_03' },
+  tym: { color: '#9a9a9a', num: '3_04' },
+  tasks: { color: '#9a9a9a', num: '3_05' },
 }

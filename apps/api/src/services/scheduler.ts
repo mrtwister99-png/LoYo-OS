@@ -153,6 +153,14 @@ async function executeScheduled(cmd: CommandDef): Promise<string>
     return `🧠 ${await summarizeAgentMemory('Mary_Jane')}\n🗂 ${await summarizeChatDay(yesterday)}`
   }
 
+  // Třídil — noční třídění Stažených souborů (loguje do activity sám)
+  if (cmd.handler === 'tridil')
+  {
+    const { runTridil } = await import('./tridil.js')
+    const { message } = await runTridil()
+    return message
+  }
+
   return `[scheduler] neznámý handler: ${cmd.handler}`
 }
 

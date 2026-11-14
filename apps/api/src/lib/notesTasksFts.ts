@@ -2,6 +2,10 @@ import { existsSync, readdirSync, readFileSync } from 'fs'
 import { join } from 'path'
 import { DATA_DIR } from './dataPaths.js'
 import { getDb } from './connection.js'
+
+// FIX F3-2: singleton DB + oprava SQL MATCH? -> MATCH ? (mezera je povinná pro FTS5)
+// Předtím: WHERE notes_fts MATCH? -> syntax error, shazovalo celý FTS pro poznámky/úkoly
+
 const db = getDb()
 db.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(file_name, title, content)`)
 db.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS tasks_fts USING fts5(file_name, title, content, done)`)
@@ -37,21 +41,24 @@ export function indexNote(file_name: string, title: string, content: string) {
   db.prepare(`DELETE FROM notes_fts WHERE file_name = ?`).run(file_name)
   db.prepare(`INSERT INTO notes_fts(file_name, title, content) VALUES (?,?,?)`).run(file_name, title, content)
 }
+
 export function searchNotes(q: string) {
+  // FIX: mezera mezi MATCH a ? je povinná
   return db.prepare(`SELECT *, bm25(notes_fts) as rank FROM notes_fts WHERE notes_fts MATCH ? ORDER BY rank LIMIT 20`).all(q)
 }
 
 export function indexTask(file_name: string, title: string, content: string, done: number) {
-  // FTS5 nemá REPLACE, takže delete + insert
   db.prepare(`DELETE FROM tasks_fts WHERE file_name = ?`).run(file_name)
   db.prepare(`INSERT INTO tasks_fts(file_name, title, content, done) VALUES (?,?,?,?)`).run(file_name, title, content, done)
 }
 
 export function searchTasks(q: string) {
+  // FIX: mezera mezi MATCH a ? je povinná
   return db.prepare(`SELECT *, bm25(tasks_fts) as rank FROM tasks_fts WHERE tasks_fts MATCH ? ORDER BY rank LIMIT 20`).all(q)
 }
 
 export function searchAll(q: string) {
+  // FIX: všude MATCH ? s mezerou
   const notes = db.prepare(`SELECT 'note' as type, file_name, title, content, bm25(notes_fts) as rank FROM notes_fts WHERE notes_fts MATCH ? ORDER BY rank LIMIT 10`).all(q) as any[]
   const tasks = db.prepare(`SELECT 'task' as type, file_name, title, content, bm25(tasks_fts) as rank FROM tasks_fts WHERE tasks_fts MATCH ? ORDER BY rank LIMIT 10`).all(q) as any[]
   return [...notes,...tasks].sort((a,b)=>a.rank-b.rank).slice(0,20)

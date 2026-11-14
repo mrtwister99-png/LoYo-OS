@@ -9,7 +9,6 @@ const QuerySchema = z.object({
 })
 
 export default async function tmpRoutes(app: FastifyInstance) {
-  // GET /api/tmp/list - seznam souborů v data/tmp - seřazeno nejnovější první, jen.json
   app.get('/tmp/list', async (req) => {
     const q = req.query as { ext?: string }
     const filterExt = q?.ext || 'json'
@@ -35,12 +34,27 @@ export default async function tmpRoutes(app: FastifyInstance) {
     const parsed = QuerySchema.safeParse(req.query)
     if (!parsed.success) return reply.status(400).send({ error: 'invalid path', detail: parsed.error.flatten() })
     const inputPath = parsed.data.path
+
+    // FIX F3-4: Dir traversal - path.includes('tmp') projde data/tmp/../../.env
+    // Správně: resolve + startsWith DATA_DIR
     const resolved = resolve(DATA_DIR, inputPath)
-    const safeTmp = TMP_DIR.endsWith(sep)? TMP_DIR : TMP_DIR + sep
-    const safeData = DATA_DIR.endsWith(sep)? DATA_DIR : DATA_DIR + sep
-    if (!resolved.startsWith(safeTmp) &&!resolved.startsWith(safeData)) {
-      return reply.status(403).send({ error: 'forbidden' })
+
+    // Ochrana proti prefix bypass: /data vs /data-evil -> musí končit sep
+    const safeData = DATA_DIR.endsWith(sep) ? DATA_DIR : DATA_DIR + sep
+    const safeTmp = TMP_DIR.endsWith(sep) ? TMP_DIR : TMP_DIR + sep
+
+    // Povolujeme jen cesty uvnitř DATA_DIR (a specifičtěji TMP_DIR nebo DATA_DIR)
+    // resolve odstraní ../, takže data/tmp/../../.env -> DATA_DIR/.env -> neprojde pokud chceme jen tmp
+    // Pro maximální bezpečnost: musí být uvnitř DATA_DIR
+    if (!resolved.startsWith(safeData)) {
+      return reply.status(403).send({ error: 'forbidden - dir traversal blocked', resolved })
     }
+
+    // Volitelně: pokud chceš povolit jen tmp, odkomentuj:
+    // if (!resolved.startsWith(safeTmp)) {
+    //   return reply.status(403).send({ error: 'forbidden - only tmp allowed' })
+    // }
+
     try {
       const raw = await readFile(resolved, 'utf-8')
       return JSON.parse(raw)

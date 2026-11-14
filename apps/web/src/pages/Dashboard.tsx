@@ -161,7 +161,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#ededed] text-black p-4 md:p-8 font-mono">
+    <div className="min-h-screen bg-[#2b2b2b] text-[#f0f0f0] p-4 md:p-8">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
         * { font-family: 'JetBrains Mono', monospace; }
@@ -169,39 +169,39 @@ export default function Dashboard() {
 
       <div className="max-w-[1600px] mx-auto space-y-6">
         {/* Header - HADR */}
-        <div className="bg-[#dbdbdb] border-2 border-black rounded-none p-4 md:p-6 flex flex-col md:flex-row justify-between gap-4">
+        <div className="bg-[#444] border border-[#444] rounded-none p-4 md:p-6 flex flex-col md:flex-row justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-4xl font-black tracking-tighter">LoYo OS v4.2 → v6.0 FULL SELF</h1>
-            <p className="text-sm mt-1 font-bold">60 ÚKOLŮ PO 1 • HADR SINGULARITY • bg:#ededed #dbdbdb #040b8d #ac0001 #CDA24D</p>
+            <p className="text-sm mt-1 font-bold">60 ÚKOLŮ PO 1 • ROYAL DARK • #2b2b2b #3a3a3a #444 · #12a4ff · #ff1e00 · #c9a646</p>
           </div>
           <div className="flex gap-3 items-center">
-            <div className="bg-black text-[#ededed] px-4 py-2 text-sm font-bold">OVERALL {overallDone}/60 • {overallProgress}%</div>
-            <div className="bg-[#040b8d] text-white px-4 py-2 text-sm font-bold">CURRENT #{currentTask?.id || '-'}</div>
+            <div className="bg-[#444] text-[#f0f0f0] px-4 py-2 text-sm font-bold">OVERALL {overallDone}/60 • {overallProgress}%</div>
+            <div className="bg-[#12a4ff] text-[#f0f0f0] px-4 py-2 text-sm font-bold">CURRENT #{currentTask?.id || '-'}</div>
           </div>
         </div>
 
         {/* Overall progress - hadr */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-[#dbdbdb] border-2 border-black p-5 space-y-4">
+          <div className="lg:col-span-2 bg-[#444] border border-[#444] p-5 space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-black">CELKOVÝ PROCES • {overallDone}/60 • {overallProgress}%</h2>
               <div className="flex gap-2">
-                <div className="w-3 h-3 bg-[#040b8d] border border-black"></div>
-                <div className="w-3 h-3 bg-[#CDA24D] border border-black"></div>
-                <div className="w-3 h-3 bg-[#ac0001] border border-black"></div>
+                <div className="w-3 h-3 bg-[#12a4ff] border border-[#444]"></div>
+                <div className="w-3 h-3 bg-[#444] border border-[#444]"></div>
+                <div className="w-3 h-3 bg-[#444] border border-[#444]"></div>
               </div>
             </div>
-            <div className="w-full h-6 bg-[#ededed] border-2 border-black overflow-hidden">
-              <div className="h-full bg-[#040b8d] transition-all duration-500 flex items-center justify-end pr-2" style={{ width: `${overallProgress}%` }}>
-                <span className="text-[10px] text-white font-bold">{overallProgress}%</span>
+            <div className="w-full h-6 bg-[#2b2b2b] border border-[#444] overflow-hidden">
+              <div className="h-full bg-[#12a4ff] transition-all duration-500 flex items-center justify-end pr-2" style={{ width: `${overallProgress}%` }}>
+                <span className="text-[10px] text-[#f0f0f0] font-bold">{overallProgress}%</span>
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
               {phases.map(p => (
-                <div key={p.key} className="bg-[#ededed] border border-black p-2 text-[11px]">
+                <div key={p.key} className="bg-[#2b2b2b] border border-[#444] p-2 text-[11px]">
                   <div className="font-bold truncate">{p.key} {p.done}/{p.total}</div>
-                  <div className="w-full h-2 bg-white border border-black mt-1">
-                    <div className="h-full bg-[#040b8d]" style={{ width: `${Math.round((p.done / p.total) * 100)}%` }} />
+                  <div className="w-full h-2 bg-[#3a3a3a] border border-[#444] mt-1">
+                    <div className="h-full bg-[#12a4ff]" style={{ width: `${Math.round((p.done / p.total) * 100)}%` }} />
                   </div>
                   <div className="text-[10px] mt-1">{Math.round((p.done / p.total) * 100)}%</div>
                 </div>
@@ -209,63 +209,63 @@ export default function Dashboard() {
             </div>
           </div>
 
-        <div className="bg-[#ededed] border-2 border-black p-4">
-          <h3 className="font-black text-xs flex justify-between"><span>HEALTH CHECK • /api/health • ÚKOL 12</span><span className={`px-2 py-0.5 text- ${health?.ok?'bg-black text-white':'bg-[#ac0001] text-white'}`}>{health?'LIVE':'LOADING...'}</span></h3>
+        <div className="bg-[#2b2b2b] border border-[#444] p-4">
+          <h3 className="font-black text-xs flex justify-between"><span>HEALTH CHECK • /api/health • ÚKOL 12</span><span className={`px-2 py-0.5 text- ${health?.ok?'bg-[#444] text-[#f0f0f0]':'bg-[#444] text-[#ff1e00]'}`}>{health?'LIVE':'LOADING...'}</span></h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
-            <div className={`border-2 border-black p-3 ${health && health.vram.usedPercent>85?'bg-[#ac0001] text-white':'bg-white'}`}><div className="text- font-bold">VRAM / RAM</div><div className="text-lg font-black mt-1">{health? `${health.vram.usedPercent}%` : '--'}</div><div className="w-full h-1 bg-black/10 mt-2"><div className="h-full bg-[#040b8d]" style={{width:`${health?.vram.usedPercent||0}%`}} /></div></div>
-            <div className={`border-2 border-black p-3 ${health?.models.qwen3_8b==='loaded'?'bg-[#00D084]':'bg-white'}`}><div className="text- font-bold">MODEL qwen3:8b</div><div className="text-sm font-black mt-1 truncate">{health?.models.qwen3_8b || '--'}</div></div>
-            <div className={`border-2 border-black p-3 ${health && health.disk.usedPercent>90?'bg-[#ac0001] text-white':'bg-white'}`}><div className="text- font-bold">DISK {health?.disk.usedPercent||0}%</div><div className="text-lg font-black mt-1">{health? `${Math.round(health.disk.free/1024/1024/1024)}GB free` : '--'}</div></div>
-            <div className={`border-2 border-black p-3 ${!health?.backup?.at?'bg-[#ac0001] text-white':'bg-white'}`}><div className="text- font-bold">ZÁLOHA</div><div className="text- font-black mt-1 truncate">{health?.backup?.at? new Date(health.backup.at).toLocaleString('cs-CZ') : '--'}</div></div>
+            <div className={`border border-[#444] p-3 ${health && health.vram.usedPercent>85? 'bg-[#3a3a3a] border-t-2 border-t-[#ff1e00] text-[#ff1e00]':'bg-[#3a3a3a]'}`}><div className="text- font-bold">VRAM / RAM</div><div className="text-lg font-black mt-1">{health? `${health.vram.usedPercent}%` : '--'}</div><div className="w-full h-1 bg-white/5 mt-2"><div className="h-full bg-[#12a4ff]" style={{width:`${health?.vram.usedPercent||0}%`}} /></div></div>
+            <div className={`border border-[#444] p-3 ${health?.models.qwen3_8b==='loaded'?'bg-[#444]':'bg-[#3a3a3a]'}`}><div className="text- font-bold">MODEL qwen3:8b</div><div className="text-sm font-black mt-1 truncate">{health?.models.qwen3_8b || '--'}</div></div>
+            <div className={`border border-[#444] p-3 ${health && health.disk.usedPercent>90? 'bg-[#3a3a3a] border-t-2 border-t-[#ff1e00] text-[#ff1e00]':'bg-[#3a3a3a]'}`}><div className="text- font-bold">DISK {health?.disk.usedPercent||0}%</div><div className="text-lg font-black mt-1">{health? `${Math.round(health.disk.free/1024/1024/1024)}GB free` : '--'}</div></div>
+            <div className={`border border-[#444] p-3 ${!health?.backup?.at? 'bg-[#3a3a3a] border-t-2 border-t-[#ff1e00] text-[#ff1e00]':'bg-[#3a3a3a]'}`}><div className="text- font-bold">ZÁLOHA</div><div className="text- font-black mt-1 truncate">{health?.backup?.at? new Date(health.backup.at).toLocaleString('cs-CZ') : '--'}</div></div>
           </div>
         </div>
 
           {/* Current selector */}
-          <div className="bg-[#040b8d] border-2 border-black p-5 text-white space-y-3 border-l-4" style={{ borderLeftColor: DASHBOARD_COLOR }}>
-            <div className="flex items-center gap-2"><span className="font-mono text- px-1.5 py-0.5 rounded bg-white text-black">{DASHBOARD_NUM}-DASH</span><span className="w-2 h-2 rounded-full" style={{ background: DASHBOARD_COLOR }} /><span className="text- tracking-widest opacity-60">DASHBOARD • {DASHBOARD_COLOR}</span></div>
+          <div className="bg-[#353535] border border-[#444] p-5 text-[#f0f0f0] space-y-3 border-l-2" style={{ borderLeftColor: DASHBOARD_COLOR }}>
+            <div className="flex items-center gap-2"><span className="font-mono text- px-1.5 py-0.5 rounded bg-[#3a3a3a] text-[#f0f0f0]">{DASHBOARD_NUM}-DASH</span><span className="w-2 h-2 rounded-full" style={{ background: DASHBOARD_COLOR }} /><span className="text- tracking-widest opacity-60">DASHBOARD • {DASHBOARD_COLOR}</span></div>
             <h2 className="font-black text-sm">CURRENT • VYBER SI CO DĚLÁŠ TEĎ</h2>
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="hledat úkol..."
-              className="w-full bg-[#ededed] border-2 border-black px-3 py-2 text-black text-xs outline-none"
+              className="w-full bg-[#2b2b2b] border border-[#444] px-3 py-2 text-[#f0f0f0] text-xs outline-none"
             />
-            <div className="bg-black text-[#ededed] p-3 text-xs">
+            <div className="bg-[#444] text-[#f0f0f0] p-3 text-xs">
               <div className="font-bold">#{currentTask?.id} {currentTask?.title}</div>
-              <div className="text-[#CDA24D] mt-1">{currentTask?.phaseLabel}</div>
+              <div className="text-[#9a9a9a] mt-1">{currentTask?.phaseLabel}</div>
               <div className="mt-2 text-[11px] leading-tight">{currentTask?.description}</div>
-              <div className="mt-3 w-full h-2 bg-[#dbdbdb] border border-white">
-                <div className="h-full bg-[#CDA24D]" style={{ width: `${currentPhaseProgress}%` }} />
+              <div className="mt-3 w-full h-2 bg-[#444] border border-[#444]">
+                <div className="h-full bg-[#444]" style={{ width: `${currentPhaseProgress}%` }} />
               </div>
               <div className="mt-1 text-[10px]">FÁZE PROGRESS {currentPhaseProgress}%</div>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <button onClick={() => currentTask && toggleStatus(currentTask.id)} className="bg-[#CDA24D] border-2 border-black text-black font-black text-xs py-2 hover:bg-white">
+              <button onClick={() => currentTask && toggleStatus(currentTask.id)} className="bg-[#444] border border-[#444] text-[#f0f0f0] font-black text-xs py-2 hover:bg-[#3a3a3a]">
                 {currentTask?.status === 'done' ? 'ZRUŠIT HOTOVO' : 'OZNAČIT HOTOVO'}
               </button>
-              <button onClick={() => setSelectedPhase('ALL')} className="bg-[#ededed] border-2 border-black text-black font-bold text-xs py-2">ALL 60</button>
+              <button onClick={() => setSelectedPhase('ALL')} className="bg-[#2b2b2b] border border-[#444] text-[#f0f0f0] font-bold text-xs py-2">ALL 60</button>
             </div>
           </div>
         </div>
 
         {/* Phase selector + task list */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="bg-[#dbdbdb] border-2 border-black p-4 space-y-2">
+          <div className="bg-[#444] border border-[#444] p-4 space-y-2">
             <h3 className="font-black text-xs">FÁZE FILTR • CURRENT VÝBĚR</h3>
-            <button onClick={() => setSelectedPhase('ALL')} className={`w-full text-left px-3 py-2 border-2 border-black text-xs font-bold ${selectedPhase === 'ALL' ? 'bg-[#040b8d] text-white' : 'bg-[#ededed]'}`}>ALL • {overallDone}/60 • {overallProgress}%</button>
+            <button onClick={() => setSelectedPhase('ALL')} className={`w-full text-left px-3 py-2 border border-[#444] text-xs font-bold ${selectedPhase === 'ALL' ? 'bg-[#12a4ff] text-[#f0f0f0]' : 'bg-[#2b2b2b]'}`}>ALL • {overallDone}/60 • {overallProgress}%</button>
             {phases.map(p => (
-              <button key={p.key} onClick={() => setSelectedPhase(p.key)} className={`w-full text-left px-3 py-2 border border-black text-[11px] font-bold ${selectedPhase === p.key ? 'bg-black text-[#ededed]' : 'bg-[#ededed] hover:bg-white'}`}>
+              <button key={p.key} onClick={() => setSelectedPhase(p.key)} className={`w-full text-left px-3 py-2 border border-[#444] text-[11px] font-bold ${selectedPhase === p.key ? 'bg-[#12a4ff] text-white' : 'bg-[#2b2b2b] hover:bg-[#3a3a3a]'}`}>
                 {p.label.split(' - ')[0]} • {p.done}/{p.total}
               </button>
             ))}
             <div className="pt-3 text-[10px] leading-tight">
               <div className="font-black">HADR PALETA:</div>
-              <div className="flex gap-1 mt-1"><span className="px-2 py-1 bg-[#ededed] border border-black">#ededed bg</span><span className="px-2 py-1 bg-[#dbdbdb] border border-black">#dbdbdb blok</span></div>
-              <div className="flex gap-1 mt-1"><span className="px-2 py-1 bg-[#040b8d] text-white border border-black">#040b8d modrá</span><span className="px-2 py-1 bg-[#ac0001] text-white border border-black">#ac0001 red</span></div>
-              <div className="mt-1 px-2 py-1 bg-[#CDA24D] border border-black">#CDA24D karamel</div>
+              <div className="flex gap-1 mt-1"><span className="px-2 py-1 bg-[#2b2b2b] border border-[#444]">#2b2b2b bg</span><span className="px-2 py-1 bg-[#3a3a3a] border border-[#444]">#3a3a3a karta</span></div>
+              <div className="flex gap-1 mt-1"><span className="px-2 py-1 bg-[#12a4ff] text-white border border-[#12a4ff]">#12a4ff modrá 10%</span><span className="px-2 py-1 bg-[#444] text-[#f0f0f0] border border-[#444] flex items-center gap-1.5"><span className="live-dot" />#ff1e00 červená 4%</span></div>
+              <div className="flex gap-1 mt-1"><span className="px-2 py-1 bg-[#444] border border-[#c9a646]/50 text-[#c9a646]">#c9a646 zlatá 1%</span><span className="px-2 py-1 bg-[#444] border border-[#444] font-display">Playfair Display</span></div>
             </div>
           </div>
 
-          <div className="lg:col-span-3 bg-[#ededed] border-2 border-black p-4">
+          <div className="lg:col-span-3 bg-[#2b2b2b] border border-[#444] p-4">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-black text-xs">ÚKOLY • {selectedPhase} • {filteredTasks.length} ks • {filteredTasks.filter(t => t.status === 'done').length} HOTOVO</h3>
               <div className="text-[10px] font-bold">KLIK = CURRENT • CHECK = HOTOVO • DOUBLE = IN-PROGRESS</div>
@@ -275,17 +275,17 @@ export default function Dashboard() {
                 <div
                   key={task.id}
                   onClick={() => setCurrentTaskId(task.id)}
-                  className={`border-2 p-3 cursor-pointer transition-all text-[11px] leading-tight ${currentTaskId === task.id ? 'border-[#040b8d] bg-[#040b8d] text-white' : task.status === 'done' ? 'border-black bg-[#dbdbdb] opacity-70' : task.status === 'in-progress' ? 'border-[#CDA24D] bg-[#CDA24D] text-black' : 'border-black bg-white hover:bg-[#dbdbdb]'}`}
+                  className={`border p-3 cursor-pointer transition-all text-[11px] leading-tight ${currentTaskId === task.id ? 'border-[#12a4ff] bg-[#12a4ff] text-[#f0f0f0]' : task.status === 'done' ? 'border-[#444] bg-[#444] opacity-70' : task.status === 'in-progress' ? 'border-[#444] bg-[#444] text-[#f0f0f0]' : 'border-[#444] bg-[#3a3a3a] hover:bg-[#444]'}`}
                 >
                   <div className="flex justify-between gap-2">
                     <span className="font-black">#{task.id} {task.title}</span>
-                    <input type="checkbox" checked={task.status === 'done'} onClick={e=>e.stopPropagation()} onChange={(e) => { e.stopPropagation(); toggleStatus(task.id); }} className="accent-[#040b8d] w-4 h-4 cursor-pointer" />
+                    <input type="checkbox" checked={task.status === 'done'} onClick={e=>e.stopPropagation()} onChange={(e) => { e.stopPropagation(); toggleStatus(task.id); }} className="accent-[#12a4ff] w-4 h-4 cursor-pointer" />
                   </div>
                   <div className="text-[10px] mt-1 opacity-80">{task.phaseLabel}</div>
                   <div className="text-[10px] mt-1">{task.description}</div>
                   <div className="flex gap-1 mt-2">
-                    <button onClick={(e) => { e.stopPropagation(); setInProgress(task.id); }} className="text-[9px] px-2 py-1 border border-black bg-[#ededed] text-black font-bold hover:bg-black hover:text-white">▶ CURRENT</button>
-                    <span className={`text-[9px] px-2 py-1 border border-black font-bold ${task.status === 'done' ? 'bg-black text-[#ededed]' : task.status === 'in-progress' ? 'bg-[#ac0001] text-white' : 'bg-white'}`}>{task.status.toUpperCase()}</span>
+                    <button onClick={(e) => { e.stopPropagation(); setInProgress(task.id); }} className="text-[9px] px-2 py-1 border border-[#444] bg-[#2b2b2b] text-[#f0f0f0] font-bold hover:bg-[#444] hover:text-[#f0f0f0]">▶ CURRENT</button>
+                    <span className={`text-[9px] px-2 py-1 border border-[#444] font-bold ${task.status === 'done' ? 'bg-[#444] text-[#f0f0f0]' : task.status === 'in-progress' ? 'bg-[#12a4ff] text-white' : 'bg-[#3a3a3a]'}`}>{task.status.toUpperCase()}</span>
                   </div>
                 </div>
               ))}
@@ -294,9 +294,9 @@ export default function Dashboard() {
         </div>
 
         {/* Footer stats */}
-        <div className="bg-black text-[#ededed] border-2 border-black p-3 flex flex-wrap gap-4 text-[11px] font-bold">
+        <div className="bg-[#444] text-[#f0f0f0] border border-[#444] p-3 flex flex-wrap gap-4 text-[11px] font-bold">
           <span>LoYo OS v6.0 FULL SELF • 60 ÚKOLŮ PO 1 • {overallDone} HOTOVO • {60 - overallDone} ZBÝVÁ • CURRENT #{currentTaskId}</span>
-          <span className="ml-auto">HADR #ededed / #dbdbdb / #040b8d / #ac0001 / #CDA24D • v4.2→v6.0 SINGULARITY</span>
+          <span className="ml-auto">ROYAL DARK #2b2b2b / #3a3a3a / #444 / #12a4ff / #ff1e00 / #c9a646 • v4.2→v6.0 SINGULARITY</span>
         </div>
       </div>
     </div>
