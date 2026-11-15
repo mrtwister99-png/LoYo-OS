@@ -4,21 +4,23 @@
   "displayName": "Proto - AI podpora e-shopu",
   "version": "0.1.0",
   "status": "active",
-  "description": "Pronajímatelný AI support agent pro české e-shopy. Vloží se do webu jedním <script> tagem, řeší stav objednávky, tracking, vratky, reklamace, sklad a faktury přes šest nástrojů (getOrderStatus, getTracking, getProductStock, createReturn, createTicket, sendSMSorEmail). Bez OPENAI_API_KEY jede deterministický český fallback, takže funguje i bez modelu.",
+  "description": "Pronajímatelný AI support agent pro české e-shopy. Vloží se do webu jedním script tagem a řeší stav objednávky, tracking, vratky, reklamace, sklad a faktury přes šest nástrojů. Bez OPENAI_API_KEY jede deterministický český fallback, takže funguje i bez modelu.",
   "runtime": "node",
   "entrypoint": "./server.js",
   "start": "node server.js",
   "promptFile": "prompts/system.md",
   "packageDir": "data/capabilities/agents/proto",
   "port": 4319,
+  "number": 19,
+  "category": "rental",
+  "model": "gpt-4o-mini",
   "healthcheck": "http://localhost:4319/api/health",
   "endpoints": {
     "demo": "http://localhost:4319/demo",
     "widget": "http://localhost:4319/widget.js",
-    "chat": "POST http://localhost:4319/api/chat",
-    "config": "GET http://localhost:4319/api/config?tenant=demo"
+    "chat": "http://localhost:4319/api/chat",
+    "config": "http://localhost:4319/api/config"
   },
-  "number": 19,
   "env": [
     "PORT",
     "PROTO_TENANT",
@@ -30,12 +32,13 @@
     "PROTO_DATA_DIR"
   ],
   "permissions": [
-    "net:local:4319",
     "fs:read:data/capabilities/agents/proto/*",
     "fs:write:data/capabilities/agents/proto/data/*",
-    "net:https:freebuff.com",
-    "net:https:api.openai.com",
-    "net:https:api.myshoptet.com"
+    "exec:data/capabilities/agents/proto/server.js",
+    "net:fetch:http://localhost:4319/*",
+    "net:fetch:https://freebuff.com/*",
+    "net:fetch:https://api.openai.com/*",
+    "net:fetch:https://api.myshoptet.com/*"
   ],
   "tools": [
     "getOrderStatus",
@@ -50,6 +53,12 @@
     "chat-widget",
     "tool-calling",
     "czech-language"
+  ],
+  "specialization": [
+    "zákaznická podpora e-shopu",
+    "objednávky a tracking",
+    "vratky a reklamace",
+    "sklad a dostupnost"
   ],
   "tags": [
     "eshop",
