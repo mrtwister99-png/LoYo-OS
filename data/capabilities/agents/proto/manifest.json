@@ -1,0 +1,78 @@
+{
+  "id": "proto",
+  "type": "agent",
+  "displayName": "Proto - AI podpora e-shopu",
+  "version": "0.1.0",
+  "status": "active",
+  "description": "Pronajímatelný AI support agent pro české e-shopy. Vloží se do webu jedním <script> tagem, řeší stav objednávky, tracking, vratky, reklamace, sklad a faktury přes šest nástrojů (getOrderStatus, getTracking, getProductStock, createReturn, createTicket, sendSMSorEmail). Bez OPENAI_API_KEY jede deterministický český fallback, takže funguje i bez modelu.",
+  "runtime": "node",
+  "entrypoint": "./server.js",
+  "start": "node server.js",
+  "promptFile": "prompts/system.md",
+  "packageDir": "data/capabilities/agents/proto",
+  "port": 4319,
+  "healthcheck": "http://localhost:4319/api/health",
+  "endpoints": {
+    "demo": "http://localhost:4319/demo",
+    "widget": "http://localhost:4319/widget.js",
+    "chat": "POST http://localhost:4319/api/chat",
+    "config": "GET http://localhost:4319/api/config?tenant=demo"
+  },
+  "number": 19,
+  "env": [
+    "PORT",
+    "PROTO_TENANT",
+    "OPENAI_API_KEY",
+    "OPENAI_BASE_URL",
+    "OPENAI_MODEL",
+    "SHOPTET_API_URL",
+    "SHOPTET_API_TOKEN",
+    "PROTO_DATA_DIR"
+  ],
+  "permissions": [
+    "net:local:4319",
+    "fs:read:data/capabilities/agents/proto/*",
+    "fs:write:data/capabilities/agents/proto/data/*",
+    "net:https:freebuff.com",
+    "net:https:api.openai.com",
+    "net:https:api.myshoptet.com"
+  ],
+  "tools": [
+    "getOrderStatus",
+    "getTracking",
+    "getProductStock",
+    "createReturn",
+    "createTicket",
+    "sendSMSorEmail"
+  ],
+  "skills": [
+    "customer-support",
+    "chat-widget",
+    "tool-calling",
+    "czech-language"
+  ],
+  "tags": [
+    "eshop",
+    "support",
+    "chatbot",
+    "widget",
+    "shoptet",
+    "pronajem",
+    "czech"
+  ],
+  "docs": [
+    "README.md",
+    "PROMPT.md",
+    "ARCHITECTURE.md",
+    "API.md",
+    "TOOLS.md",
+    "TENANTS.md",
+    "DEPLOY.md",
+    "SECURITY.md",
+    "DEMO.md",
+    "AGENTS.md"
+  ],
+  "tests": "node scripts/test-scenarios.mjs",
+  "createdAt": "2026-11-15T00:00:00Z",
+  "updatedAt": "2026-11-15T00:00:00Z"
+}
