@@ -1,0 +1,20 @@
+{
+  "id": "niky",
+  "type": "agent",
+  "displayName": "Niky — recepční Cutanna",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "Virtuální recepční pro veřejné informace a směrování zákazníků na rezervace Cutanna.",
+  "runtime": "node",
+  "entrypoint": "../../../../agents/niky/index.ts",
+  "packageDir": "agents/niky",
+  "permissions": [],
+  "tags": [
+    "niky",
+    "recepcni",
+    "cutanna"
+  ],
+  "createdAt": "2026-11-16T00:00:00Z",
+  "updatedAt": "2026-11-16T00:00:00Z",
+  "number": 0
+}
