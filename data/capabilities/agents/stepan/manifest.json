@@ -1,0 +1,36 @@
+{
+  "id": "stepan",
+  "type": "agent",
+  "displayName": "Stěpán",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Opačný pól Lopatinky: dostane věc, zjistí, co to je a za kolik se prodává na Sbazaru a Aukru, a napíše hotový inzerát na prodej včetně doporučené ceny.",
+  "runtime": "node",
+  "entrypoint": "./run.mjs",
+  "model": "qwen3:8b",
+  "permissions": [
+    "net:fetch:www.sbazar.cz",
+    "net:fetch:aukro.cz",
+    "fs:read:data/capabilities/agents/stepan",
+    "fs:write:data/capabilities/agents/stepan"
+  ],
+  "tools": [
+    "web_fetch",
+    "fs_write"
+  ],
+  "tags": [
+    "bazar",
+    "prodej",
+    "inzerat",
+    "oceneni",
+    "sbazar",
+    "aukro"
+  ],
+  "category": "sales",
+  "endpoints": {
+    "run": "POST /api/agents/stepan/run"
+  },
+  "number": 21,
+  "createdAt": "2026-11-20T00:00:00Z",
+  "updatedAt": "2026-11-20T00:00:00Z"
+}
