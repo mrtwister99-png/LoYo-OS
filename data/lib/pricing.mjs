@@ -1,4 +1,4 @@
-// data/capabilities/agents/lib/pricing.mjs
+// data/lib/pricing.mjs
 // Společné cenové počty pro agenty LOYO OS — Lopatinka i Stěpán.
 // Bez závislostí: jen čisté funkce nad polem nabídkových cen.
 
