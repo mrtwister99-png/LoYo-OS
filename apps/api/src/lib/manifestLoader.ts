@@ -62,7 +62,9 @@ export async function reindexCapabilities(): Promise<ManifestCache> {
         if (!check.success) {
           errors.push({ path: f, error: 'schema: ' + check.error.issues.slice(0, 3).map((i: any) => `${i.path.join('.') || '(kořen)'}: ${i.message}`).join('; ') });
         } else {
-          json = check.data as any;
+          // zod zahazuje pole, která schéma nezná (number, script, shell…) — číslo pak
+          // loader „dopočítal“ znovu (agenti 20, 21, … místo 2, 3, …). Pole navíc nechat.
+          json = { ...json, ...(check.data as any) };
         }
       }
       caps.push(json as CapabilityManifest);
