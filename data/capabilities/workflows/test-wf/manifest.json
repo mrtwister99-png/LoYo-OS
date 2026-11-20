@@ -1,0 +1,35 @@
+{
+  "id": "test-wf",
+  "displayName": "Test wf",
+  "description": "test",
+  "version": "0.1.0",
+  "status": "draft",
+  "model": "qwen3:8b",
+  "tags": [
+    "mary"
+  ],
+  "runtime": "composite",
+  "entrypoint": "workflows/test-wf",
+  "steps": [
+    {
+      "id": "s1",
+      "capabilityId": "lopatinka",
+      "input": {},
+      "dependsOn": [],
+      "retryPolicy": "none"
+    },
+    {
+      "id": "s2",
+      "capabilityId": "test-mary",
+      "input": {},
+      "dependsOn": [
+        "s1"
+      ],
+      "retryPolicy": "none"
+    }
+  ],
+  "type": "workflow",
+  "number": 1,
+  "updatedAt": "2026-11-20T19:38:42.995Z",
+  "createdAt": "2026-11-20T19:38:42.995Z"
+}

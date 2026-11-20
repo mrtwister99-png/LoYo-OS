@@ -1,0 +1,22 @@
+{
+  "id": "test-tym",
+  "displayName": "Test tym",
+  "description": "test",
+  "version": "0.1.0",
+  "status": "draft",
+  "model": "qwen3:8b",
+  "tags": [
+    "mary"
+  ],
+  "runtime": "composite",
+  "entrypoint": "teams/test-tym/index.ts",
+  "members": [
+    "test-mary",
+    "lopatinka"
+  ],
+  "coordination": "sequential",
+  "type": "team",
+  "number": 2,
+  "updatedAt": "2026-11-20T19:38:42.618Z",
+  "createdAt": "2026-11-20T19:38:42.618Z"
+}
