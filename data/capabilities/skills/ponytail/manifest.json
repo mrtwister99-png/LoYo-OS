@@ -7,6 +7,13 @@
   "description": "Lazy senior dev mode - smallest change that fully solves task",
   "runtime": "prompt",
   "entrypoint": "skills/ponytail/SKILL.md",
-  "permissions": ["fs:read:data/capabilities/skills/ponytail"],
-  "tags": ["minimalism", "yagni", "kotlin"]
+  "permissions": [
+    "fs:read:data/capabilities/skills/ponytail"
+  ],
+  "tags": [
+    "minimalism",
+    "yagni",
+    "kotlin"
+  ],
+  "number": 1
 }
