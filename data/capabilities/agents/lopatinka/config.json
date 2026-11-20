@@ -1,0 +1,68 @@
+{
+  "budgetCzk": 3500,
+  "preferredPriceCzk": {
+    "min": 2500,
+    "max": 3500
+  },
+  "minPriceCzk": 200,
+  "minPriceRatioOfMedian": 0.25,
+  "minTitleTokens": 2,
+  "pickCount": 3,
+  "bonusPickCount": 2,
+  "minDiscountPercent": 15,
+  "maxDiscountPercent": 60,
+  "portals": [
+    "sbazar",
+    "aukro"
+  ],
+  "queries": [
+    "notebook",
+    "notebook lenovo",
+    "grafická karta",
+    "rtx 3060",
+    "rtx 3070",
+    "monitor",
+    "iphone 12",
+    "iphone 13",
+    "playstation 5",
+    "xbox series s"
+  ],
+  "excludeKeywords": [
+    "obal",
+    "kryt",
+    "pouzdro",
+    "folie",
+    "nabíječka",
+    "kabel",
+    "adaptér",
+    "taška",
+    "stojan",
+    "držák",
+    "baterie",
+    "reproduktor",
+    "ram",
+    "paměť",
+    "na díly",
+    "díly",
+    "nefunkční",
+    "netestovaná",
+    "poškozená",
+    "prasklý",
+    "bez záruky"
+  ],
+  "profit": {
+    "enabled": true,
+    "resaleFactor": 0.95,
+    "riskPercent": 10,
+    "shippingCzk": 150
+  },
+  "watch": {
+    "maxPicks": 2,
+    "seenLimit": 60
+  },
+  "requestTimeoutMs": 20000,
+  "telegram": {
+    "parseMode": "HTML",
+    "disablePreview": true
+  }
+}

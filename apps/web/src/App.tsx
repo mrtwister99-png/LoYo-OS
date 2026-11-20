@@ -37,6 +37,7 @@ const GRNotes = lazy(() => import('./pages/profile4/GRNotes'))
 const HeleNevim = lazy(() => import('./pages/profile4/HeleNevim'))
 const Shaders = lazy(() => import('./pages/profile4/Shaders'))
 const ThreeD = lazy(() => import('./pages/profile4/ThreeD'))
+const DetskyKoutek = lazy(() => import('./pages/profile4/DetskyKoutek'))
 
 const General = () => <div className="p-10 text-sm opacity-60">General Settings • brzy...</div>
 
@@ -65,6 +66,7 @@ const PAGE_TITLES: Record<string, string> = {
   helenevim: 'HELE NEVIM',
   shaders: 'SHADERS',
   threed: '3D',
+  detskykoutek: 'DĚTSKÝ KOUTEK',
 }
 
 const PageLoader = () => (
@@ -93,7 +95,7 @@ export default function App() {
       0: ['dashboard','kalendar','activity','notes','tasks','tym','agenti','skills','mcp','cli','loops','api','workflows','general'],
       1: ['dashboard','rozdelane','musthave','testy','knowledgebase','notes'],
       2: ['dashboard','zapisky','projekty','tym','tasks'],
-      3: ['dashboard','grnotes','helenevim','shaders','threed'],
+      3: ['dashboard','grnotes','helenevim','shaders','threed','detskykoutek'],
     }
     const valid = validByProfile[activeProfile] || validByProfile[0]
     if (!valid.includes(page as any)) {
@@ -217,6 +219,7 @@ export default function App() {
       case 'helenevim': return <HeleNevim />
       case 'shaders': return <Shaders />
       case 'threed': return <ThreeD />
+      case 'detskykoutek': return <DetskyKoutek />
       default: return activeProfile === 1? <Dashboard2 /> : activeProfile === 2? <Dashboard3 /> : activeProfile === 3? <Dashboard4 /> : <Dashboard />
     }
   }, [page, activeProfile])

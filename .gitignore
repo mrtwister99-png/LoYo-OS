@@ -47,6 +47,12 @@ data/capabilities/agents/*/commands.json
 data/capabilities/*/memory.json
 data/capabilities/*/audit.json
 
+# Lopatinka runtime - hlídané dotazy, hodnocení tipů, rozhodnutí, pid bota
+data/capabilities/agents/*/watchlist.json
+data/capabilities/agents/*/feedback.json
+data/capabilities/agents/*/decisions.json
+data/capabilities/agents/*/*.pid
+
 # chat historie - osobní konverzace
 data/chat_history/
 audit.jsonl

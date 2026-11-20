@@ -4,6 +4,7 @@ import { join } from 'path';
 import { getCapabilities, getCapabilityById } from '../lib/manifestLoader.js';
 import { DATA_DIR as ROOT_DATA_DIR } from '../lib/dataPaths.js';
 import { CapabilityManifestSchema } from '@loyo/core';
+import { logActivity } from './activity.js';
 
 const DATA_DIR = join(ROOT_DATA_DIR, 'capabilities');
 
@@ -45,6 +46,20 @@ function indexRecord(type: string, m: any): Record<string, unknown> {
     case 'loop': return { ...base, name, desc: m.description ?? '', status: m.status ?? 'draft', schedule: typeof m.schedule === 'string' ? m.schedule : '', agent: m.agent ?? '', enabled: m.enabled ?? true, category: 'all' };
     default: return { ...base, name, desc: m.description ?? '', status: m.status ?? 'draft', steps: [], lastRun: '', createdAt: m.createdAt ?? new Date().toISOString() };
   }
+}
+
+// Po smazání musí zmizet i záznam z index.json, jinak agent zůstane v seznamu napořád.
+async function removeFromIndex(type: string, id: string): Promise<void> {
+  const key = INDEX_KEY[type];
+  const folder = TYPE_FOLDER[type];
+  if (!key || !folder) return;
+  const p = join(DATA_DIR, folder, 'index.json');
+  let idx: any;
+  try { idx = JSON.parse(await fs.readFile(p, 'utf-8')); } catch { return; }
+  if (!Array.isArray(idx[key])) return;
+  idx[key] = idx[key].filter((x: any) => x.id !== id);
+  idx.lastSync = new Date().toISOString();
+  await fs.writeFile(p, JSON.stringify(idx, null, 2), 'utf-8');
 }
 
 async function syncIndexFromManifest(type: string, m: any): Promise<void> {
@@ -118,8 +133,40 @@ export const capabilitiesRoutes: FastifyPluginAsync = async (fastify) => {
         const auditPath = join(targetDir, 'audit.json');
         const auditExists = await fs.access(auditPath).then(() => true).catch(() => false);
         if (!auditExists) await fs.writeFile(auditPath, '[]', 'utf-8');
+
+        // Nový agent bez promptu by neměl existovat jako prázdná složka — založ mu mozek.
+        if (type === 'agent') {
+          const promptPath = join(targetDir, '01_CORE_IDENTITY.md');
+          const hasPrompt = await fs.access(promptPath).then(() => true).catch(() => false);
+          if (!hasPrompt) {
+            const name = manifest.displayName ?? id;
+            const desc = manifest.description ?? '';
+            const sysPrompt = typeof manifest.systemPrompt === 'string' ? manifest.systemPrompt.trim() : '';
+            const brain = [
+              `# ${name} — kdo jsi`,
+              '',
+              `Jsi **${name}**, agent LOYO OS.`,
+              desc ? `\n${desc}` : '',
+              '',
+              '## Jak pracuješ',
+              sysPrompt || '- Drž se zadání, které dostaneš od Mary Jane. Odpovídej česky a stručně.',
+              '',
+              '## Zásady',
+              '- Nevymýšlej si fakta; co nevíš, řekni.',
+              '- Piš výsledky tak, aby se daly zkontrolovat (cesta k souboru, zdroj, čísla).',
+              '',
+            ].join('\n');
+            await fs.writeFile(promptPath, brain, 'utf-8');
+          }
+        }
         try { await syncIndexFromManifest(type, toWrite); } catch {}
         await getCapabilities(true);
+        await logActivity({
+          agent: 'Koštěrad',
+          type: 'save',
+          action: `vytvořen ${type}: ${manifest.displayName ?? id} (${id})`,
+          meta: { type, id },
+        }).catch(() => {});
         return { success: true, path: `data/capabilities/${folderName}/${id}/manifest.json`, message: `✓ ${manifest.displayName ?? id} vytvořen → data/capabilities/${folderName}/${id}/manifest.json` + (schemaWarnings(type, toWrite).length ? ` ⚠ schéma: ${schemaWarnings(type, toWrite).join('; ')}` : '') };
       } catch (err) { reply.code(500); return { error: 'Zápis na disk selhal.', detail: err instanceof Error ? err.message : String(err) }; }
     }
@@ -137,7 +184,14 @@ export const capabilitiesRoutes: FastifyPluginAsync = async (fastify) => {
     try {
       await backupManifest(targetDir);
       await fs.rm(targetDir, { recursive: true, force: true });
+      await removeFromIndex(type, id);
       await getCapabilities(true);
+      await logActivity({
+        agent: 'Koštěrad',
+        type: 'save',
+        action: `smazán ${type}: ${id}`,
+        meta: { type, id },
+      }).catch(() => {});
       return { success: true, message: `✓ ${type}/${id} smazán.` };
     } catch (err) { reply.code(500); return { error: 'Smazání selhalo.', detail: err instanceof Error ? err.message : String(err) }; }
   });

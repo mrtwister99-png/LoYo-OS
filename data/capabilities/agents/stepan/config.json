@@ -1,0 +1,53 @@
+{
+  "portals": [
+    "sbazar",
+    "aukro"
+  ],
+  "maxQueryTokens": 4,
+  "minPriceCzk": 100,
+  "minComparableCount": 3,
+  "defaultCondition": "dobry",
+  "conditions": {
+    "novy": { "label": "Nový", "factor": 1.1 },
+    "jako-novy": { "label": "Jako nový", "factor": 1.02 },
+    "velmi-dobry": { "label": "Velmi dobrý", "factor": 0.95 },
+    "dobry": { "label": "Dobrý", "factor": 0.88 },
+    "opotrebovany": { "label": "Opotřebený", "factor": 0.75 },
+    "na-dily": { "label": "Na díly", "factor": 0.55 }
+  },
+  "conditionDetection": [
+    { "id": "na-dily", "any": ["na dily", "nefunkcni", "vadny", "rozbity", "nefunguje"] },
+    { "id": "jako-novy", "any": ["jako novy", "jako nove", "nerozbaleny", "nerozbalene", "bez skrabancu", "bez poskrabani", "top stav"] },
+    { "id": "novy", "any": ["novy", "nove", "zabalený"] },
+    { "id": "velmi-dobry", "any": ["velmi dobry", "velmi zachovaly", "zachovaly"] },
+    { "id": "opotrebovany", "any": ["opotrebovany", "poskrabany", "skrabance", "osoupany", "odreny"] },
+    { "id": "dobry", "any": ["dobry stav", "v dobrem stavu", "bez zavad"] }
+  ],
+  "roundingCzk": 50,
+  "quickSaleFactor": 0.9,
+  "patientSaleFactor": 1.1,
+  "listingTitleMaxChars": 60,
+  "listing": {
+    "negotiable": true,
+    "location": "",
+    "shipping": true
+  },
+  "stopwords": [
+    "prodám", "prodam", "prodávám", "prodavam", "nabízím", "nabizim", "na", "prodej",
+    "stav", "jako", "nový", "novy", "nové", "nove", "velmi", "dobrý", "dobry",
+    "skoro", "zachovalý", "zachovaly", "používaný", "pouzivany", "funkční", "funkcni",
+    "kompletní", "kompletni", "komplet", "krabice", "záruka", "zaruka",
+    "cena", "cenu", "ceny", "dohodou", "kč", "kc", "zdarma",
+    "osobní", "osobni", "předání", "predani", "pošta", "posta", "poslání", "poslani",
+    "zasilkovna", "zásilkovna", "balíkovna", "balikovna", "možnost", "moznost",
+    "top", "super", "krásný", "krasny", "pěkný", "pekny", "lehce",
+    "mám", "mam", "je", "se", "za", "a", "i", "v", "ve", "s", "ze", "od", "do"
+  ],
+  "excludeKeywords": [
+    "obal", "kryt", "pouzdro", "folie", "fólie", "nabíječka", "nabijecka", "kabel",
+    "adaptér", "adapter", "taška", "tasky", "stojan", "držák", "drzak", "baterie",
+    "baterka", "na díly", "díly", "dily", "nefunkční", "nefunkcni", "poškozená",
+    "poskozena", "prasklý", "praskly", "bez záruky", "bez zaruky"
+  ],
+  "requestTimeoutMs": 20000
+}

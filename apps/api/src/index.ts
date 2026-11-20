@@ -22,6 +22,7 @@ import cliRoutes from './routes/cli'
 import { capabilitiesRoutes } from './routes/capabilities'
 import { searchRoutes } from './routes/search.js'
 import tmpRoutes from './routes/tmp.js'
+import lootCheckerRoutes from './routes/lootChecker'
 import { initDb, countFromDb } from './lib/manifestDb.js'
 import { reindexCapabilities } from './lib/manifestLoader.js'
 
@@ -42,6 +43,7 @@ await app.register(cliRoutes, { prefix: '/api' })
 await app.register(capabilitiesRoutes, { prefix: '/api' })
 await app.register(searchRoutes, { prefix: '/api' })
 await app.register(tmpRoutes, { prefix: '/api' })
+await app.register(lootCheckerRoutes, { prefix: '/api' })
 
 app.get('/api/health', async () => {
   const { getHealth } = await import('./services/health.js')
@@ -88,10 +90,16 @@ app.post('/api/finder', async (req: any) => {
 
 // 🧠 ORCHESTRATOR — nervová soustava: Mary Jane → Lubor → CLI → report
 app.post('/api/run', async (req: any) => {
-  const { message } = req.body as { message: string }
+  const { message, source } = req.body as { message: string; source?: string }
   const userMessage = message || ''
 
   await saveChatMessage('me', userMessage).catch(() => {})
+  await logActivity({
+    agent: 'Mary_Jane',
+    type: 'chat',
+    action: `${source === 'telegram' ? 'Telegram' : 'UI'}: ${userMessage.slice(0, 90)}`,
+    meta: { source: source ?? 'ui' },
+  }).catch(() => {})
 
   const result = await runOrchestrator(userMessage)
 

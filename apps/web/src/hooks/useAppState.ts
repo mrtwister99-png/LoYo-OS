@@ -26,6 +26,7 @@ export type Page =
   | 'helenevim'
   | 'shaders'
   | 'threed'
+  | 'detskykoutek'
   | 'knowledgebase'
   | 'macros'
 

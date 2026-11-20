@@ -1,0 +1,16 @@
+Loot Checker — FÁZE 2 vision třídění
+Datum: 14. 11. 2026 10:17:50
+Zdroj: C:\Users\loyo-\Desktop\GRAFIKA\dablkopiebohuzel\1\2
+Model: qwen2.5vl:7b | Práh: 60 | Pod prahem: leave
+Roztříděno: 10 | Nízká jistota (necháno): 0 | Chyby: 0
+---
+0adf276fb082038064eaf033a7c51cde.jpg -> bg/ | 90% | Obrázek obsahuje opakující se geometrické tvary v pravidelné mřížce, které vyplňují celý obrázek.
+0b63b7b6c871f615e85b0340ddfa6031.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor trojúhelníků v pravidelné mřížce
+0be72802bedaabbd6891a7da6868d310.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor s geometrickými tvary a mřížkou.
+0d249d17b2776a7ad59e8c0b530d8bef.jpg -> abeceda/ | 95% | Obsahuje písmena A až Z v řadách za sebou, je to font specimen a ukázka písma.
+0d5e2a9118a5e3842791f76b0ed1d721.jpg -> abeceda/ | 95% | Obsahuje abecedu s písmeny A až Z v řadách za sebou.
+14d51f4a4d5e0354591b47d58ec1fac3.jpg -> postavy/ | 95% | Obrázek obsahuje portrét muže v papírové origami stylu.
+1aaa6012be1b908bc5bce597352c4bec.jpg -> abeceda/ | 95% | Obsahuje celou abecedu v řadách za sebou.
+50d7e4b575d1fb3ec7854feb53be8da5.jpg -> postavy/ | 95% | Obrázek znázorňuje postavu s detailním portrétem a oděvem
+56fe4ecf5f1cd5af2027db8e385fb738.jpg -> postavy/ | 90% | Obrázek znázorňuje postavu s hlavou a rameny, což je příklad portrétu nebo postavy.
+9c0d985d095cbb86472d059efeaf0e13.jpg -> postavy/ | 95% | Obrázek znázorňuje postavu mladé dívky v stylu animovaného obrázku.

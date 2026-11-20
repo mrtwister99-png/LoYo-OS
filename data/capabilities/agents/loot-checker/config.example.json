@@ -1,0 +1,40 @@
+{
+  "dir": "D:\\loot\\nesetrideno",
+  "fallbackFolder": "ostatni",
+  "targetFolders": [
+    {
+      "name": "abeceda",
+      "path": "",
+      "description": "Celá abeceda A-Z v řadách, font specimen, typografie. Nepatří sem: jeden nápis / slovo, meme s textem, logo, obrázek bez písmen.",
+      "belongs": "Celá abeceda / alphabet — obrázek kde hlavní obsah jsou písmena A až Z v řadách za sebou. Font specimen, ukázka písma, typografie, ručně kreslená abeceda. Nezáleží na stylu: tiskací, 3D, obrysové, stínované, ručně psané, ozdobné. Může obsahovat i znaky & Æ Ø - , .",
+      "notBelongs": "jeden nápis / slovo, meme s textem, logo, obrázek bez písmen"
+    },
+    {
+      "name": "bg",
+      "path": "",
+      "description": "BG = background, pozadí, textura, pattern. Nepatří sem: abeceda, meme, fotka s postavou, jeden velký objekt.",
+      "belongs": "BG = background, pozadí, textura, pattern — opakující se vzor, který vyplňuje celý obrázek: trojúhelníky, kruhy, tečky, čáry, geometrické tvary v pravidelné mřížce. Žádný hlavní objekt uprostřed, žádná postava, žádný text. Použitelné jako tapeta / pozadí.",
+      "notBelongs": "abeceda, meme, fotka s postavou, jeden velký objekt"
+    },
+    {
+      "name": "zbrane",
+      "path": "",
+      "description": "Všechny zbraně: meče, sekery, luky, pušky, dýky. Nepatří sem: brnění, lektvary.",
+      "belongs": "Všechny zbraně: meče, sekery, luky, pušky, dýky. I když je zbraň v ruce postavy, patří sem.",
+      "notBelongs": "brnění, lektvary"
+    }
+  ],
+  "skipExtensions": [
+    "crdownload",
+    "part",
+    "tmp",
+    "download",
+    "partial"
+  ],
+  "skipPrefixes": [
+    "~$"
+  ],
+  "visionModel": "moondream",
+  "confidenceThreshold": 60,
+  "belowThreshold": "leave"
+}

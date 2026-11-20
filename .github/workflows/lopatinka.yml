@@ -1,0 +1,24 @@
+name: Lopatinka - vyhodna elektronika
+
+on:
+  schedule:
+    # 07:00 a 16:00 Praha (cron je v UTC: 06:00 a 15:00)
+    - cron: '0 6,15 * * *'
+  workflow_dispatch:
+
+jobs:
+  najdi-a-posli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Agent nemá žádné závislosti - žádný npm install není potřeba.
+      - name: Najdi 3 nabídky a pošli do Telegramu
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node data/capabilities/agents/lopatinka/run.mjs

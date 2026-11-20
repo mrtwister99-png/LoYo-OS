@@ -1,0 +1,28 @@
+{
+  "id": "demo",
+  "name": "Boty a trička s.r.o.",
+  "url": "https://boty-a-tricka.cz",
+  "supportHours": "Po–Pá 8–17, So 9–12",
+  "carriers": "Zásilkovna, PPL, DPD, Česká pošta",
+  "shipsWithin": "objednávky do 14:00 odesíláme ten samý den, jinak další pracovní den",
+  "freeShippingFrom": "1500 Kč",
+  "returnDays": 14,
+  "returnUrl": "https://boty-a-tricka.cz/vraceni",
+  "claimEmail": "reklamace@boty-a-tricka.cz",
+  "pickupAddress": "Skladová 12, Praha 9",
+  "phone": "+420 777 123 456",
+  "email": "podpora@boty-a-tricka.cz",
+  "orderFormat": "202600123",
+  "humanSlaHours": 2,
+  "provider": "demo",
+  "color": "#f59e0b",
+  "greeting": "Dobrý den, jak vám mohu pomoci s objednávkou?",
+  "quickReplies": [
+    "Kde je moje objednávka?",
+    "Chci vrátit zboží",
+    "Reklamace",
+    "Máte boty Runner 42?",
+    "Ukázka (demo)"
+  ],
+  "allowedOrigins": ["*"]
+}

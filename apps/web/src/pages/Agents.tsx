@@ -5,10 +5,18 @@ import AgentBuilder from '../components/builder/AgentBuilder'
 import { categoryColors, categoryNumbers } from '../styles/theme'
 import NumBadge, { useCapNumbers } from '../components/NumBadge'
 import TridilPanel from '../components/TridilPanel'
+import LootCheckerPanel from '../components/LootCheckerPanel'
+import LopatinkaPanel from '../components/LopatinkaPanel'
+import MaryTelegramPanel from '../components/MaryTelegramPanel'
+import StepanPanel from '../components/StepanPanel'
 
 const ACCENT = '#12a4ff'
 const AGENT_COLOR = categoryColors.agents
 const AGENT_NUM = categoryNumbers.agents
+
+// kategorie pro pronajimatelne agenty (zluty obrys)
+const RENTAL_CAT = 'rental'
+const RENTAL_COLOR = '#facc15'
 
 type Skill = { id: string; name: string }
 type Tool = { id: string; name: string; icon: string }
@@ -29,6 +37,7 @@ type Agent = {
   number?: number
   dependencies?: string[]
   loops?: string[]
+  endpoints?: Record<string, string>
 }
 
 const ALL_SKILLS: Skill[] = [
@@ -55,6 +64,7 @@ const CATS = [
   { id: 'dev', name: 'DEV', count: 0 },
   { id: 'research', name: 'RESEARCH', count: 0 },
   { id: 'sales', name: 'SALES', count: 0 },
+  { id: 'rental', name: 'PRONAJÍMATELNÍ', count: 0 },
 ]
 
 const TEAMS = ['Nezařazen', 'Obchod', 'Hračky', 'LOYO OS v2']
@@ -75,6 +85,32 @@ export default function AgentsPro() {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
   const capNums = useCapNumbers()
   const [showNew, setShowNew] = useState(false)
+  const [demoState, setDemoState] = useState<Record<string, 'starting' | 'error' | undefined>>({})
+
+  const openExternal = async (url: string) => {
+    try {
+      const { open } = await import('@tauri-apps/plugin-shell')
+      await open(url)
+    } catch {
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }
+  }
+
+  const runDemo = async (agent: Agent) => {
+    const url = agent.endpoints?.demo
+    if (!url) return
+    setDemoState(s => ({ ...s, [agent.id]: 'starting' }))
+    try {
+      const res = await fetch(`${API_URL}/api/agents/${agent.id}/demo`, { method: 'POST' })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok || !data.ok) throw new Error(data?.error || 'spuštění selhalo')
+      await openExternal(data.url || url)
+      setDemoState(s => ({ ...s, [agent.id]: undefined }))
+    } catch (err) {
+      console.error('Demo start failed:', err)
+      setDemoState(s => ({ ...s, [agent.id]: 'error' }))
+    }
+  }
 
   useEffect(() => {
     loadAgentsFromFS(false)
@@ -119,6 +155,7 @@ export default function AgentsPro() {
         number: a.number?? a.manifest?.number,
         dependencies: a.dependencies || a.manifest?.dependencies || [],
         loops: a.loops || a.manifest?.loops || [],
+        endpoints: a.endpoints || a.manifest?.endpoints || {},
       }))
       setAgents(normalized)
       setSelectedAgent(prev => {
@@ -249,12 +286,21 @@ export default function AgentsPro() {
               const fn = firstName(agent.name)
               const isOnline = agent.status==='online'
               const isBusy = agent.status==='busy'
+              const isRental = agent.category === RENTAL_CAT
+              const demoUrl = agent.endpoints?.demo
+              const demoPhase = demoState[agent.id]
               return (
-                <button
+                <div
                   key={agent.id}
+                  role="button"
+                  tabIndex={0}
                   onClick={()=>setSelectedAgent(agent)}
-                  className="group relative aspect-square bg-[#444] text-[#f0f0f0] rounded- border border-[#444] overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-[#12a4ff] hover:border-white/20 transition-all duration-200 shadow-[0_0_0_1px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:-translate-y- border-l"
-                  style={{ borderLeftColor: AGENT_COLOR }}
+                  onKeyDown={(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setSelectedAgent(agent) } }}
+                  className="group relative aspect-square bg-[#444] text-[#f0f0f0] rounded- border border-[#444] overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-[#12a4ff] hover:border-white/20 transition-all duration-200 hover:-translate-y- border-l cursor-pointer"
+                  style={{
+                    borderLeftColor: isRental ? RENTAL_COLOR : AGENT_COLOR,
+                    boxShadow: isRental ? `0 0 0 2px ${RENTAL_COLOR}` : '0 0 0 1px rgba(0,0,0,0.05)',
+                  }}
                 >
                   <NumBadge type={AGENT_NUM} n={agent.number} idx={idx} label={agent.id} tone="light" className="absolute top-2 left-2" />
                   {/* status tečka */}
@@ -271,13 +317,26 @@ export default function AgentsPro() {
                   </span>
 
                   {/* hover hint */}
-                  <span className="relative z-10 mt-3 text-[9px] tracking-[0.3em] font-bold opacity-0 group-hover:opacity-60 transition">
-                    DETAIL →
-                  </span>
+                  {!demoUrl && (
+                    <span className="relative z-10 mt-3 text-[9px] tracking-[0.3em] font-bold opacity-0 group-hover:opacity-60 transition">
+                      DETAIL →
+                    </span>
+                  )}
 
                   {/* spodní linka */}
                   <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#444] opacity-0 group-hover:opacity-100 transition" />
-                </button>
+
+                  {demoUrl && (
+                    <button
+                      onClick={(e)=>{ e.stopPropagation(); runDemo(agent) }}
+                      disabled={demoPhase === 'starting'}
+                      title={demoPhase === 'error' ? 'Ukázku se nepodařilo spustit, zkuste to znovu' : 'Spustí ukázku agenta'}
+                      className="absolute z-20 bottom-2 left-2 right-2 py-2 rounded-full bg-[#facc15] text-[#12151b] text-[9px] font-black tracking-[0.14em] hover:brightness-110 disabled:opacity-60 transition"
+                    >
+                      {demoPhase === 'starting' ? 'SPOUŠTÍM…' : demoPhase === 'error' ? 'ZKUSIT ZNOVU' : '▶ SPUSTIT UKÁZKU'}
+                    </button>
+                  )}
+                </div>
               )
             })}
 
@@ -318,6 +377,14 @@ export default function AgentsPro() {
                       <span className="text-[10px] px-2.5 py-1 rounded-full text-[#f0f0f0] font-bold tracking-widest" style={{ background: ACCENT }}>{selectedAgent.status.toUpperCase()}</span>
                       <span className="text-[10px] px-2.5 py-1 rounded-full bg-white/5 font-mono">{selectedAgent.team}</span>
                     </div>
+                    {selectedAgent.endpoints?.demo && (
+                      <button
+                        onClick={()=>runDemo(selectedAgent)}
+                        className="mt-3 px-4 py-2 rounded-full bg-[#facc15] text-[#12151b] text-[10px] font-black tracking-[0.18em] hover:brightness-110 transition"
+                      >
+                        ▶ SPUSTIT UKÁZKU
+                      </button>
+                    )}
                   </div>
                 </div>
                 <button onClick={()=>setSelectedAgent(null)} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#444] hover:text-[#f0f0f0] transition">✕</button>
@@ -325,7 +392,11 @@ export default function AgentsPro() {
             </div>
 
             <div className="p-7 space-y-8">
+              {selectedAgent.id === 'mary-jane' && <MaryTelegramPanel />}
               {selectedAgent.id === 'tridil' && <TridilPanel />}
+              {selectedAgent.id === 'loot-checker' && <LootCheckerPanel />}
+              {selectedAgent.id === 'lopatinka' && <LopatinkaPanel />}
+              {selectedAgent.id === 'stepan' && <StepanPanel />}
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
                   <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">KATEGORIE</div>

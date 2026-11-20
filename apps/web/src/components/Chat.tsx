@@ -1,7 +1,111 @@
 // D:\dev\loyo-os\apps\web\src\components\Chat.tsx - HADR SMALL + DRAGGABLE
 import { useState, useEffect, useRef } from 'react'
 
-type ChatMsg = { from: 'me' | 'mary'; text: string }
+type ChatMsg = { from: 'me' | 'mary'; text: string; meta?: TipMeta | Record<string, any> }
+
+type Tip = {
+  title: string
+  price: number
+  median: number
+  discount: number
+  portal: string
+  url: string
+  inBand?: boolean
+  slot?: 'main' | 'bonus'
+  source?: 'main' | 'watch'
+  isNew?: boolean
+  watchLabel?: string | null
+  profit?: number | null
+  profitMargin?: number | null
+}
+
+type TipMeta = { kind: 'lopatinka-tips'; report?: string; picks?: Tip[] }
+
+const czk = (v?: number | null) =>
+  v == null ? '—' : `${Math.round(v).toLocaleString('cs-CZ').replace(/\u00a0/g, ' ')} Kč`
+
+// Klikací karta tipů Lopatinky v chatu — KOUPENO / IGNOROVAT se zapisuje do decisions.json
+// (IGNOROVAT navíc do feedback.json, takže se nabídka už nepošle).
+function TipCard({ meta }: { meta: TipMeta }) {
+  const [decided, setDecided] = useState<Record<string, 'bought' | 'ignored'>>({})
+  const [error, setError] = useState('')
+  const picks = meta.picks ?? []
+
+  const decide = async (tip: Tip, action: 'bought' | 'ignored') => {
+    setError('')
+    try {
+      const res = await fetch('http://localhost:3001/api/agents/lopatinka/tips/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, url: tip.url, title: tip.title, price: tip.price }),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      setDecided(prev => ({ ...prev, [tip.url]: action }))
+    } catch {
+      setError('Rozhodnutí se nepodařilo zapsat — běží API na :3001?')
+    }
+  }
+
+  return (
+    <div style={{
+      width: '100%', padding: 8, background: '#313131',
+      border: '1.1px solid black', boxShadow: '2px 2px 0px black',
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+        <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.08em', color: '#12a4ff' }}>🛒 LOPATINKA · TIPY</span>
+        <span style={{ fontSize: 9, color: '#9a9a9a' }}>{picks.length} nabídek</span>
+      </div>
+      {picks.length === 0 && <div style={{ fontSize: 10, color: '#9a9a9a' }}>Dnes nic rozumného.</div>}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {picks.map((tip, i) => {
+          const state = decided[tip.url]
+          const metaLine = [
+            tip.portal,
+            tip.source === 'watch' ? `🔔 ${tip.watchLabel ?? 'hlídané'}${tip.isNew ? ' · NOVÉ' : ''}` : '',
+            tip.slot === 'bonus' ? 'bonus mimo pásmo' : tip.inBand === false ? 'mimo pásmo' : '',
+            tip.discount > 0 ? `−${tip.discount} % vs. medián` : tip.discount < 0 ? `⚠️ +${Math.abs(tip.discount)} % nad mediánem` : '',
+            tip.profit != null ? `zisk ~${czk(tip.profit)}` : '',
+          ].filter(Boolean).join(' · ')
+          return (
+            <div key={`${tip.url}-${i}`} style={{ padding: 6, background: '#3a3a3a', border: '1px solid #444' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 6, alignItems: 'baseline' }}>
+                <span style={{ fontSize: 10, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {i + 1}) {tip.title}
+                </span>
+                <span style={{ fontSize: 10, fontWeight: 900, color: '#12a4ff', flexShrink: 0 }}>{czk(tip.price)}</span>
+              </div>
+              <div style={{ fontSize: 9, color: '#9a9a9a', marginTop: 2 }}>{metaLine}</div>
+              <div style={{ display: 'flex', gap: 4, marginTop: 5, flexWrap: 'wrap' }}>
+                <a
+                  href={tip.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ padding: '2px 6px', fontSize: 9, fontWeight: 700, color: '#f0f0f0', background: '#444', border: '1px solid black', textDecoration: 'none' }}
+                >OTEVŘÍT</a>
+                <button
+                  onClick={() => decide(tip, 'bought')}
+                  disabled={!!state}
+                  style={{ padding: '2px 6px', fontSize: 9, fontWeight: 900, cursor: state ? 'default' : 'pointer', background: state === 'bought' ? '#1f9d55' : '#444', color: '#f0f0f0', border: '1px solid black', opacity: state && state !== 'bought' ? 0.5 : 1 }}
+                >{state === 'bought' ? '✓ KOUPENO' : 'KOUPENO'}</button>
+                <button
+                  onClick={() => decide(tip, 'ignored')}
+                  disabled={!!state}
+                  style={{ padding: '2px 6px', fontSize: 9, fontWeight: 900, cursor: state ? 'default' : 'pointer', background: state === 'ignored' ? '#8a3b3b' : '#444', color: '#f0f0f0', border: '1px solid black', opacity: state && state !== 'ignored' ? 0.5 : 1 }}
+                >{state === 'ignored' ? '✓ IGNOROVÁNO' : 'IGNOROVAT'}</button>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      {error && <div style={{ fontSize: 9, color: '#ff6b6b', marginTop: 4 }}>{error}</div>}
+      {meta.report && (
+        <div style={{ fontSize: 9, color: '#9a9a9a', marginTop: 5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          Report: {String(meta.report).split(/[\\/]/).pop()}
+        </div>
+      )}
+    </div>
+  )
+}
 
 type Props = {
   isOpen: boolean
@@ -174,7 +278,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
       .then(res => res.json())
       .then(data => {
         if (data.messages?.length) {
-          const msgs = data.messages.map((m: any) => ({ from: m.from, text: m.text }))
+          const msgs = data.messages.map((m: any) => ({ from: m.from, text: m.text, meta: m.meta }))
           setChatMessages(msgs)
           lastMsgCountRef.current = msgs.length
         }
@@ -188,7 +292,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
         .then(res => res.json())
         .then(data => {
           if (!data.messages?.length) return
-          const msgs: ChatMsg[] = data.messages.map((m: any) => ({ from: m.from, text: m.text }))
+          const msgs: ChatMsg[] = data.messages.map((m: any) => ({ from: m.from, text: m.text, meta: m.meta }))
           if (msgs.length > lastMsgCountRef.current) {
             const newOnes = msgs.slice(lastMsgCountRef.current)
             const hasNewFromMary = newOnes.some(m => m.from === 'mary')
@@ -366,20 +470,32 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
         fontFamily: "'JetBrains Mono', monospace", fontSize: 11, lineHeight: 1.4,
         background: '#2b2b2b',
       }}>
-        {chatMessages.map((msg, i) => (
-          <div key={i} style={{ display: 'flex', justifyContent: msg.from === 'me' ? 'flex-end' : 'flex-start' }}>
-            <div style={{
-              maxWidth: '82%', padding: '6px 10px', border: '1.1px solid black',
-              whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-              background: msg.from === 'me' ? '#12a4ff' : '#3a3a3a',
-              color: msg.from === 'me' ? '#f0f0f0' : '#f0f0f0',
-              boxShadow: '2px 2px 0px black',
-              fontSize: 11,
-            }}>
-              {msg.text}
+        {chatMessages.map((msg, i) => {
+          const tipMeta = msg.meta && (msg.meta as any).kind === 'lopatinka-tips' ? (msg.meta as TipMeta) : null
+          if (tipMeta) {
+            return (
+              <div key={i} style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <div style={{ maxWidth: '94%', width: '100%' }}>
+                  <TipCard meta={tipMeta} />
+                </div>
+              </div>
+            )
+          }
+          return (
+            <div key={i} style={{ display: 'flex', justifyContent: msg.from === 'me' ? 'flex-end' : 'flex-start' }}>
+              <div style={{
+                maxWidth: '82%', padding: '6px 10px', border: '1.1px solid black',
+                whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+                background: msg.from === 'me' ? '#12a4ff' : '#3a3a3a',
+                color: msg.from === 'me' ? '#f0f0f0' : '#f0f0f0',
+                boxShadow: '2px 2px 0px black',
+                fontSize: 11,
+              }}>
+                {msg.text}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
         {picker && (
           <div style={{ border: '1px solid #12a4ff', background: '#3a3a3a', boxShadow: '3px 3px 0px black', maxHeight: 220, overflowY: 'auto' }}>
             <div style={{ padding: '6px 8px', background: '#12a4ff', color: '#f0f0f0', fontWeight: 900, fontSize: 10 }}>↑↓ vyber • Enter potvrdí • Esc zavře — {picker.type} ({picker.items.length})</div>

@@ -1,0 +1,73 @@
+Loot Checker — FÁZE 2 vision třídění
+Datum: 14. 11. 2026 10:58:19
+Zdroj: C:\Users\loyo-\Desktop\GRAFIKA\dablkopiebohuzel\1
+Model: moondream | Práh: 60 | Pod prahem: leave
+Roztříděno: 0 | Nízká jistota (necháno): 67 | Chyby: 1
+---
+0062f702be4c9d48adda03bcb0eefaf1.jpg -> NECHÁNO (navrhoval desk, 0%) | Model vrátil neznámou složku "desk", beru jako ostatní. desk is the only place where it is used
+0062f702be4c9d48adda03bcb0eefaf1.jpg -> NECHÁNO (navrhoval desk, 0%) | desk is the only place where it is used
+02fa75835e7c178566e87fd01f3ac8c7.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+031eb1a53a94f16cf40555a500726285.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the reason for this image.
+0528c5b9b7e1ed2202dc2de707fa6e1e.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+06c111fe7d73f4c0e9039ea2085bd207.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+0a43357efd8223734a6bc9b3fcdb1d39.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the name of the folder.
+0adf276fb082038064eaf033a7c51cde.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+0b63b7b6c871f615e85b0340ddfa6031.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+0bcb6dcc54175a79ea0a77983f1dc0ad.jpg -> NECHÁNO (navrhoval postavy, 0.2%) | postavy is the folder name.
+0be72802bedaabbd6891a7da6868d310.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+0d249d17b2776a7ad59e8c0b530d8bef.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+0d5e2a9118a5e3842791f76b0ed1d721.jpg -> NECHÁNO (navrhoval ostatni, 0%) | The folder is empty.
+14d51f4a4d5e0354591b47d58ec1fac3.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder name. It is the folder that the image is being shown in.
+160a48d49de6e4d94ef76f28d31b6ad3 (1) - kopie.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder name.
+1aaa6012be1b908bc5bce597352c4bec.jpg -> NECHÁNO (navrhoval ostatni, 0%) | The image is a folder name.
+1dc1722fb5872c7c2d24b77e0c6bfd62.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+1fa7ba6c5068cbcb8baff02d806ebe56.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+24fc7c1072c781fa93f9cc83ecdc7d71.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+25ce883a0a2531b4e62efd8a43bd3610.jpg -> NECHÁNO (navrhoval ostatni, 0%) | The image is a folder name or a folder.
+26db1c047fe8dfb0d5d1bf328bcf64b8.jpg -> NECHÁNO (navrhoval postavy, 0.4%) | postavy is the folder name.
+26e61afda07b2b267edd1a2b91c777f3.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+2e874fdc4b1e812917cfdd15f77641b1.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+2eb9910315a83d7052928d44d20cb67e.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+31ad2172b85d99d5c1197aa88c17bb75.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+362d0e6555258d15a16be6e036c4666b.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+369e8effdb8178229fe7737eeeb6f2fa.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+38fceefc344e0111961ec1e1f5c115cc.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder name and it fits the image perfectly.
+3c60ba4c66621948bbb1167d40085210.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+3d2ed034264ecf1d5592b5ad9b1b90e6.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder name.
+3ed736007d178c09094a7492b459690c.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+3f36f495de4108dc6e6f17b425cb5161.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+425d6e6f19a80298cc120c244c0f6f64.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder name.
+43a97eb527f44952fd7db46a1992629b.jpg -> NECHÁNO (navrhoval postavy, 0.64%) | postavy is the folder name.
+4bc324aa47900019c4bfd30ed24b70e7.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+4d920dddce83f9cbdeac34c416751e66.jpg -> NECHÁNO (navrhoval postavy, 0.4%) | postavy is a meme folder.
+4ee531dcf991f159b64bdae0dbb84dfb.jpg -> NECHÁNO (navrhoval postavy, 0.7%) | postavy is the folder name.
+50d7e4b575d1fb3ec7854feb53be8da5.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy
+50eb8c9df40014df3526bccdf37b9bb0.jpg -> NECHÁNO (navrhoval ostatni, 0%) | The image does not fit any folders.
+51ee8918e3d586596d02f235257a2060.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+522aaf44f0044ca77962799fbd54e8af.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+525f07bc727efe22c78faca2d3d23a5d.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+538b0eaae794252c497b79d67615e51e.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder name.
+54f1c5c58d5394e00e2450aa5968440d.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+56fe4ecf5f1cd5af2027db8e385fb738.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy is the folder name.
+588b30a3101cf2282be78662dc06f621.jpg -> NECHÁNO (navrhoval ostatni, 0%) | The image does not fit any folders.
+5ac885e3639fa7311654f8420549ce3b.jpg -> NECHÁNO (navrhoval postavy, 0.2%) | postavy is the folder name.
+5f394043c716128de2011dbc97dd3232.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+612d8d7889d73c2a8712bb18b86f7104.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+61a6fa138bd068815ad5f2149f0f8ade.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder name.
+63edd761bc590945bf2f256fbe8ffe60.jpg -> NECHÁNO (navrhoval postavy, 0.65%) | postavy is a meme and it fits the description.
+68fd61dbee4c2277741fb057102a9151.jpg -> NECHÁNO (navrhoval ostatni, 0%) | The image does not fit any folders.
+6a03f484adfdda90d44b24d9a2ce5066.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+6cb7c5ce21569572a8b7609ab4ab307d.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+707ee2f2f0a36023ea22239f7c0fba64.jpg -> NECHÁNO (navrhoval postavy, 0.4%) | postavy
+71ba31270c985697cdb92ab5fd920ba4.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder name.
+7ef7e11c52d739db9634ec4b4180dbe4.jpg -> NECHÁNO (navrhoval postavy, 0.4%) | postavy is the folder name.
+7fa05d4fc11c374a693a3b0f4798356a.jpg -> NECHÁNO (navrhoval postavy, 0.4%) | postavy is the folder name.
+7fc90582a37af9de712d352215941e56.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+81a4223eba4d8ff0f8d0f974a038b663.jpg -> NECHÁNO (navrhoval ostatni, 0%) | The folder is empty.
+8b24ea541abf9209176fda09c38bcd7c.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder name.
+8ece32c82f4e67308fcf8f4f35bb4626.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+8fdea226aa2051f88408b9e026641d04.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+96cbcac3221fead42ec8cc721f981424.jpg -> NECHÁNO (navrhoval postavy, 0.8%) | postavy is the folder that fits the image.
+9a7f969f895065368833d12a9120e634.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.
+9c0d985d095cbb86472d059efeaf0e13.jpg -> NECHÁNO (navrhoval postavy, 0.67%) | postavy
+9e063d1c1b19fc698f7f6c60883ac445.jpg -> NECHÁNO (navrhoval postavy, 0.73%) | postavy is the folder name.

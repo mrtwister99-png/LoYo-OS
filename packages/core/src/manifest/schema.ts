@@ -33,6 +33,8 @@ export const BaseManifestSchema = z.object({
   mcp_expose: z.boolean().default(false),
   dependencies: z.array(z.string().regex(/^[a-z0-9-]+(:\d+)?$/, 'id nebo id:číslo')).default([]),
   tags: z.array(z.string()).default([]),
+  category: z.string().default('all'),
+  endpoints: z.record(z.string(), z.string()).default({}),
   reputation: ReputationSchema.default({
     success: 0,
     failure: 0,

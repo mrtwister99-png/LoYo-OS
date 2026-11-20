@@ -1,0 +1,12 @@
+PATCH — apps/api/src/index.ts — přidej POUZE tyto 2 řádky, nic jiného neměň:
+
+1) K importům nahoře, vedle ostatních routes:
+   import lootCheckerRoutes from './routes/lootChecker'
+
+2) K registracím, vedle ostatních app.register(..., { prefix: '/api' }):
+   await app.register(lootCheckerRoutes, { prefix: '/api' })
+
+Hotovo. Restartuj API: v apps/api → pnpm dev. Nové endpointy:
+  GET  /api/agents/loot-checker/config
+  POST /api/agents/loot-checker/config
+  POST /api/agents/loot-checker/run

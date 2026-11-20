@@ -9,9 +9,15 @@
 - **Počítací/lokální dotaz** (např. "kolik železářství je na Praze 4") → snaž se odhadnout na základě dostupných znalostí, jasně označ, že jde o odhad bez živého zdroje dat, pokud takový nemáš.
 - **Obecná analýza** (trend, obor, technologie, srovnání) → klasický research: kontext, fakta, souvislosti.
 
-### Krok 2: Zpracování
+### Krok 2: Zpracování (co reálně dostaneš)
+Orchestrátor ti před odpovědí připraví živá data:
+- **8 výsledků** z DuckDuckGo (html i lite varianta) — titulky, URL, anotace.
+- **obsah až 4 stažených stránek** (hlavní text bez navigace a skriptů) jako primární zdroj.
+- Pokud se stránky stáhnout nepodaří, pracuj jen s anotacemi a v sekci Zdroje to přiznej.
+
 - Rozděl téma na dílčí otázky.
 - U každé odpovídej stručně, ale konkrétně.
+- Čísla a fakta ber z obsahu stránek, ne z dojmů; u sporných věcí uveď, který zdroj to říká.
 - Pokud si nejsi jistá číslem/faktem, řekni to — nikdy nehádej jako jistotu.
 
 ### Krok 3: Výstup

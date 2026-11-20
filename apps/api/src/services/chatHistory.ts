@@ -10,7 +10,7 @@ const AUDIT_FILE  = join(HISTORY_DIR, 'audit.jsonl')
 
 const DAY_NAMES = ['nedele', 'pondeli', 'utery', 'streda', 'ctvrtek', 'patek', 'sobota']
 
-type ChatEntry = { from: 'me' | 'mary'; text: string; ts: string }
+type ChatEntry = { from: 'me' | 'mary'; text: string; ts: string; meta?: Record<string, any> }
 type DayFile = { date: string; messages: ChatEntry[] }
 
 // ISO číslo týdne (1–53)
@@ -57,7 +57,7 @@ async function writeDayFile(name: string, data: DayFile) {
 }
 
 // ---------- uloží novou zprávu do dnešního dne (přepíše starý týden, pokud je potřeba) ----------
-export async function saveChatMessage(from: 'me' | 'mary', text: string) {
+export async function saveChatMessage(from: 'me' | 'mary', text: string, meta?: Record<string, any>) {
   const name = todayName()
   const today = todayISO()
   const existing = await readDayFile(name)
@@ -65,7 +65,7 @@ export async function saveChatMessage(from: 'me' | 'mary', text: string) {
   const isNewOccurrence = existing.date !== today
   const messages = isNewOccurrence ? [] : existing.messages
 
-  const entry: ChatEntry = { from, text, ts: new Date().toISOString() }
+  const entry: ChatEntry = { from, text, ts: new Date().toISOString(), ...(meta ? { meta } : {}) }
   messages.push(entry)
   await writeDayFile(name, { date: today, messages })
 

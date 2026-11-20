@@ -11,7 +11,8 @@ import { logRun } from './runLogger'
 import { getCapabilities } from '../lib/manifestLoader'
 import { ragSearch } from '../lib/ragStore'
 import { getChatDay, saveMemorySummary, searchMemorySummaries, getMemoryByDateRange, compactOldMemory, saveMemoryVector, searchMemoryByVector, getLongMonthRows } from './chatHistory'
-import { webSearch, type SearchResult } from './web_search'
+import { webSearch, readSources, type SearchResult } from './web_search'
+import { tryAgentCommand } from './agentCommands'
 import { bumpAgentStats } from './agentStats'
 import { slugify, safeName, nextFileNumber, readDirSafe } from './fileUtils'
 import {
@@ -41,11 +42,13 @@ const MODEL = 'devstral-small-2:latest' // FIX 12GB RTX 4080
 const FAST_MODEL = MODELS.FAST.model
 const MAX_MEMORY_MESSAGES = 20 // posledních 10 výměn drženo v kontextu
 const OLLAMA_TIMEOUT_MS = 90000 // ochrana proti zaseklému/pomalému modelu
-const DEEP_TIMEOUT_MS = 120000 // deep research smí trvat déle
+const DEEP_TIMEOUT_MS = 200000 // deep research smí trvat déle (stahuje i celé stránky)
 
 // fronta řeší p-queue, žádný in-memory boolean
 
 type ChatMsg = { role: 'system' | 'user' | 'assistant'; content: string }
+
+type RunResult = { reply: string; steps: string[]; julia?: { file: string; query: string; chars: number } }
 
 // ---------- dynamické příkazy z commands.json ----------
 interface CommandDef
@@ -503,16 +506,31 @@ async function runResearch(userMessage: string, runId: string, steps: string[]) 
   const juliaSystem = juliaDocs || 'Jsi Julia Nehledalová, deep research analytik v LOYO OS. Piš detailní, věcné reporty.'
 
   steps.push(`Julia: vyhledávám na webu "${query}"`)
-  await logActivity({ agent: 'Julia_Nehledalova', type: 'search', action: `web_search: "${query}"` })
 
-  const searchResults = await webSearch(query, 5)
+  const searchResults = await webSearch(query, 8)
   steps.push(`Julia: nalezeno ${searchResults.length} zdrojů`)
+
+  // Hloubkový research nestojí jen na anotacích — stáhne i obsah nejlepších stránek.
+  const pages = await readSources(searchResults, 2)
+  steps.push(`Julia: přečteno ${pages.length} celých stránek`)
+  await logActivity({
+    agent: 'Julia_Nehledalova',
+    type: 'search',
+    action: `deep research: "${query}" → ${searchResults.length} zdrojů, ${pages.length} stránek`,
+    meta: { sources: searchResults.map((r: SearchResult) => r.url) },
+  })
 
   const zdrojeBlock = searchResults.length
     ? searchResults
-        .map((r: SearchResult, i: number) => `### Zdroj ${i + 1}: ${r.title}\nURL: ${r.url}\nObsah: ${r.snippet}`)
+        .map((r: SearchResult, i: number) => `### Zdroj ${i + 1}: ${r.title}\nURL: ${r.url}\nAnotace: ${r.snippet}`)
         .join('\n\n')
     : '(vyhledávání nevrátilo žádné použitelné výsledky — zkus jiný, méně specifický dotaz)'
+
+  const strankyBlock = pages.length
+    ? pages
+        .map((p: { title: string; url: string; text: string }, i: number) => `### Stažená stránka ${i + 1}: ${p.title}\nURL: ${p.url}\n${p.text}`)
+        .join('\n\n')
+    : '(celé stránky se nepodařilo stáhnout — pracuj jen s anotacemi výše)'
 
   steps.push('Julia: data stažena, sestavuji report')
 
@@ -525,10 +543,10 @@ async function runResearch(userMessage: string, runId: string, steps: string[]) 
           { role: 'system', content: juliaSystem },
           {
             role: 'user',
-            content: `Zadání: ${query}\n\nŽIVÁ DATA Z WEBU (použij je jako primární zdroj, cituj přesné URL v sekci Zdroje):\n${zdrojeBlock.slice(0, 9000)}\n\nSestav report podle svého protokolu (Klíčové nálezy → Detailní shrnutí → Zdroje/omezení). Pokud data z webu k tématu nestačí nebo chybí, řekni to na rovinu a doplň jen to, co je ověřitelné. Nikdy netvrď fakt, který není podložený zdrojem výše.`,
+            content: `Zadání: ${query}\n\nŽIVÁ DATA Z WEBU — ANOTACE (použij jako přehled, cituj přesné URL):\n${zdrojeBlock.slice(0, 2500)}\n\nOBSAH STAŽENÝCH STRÁNEK (primární zdroj, ber konkrétní čísla a fakta odsud):\n${strankyBlock.slice(0, 6000)}\n\nSestav report podle svého protokolu (Klíčové nálezy → Detailní shrnutí → Zdroje/omezení). V sekci Zdroje vypiš URL, ze kterých jsi čerpala. Pokud data k tématu nestačí nebo chybí, řekni to na rovinu a doplň jen to, co je ověřitelné. Nikdy netvrď fakt, který není podložený zdrojem výše.`,
           },
         ],
-        options: { temperature: 0.4, num_ctx: 2048 },
+        options: { temperature: 0.4, num_ctx: 4096, num_predict: 800 },
       },
       DEEP_TIMEOUT_MS,
     )
@@ -549,8 +567,8 @@ async function runResearch(userMessage: string, runId: string, steps: string[]) 
   await bumpAgentStats('julia_nehledalova')
   await logRun(runId, { userMessage, mode: 'research', query, model: juliaModel, sources: searchResults, file, reply: reportText })
 
-  const reply = `Research "${query}" máš hotový a je uložený v \`${file}\``
-  return { reply, steps }
+  const reply = `🔎 Research "${query}" je hotový (${reportText.length} znaků).\nUloženo: \`${file}\``
+  return { reply, steps, julia: { file, query, chars: reportText.length } }
 }
 
 // ============================================================
@@ -944,7 +962,7 @@ async function runBender(userMessage: string, runId: string, steps: string[]) {
   // FIX: async + správná cesta + 3x md
   let bible = ''
   try {
-    const biblePath = path.join(process.cwd(), '../../data/capabilities/agents/bender/knowledge.md')
+    const biblePath = join(AGENTS_DIR, 'bender', 'knowledge.md')
     bible = await readFile(biblePath, 'utf-8')
   } catch {
     bible = 'Jsi Bender, Blender specialist. BLENDER_EEVEE, make_mat(), ico_sphere hlava, cylinder 8 ruce/nohy, bevel 0.03.'
@@ -1752,9 +1770,17 @@ async function runNewSkill(userMessage: string, runId: string, steps: string[]) 
 // ============================================================
 // CORE LOGIKA - bez fronty, voláno z fronty i přímo
 // ============================================================
-async function runOrchestratorCore(userMessage: string, runId: string, steps: string[]): Promise<{ reply: string; steps: string[] }>
+async function runOrchestratorCore(userMessage: string, runId: string, steps: string[]): Promise<RunResult>
 {
   const trimmed = userMessage.trim()
+
+  // ---------- Mary Jane velí všem agentům (UI chat i Telegram) ----------
+  const agentCommand = await tryAgentCommand(trimmed).catch(() => null)
+  if (agentCommand) return agentCommand
+
+  // /julia <téma> = zkratka na hloubkový research
+  const juliaAlias = trimmed.match(/^\/julia\s+([\s\S]+)$/i)
+  if (juliaAlias) return runResearch(`/research ${juliaAlias[1]}`, runId, steps)
 
   // ---------- ÚKOL 22-24: explicitní příkazy ----------
   // typ-číslo: /edit 4-1 (typ 4 = MCP, položka 1), /edit 4 = seznam typu, /add 1-2, /add 1
@@ -2040,7 +2066,7 @@ async function runOrchestratorCore(userMessage: string, runId: string, steps: st
 // ============================================================
 // HLAVNÍ TOK S P-QUEUE (žádný while(true) polling)
 // ============================================================
-export async function runOrchestrator(userMessage: string): Promise<{ reply: string; steps: string[] }>
+export async function runOrchestrator(userMessage: string): Promise<RunResult>
 {
   const steps: string[] = []
   const runId = `${new Date().toISOString().replace(/[:.]/g, '-')}_${randomUUID().slice(0, 8)}`
@@ -2066,5 +2092,5 @@ export async function runOrchestrator(userMessage: string): Promise<{ reply: str
     }
   }
 
-  return jobQueue.add(() => runOrchestratorCore(trimmed, runId, steps), { priority: pQueuePriority }) as Promise<{ reply: string; steps: string[] }>
+  return jobQueue.add(() => runOrchestratorCore(trimmed, runId, steps), { priority: pQueuePriority }) as Promise<RunResult>
 }

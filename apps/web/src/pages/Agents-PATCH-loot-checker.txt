@@ -1,0 +1,11 @@
+PATCH — apps/web/src/pages/Agents.tsx — přidej POUZE tyto 2 řádky, nic jiného neměň:
+
+1) K importům nahoře, vedle `import TridilPanel from '../components/TridilPanel'`:
+   import LootCheckerPanel from '../components/LootCheckerPanel'
+
+2) Do detailu agenta, hned POD řádek:
+     {selectedAgent.id === 'tridil' && <TridilPanel />}
+   přidej:
+     {selectedAgent.id === 'loot-checker' && <LootCheckerPanel />}
+
+Hotovo. Restartuj web: v apps/web → pnpm dev. Panel se ukáže po kliknutí na agenta Loot Checker.

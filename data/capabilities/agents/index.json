@@ -1,6 +1,6 @@
 {
   "version": "3.0.0",
-  "lastSync": "2026-09-07T22:00:22.100Z",
+  "lastSync": "2026-11-20T05:16:14.345Z",
   "agents": [
     {
       "id": "mary-jane",
@@ -117,6 +117,105 @@
       ],
       "tasksToday": 0,
       "created": "2026-09-05T00:00:00Z",
+      "lastRun": null
+    },
+    {
+      "id": "proto",
+      "number": 19,
+      "folder": "proto",
+      "name": "Proto",
+      "role": "AI podpora e-shopu na pronájem (chat widget + tool calling)",
+      "category": "rental",
+      "team": "LOYO OS v3",
+      "status": "online",
+      "skills": [
+        "customer-support",
+        "chat-widget",
+        "tool-calling",
+        "czech-language"
+      ],
+      "tools": [
+        "getOrderStatus",
+        "getTracking",
+        "getProductStock",
+        "createReturn",
+        "createTicket",
+        "sendSMSorEmail"
+      ],
+      "workflow": "support",
+      "prompt_file": "01_CORE_IDENTITY.md",
+      "docs": [
+        "01_CORE_IDENTITY.md",
+        "02_WORKFLOW.md",
+        "03_GUARDRAILS.md",
+        "README.md",
+        "PROMPT.md",
+        "TOOLS.md",
+        "TENANTS.md",
+        "SECURITY.md"
+      ],
+      "tasksToday": 0,
+      "created": "2026-11-15T00:00:00Z",
+      "lastRun": null
+    },
+    {
+      "id": "lopatinka",
+      "number": 20,
+      "folder": "lopatinka",
+      "name": "Lopatinka",
+      "role": "Hledačka výhodné elektroniky (Sbazar + Aukro → Telegram)",
+      "category": "shopping",
+      "team": "LOYO OS v3",
+      "status": "online",
+      "skills": [
+        "bazaar-scan",
+        "deal-scoring",
+        "telegram-notify"
+      ],
+      "tools": [
+        "web_fetch",
+        "telegram_send",
+        "fs_write"
+      ],
+      "workflow": "hunt",
+      "prompt_file": "01_CORE_IDENTITY.md",
+      "docs": [
+        "01_CORE_IDENTITY.md",
+        "02_WORKFLOW.md",
+        "03_GUARDRAILS.md"
+      ],
+      "tasksToday": 0,
+      "created": "2026-11-19T00:00:00Z",
+      "lastRun": null
+    },
+    {
+      "id": "stepan",
+      "number": 21,
+      "folder": "stepan",
+      "name": "Stěpán",
+      "role": "Ocenění věci a inzerát na prodej (Sbazar + Aukro → cena + text inzerátu)",
+      "category": "sales",
+      "team": "LOYO OS v3",
+      "status": "online",
+      "skills": [
+        "price-appraisal",
+        "listing-writer",
+        "bazaar-scan"
+      ],
+      "tools": [
+        "web_fetch",
+        "fs_write"
+      ],
+      "workflow": "sell",
+      "prompt_file": "01_CORE_IDENTITY.md",
+      "docs": [
+        "01_CORE_IDENTITY.md",
+        "02_WORKFLOW.md",
+        "03_GUARDRAILS.md",
+        "README.md"
+      ],
+      "tasksToday": 0,
+      "created": "2026-11-20T00:00:00Z",
       "lastRun": null
     }
   ]

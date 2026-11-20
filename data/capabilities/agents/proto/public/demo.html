@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Boty a trička s.r.o. — demo e-shop s agentem Proto</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #0f1115; color: #e8eaf0; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; border-bottom: 1px solid #232833; flex-wrap: wrap; }
+  .logo { font-weight: 800; font-size: 18px; }
+  .logo span { color: #f59e0b; }
+  nav { display: flex; gap: 16px; color: #9aa3b2; font-size: 14px; }
+  main { max-width: 1040px; margin: 0 auto; padding: 32px 24px 120px; }
+  h1 { font-size: clamp(26px, 4vw, 38px); margin: 0 0 8px; }
+  .lead { color: #9aa3b2; margin: 0 0 28px; max-width: 640px; line-height: 1.6; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .card { background: #171a21; border: 1px solid #262a33; border-radius: 14px; padding: 16px; }
+  .thumb { height: 120px; border-radius: 10px; background: linear-gradient(135deg, #232a36, #171a21); display: grid; place-items: center; font-size: 40px; margin-bottom: 12px; }
+  .card b { display: block; margin-bottom: 4px; }
+  .price { color: #f59e0b; font-weight: 700; }
+  .panel { margin-top: 40px; background: #171a21; border: 1px solid #262a33; border-radius: 14px; padding: 20px; }
+  .panel h2 { margin: 0 0 12px; font-size: 18px; }
+  .panel ol { margin: 0; padding-left: 20px; color: #c3cbd8; line-height: 1.9; }
+  .panel code { background: #0f1115; border: 1px solid #262a33; border-radius: 6px; padding: 2px 6px; font-size: 12px; }
+  .hint { margin-top: 16px; color: #9aa3b2; font-size: 13px; line-height: 1.6; }
+  .badge { display: inline-block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: #f59e0b; border: 1px solid #f59e0b; border-radius: 999px; padding: 3px 9px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Boty a trička <span>s.r.o.</span></div>
+  <nav><span>Novinky</span><span>Boty</span><span>Trička</span><span>Kontakt</span></nav>
+</header>
+
+<main>
+  <span class="badge">Demo e-shop</span>
+  <h1>Support agent Proto naživo</h1>
+  <p class="lead">
+    Tenhle e-shop je záměrně jednoduchý. Dole vpravo je vložený widget agenta Proto
+    přes jeden <code>&lt;script&gt;</code>. Agent umí stav objednávky, vratky, reklamace i sklad.
+  </p>
+
+  <div class="grid">
+    <div class="card"><div class="thumb">👕</div><b>Tričko Basic černé</b><span class="price">390 Kč</span></div>
+    <div class="card"><div class="thumb">👟</div><b>Boty Runner 42</b><span class="price">1 990 Kč</span></div>
+    <div class="card"><div class="thumb">🧥</div><b>Mikina Premium</b><span class="price">1 290 Kč</span></div>
+  </div>
+
+  <section class="panel">
+    <h2>Vyzkoušejte těchto 6 dotazů</h2>
+    <ol>
+      <li>Dobrý den, kde je moje objednávka 2026001?</li>
+      <li>Chci vrátit mikinu, je mi malá.</li>
+      <li>Přišla mi rozbitá věc, co mám dělat?</li>
+      <li>Máte boty Runner ve velikosti 42?</li>
+      <li>Potřebuju fakturu, nepřišla mi.</li>
+      <li>Jste debil, chci člověka!</li>
+    </ol>
+    <p class="hint">
+      Napište „demo“ a agent přepne do demo režimu s testovacími objednávkami 2026001–2026003.
+      Vložení do jiného e-shopu: <code>&lt;script src="http://localhost:4319/widget.js" data-tenant="demo"&gt;&lt;/script&gt;</code>
+    </p>
+  </section>
+</main>
+
+<script src="/widget.js" data-tenant="demo"></script>
+</body>
+</html>

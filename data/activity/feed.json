@@ -1,5 +1,2687 @@
 [
   {
+    "id": "1f1ffa51-a994-45c2-a4ea-fcf541cdad33",
+    "ts": "2026-11-20T19:29:02.078Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "ControlVision běží (pid 29040)"
+  },
+  {
+    "id": "eb49a054-756e-49b4-893c-a2534c543793",
+    "ts": "2026-11-20T19:29:00.568Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští ControlVision server"
+  },
+  {
+    "id": "0d360756-0631-4466-829e-519cb914c4f5",
+    "ts": "2026-11-20T19:29:00.308Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /cv",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "d646905c-6a08-47e7-be99-221eaf76a421",
+    "ts": "2026-11-20T19:00:12.945Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "738b848e-2118-455d-815d-9f4f8689da4c",
+    "ts": "2026-11-20T18:46:57.929Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "92b1f172-c005-4152-ad4e-05c4a4b40906",
+    "ts": "2026-11-20T18:46:56.994Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: ai v roce 2027 → D:\\dev\\loyo-os\\data\\reports\\ai-v-roce-2027_2026-11-20-18-46-56.md",
+    "meta": {
+      "runId": "2026-11-20T18-44-59-530Z_6495e7bd",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\ai-v-roce-2027_2026-11-20-18-46-56.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "28546c75-1e01-44ca-ac4e-9fb63a1e5e6d",
+    "ts": "2026-11-20T18:45:04.844Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"ai v roce 2027\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://asociace.ai/prognoza-ai-2027-hlavni-zjisteni-a-varovani-pro-vyvoj-umele-inteligence/",
+        "https://techmates.io/cs/blog/ai-in-2027-agents-new-skills-and-growing-pressure-on-security",
+        "https://ai-2027.com/",
+        "https://www.patria.cz/zpravodajstvi/7407467/perly-tydne-po-kauze-nvidia-jeste-lepsi-ai-vyhled-v-usa-a-jaky-bude-rok-2027-celkove.html",
+        "https://www.wired.cz/news-beat/ai-2027-nova-prognoza-toho-jak-by-superinteligentni-ai-mohla-ovlivnit-behem-dekady-svet",
+        "https://www.forbes.com/sites/bernardmarr/2026/10/05/the-8-ai-trends-that-will-change-everything-in-2027/",
+        "https://whyworry.si/guides/ai-2027",
+        "https://freebit.cz/nejlepsi-ai-nastroje-a-ide-pro-vyvojare-v-roce-2027/"
+      ]
+    }
+  },
+  {
+    "id": "dc3a5341-c30f-465f-b631-6e5241ef946f",
+    "ts": "2026-11-20T18:44:59.528Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia ai v roce 2027",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "7029e1af-6ed9-4479-a5f2-3ac825d80681",
+    "ts": "2026-11-20T18:00:12.398Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "5dadd9d4-2adb-4154-9de7-54a190c182d3",
+    "ts": "2026-11-20T17:00:11.931Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "9c768676-42e5-47d8-975a-0e804ab26875",
+    "ts": "2026-11-20T16:27:48.667Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: shader proffesional level → D:\\dev\\loyo-os\\data\\reports\\shader-proffesional-level_2026-11-20-16-27-48.md",
+    "meta": {
+      "runId": "2026-11-20T16-25-45-479Z_33252580",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\shader-proffesional-level_2026-11-20-16-27-48.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "4f1da0e5-5c0b-4e41-a341-db8d6c96f8a9",
+    "ts": "2026-11-20T16:25:47.629Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"shader proffesional level\" → 8 zdrojů, 1 stránek",
+    "meta": {
+      "sources": [
+        "https://www.youtube.com/watch?v=fvXfjwxUg3g",
+        "https://pixune.com/blog/shader-artist/",
+        "https://shader-learning.com/",
+        "https://visualalchemist.in/2026/07/16/building-a-career-in-glsl-shaders-professional-pathways-in-gpu-accelerated-visual-development/",
+        "https://shaders.com/pro",
+        "https://www.shader-learn.com/",
+        "https://shaders.com/",
+        "https://volumeshader.pro/"
+      ]
+    }
+  },
+  {
+    "id": "3802c88b-413f-4e9d-90f5-526557f1900d",
+    "ts": "2026-11-20T16:25:45.477Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia shader proffesional level",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "5794b08c-0e9b-4f9a-840c-ab55b29cbaee",
+    "ts": "2026-11-20T16:00:10.251Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "93da307f-383a-4956-a6b1-2ade0fca2b4b",
+    "ts": "2026-11-20T15:44:51.936Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: charakteristiky shaderu. Specialni mozne transformace → D:\\dev\\loyo-os\\data\\reports\\charakteristiky-shaderu-Specialni-mozne-transformace_2026-11-20-15-44-51.md",
+    "meta": {
+      "runId": "2026-11-20T15-42-54-156Z_85a3a2fe",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\charakteristiky-shaderu-Specialni-mozne-transformace_2026-11-20-15-44-51.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "a71e6487-c939-4961-bae1-91667cc09337",
+    "ts": "2026-11-20T15:42:55.421Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"charakteristiky shaderu. Specialni mozne transformace\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://cs.wikipedia.org/wiki/Shader",
+        "https://learn.microsoft.com/cs-cz/visualstudio/designers/shader-designer?view=visualstudio",
+        "https://it-slovnik.cz/pojem/shader",
+        "https://learn.microsoft.com/cs-cz/windows/win32/direct3d11/d3d11-graphics-reference-shader-enums",
+        "https://www.youtube.com/watch?v=z104S0-Dw4Y",
+        "https://learn.microsoft.com/cs-cz/visualstudio/designers/shader-designer-nodes?view=visualstudio",
+        "https://en.wikipedia.org/wiki/Shader",
+        "https://www.meshy.ai/cs/3d-glossary/shader"
+      ]
+    }
+  },
+  {
+    "id": "6edd801c-4fd0-4b17-b150-ed0f8e8cdfea",
+    "ts": "2026-11-20T15:42:54.152Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia charakteristiky shaderu. Specialni mozne transformace",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "b0bd960c-55cc-4077-8fda-4a43f87a6405",
+    "ts": "2026-11-20T15:00:09.783Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "1480d0e4-8bb4-403d-b394-84ef348a7591",
+    "ts": "2026-11-20T14:26:54.246Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: profesionální 3dmaping na party. Videodjing → D:\\dev\\loyo-os\\data\\reports\\profesionln-3dmaping-na-party-Videodjing_2026-11-20-14-26-54.md",
+    "meta": {
+      "runId": "2026-11-20T14-25-02-395Z_dccae769",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\profesionln-3dmaping-na-party-Videodjing_2026-11-20-14-26-54.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "9ecb1f35-b4e4-4be3-b9a3-f441b6a0016a",
+    "ts": "2026-11-20T14:25:04.316Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"profesionální 3dmaping na party. Videodjing\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://www.borovkarental.cz/videomapping_z888/",
+        "https://quix.cz/videomapping/",
+        "https://quix.cz/en/videomapping/",
+        "https://www.avmedia.cz/videomapping",
+        "https://spectrumproduction.cz/2-1/sluzby-videomapping-projekce.html",
+        "https://www.czechvideomapping.com/en",
+        "https://scarlettentertainment.com/acts/video-mapping",
+        "http://www.borovka.cz/vybaveni/technicke-zaistenie-videomappingu-a-odbaveni"
+      ]
+    }
+  },
+  {
+    "id": "efcc1b6d-0270-43aa-be8f-b401d127acd4",
+    "ts": "2026-11-20T14:25:02.393Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /JULIA profesionální 3dmaping na party. Videodjing",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d5490c4f-9d80-4ce4-b4f6-f363dc464c26",
+    "ts": "2026-11-20T14:00:09.282Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "bbf79664-1035-4f89-8372-45ce5ffa342f",
+    "ts": "2026-11-20T13:38:26.107Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "4427b3f7-6918-4d83-af23-a0dff5343b57",
+    "ts": "2026-11-20T13:33:32.233Z",
+    "agent": "Lopatinka",
+    "type": "system",
+    "action": "běh OK → 5 tipů",
+    "meta": {
+      "picks": 5
+    }
+  },
+  {
+    "id": "cf2b0d9e-b6b7-4b63-8d44-a2560ef26132",
+    "ts": "2026-11-20T13:33:06.762Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští Lopatinku",
+    "meta": {
+      "budget": "5000"
+    }
+  },
+  {
+    "id": "1ef42222-82c5-4874-a236-4e72fab16f96",
+    "ts": "2026-11-20T13:33:06.758Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /lopatinka 5000 --send",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "7df5411c-d6bb-425e-8194-53f5f751b4aa",
+    "ts": "2026-11-20T13:32:15.826Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /activity",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "b7754055-9877-4ee4-a238-3a961cd6f0a2",
+    "ts": "2026-11-20T13:31:22.976Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "53b8f80e-897b-4043-bcb5-6ffbb07f7a1a",
+    "ts": "2026-11-20T13:30:41.077Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: AHOJ",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "40b88a12-d766-4f12-b6f0-745f0cb3bef6",
+    "ts": "2026-11-20T13:10:10.528Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: tips and tricks for 3d projector maping → D:\\dev\\loyo-os\\data\\reports\\tips-and-tricks-for-3d-projector-maping_2026-11-20-13-10-10.md",
+    "meta": {
+      "runId": "2026-11-20T13-08-37-097Z_3f002a51",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\tips-and-tricks-for-3d-projector-maping_2026-11-20-13-10-10.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "a00842ae-e07c-4a25-a394-e93df802a674",
+    "ts": "2026-11-20T13:08:38.227Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"tips and tricks for 3d projector maping\" → 8 zdrojů, 1 stránek",
+    "meta": {
+      "sources": [
+        "https://4mapper.com/blog/post/how-to-do-projection-mapping",
+        "https://www.geeky-gadgets.com/create-custom-visuals-projection-mapping-guide-2026/",
+        "https://ghostarcade.live/blog/projection-mapping-beginners-guide",
+        "https://holomapperstudio.com/blogs/projection-mapping-for-beginners/",
+        "https://lazylighting.com/blog/creating-your-first-3d-projection-mapping",
+        "https://superpixel.sg/3d-projection-mapping/",
+        "https://ashleykelemen.com/5-best-tricks-when-applying-projection-mapping/",
+        "https://lazylighting.com/blog"
+      ]
+    }
+  },
+  {
+    "id": "d9c4fa47-3ea9-4406-9e19-e1cf5a01c98d",
+    "ts": "2026-11-20T13:08:37.096Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia tips and tricks for 3d projector maping",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "ec93ec83-b078-4580-82be-df6b0faac72a",
+    "ts": "2026-11-20T13:08:36.442Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: programování shaderu profesionalne → D:\\dev\\loyo-os\\data\\reports\\programovn-shaderu-profesionalne_2026-11-20-13-08-36.md",
+    "meta": {
+      "runId": "2026-11-20T13-06-42-668Z_6cf5a1cc",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\programovn-shaderu-profesionalne_2026-11-20-13-08-36.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "c4f4eda3-b5a6-4750-9d54-2b904830fbac",
+    "ts": "2026-11-20T13:06:43.896Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"programování shaderu profesionalne\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://learn.microsoft.com/cs-cz/visualstudio/designers/shader-designer?view=visualstudio",
+        "https://learn.microsoft.com/cs-cz/visualstudio/designers/working-with-shaders?view=visualstudio",
+        "https://cw.fel.cvut.cz/old/_media/courses/b0b39pgr/01-shadersprogram.pdf",
+        "https://generalistprogrammer.com/tutorials/shader-programming-complete-graphics-guide-2025",
+        "http://cgg.mff.cuni.cz/~pepca/lectures/pdf/hwshaders.pdf",
+        "https://cw.fel.cvut.cz/old/_media/courses/b0b39pgr/02-shadersdata.pdf",
+        "https://shaderacademy.com/explore",
+        "https://cgg.mff.cuni.cz/~pepca/i218/cg.pdf"
+      ]
+    }
+  },
+  {
+    "id": "18323e32-7e0c-4d7d-9678-8eb872c58df4",
+    "ts": "2026-11-20T13:06:42.666Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia programování shaderu profesionalne",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "1cadb517-4be3-450f-8b25-933a6ec42363",
+    "ts": "2026-11-20T13:00:08.856Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "14f34aa8-2b4f-4498-844f-f39fb44c650b",
+    "ts": "2026-11-20T12:58:22.701Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: ai programování videí příběhu říjen listopad 2026 → D:\\dev\\loyo-os\\data\\reports\\ai-programovn-vide-pbhu-jen-listopad-2026_2026-11-20-12-58-22.md",
+    "meta": {
+      "runId": "2026-11-20T12-56-40-618Z_b127a2a1",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\ai-programovn-vide-pbhu-jen-listopad-2026_2026-11-20-12-58-22.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "38c0ed12-6551-4e20-97c6-d9fb45fd0067",
+    "ts": "2026-11-20T12:56:42.341Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"ai programování videí příběhu říjen listopad 2026\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://www.cinemagic.cz/service-page/ai-video-prakticky-pokrocili-22-10",
+        "https://www.visionstory.ai/cs/ai-trends/ai-video-statistics-2026",
+        "https://noviny.ai/article/cesky-ai-summit-36-tisic-registrovanych-listopad-2026",
+        "https://noviny.ai/article/ai-summit-listopad-2026-online-zdarma-prakticke-workshopy",
+        "https://www.unite.ai/cs/best-ai-video-generation-apis/",
+        "https://felloai.com/cs/nejlepsi-ai-modely/",
+        "https://www.le-artist.cz/blog/ai-novinky-2026-10",
+        "https://magiclight.ai/cs/tools/ai-story-video-generator/"
+      ]
+    }
+  },
+  {
+    "id": "46e2dcb4-7e09-47c7-a61d-10ff12f63bfa",
+    "ts": "2026-11-20T12:56:40.617Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia ai programování videí příběhu říjen listopad 2026",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "f41a841c-ad3e-4fbd-ad1f-99db29a91ede",
+    "ts": "2026-11-20T12:52:31.709Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: rust programování hry s pismeny → D:\\dev\\loyo-os\\data\\reports\\rust-programovn-hry-s-pismeny_2026-11-20-12-52-31.md",
+    "meta": {
+      "runId": "2026-11-20T12-50-37-267Z_d41d9146",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\rust-programovn-hry-s-pismeny_2026-11-20-12-52-31.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "ad790939-58bd-41f2-81fe-70dea6f63576",
+    "ts": "2026-11-20T12:50:39.786Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"rust programování hry s pismeny\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://cs.wikipedia.org/wiki/Rust_(programovac%C3%AD_jazyk)",
+        "https://itch.io/games/made-with-rust",
+        "https://www.geeksforgeeks.org/blogs/rust-projects/",
+        "https://github.com/PistonDevelopers/piston",
+        "https://www.w3schools.com/rust/",
+        "https://github.com/akiross/rs-type",
+        "https://www.root.cz/serialy/programovaci-jazyk-rust/",
+        "https://learn.microsoft.com/cs-cz/shows/beginners-series-to-rust/"
+      ]
+    }
+  },
+  {
+    "id": "26b4a921-b1e2-4dc3-ab1d-799c89ea2ee3",
+    "ts": "2026-11-20T12:50:37.265Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia rust programování hry s pismeny",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "307767cf-1bc2-4fbd-a193-e05d9081e0ae",
+    "ts": "2026-11-20T12:43:04.447Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: nejlepší zaměstnání pro ai nadšence praha → D:\\dev\\loyo-os\\data\\reports\\nejlep-zamstnn-pro-ai-nadence-praha_2026-11-20-12-43-04.md",
+    "meta": {
+      "runId": "2026-11-20T12-41-06-812Z_411c359f",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\nejlep-zamstnn-pro-ai-nadence-praha_2026-11-20-12-43-04.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "bdfbe80c-ecb3-453f-b49a-6d31cee81969",
+    "ts": "2026-11-20T12:41:07.736Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"nejlepší zaměstnání pro ai nadšence praha\" → 8 zdrojů, 0 stránek",
+    "meta": {
+      "sources": [
+        "https://cz.jooble.org/pr%C3%A1ce-ai",
+        "https://kariera.alza.cz/pozice/ai-engineer/",
+        "https://cz.indeed.com/q-automatizace-ai-l-hlavn%C3%AD-m%C4%9Bsto-praha-nab%C3%ADdky-pr%C3%A1ce.html?vjk=1f513331a5e9a88b",
+        "https://cz.jooble.org/pr%C3%A1ce-ai/Praha",
+        "https://www.pracomat.cz/hledam-praci/region-praha/profese-ai-umela-inteligence",
+        "https://cz.indeed.com/q-ai-manager-l-hlavn%C3%AD-m%C4%9Bsto-praha-nab%C3%ADdky-pr%C3%A1ce.html?vjk=b128f067ce3dd018",
+        "https://cz.linkedin.com/jobs/artificial-intelligence-jobs",
+        "https://www.careerjet.cz/prace-ai-expert/Praha"
+      ]
+    }
+  },
+  {
+    "id": "f96d94a8-0c1e-47f2-a70b-2f371c2c7e1a",
+    "ts": "2026-11-20T12:41:06.808Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia nejlepší zaměstnání pro ai nadšence praha",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d9eae141-0d08-48f7-9854-1f0000244b5a",
+    "ts": "2026-11-20T12:23:48.853Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: jak se dá programovat video → D:\\dev\\loyo-os\\data\\reports\\jak-se-d-programovat-video_2026-11-20-12-23-48.md",
+    "meta": {
+      "runId": "2026-11-20T12-22-07-986Z_79a7bcd0",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\jak-se-d-programovat-video_2026-11-20-12-23-48.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "e030b8dc-cd59-44e7-82f4-738519e6a829",
+    "ts": "2026-11-20T12:22:09.326Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"jak se dá programovat video\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://www.wikihow.cz/Jak-vytvo%C5%99it-po%C4%8D%C3%ADta%C4%8Dovou-hru",
+        "https://www.movavi.com/cz/learning-portal/best-video-editing-software-for-beginners.html",
+        "https://www.freeme.cz/tvorba-videi/",
+        "https://tecnobits.com/cs/jak-ud%C4%9Blat-video-na-pc/",
+        "https://edu.ceskatelevize.cz/video/15625-programovani",
+        "https://itablet.cz/programovani-her-jak-zacit-tvorit-vlastni-videohry/",
+        "https://martynkova.cz/clanky/strih-videa-davinci-resolve",
+        "https://shortgenius.com/cs/blog/nejlepsich-bezplatnych-programu-na-upravu-videa-pro-zacatenciky"
+      ]
+    }
+  },
+  {
+    "id": "b06b1529-5986-4978-9d7a-63d358c9baad",
+    "ts": "2026-11-20T12:22:07.984Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia jak se dá programovat video",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "9877dff9-863f-4746-864d-4f8fd2de3d74",
+    "ts": "2026-11-20T12:22:07.239Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: jak se animuji shadery → D:\\dev\\loyo-os\\data\\reports\\jak-se-animuji-shadery_2026-11-20-12-22-07.md",
+    "meta": {
+      "runId": "2026-11-20T12-22-01-515Z_90f48af3",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\jak-se-animuji-shadery_2026-11-20-12-22-07.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "dd507b7f-36bf-4600-aab6-88b861a4b328",
+    "ts": "2026-11-20T12:22:03.355Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"jak se animuji shadery\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://cs.wikipedia.org/wiki/Shader",
+        "https://cada-edu.com/guides/shading-in-animation",
+        "https://www.curseforge.com/minecraft/search?class=shaders&page=1&sortBy=popularity",
+        "https://learn.microsoft.com/cs-cz/windows/win32/direct3dgetstarted/work-with-shaders-and-shader-resources",
+        "https://jirkasa.github.io/threejs-navod/tutorial/shadery/",
+        "https://celostnilecba.com/pruvodci/pruvodce-jak-nastavit-shadery-ve-hre-seus",
+        "https://www.youtube.com/watch?v=z104S0-Dw4Y",
+        "https://www.meshy.ai/cs/3d-glossary/shader"
+      ]
+    }
+  },
+  {
+    "id": "95207466-c0ba-42bd-b950-88e4308c9898",
+    "ts": "2026-11-20T12:22:01.511Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia jak se animuji shadery",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "fbc9770e-3807-4149-87cb-ce6e1e25ab35",
+    "ts": "2026-11-20T12:22:01.119Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: best animation 2026 → D:\\dev\\loyo-os\\data\\reports\\best-animation-2026_2026-11-20-12-22-01.md",
+    "meta": {
+      "runId": "2026-11-20T12-20-54-244Z_0fd65e84",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\best-animation-2026_2026-11-20-12-22-01.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "297d57f1-4705-48f8-9ff5-310feb5856c1",
+    "ts": "2026-11-20T12:20:55.852Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"best animation 2026\" → 8 zdrojů, 1 stránek",
+    "meta": {
+      "sources": [
+        "https://www.imdb.com/list/ls4108707026/",
+        "https://screenrant.com/most-exciting-upcoming-animated-movies-2026/",
+        "https://www.imdb.com/list/ls4109851779/",
+        "https://www.moodmovielist.com/movies?type=Animation&year=2026&page=1",
+        "https://www.cbr.com/best-animated-movies-2026-so-far-list/",
+        "https://www.ranker.com/list/new-animated-movies-of-2026/jason-bancroft",
+        "https://www.slashfilm.com/2260535/best-animated-movies-2026/",
+        "https://leisurebyte.com/10-best-animated-films-of-2026/"
+      ]
+    }
+  },
+  {
+    "id": "46e99653-5eef-467c-b7d7-4a3274016201",
+    "ts": "2026-11-20T12:20:54.243Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia best animation 2026",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "40ef5629-9f95-4390-8a08-48dca07137b4",
+    "ts": "2026-11-20T12:20:53.785Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: how to be better animator → D:\\dev\\loyo-os\\data\\reports\\how-to-be-better-animator_2026-11-20-12-20-53.md",
+    "meta": {
+      "runId": "2026-11-20T12-19-55-563Z_77177c77",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\how-to-be-better-animator_2026-11-20-12-20-53.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "b5397b79-d458-459b-bc70-04eb2aed2b93",
+    "ts": "2026-11-20T12:19:57.896Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"how to be better animator\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://www.animationeducations.com/how-to-become-animator.php",
+        "https://preply.com/en/blog/how-to-become-an-animator/",
+        "https://certifiedprofessional.adobe.com/en/resources/video-design/become-an-animator/how-to-become-an-animator",
+        "https://www.skillshare.com/en/blog/21-best-animation-tips-for-beginners-and-beyond/",
+        "https://ianimate.net/more/articles/how-to-become-an-animator-a-complete-guide",
+        "https://www.masterclass.com/articles/how-to-become-an-animator",
+        "https://www.youtube.com/watch?v=iSET8N10IvM",
+        "https://www.wikihow-fun.com/Become-an-Animator"
+      ]
+    }
+  },
+  {
+    "id": "8e60b61d-39e6-4ff8-ac49-d6c9cb223fa7",
+    "ts": "2026-11-20T12:19:55.561Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia how to be better animator",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "5aec4892-74ab-4e50-a6a3-bd40448b344a",
+    "ts": "2026-11-20T12:05:28.219Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: jak se stát co nejlepším grafikem/animatorem → D:\\dev\\loyo-os\\data\\reports\\jak-se-stt-co-nejlepm-grafikemanimatorem_2026-11-20-12-05-28.md",
+    "meta": {
+      "runId": "2026-11-20T12-03-34-375Z_cf622e1f",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\jak-se-stt-co-nejlepm-grafikemanimatorem_2026-11-20-12-05-28.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "c2491a46-0de7-4f5d-b5a5-970ebae072f9",
+    "ts": "2026-11-20T12:03:36.828Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"jak se stát co nejlepším grafikem/animatorem\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://www.alexandria.cz/chci-se-stat-animatorem",
+        "https://www.animationpoint.cz/stan-se-animatorem/faq/",
+        "https://www.wikihow.cz/Jak-se-st%C3%A1t-grafikem",
+        "https://jaksedostatdomedii.cz/nastroje/nejlepsi-program-na-animace/",
+        "https://www.meshy.ai/cs/blog/ai-animation-generator",
+        "https://www.animationpoint.cz/",
+        "https://www.animationpoint.cz/stan-se-animatorem/",
+        "https://www.meshy.ai/cs/blog/how-to-become-an-animator"
+      ]
+    }
+  },
+  {
+    "id": "cbb82a91-e296-4382-ab3c-0f050a6b994e",
+    "ts": "2026-11-20T12:03:34.371Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia jak se stát co nejlepším grafikem/animatorem",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "83b026cc-956a-4b5d-9a8b-7b899f445b8b",
+    "ts": "2026-11-20T12:00:08.405Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "c2ab58fc-0c7d-4697-acbc-69fa813669dd",
+    "ts": "2026-11-20T11:57:23.089Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: lokální orchestrace přes soubory → D:\\dev\\loyo-os\\data\\reports\\lokln-orchestrace-pes-soubory_2026-11-20-11-57-23.md",
+    "meta": {
+      "runId": "2026-11-20T11-56-05-832Z_2f897521",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\lokln-orchestrace-pes-soubory_2026-11-20-11-57-23.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "fb67f8cd-6771-466d-9dc9-e3154e7e28cb",
+    "ts": "2026-11-20T11:56:07.312Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"lokální orchestrace přes soubory\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://support.microsoft.com/cs-cz/windows/experience/connectivity-networking/file-sharing-over-a-network-in-windows",
+        "https://support.microsoft.com/cs-cz/windows/experience/connectivity-networking/share-files-in-windows",
+        "https://tecnobits.com/cs/sd%C3%ADlen%C3%AD-soubor%C5%AF-pomoc%C3%AD-vlc-mezi-dv%C4%9Bma-po%C4%8D%C3%ADta%C4%8Di/",
+        "https://www.cistepc.cz/jak-sdilet-slozku-v-siti-ve-windows-11-pres-wi-fi-nebo-lan/",
+        "https://cs.wikipedia.org/wiki/Orchestrace_(informatika)",
+        "https://www.easeus.cz/pc-transfer/share-files-between-computers-over-network.html",
+        "https://wintip.cz/4983-jak-spravne-nastavit-pripojeni-ke-sdilene-slozce-na-windows-11",
+        "https://mundowin.com/cs/Jak-nastavit-lok%C3%A1ln%C3%AD-s%C3%AD%C5%A5-pro-sd%C3%ADlen%C3%AD-soubor%C5%AF/"
+      ]
+    }
+  },
+  {
+    "id": "bc73be1a-33b9-4881-b1a2-8f561474a682",
+    "ts": "2026-11-20T11:56:05.828Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /JULIA lokální orchestrace přes soubory",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "c8eca656-6e4f-42b1-b890-61571fb0ff8d",
+    "ts": "2026-11-20T11:55:22.714Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: how to do the best automstion in year 2027 → D:\\dev\\loyo-os\\data\\reports\\how-to-do-the-best-automstion-in-year-2027_2026-11-20-11-55-22.md",
+    "meta": {
+      "runId": "2026-11-20T11-54-14-712Z_ed8bd62f",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\how-to-do-the-best-automstion-in-year-2027_2026-11-20-11-55-22.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "93a6ff61-3801-45e1-bfe7-d44fbbbd0049",
+    "ts": "2026-11-20T11:54:17.342Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"how to do the best automstion in year 2027\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://www.analyticsinsight.net/automation/top-automation-trends-to-watch-in-2027",
+        "https://automationideas.com/blog/manufacturing-automation-planning-2027/",
+        "https://appsglobal.co/articles/automation-technology-a-glimpse-into-2027",
+        "https://www.automate.org/robotics/industry-insights/whats-ahead-for-the-industrial-automation-market-in-2027",
+        "https://www.codowl.com/article/automation-meets-productivity-your-guide-to-2027s-top-tools",
+        "https://www.automate.org/robotics/webinars/2027-industrial-automation-trends-what-to-expect-in-the-coming-year",
+        "https://salesmotion.io/blog/sales-automation-best-practices",
+        "https://startupik.com/best-automation-stacks-for-solo-founders-in-2027/"
+      ]
+    }
+  },
+  {
+    "id": "3b4c8ea8-92aa-4c9d-9e1b-a014495716ed",
+    "ts": "2026-11-20T11:54:14.709Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia how to do the best automstion in year 2027",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "1711128f-e4e0-4a57-88cc-5efde5c56b2b",
+    "ts": "2026-11-20T11:52:37.493Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: detailed proffesional ui design tips → D:\\dev\\loyo-os\\data\\reports\\detailed-proffesional-ui-design-tips_2026-11-20-11-52-37.md",
+    "meta": {
+      "runId": "2026-11-20T11-51-49-296Z_ce15d4e2",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\detailed-proffesional-ui-design-tips_2026-11-20-11-52-37.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "11a2e755-40e8-40a3-9393-03f2f10de9ff",
+    "ts": "2026-11-20T11:51:51.256Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"detailed proffesional ui design tips\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://uxplaybook.org/articles/ui-fundamentals-best-practices-for-ux-designers",
+        "https://www.uidesign.tips/ui-tips",
+        "https://www.uidesign.tips/",
+        "https://www.adhamdannaway.com/blog/ui-design/ui-design-tips",
+        "https://uiuxdesigning.com/ui-design-best-practices/",
+        "https://www.uxpin.com/studio/blog/ui-design-principles/",
+        "https://developer.apple.com/design/tips/",
+        "https://www.uxdesigninstitute.com/blog/guide-to-the-ui-design-process/"
+      ]
+    }
+  },
+  {
+    "id": "83291d6a-8fa9-4271-bf5c-50eeb938f9c7",
+    "ts": "2026-11-20T11:51:49.294Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia detailed proffesional ui design tips",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "a463009b-6486-4096-b294-735f4897945d",
+    "ts": "2026-11-20T11:51:48.577Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: nejlepší programovací jazyk pro hru se slovy a písmeny → D:\\dev\\loyo-os\\data\\reports\\nejlep-programovac-jazyk-pro-hru-se-slovy-a-psmeny_2026-11-20-11-51-48.md",
+    "meta": {
+      "runId": "2026-11-20T11-50-05-775Z_36b2de83",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\nejlep-programovac-jazyk-pro-hru-se-slovy-a-psmeny_2026-11-20-11-51-48.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "2af2d0e5-4223-4973-8f57-a06182088184",
+    "ts": "2026-11-20T11:50:07.248Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"nejlepší programovací jazyk pro hru se slovy a písmeny\" → 8 zdrojů, 0 stránek",
+    "meta": {
+      "sources": [
+        "https://www.guru99.com/cs/best-programming-language.html",
+        "https://skillmea.cz/blog/8-najpopularnejsich-programovacich-jazykov-pre-vyvoj-hier",
+        "https://arhivo.com/cs/chapters/5613-the-15-best-programming-languages-for-games-development",
+        "https://www.jobscontact.cz/blog/top-4-programovaci-jazyky-pro-herni-vyvoj",
+        "https://vtm.zive.cz/clanky/14-nejsilenejsich-programovacich-jazyku-ze-kterych-vam-praskne-hlava/sc-870-a-239220/default.aspx",
+        "https://robotdreams.cz/blog/263-8-programovacich-jazyku-ktere-bys-mel-a-znat",
+        "https://www.interval.cz/clanky/10-nejpopularnejsich-programovacich-jazyku-a-jejich-vyuziti/",
+        "https://algonova.school/cz/blog/nejlepsi-programovaci-jazyk-pro-deti"
+      ]
+    }
+  },
+  {
+    "id": "a2706ea7-8aef-4149-b12a-98d3c75d7f24",
+    "ts": "2026-11-20T11:50:05.772Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia nejlepší programovací jazyk pro hru se slovy a písmeny",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "1bbbf86f-7047-47e7-8836-00b8b2ba9e32",
+    "ts": "2026-11-20T11:45:10.670Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: best ux tips for developers → D:\\dev\\loyo-os\\data\\reports\\best-ux-tips-for-developers_2026-11-20-11-45-10.md",
+    "meta": {
+      "runId": "2026-11-20T11-43-59-575Z_4064cc30",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\best-ux-tips-for-developers_2026-11-20-11-45-10.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "7de333c4-936b-49e3-a652-8f33d92935f0",
+    "ts": "2026-11-20T11:44:00.829Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"best ux tips for developers\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://www.intechnic.com/blog/100-ux-design-pro-tips-from-user-experience-master/",
+        "https://blog.openreplay.com/ux-best-practices-for-developers/",
+        "https://uxplaybook.org/articles/ui-fundamentals-best-practices-for-ux-designers",
+        "https://uxcam.com/blog/ux-design-best-practices/",
+        "https://prismic.io/blog/ux-tips-for-developers",
+        "https://www.uxmatters.com/mt/archives/2024/04/15-essential-ux-design-principles-and-practices-for-developers.php",
+        "https://designcloud.app/blog/ux-design-tips",
+        "https://hackernoon.com/9-must-know-ux-design-tips-for-developers-k8143109"
+      ]
+    }
+  },
+  {
+    "id": "2069055c-3c65-4648-8631-7b0c6da40c4a",
+    "ts": "2026-11-20T11:43:59.503Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia best ux tips for developers",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2faa3a85-8d2c-4347-bea6-9f67e4a21a92",
+    "ts": "2026-11-20T11:42:19.272Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /ID",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "f62699b8-d150-4066-80d4-d0cc78fa1800",
+    "ts": "2026-11-20T11:42:18.242Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: best animation Tipsport for shaders 2026 → D:\\dev\\loyo-os\\data\\reports\\best-animation-Tipsport-for-shaders-2026_2026-11-20-11-42-18.md",
+    "meta": {
+      "runId": "2026-11-20T11-41-19-704Z_6cddd2ec",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\best-animation-Tipsport-for-shaders-2026_2026-11-20-11-42-18.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "ed22451e-d9b8-4bcb-9a65-9740171391e8",
+    "ts": "2026-11-20T11:41:21.253Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"best animation Tipsport for shaders 2026\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://3dxdev.com/the-best-free-blender-add-ons-in-2026-that-actually-save-you-hours/",
+        "https://www.igeeksblog.com/best-minecraft-shaders/",
+        "https://www.shadertastic.com/",
+        "https://musthavemods.com/best-minecraft-shaders-2026/",
+        "https://www.switchbladegaming.com/minecraft/shader-packs-2026/",
+        "https://notesread.com/10-best-minecraft-animation-mods-and-shaders/",
+        "https://beebom.com/best-minecraft-shaders/",
+        "https://learn.g2.com/best-animation-software"
+      ]
+    }
+  },
+  {
+    "id": "8651d158-cd85-486b-8363-33946e4b7069",
+    "ts": "2026-11-20T11:41:19.701Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia best animation Tipsport for shaders 2026",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "a955950a-7ca3-45d4-ac10-78bc9422264c",
+    "ts": "2026-11-20T11:41:01.308Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Chci seznam příkazů",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2137bb23-35b0-459b-be76-44228354178f",
+    "ts": "2026-11-20T11:40:25.782Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: A",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "499b682d-5e64-4d6b-af64-5dbfa1f680a3",
+    "ts": "2026-11-20T11:40:06.476Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: ?",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "aeca3e99-20a3-4819-a965-fcf9fdb11ea9",
+    "ts": "2026-11-20T11:37:32.536Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: A chci aby si mi napsala všechny jména souboru na plose",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "df426ba2-e183-4a52-b9d5-385e9eb7e84d",
+    "ts": "2026-11-20T11:32:25.367Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: B",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "66cabb77-3797-4cb2-939a-77c4f8f69347",
+    "ts": "2026-11-20T11:30:37.461Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Podívej se pomocí nástroje filesystem do složky mé Plochy (Desktop) a vypiš mi všechny sou",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "922ae296-68e8-46f8-b072-fb9d7176ca7f",
+    "ts": "2026-11-20T11:26:38.801Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "smazán příkaz: /123",
+    "meta": {
+      "runId": "2026-11-20T11-26-38-800Z_2d99200a"
+    }
+  },
+  {
+    "id": "942def7b-85c6-44ee-b828-61478e3d9a4e",
+    "ts": "2026-11-20T11:26:38.799Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /remove /123",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "c0a9cdd5-8ae2-4d63-ab23-9439bbd48c2f",
+    "ts": "2026-11-20T11:26:30.248Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /remove 123",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2852978c-4084-47b4-830b-6788c1ae3603",
+    "ts": "2026-11-20T11:16:22.312Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "add mcp filesystem:4_01 to agent #1",
+    "meta": {
+      "runId": "2026-11-20T11-16-22-048Z_1b6775a1"
+    }
+  },
+  {
+    "id": "11d9b8b9-18d4-406f-b782-50d331f3ef3d",
+    "ts": "2026-11-20T11:16:22.046Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: 1",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "83a34b7f-8ab7-4ea3-8d25-def5a05ae9ba",
+    "ts": "2026-11-20T11:16:14.597Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add 4-1",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2c35305e-6fda-4750-8f73-ca65c09ce005",
+    "ts": "2026-11-20T11:16:07.105Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add mcp",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "91dc8f14-0154-4e34-98ed-0fc48d6e9183",
+    "ts": "2026-11-20T11:16:00.770Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /ADD /mcp /1 /1",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "969b50c5-b6cc-49d4-a2eb-9988bf1b192b",
+    "ts": "2026-11-20T11:15:26.827Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add 4-1-1",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "e92b933e-6e5c-4775-baee-cc508d093bd3",
+    "ts": "2026-11-20T11:15:12.815Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list 1",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "56650976-0b10-43e0-a360-d6005f1d7e45",
+    "ts": "2026-11-20T11:14:57.208Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list 4",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "b63e72fa-ad5d-4dd4-97d6-f150d9a3708d",
+    "ts": "2026-11-20T11:14:40.327Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0d0bfb1f-25d1-49f4-a040-5a691c3cd746",
+    "ts": "2026-11-20T11:14:28.019Z",
+    "agent": "Mary_Jane",
+    "type": "routing",
+    "action": "edit agents #2",
+    "meta": {
+      "runId": "2026-11-20T11-14-28-018Z_9ca9ba19"
+    }
+  },
+  {
+    "id": "c541ea6a-1661-4072-987a-d35618aeadf0",
+    "ts": "2026-11-20T11:14:28.016Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /edit 1-2",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "3207ecd3-1bae-4c1a-b93c-3c5c64ad3fa4",
+    "ts": "2026-11-20T11:07:42.043Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /agents",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "66610b76-694e-4364-b1ce-35f47d144732",
+    "ts": "2026-11-20T11:07:41.101Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: tipy triky pro nejlepší ai orchestraci roku 2026 → D:\\dev\\loyo-os\\data\\reports\\tipy-triky-pro-nejlep-ai-orchestraci-roku-2026_2026-11-20-11-07-41.md",
+    "meta": {
+      "runId": "2026-11-20T11-05-47-245Z_58d21168",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\tipy-triky-pro-nejlep-ai-orchestraci-roku-2026_2026-11-20-11-07-41.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "16a2e8a2-14c3-4055-a0cd-9164c5ccf6f6",
+    "ts": "2026-11-20T11:05:48.391Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"tipy triky pro nejlepší ai orchestraci roku 2026\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://aicko.cz/content/5-kroku-k-uspesne-orchestraci-ai-agentu-v-roce-2026",
+        "https://clickup.com/cs/blog/128442/ai-hacky",
+        "https://bliqer.cz/blog/best-ai-tools-2026",
+        "https://pavelkovarik.cz/nejlepsi-ai-asistent-2026-srovnani-chatgpt-gemini-claude-a-dalsich/",
+        "https://aicko.cz/content/ai-nastroje-2026-kompletni-prehled-nejlepsich-nastroju-umele-inteligence",
+        "https://www.aispolecnik.cz/srovnani-ai/srovnani-ai-modelu-2026/",
+        "https://felloai.com/cs/nejlepsi-ai-modely/",
+        "https://zacinamsai.cz/articles/nejlepsi-ai-nastroje-pro-ceske-firmy-2026"
+      ]
+    }
+  },
+  {
+    "id": "ed259131-6694-4dc8-8d85-f68ae68f8711",
+    "ts": "2026-11-20T11:05:47.243Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia tipy triky pro nejlepší ai orchestraci roku 2026",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2d0ac166-5bae-425e-ad32-cc96de6bcc4f",
+    "ts": "2026-11-20T11:02:27.853Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /123",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2716458c-c2d1-4a82-8341-762c665da64f",
+    "ts": "2026-11-20T11:00:08.077Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "707337e8-d452-465a-92e5-0110877cbc1d",
+    "ts": "2026-11-20T10:51:59.597Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Cau",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "56faf769-0722-4ca4-8cab-1396904913c4",
+    "ts": "2026-11-20T10:51:59.411Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "463b9924-6882-4ab3-9110-e5e28877e216",
+    "ts": "2026-11-20T10:51:42.019Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "afb8c389-9fcb-497c-9d18-7b7a456d5654",
+    "ts": "2026-11-20T10:51:41.144Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: animace rush listopad 2026 → D:\\dev\\loyo-os\\data\\reports\\animace-rush-listopad-2026_2026-11-20-10-51-41.md",
+    "meta": {
+      "runId": "2026-11-20T10-49-53-064Z_82b70173",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\animace-rush-listopad-2026_2026-11-20-10-51-41.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "c71e438b-5a68-42dd-bc1b-7a105a0c8eaa",
+    "ts": "2026-11-20T10:49:54.430Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"animace rush listopad 2026\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://goout.net/cs/festival-animanie-2026/szfvboy/",
+        "https://www.festival-animanie.cz/",
+        "https://www.festival-animanie.cz/cs/programme",
+        "https://www.rush.com/2026/11/",
+        "https://www.art2friends.cz/clanek/animanie-2026-zacina-dnes-famu-pameti-z-ulity-i-narozeniny-shreka",
+        "https://www.kdykde.cz/akce/od/2026-11-20/do/2026-11-22/co/adrenalin/",
+        "https://www.pragmoon.cz/akce/festival-animanie-2026",
+        "https://www.plzen.cz/120_souteznich_snimku_game_zona_i_workshopy_v_plzni_vypukne_jubilejni_21_rocnik_festivalu_animanie"
+      ]
+    }
+  },
+  {
+    "id": "fe10110e-5a2c-4160-9c5f-9737021f9419",
+    "ts": "2026-11-20T10:49:53.062Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia animace rush listopad 2026",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "3cd8630d-b4cf-46ce-940c-4540a638d12c",
+    "ts": "2026-11-20T10:42:24.732Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: ui ux 2027 tipy → D:\\dev\\loyo-os\\data\\reports\\ui-ux-2027-tipy_2026-11-20-10-42-24.md",
+    "meta": {
+      "runId": "2026-11-20T10-42-00-769Z_73b523db",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\ui-ux-2027-tipy_2026-11-20-10-42-24.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "fb3ee49c-c667-4e88-974b-27eea250c51e",
+    "ts": "2026-11-20T10:42:02.206Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"ui ux 2027 tipy\" → 8 zdrojů, 1 stránek",
+    "meta": {
+      "sources": [
+        "https://duckduckgo.com/y.js?ad_domain=udemy.com&ad_provider=bingv7aa&ad_type=txad&click_metadata=Idc5ylfqhKOO1RQco%2DnIpcscRBFmqO1XAZtCm5dpuK4IetXXws3eea11dBDlu5q6ef9cn1GLwB_Sj%2Dvgz8TL324Fe_muwoNMGUOcDziWDqTgjqk2DhdPaUE5NKYBNo8y%2DjDcEkdQ1UAD782zAYfnMBEpIeXx2hjxSPVegaWK8kc.hOYNCOh4WGPN%2D9GlJi5_3Q&rut=8983bd7ca57fcdcaf461531f19ed73c61e16edbe3ecc987b812c8e5f1d17a57e&u3=https%3A%2F%2Fwww.bing.com%2Faclick%3Fld%3De8MxC3S%2DxtFyFXAMrfPaeupTVUCUw1A6LSWeNJtST8NSMDaUKA9OUZkroPKTdF6jfym2MVemngfiwCLevX52Fq%2DIihMu_uGwJUw2xUTP8FJUUklktexUEzQw5gfROCArPz_yMuqigovQkaDPfqI2cfMZ0aGoyABccSQr%2D2%2DV9xhtOzZ1uA3oED4lcxhY1aZq5zf4kGePClg5FCSGD4V2W2oqy6_QI%26u%3DaHR0cHMlM2ElMmYlMmZ3d3cudWRlbXkuY29tJTJmY291cnNlJTJmbGVhcm4tdWktdXgtZGVzaWduJTJmJTNmdXRtX2NhbXBhaWduJTNkQkctU2VhcmNoX0RTQV9CZXRhX1Byb2ZfbGEuRU5fY2MuUk9XLUVuZ2xpc2glMjZ1dG1fc291cmNlJTNkYmluZyUyNnV0bV9tZWRpdW0lM2RwYWlkLXNlYXJjaCUyNnBvcnRmb2xpbyUzZEJpbmctUk9XLUVuZ2xpc2glMjZ1dG1fYXVkaWVuY2UlM2RteCUyNnV0bV90YWN0aWMlM2RuYiUyNnV0bV90ZXJtJTNkXy5fYWdfMTMxMjgxOTI3Mjg2NDc1Ml8uX2FkX18uX2t3X0Rlc2lnbiUyNTIwZW4lMjZ1dG1fY29udGVudCUzZHMlMjZmdW5uZWwlM2QlMjZ0ZXN0JTNkJTI2dXRtX2NhbXBhaWduX2lkJTNkNjM4NTk2MjI5JTI2bXNjbGtpZCUzZDRkNGE0NDhmOWM0ZTFmZGRmNGE0MmY4ZmJmYjQyMzY2%26rlid%3D4d4a448f9c4e1fddf4a42f8fbfb42366&vqd=4-111319016385871255251042080700179043344&iurl=%7B1%7DIG%3D2FE9E8EA8FEC4A41A3B22575E4C86219%26CID%3D29130DE78EDE64383B6615F08F8B657D%26ID%3DDevEx%2C5037.1",
+        "https://appsinsight.co/ui-ux-design-trends/",
+        "https://fueler.io/blog/top-uiux-design-trends-to-watch",
+        "https://www.uxdesigninstitute.com/blog/ux-trends-for-2027/",
+        "https://aidrivenlab.framer.ai/blog/latest-ui-ux-design-trends-2027",
+        "https://uiux.studio/blog/ui-ux-design-trends-2027",
+        "https://codewebbarcelona.com/en/ux-ui-trends-2027/",
+        "https://www.whizzbridge.com/blog/ux-ui-trends"
+      ]
+    }
+  },
+  {
+    "id": "c9b34a09-5b79-4891-99d7-e0325ec8af21",
+    "ts": "2026-11-20T10:42:00.767Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia ui ux 2027 tipy",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "19e9de2d-3461-4bf6-b829-b198d521baba",
+    "ts": "2026-11-20T10:15:03.132Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add 4-1-1",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "a981facb-2212-4012-9b15-6cc6a82d0759",
+    "ts": "2026-11-20T10:13:48.729Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Add 4-1",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "de302048-8d4a-4b6e-b714-5a7b4162e7fe",
+    "ts": "2026-11-20T10:12:57.730Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list 4",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "689bad21-1e54-4712-9481-1431f2ef2445",
+    "ts": "2026-11-20T10:12:03.764Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add mcp",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "e7208587-bd88-4cd1-8b27-a65afbab412e",
+    "ts": "2026-11-20T10:11:57.351Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add 4-3",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "bb9034c2-e9cb-43cf-85a1-06a1b574f7f4",
+    "ts": "2026-11-20T10:11:23.915Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "68827572-8023-4317-8cd5-dec297b80e88",
+    "ts": "2026-11-20T10:11:18.102Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /help",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "91609043-a71a-4e48-a96d-77c515af78b1",
+    "ts": "2026-11-20T10:10:32.146Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add /mcp",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "80f61faf-c68f-470a-9065-5a730c5523eb",
+    "ts": "2026-11-20T10:10:24.440Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add mcp help",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "acfc0d31-c654-4f30-8edd-766d184260be",
+    "ts": "2026-11-20T10:10:13.485Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list 5",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0f5096b3-c9ee-4bd8-bdaa-7428868c8fc5",
+    "ts": "2026-11-20T10:00:19.190Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /LIST 1",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "bf384ff3-d12c-4f53-b3e0-2bd87118f511",
+    "ts": "2026-11-20T10:00:14.834Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list 2",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "c459a1ee-7453-415f-b74e-e3ac97399952",
+    "ts": "2026-11-20T10:00:07.521Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "2bad8bc6-ead3-4681-8848-165f5407c619",
+    "ts": "2026-11-20T09:59:33.498Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list 4",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "6912c5a7-1bef-45dc-8fa3-bb083e897f1f",
+    "ts": "2026-11-20T09:57:51.250Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cli",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "5534e95e-48e2-41e4-a72f-ad311b083497",
+    "ts": "2026-11-20T09:56:07.241Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /agents",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0a182d05-5d67-4be4-b833-5892fa4ccc2b",
+    "ts": "2026-11-20T09:55:51.693Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /help",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "41337e18-4a90-44d6-91ca-fb3cdaf22274",
+    "ts": "2026-11-20T09:55:39.238Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /new /agent",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "60273b9f-2409-4efd-b170-32e2a42a7a20",
+    "ts": "2026-11-20T09:55:23.294Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add cli",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "a523feed-8466-4b4a-8905-5125b127a5bc",
+    "ts": "2026-11-20T09:53:56.247Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /123",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0b151b5c-5157-4ece-9c64-8d8036d3f959",
+    "ts": "2026-11-20T09:53:51.647Z",
+    "agent": "Mary_Jane",
+    "type": "save",
+    "action": "nový příkaz: /123",
+    "meta": {
+      "runId": "2026-11-20T09-53-51-646Z_249d347a"
+    }
+  },
+  {
+    "id": "31a740df-c725-44c8-a61c-e84d9fd4b6ae",
+    "ts": "2026-11-20T09:53:51.645Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add /123 - Otevři PowerShell v adresáři uživatelovy Plochy ($HOME\\Desktop nebo [Environme",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2a9a3042-2ed5-45b4-9a2e-d8b3c8630a63",
+    "ts": "2026-11-20T09:42:34.221Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: local orchestration agents profesional → D:\\dev\\loyo-os\\data\\reports\\local-orchestration-agents-profesional_2026-11-20-09-42-34.md",
+    "meta": {
+      "runId": "2026-11-20T09-41-27-449Z_69a79642",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\local-orchestration-agents-profesional_2026-11-20-09-42-34.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "10c6c9e7-a3d2-4662-9f8f-6e717e7fe53f",
+    "ts": "2026-11-20T09:41:29.786Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"local orchestration agents profesional\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://github.com/rondoflow/rondoflow",
+        "https://www.ibm.com/think/topics/ai-agent-orchestration",
+        "https://vahtian.com/learn/local-models-agents-orchestration/",
+        "https://github.com/vivy-yi/awesome-agent-orchestration",
+        "https://www.outsystems.com/ai/agents-orchestration",
+        "https://atomic.chat/blog/guides/best-local-ai-agents",
+        "https://aimultiple.com/agentic-orchestration",
+        "https://theaiagentindex.com/resources/guides/multi-agent-orchestration"
+      ]
+    }
+  },
+  {
+    "id": "4a767f66-0ec8-4bb2-8330-06eaaf28a3fe",
+    "ts": "2026-11-20T09:41:27.447Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia local orchestration agents profesional",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "11965125-6854-4f49-a29a-a8136d1c9c80",
+    "ts": "2026-11-20T09:31:33.280Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /new agent",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "ae818ea1-bf99-400d-b282-acc99def06d4",
+    "ts": "2026-11-20T09:31:15.049Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /add",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "af813f53-a6c3-4d54-b709-af4d1aea9c8c",
+    "ts": "2026-11-20T09:30:57.783Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /commands",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2427ca3e-de80-4f82-bd0e-261f2422ce74",
+    "ts": "2026-11-20T09:21:56.054Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: jak starý telefon idelat z něj server linux → D:\\dev\\loyo-os\\data\\reports\\jak-star-telefon-idelat-z-nj-server-linux_2026-11-20-09-21-56.md",
+    "meta": {
+      "runId": "2026-11-20T09-20-02-012Z_99569a5a",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\jak-star-telefon-idelat-z-nj-server-linux_2026-11-20-09-21-56.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "2a116783-8fc8-4265-9fc4-3bbef819720d",
+    "ts": "2026-11-20T09:20:03.531Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"jak starý telefon idelat z něj server linux\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://cs.androidsis.com/Prom%C4%9B%C5%88te-sv%C5%AFj-star%C3%BD-smartphone-v-termin%C3%A1l-s-Linuxem-pomoc%C3%AD-sxmo/",
+        "https://cs.androidguias.com/Prom%C4%9B%C5%88te-star%C3%BD-mobiln%C3%AD-telefon-v-linuxovou-konzoli-pomoc%C3%AD-sxmo/",
+        "https://cs.todoandroid.es/Pr%C5%AFvodce-SXMO%3A-Jak-m%C3%ADt-Linuxov%C3%BD-termin%C3%A1l-na-star%C3%A9m-smartphonu/",
+        "https://www.youtube.com/watch?v=WrPzK5033q4",
+        "https://cs.androidguias.com/Prom%C4%9B%C5%88te-sv%C5%AFj-star%C3%BD-Android-v-dom%C3%A1c%C3%AD-medi%C3%A1ln%C3%AD-server-a-vyt%C4%9B%C5%BEte-z-n%C4%9Bj-maximum./",
+        "https://mobilmania.zive.cz/clanky/nepotrebujete-raspberry-pi-stary-telefon-zvladne-roli-domaciho-serveru-lepe-a-bez-dalsich-investic/sc-3-a-1364611/default.aspx",
+        "https://lepczynski.it/inne/jak-zamienic-stary-telefon-w-linuxowy-serwer-i-srodowisko-do-testow/",
+        "https://mobilmania.zive.cz/clanky/jak-ziskat-levny-a-prenosny-nas-na-cesty-vytvorte-ho-ze-stareho-smartphonu-ukazeme-jak/sc-3-a-1360677/default.aspx"
+      ]
+    }
+  },
+  {
+    "id": "d65bd802-ef40-4590-890d-dd9e8902c073",
+    "ts": "2026-11-20T09:20:02.011Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia jak starý telefon idelat z něj server linux",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "496139a2-3283-4f83-8837-34fb9483a0d7",
+    "ts": "2026-11-20T09:09:50.296Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: ai novinky listopad 2 tyden → D:\\dev\\loyo-os\\data\\reports\\ai-novinky-listopad-2-tyden_2026-11-20-09-09-50.md",
+    "meta": {
+      "runId": "2026-11-20T09-07-56-820Z_fd54b2ab",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\ai-novinky-listopad-2-tyden_2026-11-20-09-09-50.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "35c7a189-0a26-40c0-bffd-e39b2961c49b",
+    "ts": "2026-11-20T09:07:57.878Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"ai novinky listopad 2 tyden\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://walterstein.eu/cz/ai-novinky/2026-11/",
+        "https://denikn.cz/2226260/dva-tydny-ctrnact-kraju-pres-200-akci-dny-ai-startuji-2-listopadu/",
+        "https://prazsky.denik.cz/zpravy-region/dny-ai-zacinaji-2-listopadu-festival-nabidne-pres-200-akci-po-cele-cr/",
+        "https://www.novinky.cz/clanek/veda-skoly-ohnive-tornado-i-bezne-nepristupna-mista-listopadovy-tyden-akademie-ved-nabidne-pres-300-akci-40603055",
+        "https://www.ejaj.cz/novinky/?den=2026-11-11",
+        "https://www.novinkyai.cz/",
+        "https://www.ppcprofits.cz/blog/listopad-2026-v-online-marketingu-nove-trendy-v-ai-seo",
+        "https://aicrunch.cz/"
+      ]
+    }
+  },
+  {
+    "id": "f51eb1d5-0a0c-4a3c-acb3-dcd1efa9d990",
+    "ts": "2026-11-20T09:07:56.820Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia ai novinky listopad 2 tyden",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d2c338e6-c592-48a2-90f7-974f825b44ff",
+    "ts": "2026-11-20T09:00:07.066Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "d590c53b-c2bc-4fec-bdfe-969881601d39",
+    "ts": "2026-11-20T08:58:49.839Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: ai novinky listopad 2026 → D:\\dev\\loyo-os\\data\\reports\\ai-novinky-listopad-2026_2026-11-20-08-58-49.md",
+    "meta": {
+      "runId": "2026-11-20T08-56-55-946Z_c9380414",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\ai-novinky-listopad-2026_2026-11-20-08-58-49.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "e83b0bc1-3700-457f-aac3-ed4d687fc440",
+    "ts": "2026-11-20T08:56:57.321Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"ai novinky listopad 2026\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://walterstein.eu/cz/ai-novinky/2026-11/",
+        "https://www.ejaj.cz/novinky/?den=2026-11-11",
+        "https://www.listify.cool/blog/nejlepsi-ai-modely-listopad-2026-srovnani",
+        "https://felloai.com/cs/nejlepsi-ai-modely/",
+        "https://www.ppcprofits.cz/blog/listopad-2026-v-online-marketingu-nove-trendy-v-ai-seo",
+        "https://www.le-artist.cz/blog/ai-novinky-2026-10",
+        "https://noviny.ai/article/cesky-ai-summit-36-tisic-registrovanych-listopad-2026",
+        "https://www.marketingminer.com/cs/blog/seo-novinky-listopad-2026"
+      ]
+    }
+  },
+  {
+    "id": "5ef8167c-87bd-4bb8-8324-c8f5d5b0c503",
+    "ts": "2026-11-20T08:56:55.945Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia ai novinky listopad 2026",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "a4575ff9-59a6-4bbc-8f66-c2220002797b",
+    "ts": "2026-11-20T08:49:15.949Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /boty",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "35df32a4-d2a6-48a4-8606-eeb172f30aa1",
+    "ts": "2026-11-20T08:43:50.103Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /boty",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "6bc9d14d-8dd5-4285-af3b-776e4f95d69f",
+    "ts": "2026-11-20T08:43:45.732Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "530df5ae-20aa-4fd2-a1b4-628811d404bc",
+    "ts": "2026-11-20T08:43:29.500Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: , cau",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "20785af9-a48b-488a-a61e-be8b46518e7d",
+    "ts": "2026-11-20T08:33:19.549Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "f4ef3a8b-9d5b-4e82-a2a7-b5db6610805b",
+    "ts": "2026-11-20T08:33:11.559Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "ebf22ebb-eb49-4140-8800-5d933260f9c7",
+    "ts": "2026-11-20T08:32:42.781Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /help",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "7a081043-9390-4837-bc1f-818a9d84b5a1",
+    "ts": "2026-11-20T08:32:28.971Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /commands",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "540721c4-5e72-4d08-a231-212b65c5de1f",
+    "ts": "2026-11-20T08:30:46.044Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "3efe2e1f-8fb1-43a9-8107-2c076889ae42",
+    "ts": "2026-11-20T08:00:06.586Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "bbf9e365-525a-4089-b543-10c08c666d06",
+    "ts": "2026-11-20T07:59:21.173Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /new bot",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "cf6095bf-d6d5-49fd-9ec3-89865a7aca01",
+    "ts": "2026-11-20T07:58:36.964Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /boty",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "84bef1cc-9f75-47e6-9cdc-7c2c9c4f3440",
+    "ts": "2026-11-20T07:58:36.758Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /boty",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d423a715-0fd4-4e80-be0e-c15aa933b1b1",
+    "ts": "2026-11-20T07:58:10.735Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vot",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d7086edb-b52d-42dd-b280-ab4f8dbca830",
+    "ts": "2026-11-20T07:57:56.673Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /agents",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "3a665ec1-4a91-4c05-b563-2b6a735f83ba",
+    "ts": "2026-11-20T07:57:50.508Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "9f199312-6661-4fa5-92ed-542ea68631b4",
+    "ts": "2026-11-20T07:42:52.145Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "dff4545b-5888-4927-a022-9bda31104006",
+    "ts": "2026-11-20T07:39:45.451Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: C",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "7f120a55-160d-46df-9f15-b7b7211e4e26",
+    "ts": "2026-11-20T07:38:23.924Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: B2b jakýkoliv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "1db2d915-2fb1-436a-8c22-dbaab413a0c4",
+    "ts": "2026-11-20T07:38:23.381Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: top ai agent na lead → D:\\dev\\loyo-os\\data\\reports\\top-ai-agent-na-lead_2026-11-20-07-38-23.md",
+    "meta": {
+      "runId": "2026-11-20T07-36-31-029Z_b0d6eecc",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\top-ai-agent-na-lead_2026-11-20-07-38-23.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "8887999a-2100-4e0e-a877-859b21facb87",
+    "ts": "2026-11-20T07:36:32.682Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"top ai agent na lead\" → 8 zdrojů, 1 stránek",
+    "meta": {
+      "sources": [
+        "https://firstpagesage.com/seo-blog/the-top-ai-agents-by-market-share/",
+        "https://noimosai.com/en/blog/10-best-ai-agents-for-lead-generation-in-2026",
+        "https://respond.io/blog/10-best-ai-agents-for-lead-generation",
+        "https://www.cloudtalk.io/blog/best-automated-voice-agents-for-lead-generation/",
+        "https://www.heygen.com/blog/best-ai-lead-generation-tools",
+        "https://fin.ai/learn/best-ai-sales-agents",
+        "https://marketplace.relevanceai.com/use-cases/lead-scoring-agents",
+        "https://www.salesforge.ai/blog/ai-lead-generation-tools"
+      ]
+    }
+  },
+  {
+    "id": "54a1cccc-08e2-4e3e-80e6-6770e14f8607",
+    "ts": "2026-11-20T07:36:31.026Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia top ai agent na lead",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "4a3b7787-4fbe-439f-a291-dbe7a73595c7",
+    "ts": "2026-11-20T07:36:12.174Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Jilia top ai agent na lead",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "7b974a02-d601-4a5b-830f-864ad419834a",
+    "ts": "2026-11-20T07:25:38.099Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "ecfa933f-26b4-4e35-94d3-7a121df0e225",
+    "ts": "2026-11-20T07:17:17.370Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "bd392703-3a33-4448-b331-e345519b5544",
+    "ts": "2026-11-20T07:03:47.825Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /controlvision",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "43cc8d15-2e80-45f5-9efa-e876e255bc25",
+    "ts": "2026-11-20T07:03:00.434Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vc",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "a4c4b166-8530-4474-84e9-10b29acb584e",
+    "ts": "2026-11-20T07:01:34.611Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Neběží",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "223f0db5-8070-4c51-bb12-daa645299b88",
+    "ts": "2026-11-20T07:01:19.509Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "60e4a92c-5218-4e02-989e-1aa40b2f581a",
+    "ts": "2026-11-20T07:00:06.176Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "32bd9534-5ba7-4842-a7fd-41780189f2b1",
+    "ts": "2026-11-20T06:46:47.980Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /cv",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "4f01adee-7532-40ff-af51-673b35bca8a4",
+    "ts": "2026-11-20T06:46:41.310Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /boty",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "00211bc3-c3be-4253-a259-2fde534bc37d",
+    "ts": "2026-11-20T06:46:24.184Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "4833f694-4478-4321-a197-9f113040e11d",
+    "ts": "2026-11-20T06:46:23.812Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "486ba752-9911-494e-905c-c7f0a9b203e6",
+    "ts": "2026-11-20T06:46:18.460Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /cv",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "46143044-18cb-4ada-b1cc-4cc66e78e0b0",
+    "ts": "2026-11-20T06:46:07.339Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "c516bc04-58f4-408e-97d2-9be2986aead3",
+    "ts": "2026-11-20T06:46:06.730Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn"
+  },
+  {
+    "id": "7c677b1b-8036-4623-9bd9-9d4cba889e4d",
+    "ts": "2026-11-20T06:09:33.644Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: aiorchestration search agent Best info → D:\\dev\\loyo-os\\data\\reports\\aiorchestration-search-agent-Best-info_2026-11-20-06-09-33.md",
+    "meta": {
+      "runId": "2026-11-20T06-08-22-211Z_be589d58",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\aiorchestration-search-agent-Best-info_2026-11-20-06-09-33.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "ce4a2354-6d3a-4ee6-a49f-0a5e5440cb4d",
+    "ts": "2026-11-20T06:08:23.566Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"aiorchestration search agent Best info\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://mastra.ai/articles/best-ai-agent-search-tools",
+        "https://gogloby.com/insights/best-ai-agent-orchestration-platforms-and-frameworks/",
+        "https://parallel.ai/articles/best-ai-search-for-agents",
+        "https://www.selecthub.com/c/ai-agent-orchestration-platforms/",
+        "https://www.firecrawl.dev/blog/best-ai-search-engines-agents",
+        "https://thedigitalprojectmanager.com/tools/best-ai-orchestration-tools/",
+        "https://oxylabs.io/blog/top-ai-search-tools",
+        "https://www.gosearch.ai/blog/best-ai-agent-software-for-enterprise-search-2026-guide/"
+      ]
+    }
+  },
+  {
+    "id": "f15ebf2b-da01-4656-a617-334aa1ebb099",
+    "ts": "2026-11-20T06:08:22.210Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia aiorchestration search agent Best info",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "460bf081-1cea-4171-8bc2-0edf300989a8",
+    "ts": "2026-11-20T06:07:38.132Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /povely",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "e1ea1c8b-9d1b-4e7e-af4d-07e00553211e",
+    "ts": "2026-11-20T06:06:35.435Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn"
+  },
+  {
+    "id": "70b9d218-72ca-4edd-9cc1-f9889130fe2e",
+    "ts": "2026-11-20T06:06:33.827Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot zastaven"
+  },
+  {
+    "id": "392555b1-5a39-48a0-9832-e609ece2d8a6",
+    "ts": "2026-11-20T06:01:06.537Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "chyba reportu: Ollama neodpověděla do 180s (model: devstral-small-2:latest). Zkontroluj, jestli se model vejde do VRAM, nebo zkus menší model.",
+    "meta": {
+      "runId": "2026-11-20T05-58-04-424Z_2caf2a12"
+    }
+  },
+  {
+    "id": "516276e4-65f0-49a0-8203-c070d457f337",
+    "ts": "2026-11-20T06:00:25.163Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /daily-brief",
+    "meta": {
+      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n⏳ Fronta: úkol #ba0a24 zařazen (priorita 1), před tebou 1 úkolů.\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?"
+    }
+  },
+  {
+    "id": "a5ef3875-05ff-452d-9e5a-89f0fd0f3173",
+    "ts": "2026-11-20T06:00:25.153Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "8161f143-f7c7-4512-a761-440f93fde877",
+    "ts": "2026-11-20T05:52:56.554Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "22a1c5b1-eeaf-4fce-b82a-b224ef3419d8",
+    "ts": "2026-11-20T05:51:01.721Z",
+    "agent": "Lopatinka",
+    "type": "system",
+    "action": "běh OK → 5 tipů",
+    "meta": {
+      "picks": 5
+    }
+  },
+  {
+    "id": "1827554c-2fe1-410f-b12b-fbe6fb5ff28e",
+    "ts": "2026-11-20T05:50:38.180Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští Lopatinku",
+    "meta": {
+      "budget": "3500"
+    }
+  },
+  {
+    "id": "f80b46a2-568e-4f8d-959c-b61c5076853b",
+    "ts": "2026-11-20T05:50:38.179Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /lopatinka 3500 --send",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0d07a091-f7e8-43e0-89f8-c645beda4c63",
+    "ts": "2026-11-20T05:45:22.535Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /activity",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "1e70cbc0-1540-44ff-bdfa-6c6d763dcd72",
+    "ts": "2026-11-20T05:45:11.510Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /activity",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "733c26c3-ea07-418d-9e86-ca3a15ba9dc2",
+    "ts": "2026-11-20T05:44:28.256Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d3f17cec-eba8-423a-89a1-003f8fc1217d",
+    "ts": "2026-11-20T05:41:21.038Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn"
+  },
+  {
+    "id": "46752a61-f0c1-478a-b35f-1392f38b74cd",
+    "ts": "2026-11-20T05:41:19.113Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot zastaven"
+  },
+  {
+    "id": "d17750cd-4fb0-4503-90c9-ce9022f90ebd",
+    "ts": "2026-11-20T05:29:00.098Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "f0c7350e-e90b-43ed-b135-1f5bfa4caf14",
+    "ts": "2026-11-20T05:28:41.155Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "19a379a1-65df-457f-876a-295a577a3acb",
+    "ts": "2026-11-20T05:28:10.744Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ai",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "15f21fc2-062d-4949-add5-dbccd26360fc",
+    "ts": "2026-11-20T05:28:10.726Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn"
+  },
+  {
+    "id": "b3210e35-e1b1-4930-b2d2-0a5d61880b6c",
+    "ts": "2026-11-20T05:27:03.796Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští Koštěrada"
+  },
+  {
+    "id": "1833935e-3e93-4b48-9354-a42310aeebe4",
+    "ts": "2026-11-20T05:27:03.792Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /zapni vse",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "6db8fb56-6cbb-4bec-b2ce-00b646659fd3",
+    "ts": "2026-11-20T02:00:44.205Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /memory-nightly",
+    "meta": {
+      "message": "🧠 paměť mary-jane: 18 zpráv, není co shrnout\n🗂 chat 2026-11-19: 0 zpráv, nic k uložení"
+    }
+  },
+  {
+    "id": "d39f1c9d-e286-49f1-9c80-6ac6970a3836",
+    "ts": "2026-11-19T23:05:05.001Z",
+    "agent": "Tridil",
+    "type": "save",
+    "action": "🗂 Třídil přesunul 2 souborů (zip: 2)",
+    "meta": {
+      "dir": "C:\\Users\\loyo-\\Downloads",
+      "since": "2026-11-18T23:05:04.983Z",
+      "dryRun": false,
+      "moved": [
+        "fazt_review.zip → zip/fazt_review.zip",
+        "fazt_review_v2.zip → zip/fazt_review_v2.zip"
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "92b20a19-d00a-400d-aaac-e822fc3b8bf4",
+    "ts": "2026-11-18T23:05:04.999Z",
+    "agent": "Tridil",
+    "type": "save",
+    "action": "🗂 Třídil: nic nového k roztřídění",
+    "meta": {
+      "dir": "C:\\Users\\loyo-\\Downloads",
+      "since": "2026-11-17T23:05:04.017Z",
+      "dryRun": false,
+      "moved": [],
+      "errors": []
+    }
+  },
+  {
+    "id": "d8701ef0-c091-4e38-9568-4c3da7ae651a",
+    "ts": "2026-11-17T23:05:04.020Z",
+    "agent": "Tridil",
+    "type": "save",
+    "action": "🗂 Třídil: nic nového k roztřídění",
+    "meta": {
+      "dir": "C:\\Users\\loyo-\\Downloads",
+      "since": "2026-11-16T23:05:04.446Z",
+      "dryRun": false,
+      "moved": [],
+      "errors": []
+    }
+  },
+  {
+    "id": "54dc72d6-5b34-4faf-bdc7-99d4132f87a3",
+    "ts": "2026-11-16T23:05:04.491Z",
+    "agent": "Tridil",
+    "type": "save",
+    "action": "🗂 Třídil přesunul 30 souborů (obrazky: 20, mp3: 10)",
+    "meta": {
+      "dir": "C:\\Users\\loyo-\\Downloads",
+      "since": "2026-11-15T23:05:03.449Z",
+      "dryRun": false,
+      "moved": [
+        "fazt_09_origami.png → obrazky/fazt_09_origami.png",
+        "fazt_10_exclamation.png → obrazky/fazt_10_exclamation.png",
+        "fazt_BGEO_03.png → obrazky/fazt_BGEO_03.png",
+        "fazt_GPG_05.png → obrazky/fazt_GPG_05.png",
+        "fazt_MACH_02.png → obrazky/fazt_MACH_02.png",
+        "fazt_MACH_05.png → obrazky/fazt_MACH_05.png",
+        "fazt_MIN3D_06.png → obrazky/fazt_MIN3D_06.png",
+        "fazt_MIN3D_07.png → obrazky/fazt_MIN3D_07.png",
+        "fazt_MIN3D_09.png → obrazky/fazt_MIN3D_09.png",
+        "fazt_MIN_02.png → obrazky/fazt_MIN_02.png",
+        "fazt_MIN_04.png → obrazky/fazt_MIN_04.png",
+        "fazt_MIN_06.png → obrazky/fazt_MIN_06.png",
+        "fazt_MIN_10.png → obrazky/fazt_MIN_10.png",
+        "fazt_NBGEO_02.png → obrazky/fazt_NBGEO_02.png",
+        "fazt_NBGEO_06.png → obrazky/fazt_NBGEO_06 (1).png",
+        "fazt_NBGEO_07.png → obrazky/fazt_NBGEO_07.png",
+        "fazt_RGM_02.png → obrazky/fazt_RGM_02.png",
+        "fazt_RGM_05.png → obrazky/fazt_RGM_05.png",
+        "fazt_RPIX_04.png → obrazky/fazt_RPIX_04.png",
+        "fazt_RPIX_05.png → obrazky/fazt_RPIX_05.png",
+        "Záznam (7) (mp3cut.net) (1).m4a → mp3/Záznam (7) (mp3cut.net) (1).m4a",
+        "Záznam (7) (mp3cut.net) (2).m4a → mp3/Záznam (7) (mp3cut.net) (2).m4a",
+        "Záznam (7) (mp3cut.net).m4a → mp3/Záznam (7) (mp3cut.net).m4a",
+        "Záznam (8) (mp3cut.net) (1).m4a → mp3/Záznam (8) (mp3cut.net) (1).m4a",
+        "Záznam (8) (mp3cut.net) (2).m4a → mp3/Záznam (8) (mp3cut.net) (2).m4a",
+        "Záznam (8) (mp3cut.net) (3).m4a → mp3/Záznam (8) (mp3cut.net) (3).m4a",
+        "Záznam (8) (mp3cut.net) (4).m4a → mp3/Záznam (8) (mp3cut.net) (4).m4a",
+        "Záznam (8) (mp3cut.net) (5).m4a → mp3/Záznam (8) (mp3cut.net) (5).m4a",
+        "Záznam (8) (mp3cut.net) (6).m4a → mp3/Záznam (8) (mp3cut.net) (6).m4a",
+        "Záznam (8) (mp3cut.net).m4a → mp3/Záznam (8) (mp3cut.net).m4a"
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "9eb354a5-f3dc-44fc-8b0a-91d986fe796b",
+    "ts": "2026-11-15T23:05:03.470Z",
+    "agent": "Tridil",
+    "type": "save",
+    "action": "🗂 Třídil přesunul 18 souborů (obrazky: 17, zip: 1)",
+    "meta": {
+      "dir": "C:\\Users\\loyo-\\Downloads",
+      "since": "2026-11-14T23:05:03.309Z",
+      "dryRun": false,
+      "moved": [
+        "dddd.png → obrazky/dddd.png",
+        "dej-oblicej-2.png → obrazky/dej-oblicej-2.png",
+        "fazt_EXCH_02.png → obrazky/fazt_EXCH_02.png",
+        "fazt_FGLITCH_01.png → obrazky/fazt_FGLITCH_01.png",
+        "fazt_FGLITCH_02.png → obrazky/fazt_FGLITCH_02.png",
+        "fazt_NBGEO_04.png → obrazky/fazt_NBGEO_04.png",
+        "fazt_NBGEO_06.png → obrazky/fazt_NBGEO_06.png",
+        "fazt_RBL_05.png → obrazky/fazt_RBL_05.png",
+        "image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n-3.jpg → obrazky/image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n-3.jpg",
+        "image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n-6.jpg → obrazky/image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n-6.jpg",
+        "image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n.jpg → obrazky/image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n.jpg",
+        "image_20261017_171947-udlej-kulich-salu-kobeerec-pak-piano-zachod-v-tomt-2.jpg → obrazky/image_20261017_171947-udlej-kulich-salu-kobeerec-pak-piano-zachod-v-tomt-2.jpg",
+        "image_20261017_171947-udlej-kulich-salu-kobeerec-pak-piano-zachod-v-tomt.jpg → obrazky/image_20261017_171947-udlej-kulich-salu-kobeerec-pak-piano-zachod-v-tomt.jpg",
+        "key_with_face.png → obrazky/key_with_face.png",
+        "LoYo_OS_v4_Full_Docs.zip → zip/LoYo_OS_v4_Full_Docs (1).zip",
+        "style_1_realistic_cutout.png → obrazky/style_1_realistic_cutout.png",
+        "yx.png → obrazky/yx.png",
+        "zero_cutout.png → obrazky/zero_cutout.png"
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "01530595-ae00-4db3-a104-f30b1f994fef",
+    "ts": "2026-11-15T06:00:53.789Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /daily-brief",
+    "meta": {
+      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n📋 **Status LoYo OS** [fast-devstral-2048 <1s]\n• Otevřené úkoly: 1 / 3\n• Poznámky celkem: 7\n• Kalendářní události: 0\n• Systém: agent 4 • team 1 • loop 0 • wor"
+    }
+  },
+  {
+    "id": "17b45e43-c6c1-434d-8411-c1254a4e6f9d",
+    "ts": "2026-11-15T06:00:53.736Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "aa0205fc-4ebd-42f6-827b-2e27cfde444d",
+    "ts": "2026-11-14T23:05:03.339Z",
+    "agent": "Tridil",
+    "type": "save",
+    "action": "🗂 Třídil přesunul 24 souborů (zip: 3, obrazky: 20, ostatni: 1)",
+    "meta": {
+      "dir": "C:\\Users\\loyo-\\Downloads",
+      "since": "2026-11-14T08:11:35.167Z",
+      "dryRun": false,
+      "moved": [
+        "ASAP_2_soubory.zip → zip/ASAP_2_soubory.zip",
+        "fazt_04.png → obrazky/fazt_04.png",
+        "fazt_08.png → obrazky/fazt_08.png",
+        "fazt_BG_02.png → obrazky/fazt_BG_02.png",
+        "fazt_BK_05.png → obrazky/fazt_BK_05.png",
+        "fazt_BRO_10.png → obrazky/fazt_BRO_10.png",
+        "fazt_DERP_02.png → obrazky/fazt_DERP_02.png",
+        "fazt_DERP_03.png → obrazky/fazt_DERP_03.png",
+        "fazt_FK_01.png → obrazky/fazt_FK_01.png",
+        "fazt_FK_02.png → obrazky/fazt_FK_02.png",
+        "fazt_FK_04.png → obrazky/fazt_FK_04.png",
+        "fazt_FK_05.png → obrazky/fazt_FK_05.png",
+        "fazt_NK_03.png → obrazky/fazt_NK_03.png",
+        "fazt_TROLL_03.png → obrazky/fazt_TROLL_03.png",
+        "fazt_WORD_07.png → obrazky/fazt_WORD_07.png",
+        "fazt_WORD_09.png → obrazky/fazt_WORD_09.png",
+        "Freebuff-0.0.202-win-x64--fb_v1.de022400-b0ee-40ba-8c45-4e0f94e7fe32.toi940.windows.FvmHab-EUYnIF-OB848s7jye2lPbK-i6y6GFLZX_gl0.exe → ostatni/Freebuff-0.0.202-win-x64--fb_v1.de022400-b0ee-40ba-8c45-4e0f94e7fe32.toi940.windows.FvmHab-EUYnIF-OB848s7jye2lPbK-i6y6GFLZX_gl0.exe",
+        "image_20261114_192656.jpg → obrazky/image_20261114_192656.jpg",
+        "onestroke_02.png → obrazky/onestroke_02.png",
+        "onestroke_06.png → obrazky/onestroke_06.png",
+        "onestroke_10.png → obrazky/onestroke_10.png",
+        "porovnani.zip → zip/porovnani.zip",
+        "rfk2_10.png → obrazky/rfk2_10.png",
+        "Tomory-FIX-uprava-textu.zip → zip/Tomory-FIX-uprava-textu.zip"
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "3a7752bd-095b-4c3c-8a5e-1495d31e9955",
+    "ts": "2026-11-14T10:00:40.726Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "48145ffe-31e5-4f56-a2e9-25fb9412baba",
+    "ts": "2026-11-14T09:00:18.571Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "514ebe3c-ed6a-4248-a573-42c19f13e101",
+    "ts": "2026-11-14T08:11:35.193Z",
+    "agent": "Tridil",
+    "type": "save",
+    "action": "🗂 Třídil přesunul 13 souborů (obrazky: 5, zip: 6, mp3: 2)",
+    "meta": {
+      "dir": "C:\\Users\\loyo-\\Downloads",
+      "since": null,
+      "dryRun": false,
+      "moved": [
+        "30937_funny_dolan.jpg → obrazky/30937_funny_dolan.jpg",
+        "ASAP_review_1_az_6.zip → zip/ASAP_review_1_az_6.zip",
+        "colibri-main.zip → zip/colibri-main.zip",
+        "fast_03.png → obrazky/fast_03.png",
+        "fast_final_01.png → obrazky/fast_final_01.png",
+        "fast_v2_03.png → obrazky/fast_v2_03.png",
+        "hihihichachacha.mp3 → mp3/hihihichachacha.mp3",
+        "loot-checker-v2.zip → zip/loot-checker-v2.zip",
+        "loot-checker-v3.zip → zip/loot-checker-v3.zip",
+        "loot-checker-v31.zip → zip/loot-checker-v31.zip",
+        "loot-checker.zip → zip/loot-checker.zip",
+        "reallyfastbrowser.png → obrazky/reallyfastbrowser.png",
+        "Záznam 2026-11-14 072303.mp3 → mp3/Záznam 2026-11-14 072303.mp3"
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "327750c9-d071-4edc-b948-df9e8a4bbb74",
+    "ts": "2026-11-14T08:00:23.174Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
     "id": "032d4779-8bd5-4e2a-a038-8a1081424aaf",
     "ts": "2026-11-13T23:05:01.890Z",
     "agent": "Tridil",
@@ -280,16 +2962,6 @@
     }
   },
   {
-    "id": "2d748e1b-b3b2-49ab-9613-cb0d184ac80d",
-    "ts": "2026-10-06T00:00:59.868Z",
-    "agent": "Koštěrad",
-    "type": "system",
-    "action": "Koštěrad: žádná failed runs ke kontrole",
-    "meta": {
-      "scanned": 0
-    }
-  },
-  {
     "id": "5f1d18ac-7a9b-4d88-9ce4-fe6c831f6532",
     "ts": "2026-10-03T14:00:25.505Z",
     "agent": "Scheduler",
@@ -387,16 +3059,6 @@
     "action": "scheduled: /voda",
     "meta": {
       "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "11a33244-38a4-4b92-b482-fe8d1e6d3ac1",
-    "ts": "2026-09-14T00:00:37.225Z",
-    "agent": "Koštěrad",
-    "type": "system",
-    "action": "Koštěrad: žádná failed runs ke kontrole",
-    "meta": {
-      "scanned": 0
     }
   },
   {

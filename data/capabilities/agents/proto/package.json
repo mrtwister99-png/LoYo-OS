@@ -1,0 +1,15 @@
+{
+  "name": "proto",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Proto - pronajímatelny AI support agent pro ceske e-shopy",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node scripts/test-scenarios.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

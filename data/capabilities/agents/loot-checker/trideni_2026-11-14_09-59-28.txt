@@ -1,0 +1,74 @@
+Loot Checker — FÁZE 2 vision třídění
+Datum: 14. 11. 2026 10:59:28
+Zdroj: C:\Users\loyo-\Desktop\GRAFIKA\dablkopiebohuzel\1
+Model: qwen2.5vl:7b | Práh: 60 | Pod prahem: leave
+Roztříděno: 67 | Nízká jistota (necháno): 1 | Chyby: 0
+---
+0062f702be4c9d48adda03bcb0eefaf1.jpg -> abeceda/ | 95% | Obrázek představuje písmeno G vytvořené z elektronické desky, což patří do kategorie abecedy.
+02fa75835e7c178566e87fd01f3ac8c7.jpg -> abeceda/ | 95% | Obsahuje celou abecedu v řadách za sebou.
+031eb1a53a94f16cf40555a500726285.jpg -> postavy/ | 95% | Obrázek obsahuje mnoho postav v podobě obličejů a těl v pixelovém stylu.
+0528c5b9b7e1ed2202dc2de707fa6e1e.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor trojúhelníků jako pozadí.
+06c111fe7d73f4c0e9039ea2085bd207.jpg -> objekt/ | 90% | Obrázek obsahuje jediný velký objekt - kruh v čtverci.
+0a43357efd8223734a6bc9b3fcdb1d39.jpg -> objekt/ | 90% | Obrázek obsahuje mnoho různých geometrických objektů s názvy.
+0adf276fb082038064eaf033a7c51cde.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor geometrických tvary v pravidelné mřížce.
+0b63b7b6c871f615e85b0340ddfa6031.jpg -> bg/ | 95% | Obrázek obsahuje opakující se vzor trojúhelníků v pravidelné mřížce
+0bcb6dcc54175a79ea0a77983f1dc0ad.jpg -> meme/ | 90% | Obrazek je meme s postavou a textem
+0be72802bedaabbd6891a7da6868d310.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor s geometrickými tvary a čárami, který vyplňuje celý obrázek.
+0d249d17b2776a7ad59e8c0b530d8bef.jpg -> abeceda/ | 95% | Obsahuje celou abecedu v řadách za sebou, je to font specimen a ukázka písma.
+0d5e2a9118a5e3842791f76b0ed1d721.jpg -> abeceda/ | 95% | Obsahuje kompletní abecedu v řadách za sebou, font specimen, ukázka písma, typografie.
+14d51f4a4d5e0354591b47d58ec1fac3.jpg -> postavy/ | 90% | Obrázek obsahuje portrét muže s brýlemi a oblekem, což je hlavní objekt.
+160a48d49de6e4d94ef76f28d31b6ad3 (1) - kopie.jpg -> abeceda/ | 95% | Obsahuje kompletní abecedu A-Z v řadách za sebou.
+1aaa6012be1b908bc5bce597352c4bec.jpg -> abeceda/ | 95% | Obsahuje celou abecedu v řadách za sebou.
+1dc1722fb5872c7c2d24b77e0c6bfd62.jpg -> bg/ | 85% | Obrázek obsahuje opakující se vzor kruhů a obdélníků, který vyplňuje celý obrázek.
+1fa7ba6c5068cbcb8baff02d806ebe56.jpg -> objekt/ | 80% | Obrázek znázorňuje jediný velký objekt - ruku s prsty vypouklými nahoru.
+24fc7c1072c781fa93f9cc83ecdc7d71.jpg -> objekt/ | 90% | Obrazek obsahuje jediný velký geometrický objekt.
+25ce883a0a2531b4e62efd8a43bd3610.jpg -> abeceda/ | 95% | Obsahuje celou abecedu v řadách za sebou.
+26db1c047fe8dfb0d5d1bf328bcf64b8.jpg -> objekt/ | 85% | Obrázek obsahuje jediný velký geometrický objekt s více prvkůmi.
+26e61afda07b2b267edd1a2b91c777f3.jpg -> objekt/ | 85% | Obrazek obsahuje jediný velký objekt - rukou s úsměvem a jazykem
+2e874fdc4b1e812917cfdd15f77641b1.jpg -> postavy/ | 90% | Obrázek obsahuje různé postavy a obličeje lidí
+2eb9910315a83d7052928d44d20cb67e.jpg -> objekt/ | 90% | Obrazek obsahuje jediný velký objekt - srdce s puzzle díly.
+31ad2172b85d99d5c1197aa88c17bb75.jpg -> meme/ | 90% | Obrazek je stylizovaný a připomíná meme s jedním hlavním objektem.
+362d0e6555258d15a16be6e036c4666b.jpg -> objekt/ | 90% | Obrázek obsahuje jediný velký objekt, který připomíná mořskou šípu.
+369e8effdb8178229fe7737eeeb6f2fa.jpg -> bg/ | 90% | Obrázek je výrazně pozadím s geometrickými tvary a vzorem.
+38fceefc344e0111961ec1e1f5c115cc.jpg -> objekt/ | 90% | Obrázek obsahuje jediný velký objekt - jablko, které se rozpadá na kostky.
+3c60ba4c66621948bbb1167d40085210.jpg -> objekt/ | 85% | Obrázek obsahuje mnoho malých kruhů, které jsou jedním velkým objektem.
+3d2ed034264ecf1d5592b5ad9b1b90e6.jpg -> bg/ | 95% | Obrázek je plný opakujícího se vzoru bez hlavního objektu nebo textu.
+3ed736007d178c09094a7492b459690c.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor geometrických tvary v pravidelné mřížce.
+3f36f495de4108dc6e6f17b425cb5161.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor geometrických tvarů v pravidelné mřížce, který vyplňuje celý obrázek.
+3f60c4d425db1591ce32d4a702df5aa8.jpg -> abeceda/ | 90% | Obsahuje abecední řádky s písmeny A až H
+425d6e6f19a80298cc120c244c0f6f64.jpg -> abeceda/ | 95% | Obsahuje písmena A až Z v řadách za sebou.
+43a97eb527f44952fd7db46a1992629b.jpg -> postavy/ | 90% | Obrázek obsahuje několik karikatur lidských obličejů.
+4bc324aa47900019c4bfd30ed24b70e7.jpg -> postavy/ | 90% | Obrazek obsahuje různé tváře a výrazové exprese postavy.
+4d920dddce83f9cbdeac34c416751e66.jpg -> meme/ | 90% | Obrazek obsahuje mnoho komiksových bublin, které jsou typické pro memy.
+4ee531dcf991f159b64bdae0dbb84dfb.jpg -> objekt/ | 80% | Obrázek obsahuje různé objekty jako jsou okna, ikony a nástroje, které jsou typické pro počítačové ovládací prvky.
+50d7e4b575d1fb3ec7854feb53be8da5.jpg -> postavy/ | 95% | obrazek znázorňuje postavu s detailním obličejem a tělem
+50eb8c9df40014df3526bccdf37b9bb0.jpg -> bg/ | 90% | Obrázek je většinou pozadí s logem Windows a textovým polem, které nejsou hlavními objekty.
+51ee8918e3d586596d02f235257a2060.jpg -> objekt/ | 90% | Obrázek znázorňuje jednu geometrickou figuru, která je velká a dominuje celým obrázkem.
+522aaf44f0044ca77962799fbd54e8af.jpg -> postavy/ | 90% | Obrázek znázorňuje stylizovanou postavu s obličejem a tělem
+525f07bc727efe22c78faca2d3d23a5d.jpg -> postavy/ | 90% | Obrázek obsahuje několik portrétů stejné postavy s různými výrazovými expresemi.
+538b0eaae794252c497b79d67615e51e.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor kruhů jako pozadí.
+54f1c5c58d5394e00e2450aa5968440d.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor z kruhů a čárek, který vyplňuje celý obrázek.
+56fe4ecf5f1cd5af2027db8e385fb738.jpg -> postavy/ | 95% | Obrázek znázorňuje postavu s obličejem a tělem
+588b30a3101cf2282be78662dc06f621.jpg -> abeceda/ | 95% | Obsahuje kompletní abecedu s písmeny A až Z v řadách.
+5ac885e3639fa7311654f8420549ce3b.jpg -> meme/ | 90% | Obrazek je meme s postavou a textem.
+5f394043c716128de2011dbc97dd3232.jpg -> postavy/ | 90% | obrazek znázorňuje muže s obličejem
+612d8d7889d73c2a8712bb18b86f7104.jpg -> objekt/ | 90% | obrazek obsahuje jediný velký objekt s čárami a barevnými bodky
+61a6fa138bd068815ad5f2149f0f8ade.jpg -> bg/ | 90% | Obrázek je složen z opakujících se geometrických tvareů, které vytvářejí pozadí.
+63edd761bc590945bf2f256fbe8ffe60.jpg -> bg/ | 90% | Obrázek má opakující se vzor v pravidelné mřížce jako pozadí.
+68fd61dbee4c2277741fb057102a9151.jpg -> ostatni/ | 90% | Obrázek obsahuje logotyp operačního systému Windows XP.
+6a03f484adfdda90d44b24d9a2ce5066.jpg -> objekt/ | 85% | Obrázek obsahuje jedno velké geometrické tělo s menšími částmi kolem něj.
+6cb7c5ce21569572a8b7609ab4ab307d.jpg -> abeceda/ | 90% | Obsahuje písmena A až Z v řadách za sebou, což je typografický vzor.
+707ee2f2f0a36023ea22239f7c0fba64.jpg -> postavy/ | 90% | Obrázek obsahuje několik postav s různými gesty a pohyby.
+71ba31270c985697cdb92ab5fd920ba4.jpg -> abeceda/ | 95% | Obsahuje celou abecedu v řadách za sebou.
+7ef7e11c52d739db9634ec4b4180dbe4.jpg -> bg/ | 90% | Obrázek je opakujícím se vzorem kostek, který vyplňuje celý obrázek.
+7fa05d4fc11c374a693a3b0f4798356a.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor geometrických tvary v pravidelné mřížce.
+7fc90582a37af9de712d352215941e56.jpg -> meme/ | 90% | Obrazek je stylizovaný a ukazuje charakter, což je charakteristické pro meme.
+81a4223eba4d8ff0f8d0f974a038b663.jpg -> abeceda/ | 95% | Obsahuje celou abecedu v řadách za sebou.
+8b24ea541abf9209176fda09c38bcd7c.jpg -> bg/ | 90% | Obrázek je opakujícím se vzorem s geometrickými tvary v pravidelné mřížce.
+8ece32c82f4e67308fcf8f4f35bb4626.jpg -> meme/ | 90% | Obrazek je meme s vyobrazením postavy s výrazem zloby a úžasného zájmu.
+8fdea226aa2051f88408b9e026641d04.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor geometrických tvary v pravidelné mřížce.
+96cbcac3221fead42ec8cc721f981424.jpg -> bg/ | 90% | Obrázek obsahuje opakující se vzor v pravidelné mřížce jako pozadí.
+9a7f969f895065368833d12a9120e634.jpg -> bg/ | 90% | Obrázek je plný opakujícího vzoru s černobílými kostkami a barevnými proužky.
+9c0d985d095cbb86472d059efeaf0e13.jpg -> postavy/ | 90% | obrazek znázorňuje postavu mladé dívky v šatech a tenisky
+9e063d1c1b19fc698f7f6c60883ac445.jpg -> meme/ | 90% | Obrazek je komiks a obsahuje humoristickou situaci
+68fd61dbee4c2277741fb057102a9151.jpg -> NECHÁNO (navrhoval logo, 90%) | Model vrátil neznámou složku "logo", beru jako ostatní. Obrázek obsahuje logotyp operačního systému Windows XP.

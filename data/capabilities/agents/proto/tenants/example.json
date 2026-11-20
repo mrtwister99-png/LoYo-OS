@@ -1,0 +1,27 @@
+{
+  "id": "example",
+  "name": "Ukázkový e-shop s.r.o.",
+  "url": "https://www.ukazkovy-eshop.cz",
+  "supportHours": "Po–Pá 8–17",
+  "carriers": "Zásilkovna, PPL, DPD, Česká pošta, osobní odběr",
+  "shipsWithin": "objednávky do 14:00 odesíláme ten samý den",
+  "freeShippingFrom": "1500 Kč",
+  "returnDays": 14,
+  "returnUrl": "https://www.ukazkovy-eshop.cz/vraceni",
+  "claimEmail": "reklamace@ukazkovy-eshop.cz",
+  "pickupAddress": "Skladová 1, Brno",
+  "phone": "+420 777 000 111",
+  "email": "podpora@ukazkovy-eshop.cz",
+  "orderFormat": "202600123",
+  "humanSlaHours": 2,
+  "provider": "shoptet",
+  "color": "#2563eb",
+  "greeting": "Dobrý den, jak vám mohu pomoci s objednávkou?",
+  "quickReplies": [
+    "Kde je moje objednávka?",
+    "Chci vrátit zboží",
+    "Reklamace",
+    "Máte zboží skladem?"
+  ],
+  "allowedOrigins": ["https://www.ukazkovy-eshop.cz"]
+}
