@@ -14,7 +14,8 @@ import { DATA_DIR, CAPABILITIES_DIR } from './dataPaths.js';
 
 const GIT_ROOT = path.resolve(DATA_DIR, '..');
 const CAPABILITIES_REL = path.relative(GIT_ROOT, CAPABILITIES_DIR).replace(/\\/g, '/');
-const MANIFESTS = `:(glob)${CAPABILITIES_REL}/**/manifest.json`;
+// jen <typ>/<id>/manifest.json — ne cizí manifesty hlouběji (upstream knihovny)
+const MANIFESTS = `:(glob)${CAPABILITIES_REL}/*/*/manifest.json`;
 
 function git(args: string[]): Promise<string> {
   return new Promise((resolve, reject) => {

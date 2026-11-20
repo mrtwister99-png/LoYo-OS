@@ -7,17 +7,18 @@ import { CapabilityManifestSchema } from '@loyo/core';
 
 const CAPABILITIES_DIR = join(DATA_DIR, 'capabilities');
 
+// Jen data/capabilities/<typ>/<id>/manifest.json. Hlouběji leží cizí kód
+// (např. mcp/blender/upstream/…/manifest.json) a to žádná capability není.
 function walkManifests(dir: string, out: string[] = []): string[] {
-  try {
-    for (const entry of readdirSync(dir)) {
-      const full = join(dir, entry);
-      try {
-        const st = statSync(full);
-        if (st.isDirectory()) walkManifests(full, out);
-        else if (entry === 'manifest.json') out.push(full);
-      } catch {}
+  const subdirs = (d: string) => {
+    try { return readdirSync(d).filter((e) => !e.startsWith('.') && statSync(join(d, e)).isDirectory()); } catch { return []; }
+  };
+  for (const type of subdirs(dir)) {
+    for (const id of subdirs(join(dir, type))) {
+      const f = join(dir, type, id, 'manifest.json');
+      try { if (statSync(f).isFile()) out.push(f); } catch {}
     }
-  } catch {}
+  }
   return out;
 }
 

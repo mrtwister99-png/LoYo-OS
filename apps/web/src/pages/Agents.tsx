@@ -323,6 +323,22 @@ export default function AgentsPro() {
                     </span>
                   )}
 
+                  {/* co má agent připnuto (MCP, skilly, CLI) — vidět rovnou na kartě */}
+                  {(() => {
+                    const pinned = [
+                      ...(agent.dependencies || []).map(d => ({ k: 'm' + d, t: categoryNumbers.mcp, n: capNums.mcp?.[d.split(':')[0]], l: d.split(':')[0] })),
+                      ...agent.skills.filter(s => capNums.skill?.[s] != null).map(s => ({ k: 's' + s, t: categoryNumbers.skill, n: capNums.skill?.[s], l: s })),
+                      ...agent.tools.filter(t => t.startsWith('cli:')).map(t => ({ k: 'c' + t, t: categoryNumbers.cli, n: capNums.cli?.[t.slice(4)], l: t.slice(4) })),
+                    ]
+                    if (!pinned.length) return null
+                    return (
+                      <div className={`absolute z-10 left-2 right-2 flex flex-wrap justify-center gap-1 ${demoUrl ? 'bottom-11' : 'bottom-2'}`} title={pinned.map(p => p.l).join(', ')}>
+                        {pinned.slice(0, 4).map((p, i) => <NumBadge key={p.k} type={p.t} n={p.n} idx={i} label={p.l} />)}
+                        {pinned.length > 4 && <span className="text-[10px] font-mono opacity-70">+{pinned.length - 4}</span>}
+                      </div>
+                    )
+                  })()}
+
                   {/* spodní linka */}
                   <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#444] opacity-0 group-hover:opacity-100 transition" />
 

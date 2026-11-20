@@ -79,6 +79,25 @@ async function startDetachedNodeBot(dir: string, script: string, logName: string
   return logPath
 }
 
+// Co má agent „připnuto“: MCP (dependencies) je v manifestu, ale skilly / nástroje / loopy
+// připnuté v UI ukládá Tauri do agents/index.json — bez sloučení by se v UI po obnovení ztratily.
+async function withAttachments(agents: any[]): Promise<any[]> {
+  let idx: any[] = []
+  try { idx = JSON.parse(await readFile(join(AGENTS_DIR, 'index.json'), 'utf8')).agents ?? [] } catch {}
+  const byId = new Map(idx.map((x: any) => [x.id, x]))
+  const union = (...lists: any[]) => [...new Set(lists.flatMap((l) => (Array.isArray(l) ? l : [])).filter((x) => typeof x === 'string' && x))]
+  return agents.map((a: any) => {
+    const rec: any = byId.get(a.id) ?? {}
+    return {
+      ...a,
+      skills: union(a.skills, rec.skills),
+      tools: union(a.tools, rec.tools),
+      loops: union(a.loops, rec.loops),
+      dependencies: union(a.dependencies, rec.dependencies),
+    }
+  })
+}
+
 // Při startu API zapne Mary Telegram bota (když je token a bot ještě neběží).
 // Vypnout jde přes MARY_TELEGRAM_AUTOSTART=0 v .env.
 export async function ensureMaryBot(): Promise<string> {
@@ -126,7 +145,7 @@ export default async function agentRoutes(app: FastifyInstance) {
       const agents = searchFromDb(String(search), 'agent')
       return { agents, count: agents.length, query: search }
     }
-    const agents = await getAgents()
+    const agents = await withAttachments(await getAgents())
     return { agents, count: agents.length }
   })
 

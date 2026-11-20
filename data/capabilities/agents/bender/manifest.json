@@ -41,5 +41,8 @@
   ],
   "createdAt": "2026-11-05T00:00:00Z",
   "updatedAt": "2026-11-05T00:00:00Z",
-  "number": 16
+  "number": 16,
+  "dependencies": [
+    "blender:2"
+  ]
 }

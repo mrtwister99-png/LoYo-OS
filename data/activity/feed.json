@@ -1,5 +1,15 @@
 [
   {
+    "id": "22c370d2-b8f5-45e2-bfa1-2bc447c46889",
+    "ts": "2026-11-20T21:00:37.796Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
     "id": "db6bebd9-0d52-449a-87d4-14e8c531530c",
     "ts": "2026-11-20T20:47:38.431Z",
     "agent": "Mary Jane",
