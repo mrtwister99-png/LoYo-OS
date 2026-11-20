@@ -12,7 +12,8 @@ import { getCapabilities } from '../lib/manifestLoader'
 import { ragSearch } from '../lib/ragStore'
 import { getChatDay, saveMemorySummary, searchMemorySummaries, getMemoryByDateRange, compactOldMemory, saveMemoryVector, searchMemoryByVector, getLongMonthRows } from './chatHistory'
 import { webSearch, readSources, type SearchResult } from './web_search'
-import { tryAgentCommand } from './agentCommands'
+import { isShellMessage, tryAgentCommand } from './agentCommands'
+import { sendTelegram } from './telegramNotify'
 import { bumpAgentStats } from './agentStats'
 import { slugify, safeName, nextFileNumber, readDirSafe } from './fileUtils'
 import {
@@ -2066,7 +2067,7 @@ async function runOrchestratorCore(userMessage: string, runId: string, steps: st
 // ============================================================
 // HLAVNÍ TOK S P-QUEUE (žádný while(true) polling)
 // ============================================================
-export async function runOrchestrator(userMessage: string): Promise<RunResult>
+export async function runOrchestrator(userMessage: string, source: string = 'ui'): Promise<RunResult>
 {
   const steps: string[] = []
   const runId = `${new Date().toISOString().replace(/[:.]/g, '-')}_${randomUUID().slice(0, 8)}`
@@ -2074,20 +2075,31 @@ export async function runOrchestrator(userMessage: string): Promise<RunResult>
   const priority = getPriority(trimmed)
   const pQueuePriority = 10 - priority
 
+  // terminál (/terminal, /ps a zprávy do běžícího shellu) jde mimo frontu
+  if (isShellMessage(trimmed)) {
+    const shell = await tryAgentCommand(trimmed).catch((e: any) => ({ reply: `❌ Terminál: ${e?.message ?? e}`, steps: [] as string[] }))
+    if (shell) return shell
+  }
+
   if (jobQueue.pending > 0 || jobQueue.size > 0) {
     const job = await enqueueJob(trimmed, priority)
     jobQueue.add(async () => {
       const s: string[] = []
       try {
         await markJobStatus(job.id, 'running', runId)
-        await runOrchestratorCore(job.message, runId, s)
+        const result = await runOrchestratorCore(job.message, runId, s)
         await markJobStatus(job.id, 'done', runId)
-      } catch {
+        // zadáno z Telegramu → výsledek tam po dokončení pošli (jinak by se ztratil)
+        if (source === 'telegram' && result?.reply) {
+          await sendTelegram(`✅ Úkol #${job.id.slice(0, 6)} hotový:\n\n${result.reply}`)
+        }
+      } catch (e: any) {
         await markJobStatus(job.id, 'failed', runId)
+        if (source === 'telegram') await sendTelegram(`❌ Úkol #${job.id.slice(0, 6)} selhal: ${e?.message ?? e}`)
       }
     }, { priority: pQueuePriority })
     return {
-      reply: `⏳ Fronta: úkol #${job.id.slice(0, 6)} zařazen (priorita ${priority}), před tebou ${jobQueue.size} úkolů.`,
+      reply: `⏳ Fronta: úkol #${job.id.slice(0, 6)} zařazen (priorita ${priority}), před tebou ${jobQueue.size} úkolů.${source === 'telegram' ? ' Výsledek ti pošlu sem, až bude hotový.' : ''}`,
       steps: [`p-queue enqueued ${job.id} prio=${priority} size=${jobQueue.size}`]
     }
   }

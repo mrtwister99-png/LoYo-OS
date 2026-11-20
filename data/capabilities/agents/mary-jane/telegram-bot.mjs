@@ -132,6 +132,12 @@ const HELP = [
   '/julia <téma> — hloubkový research (výsledek otevřeš tlačítkem 📄)',
   '/activity — poslední akce agentů',
   '/boty — stav Telegram botů',
+  '/cv — ControlVision server (ovládání PC z mobilu)',
+  '/terminal · /ps — terminál na PC, každá zpráva = příkaz, /exit konec',
+  '/new agent|team|workflow|cli … — založí novou věc (/new = návod)',
+  '/py <soubor.py> - <zadání> — napíšu Python skript (bez cesty = plocha)',
+  '/skript <soubor> · /spust <agent> — spustí skript / agenta',
+  'nebo větou: „udělej kurzy.py na plochu … a vytvoř agenta Joozina, ať ho použije“',
   '/vse — seznam všech povelů',
   '/note, /task, /status, /find, /research… — zbytek systému',
   '/id — chat id pro .env',
@@ -151,7 +157,9 @@ async function askMary(text) {
   if (!res.ok) throw new Error(data?.error || `API HTTP ${res.status}`)
   let reply = String(data?.reply ?? '').trim()
   // interní značky pro Builder v UI nemají v Telegramu co dělat
+  const builder = /OPEN_BUILDER:/.test(reply)
   reply = reply.replace(/OPEN_BUILDER:[^\n]*\n?/g, '').replace(/PICKER:[^\n]*\n?/g, '').trim()
+  if (builder) reply += '\n\n🧩 Builder je připravený v LOYO OS (UI) — doladíš a uložíš ho tam.'
   return {
     reply: reply || 'Hotovo. (odpověď byla prázdná — koukni do UI)',
     julia: data?.julia ?? null,
@@ -244,6 +252,15 @@ async function handleMessage(message, token, allowedChatId) {
   }
   if (text === '/start' || text === '/tg-help') {
     await sendLong(token, chatId, HELP)
+    return
+  }
+  // terminál = plný přístup k PC → jen když je bot zamčený na tvoje chat id
+  if (!allowedChatId && /^\/(terminal|terminál|cmd|ps|powershell)(\s|$)/i.test(text)) {
+    await sendLong(
+      token,
+      chatId,
+      `🔒 Terminál přes Telegram povolím, až bude bot zamčený na tvůj chat.\nDej do .env: TELEGRAM_MARY_CHAT_ID=${chatId} a restartuj bota.`,
+    )
     return
   }
 

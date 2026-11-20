@@ -584,11 +584,36 @@ fn sync_agents_from_fs() -> Result<AgentIndex, String> {
 fn save_agent_to_fs(mut agent: AgentRecord) -> Result<(), String> {
     let base_path = get_base_path().join(&agent.folder);
     fs::create_dir_all(&base_path).map_err(|e| e.to_string())?;
-    let identity_content = format!(
-        "# CORE IDENTITY\n\n**Jméno:** {}\n**Role:** {}\n**Team:** {}\n**Status:** {}\n\n## Prompt File\n{}\n\n## Workflow\n{}\n",
-        agent.name, agent.role, agent.team, agent.status, agent.prompt_file, agent.workflow
-    );
-    fs::write(base_path.join("01_CORE_IDENTITY.md"), identity_content).map_err(|e| e.to_string())?;
+    let identity_path = base_path.join("01_CORE_IDENTITY.md");
+    if identity_path.exists() {
+        // Existující prompt NEPŘEPISOVAT celý (dřív se tu každým Uložit smazala osobnost agenta).
+        // Změní se jen řádky **Jméno:** a **Role:**, zbytek souboru zůstane, jak je.
+        let content = fs::read_to_string(&identity_path).map_err(|e| e.to_string())?;
+        let eol = if content.contains("\r\n") { "\r\n" } else { "\n" };
+        let mut changed = false;
+        let updated: Vec<String> = content.lines().map(|line| {
+            for (key, value) in [("**Jméno:**", &agent.name), ("**Role:**", &agent.role)] {
+                if let Some(pos) = line.find(key) {
+                    if value.trim().is_empty() { return line.to_string(); }
+                    let new_line = format!("{}{} {}", &line[..pos], key, value.trim());
+                    if new_line != line { changed = true; }
+                    return new_line;
+                }
+            }
+            line.to_string()
+        }).collect();
+        if changed {
+            let mut out = updated.join(eol);
+            if content.ends_with('\n') { out.push_str(eol); }
+            fs::write(&identity_path, out).map_err(|e| e.to_string())?;
+        }
+    } else {
+        let identity_content = format!(
+            "# CORE IDENTITY\n\n**Jméno:** {}\n**Role:** {}\n**Team:** {}\n**Status:** {}\n\n## Prompt File\n{}\n\n## Workflow\n{}\n",
+            agent.name, agent.role, agent.team, agent.status, agent.prompt_file, agent.workflow
+        );
+        fs::write(&identity_path, identity_content).map_err(|e| e.to_string())?;
+    }
     let index_path = get_base_path().join("index.json");
     let mut index: AgentIndex = if index_path.exists() {
         let content = fs::read_to_string(&index_path).map_err(|e| e.to_string())?;

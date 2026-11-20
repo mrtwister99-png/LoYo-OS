@@ -321,7 +321,12 @@ async function tick(): Promise<void>
       addNotification(cmd.name, message)
 
       // zapsat do chatu — Mary pošle zprávu jako by ji napsala sama
-      await saveChatMessage('mary', message).catch((err) =>
+      // + zrcadlí se do Telegramu (připomínky a ranní přehled i v mobilu);
+      // ne noční údržba paměti (03:00) a ne příkazy s "telegram": false v commands.json
+      await saveChatMessage('mary', message, {
+        source: 'scheduler',
+        mirror: (cmd as any).telegram !== false && cmd.handler !== 'memory-nightly',
+      }).catch((err) =>
         console.error('[scheduler] chat save error:', err)
       )
 

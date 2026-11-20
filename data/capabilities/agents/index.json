@@ -1,41 +1,29 @@
 {
   "version": "3.0.0",
-  "lastSync": "2026-11-20T05:16:14.345Z",
+  "lastSync": "2026-11-20T19:52:23.889Z",
   "agents": [
     {
       "id": "mary-jane",
-      "number": 1,
       "folder": "mary-jane",
       "name": "Mary Jane",
-      "role": "Elite Executive Assistant & Command Router",
+      "role": "Elitní asistentka a router LOYO OS — UI chat i Telegram, povely na všechny agenty (/lopatinka, /stepan, /kosterad, /julia), poznámky, úkoly, kalendář a activity feed.",
       "category": "all",
       "team": "LOYO OS v3",
-      "status": "online",
-      "skills": [
-        "dispatcher",
-        "notes",
-        "calendar"
-      ],
+      "status": "active",
+      "skills": [],
       "tools": [
-        "rag",
-        "fs_read",
-        "fs_write"
+        "fs_read"
       ],
-      "workflow": "dispatcher",
-      "prompt_file": "01_CORE_IDENTITY.md",
-      "docs": [
-        "01_CORE_IDENTITY.md",
-        "02_CONTEXT_AND_MEMORY.md",
-        "03_COMMANDS_ROUTING.md",
-        "04_GUARDRAILS.md"
-      ],
+      "workflow": "prompt",
+      "promptFile": "",
+      "docs": [],
       "tasksToday": 0,
-      "created": "2026-08-26T09:00:00Z",
-      "lastRun": "2026-09-06T22:00:07.641Z"
+      "created": "",
+      "lastRun": "",
+      "number": 1
     },
     {
       "id": "lubor-nehleda",
-      "number": 2,
       "folder": "lubor-nehleda",
       "name": "Lubor Nehleda",
       "role": "Analytik / Lead Finder",
@@ -52,7 +40,7 @@
         "fs_read"
       ],
       "workflow": "find",
-      "prompt_file": "01_CORE_IDENTITY.md",
+      "promptFile": "",
       "docs": [
         "01_CORE_IDENTITY.md",
         "02_WORKFLOW.md",
@@ -60,11 +48,11 @@
       ],
       "tasksToday": 0,
       "created": "2026-08-28T00:00:00Z",
-      "lastRun": "2026-08-31T02:34:30.650Z"
+      "lastRun": "2026-08-31T02:34:30.650Z",
+      "number": 2
     },
     {
       "id": "julia-nehledalova",
-      "number": 3,
       "folder": "julia-nehledalova",
       "name": "Julia Nehledalová",
       "role": "Deep Research Analyst",
@@ -80,7 +68,7 @@
         "web_search"
       ],
       "workflow": "research",
-      "prompt_file": "01_CORE_IDENTITY.md",
+      "promptFile": "",
       "docs": [
         "01_CORE_IDENTITY.md",
         "02_WORKFLOW.md",
@@ -88,11 +76,11 @@
       ],
       "tasksToday": 0,
       "created": "2026-08-31T00:00:00Z",
-      "lastRun": "2026-08-31T03:14:07.634Z"
+      "lastRun": "2026-08-31T03:14:07.634Z",
+      "number": 3
     },
     {
       "id": "kosterad-fuckstein",
-      "number": 4,
       "folder": "kosterad-fuckstein",
       "name": "Koštěrad Fuckstein",
       "role": "Builder Agent — manifest generation & validation",
@@ -109,7 +97,7 @@
         "fs_read"
       ],
       "workflow": "build",
-      "prompt_file": "01_CORE_IDENTITY.md",
+      "promptFile": "",
       "docs": [
         "01_CORE_IDENTITY.md",
         "02_WORKFLOW.md",
@@ -117,11 +105,11 @@
       ],
       "tasksToday": 0,
       "created": "2026-09-05T00:00:00Z",
-      "lastRun": null
+      "lastRun": "",
+      "number": 4
     },
     {
       "id": "proto",
-      "number": 19,
       "folder": "proto",
       "name": "Proto",
       "role": "AI podpora e-shopu na pronájem (chat widget + tool calling)",
@@ -143,7 +131,7 @@
         "sendSMSorEmail"
       ],
       "workflow": "support",
-      "prompt_file": "01_CORE_IDENTITY.md",
+      "promptFile": "",
       "docs": [
         "01_CORE_IDENTITY.md",
         "02_WORKFLOW.md",
@@ -156,11 +144,11 @@
       ],
       "tasksToday": 0,
       "created": "2026-11-15T00:00:00Z",
-      "lastRun": null
+      "lastRun": "",
+      "number": 19
     },
     {
       "id": "lopatinka",
-      "number": 20,
       "folder": "lopatinka",
       "name": "Lopatinka",
       "role": "Hledačka výhodné elektroniky (Sbazar + Aukro → Telegram)",
@@ -178,7 +166,7 @@
         "fs_write"
       ],
       "workflow": "hunt",
-      "prompt_file": "01_CORE_IDENTITY.md",
+      "promptFile": "",
       "docs": [
         "01_CORE_IDENTITY.md",
         "02_WORKFLOW.md",
@@ -186,11 +174,11 @@
       ],
       "tasksToday": 0,
       "created": "2026-11-19T00:00:00Z",
-      "lastRun": null
+      "lastRun": "",
+      "number": 20
     },
     {
       "id": "stepan",
-      "number": 21,
       "folder": "stepan",
       "name": "Stěpán",
       "role": "Ocenění věci a inzerát na prodej (Sbazar + Aukro → cena + text inzerátu)",
@@ -207,7 +195,7 @@
         "fs_write"
       ],
       "workflow": "sell",
-      "prompt_file": "01_CORE_IDENTITY.md",
+      "promptFile": "",
       "docs": [
         "01_CORE_IDENTITY.md",
         "02_WORKFLOW.md",
@@ -216,7 +204,8 @@
       ],
       "tasksToday": 0,
       "created": "2026-11-20T00:00:00Z",
-      "lastRun": null
+      "lastRun": "",
+      "number": 21
     }
   ]
 }

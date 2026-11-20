@@ -1,5 +1,676 @@
 [
   {
+    "id": "9715604b-f0e6-4dbf-bc01-6ee56364ee84",
+    "ts": "2026-11-20T19:52:26.134Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn"
+  },
+  {
+    "id": "2982f805-8ea5-40f9-bc13-bc0678fb1d7a",
+    "ts": "2026-11-20T19:52:24.586Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot zastaven"
+  },
+  {
+    "id": "c28cedb5-c57b-4564-84ca-eff01bb67f52",
+    "ts": "2026-11-20T19:52:24.237Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "smazán agent: joozina-test",
+    "meta": {
+      "type": "agent",
+      "id": "joozina-test"
+    }
+  },
+  {
+    "id": "c925883e-cd53-4d62-bc53-79ef858ca220",
+    "ts": "2026-11-20T19:52:23.860Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "smazán agent: test-ps",
+    "meta": {
+      "type": "agent",
+      "id": "test-ps"
+    }
+  },
+  {
+    "id": "9f3ebe15-a06f-484b-b780-bd6a252eaaf5",
+    "ts": "2026-11-20T19:52:23.504Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "smazán agent: test-skript",
+    "meta": {
+      "type": "agent",
+      "id": "test-skript"
+    }
+  },
+  {
+    "id": "9dcc94b4-c01a-43b2-8325-6b3a3e78237c",
+    "ts": "2026-11-20T19:52:23.187Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "smazán cli: test-cli",
+    "meta": {
+      "type": "cli",
+      "id": "test-cli"
+    }
+  },
+  {
+    "id": "b1ad4c10-4cb8-4a4c-8278-c6ea71e84a5e",
+    "ts": "2026-11-20T19:52:22.873Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "smazán workflow: test-wf",
+    "meta": {
+      "type": "workflow",
+      "id": "test-wf"
+    }
+  },
+  {
+    "id": "a69055ce-e7ab-4840-988b-b8df9ab4b325",
+    "ts": "2026-11-20T19:52:22.487Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "smazán team: test-tym",
+    "meta": {
+      "type": "team",
+      "id": "test-tym"
+    }
+  },
+  {
+    "id": "74baf2eb-d8d1-470a-8cd7-d1851ac6c100",
+    "ts": "2026-11-20T19:52:22.153Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "smazán agent: test-mary",
+    "meta": {
+      "type": "agent",
+      "id": "test-mary"
+    }
+  },
+  {
+    "id": "b7a6e7d0-dec4-43f4-a752-ff8fc99124c2",
+    "ts": "2026-11-20T19:52:17.468Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /boty",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "d70b2aa4-3ba0-4b0e-b67a-553163876592",
+    "ts": "2026-11-20T19:52:02.086Z",
+    "agent": "Joozina-test",
+    "type": "system",
+    "action": "doběhl OK"
+  },
+  {
+    "id": "a84a82e9-bb9c-4a6a-a571-cffa2329c2fc",
+    "ts": "2026-11-20T19:52:01.744Z",
+    "agent": "Joozina-test",
+    "type": "system",
+    "action": "spuštěn přes Mary (mj-pozdrav.py)"
+  },
+  {
+    "id": "19a87ded-288f-42b1-a8ad-46c9fb297df2",
+    "ts": "2026-11-20T19:52:01.733Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /spust joozina-test",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "6d29c866-d186-4629-b73b-86d065bf5110",
+    "ts": "2026-11-20T19:52:01.618Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "vytvořen agent: Joozina-test (joozina-test)",
+    "meta": {
+      "type": "agent",
+      "id": "joozina-test"
+    }
+  },
+  {
+    "id": "0bc3839d-5a52-411d-8475-0ccee57838ef",
+    "ts": "2026-11-20T19:50:34.074Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "píše mj-pozdrav.py (qwen2.5-coder:32b)"
+  },
+  {
+    "id": "30990b51-d4d1-452f-8e7e-f62dafcf8513",
+    "ts": "2026-11-20T19:50:34.058Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: udělej mj-pozdrav.py na plochu, co vypíše pozdrav a kolik je hodin a pak vytvoř agenta Joo",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "a01900a0-0518-459a-963a-05bb83806bc8",
+    "ts": "2026-11-20T19:49:42.277Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /vse",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "54e9b06b-22ba-4a70-b2a2-36249c6df560",
+    "ts": "2026-11-20T19:49:41.565Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /spust joozina-test",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "0d242c75-66a5-4fdf-8857-3d3f2b0d78eb",
+    "ts": "2026-11-20T19:46:41.498Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "píše mj-pozdrav.py (qwen2.5-coder:32b)"
+  },
+  {
+    "id": "4363514f-8747-4401-a9e0-44f925c0e776",
+    "ts": "2026-11-20T19:46:41.483Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: udělej mj-pozdrav.py na plochu, co vypíše pozdrav a kolik je hodin a pak vytvoř agenta Joo",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "5060b08e-763c-4532-ae19-ee940d7bc5db",
+    "ts": "2026-11-20T19:46:41.045Z",
+    "agent": "Test PS",
+    "type": "system",
+    "action": "spuštěn přes Mary (ps)"
+  },
+  {
+    "id": "79645959-9f88-46ca-88dc-4b76907e7698",
+    "ts": "2026-11-20T19:46:40.493Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /spust test-ps",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "beef7a51-0b7b-4c5c-9eaa-70225ffba50f",
+    "ts": "2026-11-20T19:46:17.460Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /spust test-ps",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "b70cbcdb-90ae-4814-b74b-b92807481a1d",
+    "ts": "2026-11-20T19:46:17.384Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "vytvořen agent: Test PS (test-ps)",
+    "meta": {
+      "type": "agent",
+      "id": "test-ps"
+    }
+  },
+  {
+    "id": "54f79bd1-f4ac-4895-b67f-9039bb5b9ec0",
+    "ts": "2026-11-20T19:46:17.068Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /new agent Test PS - počítá soubory | ps: Get-ChildItem D:\\dev\\loyo-os\\apps | Measure-Obje",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "5bd1d8ba-6ff8-418a-a94d-73519bd625a8",
+    "ts": "2026-11-20T19:46:16.996Z",
+    "agent": "Test Skript",
+    "type": "system",
+    "action": "doběhl OK"
+  },
+  {
+    "id": "8a0d4b6d-eff1-4467-ac44-848d5a798505",
+    "ts": "2026-11-20T19:46:16.777Z",
+    "agent": "Test Skript",
+    "type": "system",
+    "action": "spuštěn přes Mary (mj_test.py)"
+  },
+  {
+    "id": "7bab0458-a34d-4225-9dc1-bb34b03d9128",
+    "ts": "2026-11-20T19:46:16.768Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /spust test-skript 10 20",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "c86adb75-204b-454f-8d63-9490576cb846",
+    "ts": "2026-11-20T19:46:16.643Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "vytvořen agent: Test Skript (test-skript)",
+    "meta": {
+      "type": "agent",
+      "id": "test-skript"
+    }
+  },
+  {
+    "id": "ea38d7ed-c638-4d12-92a7-a1738d41dce2",
+    "ts": "2026-11-20T19:46:15.777Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /new agent Test Skript - test | skript: C:\\Users\\loyo-\\AppData\\Local\\Temp\\claude\\22c0a9692",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "b3074a44-8481-4ba1-8955-f7826f0cdef3",
+    "ts": "2026-11-20T19:46:15.451Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští skript mj_test.py"
+  },
+  {
+    "id": "b6e60912-9522-46eb-a00a-02c933cbda72",
+    "ts": "2026-11-20T19:46:15.445Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /skript C:\\Users\\loyo-\\AppData\\Local\\Temp\\claude\\22c0a9692d5c0a80\\49689f35-cf65-40ab-96db-",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "44c6d9c7-d17b-4bb8-b36d-e9cdb604ee56",
+    "ts": "2026-11-20T19:44:32.565Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "píše mj_test.py (qwen2.5-coder:32b)"
+  },
+  {
+    "id": "42498002-bbc7-4478-b99f-538d83cc4291",
+    "ts": "2026-11-20T19:44:32.558Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /py C:\\Users\\loyo-\\AppData\\Local\\Temp\\claude\\22c0a9692d5c0a80\\49689f35-cf65-40ab-96db-7ab3",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "1d846245-acba-499b-98bd-6ccf77b548b4",
+    "ts": "2026-11-20T19:44:32.544Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "vypnula PowerShell"
+  },
+  {
+    "id": "5b8df6e5-f260-4d8b-ab61-30b3ea52d45c",
+    "ts": "2026-11-20T19:44:32.535Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /exit",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "0b337ef7-85a3-46d9-82b1-d70a67758fc0",
+    "ts": "2026-11-20T19:44:32.207Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula PowerShell"
+  },
+  {
+    "id": "612080f0-bbd9-4ab6-82d0-760bdc5d7ed7",
+    "ts": "2026-11-20T19:44:31.467Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /ps echo 'Příliš žluťoučký kůň PS'",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "1c5821c3-2b89-469c-a30e-eadb49e5f150",
+    "ts": "2026-11-20T19:38:43.830Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /new team Bez agentu - x",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "2c1e8277-5539-45c1-894c-f81b579a85ab",
+    "ts": "2026-11-20T19:38:43.749Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "vytvořen cli: test-cli (test-cli)",
+    "meta": {
+      "type": "cli",
+      "id": "test-cli"
+    }
+  },
+  {
+    "id": "84cbbc51-60ac-4d4a-8316-15bce099d6db",
+    "ts": "2026-11-20T19:38:43.395Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /new cli test-cli - test kostra",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "9102cfae-4bc5-4966-b278-7498273a2ddf",
+    "ts": "2026-11-20T19:38:43.289Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "vytvořen workflow: Test wf (test-wf)",
+    "meta": {
+      "type": "workflow",
+      "id": "test-wf"
+    }
+  },
+  {
+    "id": "417f113b-cb85-4502-a310-122f30f60515",
+    "ts": "2026-11-20T19:38:42.979Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /new workflow Test wf - test | kroky: lopatinka > test-mary",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "24ab02b9-e77f-4c92-9e6c-2c66dcd75d5b",
+    "ts": "2026-11-20T19:38:42.903Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "vytvořen team: Test tym (test-tym)",
+    "meta": {
+      "type": "team",
+      "id": "test-tym"
+    }
+  },
+  {
+    "id": "5d664fb5-2fab-42b3-9154-9c81098e1b3b",
+    "ts": "2026-11-20T19:38:42.578Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /new team Test tym - test | agenti: test-mary, lopatinka",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "b779f228-d59c-4ad3-ba2a-df826ee4daa5",
+    "ts": "2026-11-20T19:38:42.507Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "vytvořen agent: Test Mary (test-mary)",
+    "meta": {
+      "type": "agent",
+      "id": "test-mary"
+    }
+  },
+  {
+    "id": "e8a36645-46f2-4af2-93db-3d6bd8876270",
+    "ts": "2026-11-20T19:38:41.493Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /new agent Test Mary - smazat, jen test",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "77e9e10a-0913-4b7d-9271-881f7145a942",
+    "ts": "2026-11-20T19:38:41.473Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /new",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "4d5d398e-6954-43af-9473-095747afac6a",
+    "ts": "2026-11-20T19:38:41.460Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "vypnula PowerShell"
+  },
+  {
+    "id": "d5de711a-2c93-48fd-8e9b-78cc8e2549ad",
+    "ts": "2026-11-20T19:38:41.444Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /exit",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "c13d03d7-427c-4796-a47f-1cbbac4d88ae",
+    "ts": "2026-11-20T19:38:41.139Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula PowerShell"
+  },
+  {
+    "id": "b3bcf898-dc0c-4201-a11e-b8e844a3400a",
+    "ts": "2026-11-20T19:38:40.243Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /ps echo \"Příliš žluťoučký kůň PS\"",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "40d113a2-fded-42cb-bfdc-58112c4ff10c",
+    "ts": "2026-11-20T19:38:39.921Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: neexistujici-prikaz",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "c91f0f2f-63b2-45cb-ad87-db738a0dad30",
+    "ts": "2026-11-20T19:38:39.612Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: cd /d D:\\dev\\loyo-os && dir /b apps",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "1108ba66-2bc0-43c1-991c-c30d82d19fb4",
+    "ts": "2026-11-20T19:38:39.307Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: echo Příliš žluťoučký kůň",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "c1164151-0b7a-40eb-a27a-2c37205a0e4c",
+    "ts": "2026-11-20T19:38:39.257Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula Terminál (cmd)"
+  },
+  {
+    "id": "ae3cdd0d-facd-408e-97e8-3bbda7bcc02d",
+    "ts": "2026-11-20T19:38:38.914Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /terminal",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "8e2c64f0-b00f-4e77-a28f-cbf588b92030",
+    "ts": "2026-11-20T19:38:13.570Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "b91aa7fd-b071-4f97-8e18-e5bd43eb2bf5",
+    "ts": "2026-11-20T19:35:22.688Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: ahoj, je to zase normální chat?",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "a46477dc-e226-49fd-96d6-4b96af78865d",
+    "ts": "2026-11-20T19:35:22.670Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "vypnula Terminál (cmd)"
+  },
+  {
+    "id": "176c6290-41de-4907-b1f3-43787137ce73",
+    "ts": "2026-11-20T19:35:22.652Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /exit",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "b669ee24-ae33-423e-a82b-e281310ea938",
+    "ts": "2026-11-20T19:35:22.308Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: echo Příliš žluťoučký kůň",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "9daffe43-7cac-44dc-a09d-b333ca9a9965",
+    "ts": "2026-11-20T19:35:21.953Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: cd /d D:\\dev && dir /b loyo-os\\apps",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "a8989ebc-e28e-4f29-a015-9bdf35ea85b9",
+    "ts": "2026-11-20T19:35:21.903Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula Terminál (cmd)"
+  },
+  {
+    "id": "2a128d53-32a0-4236-8dca-dd3fd78510d1",
+    "ts": "2026-11-20T19:35:21.577Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /terminal",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "f4534539-b978-4629-8f63-e6f955cb68d5",
+    "ts": "2026-11-20T19:35:21.232Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: Get-Item neexistuje.txt",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "162eff76-bd6e-444e-8946-5d7a11aabc6e",
+    "ts": "2026-11-20T19:35:20.946Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: $x = 41; $x + 1",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "7fe0eb14-330f-4429-9918-601013ccb9d7",
+    "ts": "2026-11-20T19:35:20.604Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: cd D:\\dev\\loyo-os; (Get-ChildItem apps).Name",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "047dd837-d246-4596-a39b-f34083961c9f",
+    "ts": "2026-11-20T19:35:20.499Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula PowerShell"
+  },
+  {
+    "id": "a1e51df8-c4da-462d-9e8c-5e3a7b12efc4",
+    "ts": "2026-11-20T19:35:19.626Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /ps",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "c4a18edd-f14d-4e03-9b66-ccd4e426a9b1",
+    "ts": "2026-11-20T19:34:40.529Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "4a6e1e4a-851a-45ce-8271-113add88ba53",
+    "ts": "2026-11-20T19:34:40.507Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj marry",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
     "id": "1f1ffa51-a994-45c2-a4ea-fcf541cdad33",
     "ts": "2026-11-20T19:29:02.078Z",
     "agent": "Mary Jane",

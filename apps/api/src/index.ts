@@ -93,7 +93,7 @@ app.post('/api/run', async (req: any) => {
   const { message, source } = req.body as { message: string; source?: string }
   const userMessage = message || ''
 
-  await saveChatMessage('me', userMessage).catch(() => {})
+  await saveChatMessage('me', userMessage, { source: source ?? 'ui' }).catch(() => {})
   await logActivity({
     agent: 'Mary_Jane',
     type: 'chat',
@@ -101,9 +101,9 @@ app.post('/api/run', async (req: any) => {
     meta: { source: source ?? 'ui' },
   }).catch(() => {})
 
-  const result = await runOrchestrator(userMessage)
+  const result = await runOrchestrator(userMessage, source ?? 'ui')
 
-  await saveChatMessage('mary', result.reply).catch(() => {})
+  await saveChatMessage('mary', result.reply, { source: source ?? 'ui' }).catch(() => {})
 
   return result
 })
@@ -190,6 +190,10 @@ console.log(`[fts] reindexed ${fts.notes} notes, ${fts.tasks} tasks -> db now ${
 console.log('[manifestDb] index.db ready →', join(DATA_DIR, 'index.db'), `(${countFromDb()} capabilities)`)
   await startScheduler()
   console.log('[scheduler] registered — checking commands.json every 60s')
+
+  // Mary Jane Telegram bot naskočí s API (dřív se musel zapínat ručně v UI)
+  const { ensureMaryBot } = await import('./routes/agents.js')
+  console.log(`[mary-bot] ${await ensureMaryBot().catch((e) => `chyba: ${e?.message ?? e}`)}`)
 
   // ÚKOL 11 - Koštěrad nightly 02:00
   setInterval(async () => {

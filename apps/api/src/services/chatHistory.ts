@@ -72,6 +72,18 @@ export async function saveChatMessage(from: 'me' | 'mary', text: string, meta?: 
   // audit log — každá zpráva jako jeden JSON řádek (JSONL), nikdy se nepřepisuje
   await mkdir(HISTORY_DIR, { recursive: true })
   await appendFile(AUDIT_FILE, JSON.stringify(entry) + '\n', 'utf-8')
+
+  // Telegram = stejný chat jako UI: co se objeví v chatu, pošli i do Telegramu.
+  // Ne zprávy, které z Telegramu přišly (ty tam už jsou), ne testy, a ne když volající řekne mirror: false.
+  // Vypnout úplně: MARY_TELEGRAM_MIRROR=0 v .env.
+  if (meta?.mirror !== false && meta?.source !== 'telegram' && meta?.source !== 'test') {
+    import('./telegramNotify.js')
+      .then(async ({ envValue, sendTelegram }) => {
+        if ((await envValue('MARY_TELEGRAM_MIRROR')) === '0') return
+        await sendTelegram(from === 'me' ? `🖥️ Ty (UI): ${text}` : text)
+      })
+      .catch(() => {})
+  }
 }
 
 // ---------- načte posledních 14 dní, poskládá chronologicky ----------

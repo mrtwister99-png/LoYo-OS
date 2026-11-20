@@ -79,6 +79,27 @@ async function startDetachedNodeBot(dir: string, script: string, logName: string
   return logPath
 }
 
+// Při startu API zapne Mary Telegram bota (když je token a bot ještě neběží).
+// Vypnout jde přes MARY_TELEGRAM_AUTOSTART=0 v .env.
+export async function ensureMaryBot(): Promise<string> {
+  const off = process.env.MARY_TELEGRAM_AUTOSTART === '0' ||
+    (await readFile(resolve(DATA_DIR, '..', '.env'), 'utf8').catch(() => '')).split(/\r?\n/).some((l) => /^\s*MARY_TELEGRAM_AUTOSTART\s*=\s*['"]?0['"]?\s*$/.test(l))
+  if (off) return 'autostart vypnutý (MARY_TELEGRAM_AUTOSTART=0)'
+  const status = await maryBotStatus()
+  if (status.running) return `už běží (pid ${status.pid})`
+  if (!status.configured) return 'chybí TELEGRAM_BOT_TOKEN v .env'
+  await startDetachedNodeBot(MARY_DIR, 'telegram-bot.mjs', 'mary-telegram-bot.log')
+  for (let i = 0; i < 20; i++) {
+    await new Promise((r) => setTimeout(r, 250))
+    const next = await maryBotStatus()
+    if (next.running) {
+      await logActivity({ agent: 'Mary Jane', type: 'system', action: 'Telegram bot spuštěn se startem API' }).catch(() => {})
+      return `spuštěn (pid ${next.pid})`
+    }
+  }
+  return 'nespustil se — viz data/logs/mary-telegram-bot.log'
+}
+
 async function telegramConfigured(keys: string[] = ['TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID']): Promise<boolean> {
   if (keys.every((key) => !!process.env[key])) return true
   try {
@@ -260,6 +281,8 @@ export default async function agentRoutes(app: FastifyInstance) {
               runId: state.lastRun,
               report: state.lastReport,
               picks: Array.isArray(state.lastChatPicks) ? state.lastChatPicks : [],
+              // ostrý běh posílá tipy do Telegramu sám (i s 👍/👎) → nezdvojovat
+              mirror: !!dryRun,
             })
           } catch {
             // chat je jen doplněk — běh agenta kvůli němu nesmí selhat

@@ -8,6 +8,9 @@ import { join } from 'node:path'
 import { AGENTS_DIR, DATA_DIR } from '../lib/dataPaths.js'
 import { getAgents } from '../lib/manifestLoader.js'
 import { logActivity } from '../routes/activity.js'
+import { newUsage, parseNewKind, runNewCapability } from './capabilityCreate.js'
+import { pyCommand, runAgentCommand, scriptCommand, tryNaturalScriptIntent } from './scriptCommands.js'
+import { runInShell, SHELL_LABEL, shellStatus, startShell, stopShell, type ShellKind } from './shellSession.js'
 
 type CommandResult = { reply: string; steps: string[] }
 
@@ -266,8 +269,50 @@ async function runControlVision(): Promise<CommandResult> {
   }
 }
 
+// ---------- /terminal (cmd) a /ps (PowerShell) ----------
+async function shellCommand(kind: ShellKind, args: string): Promise<CommandResult> {
+  const name = kind === 'cmd' ? '/terminal' : '/ps'
+  const steps = [`Mary Jane: ${name}${args ? ` ${args.slice(0, 60)}` : ''}`]
+  if (/^(off|stop|exit|konec|vypni)$/i.test(args)) return exitShell()
+
+  const { started, cwd } = await startShell(kind)
+  if (started) await activity('Mary Jane', `zapnula ${SHELL_LABEL[kind]}`)
+  if (!args) {
+    return {
+      reply: [
+        `💻 ${SHELL_LABEL[kind]} ${started ? 'zapnutý' : 'už běží'} · ${cwd}`,
+        '',
+        'Teď každá tvoje zpráva = příkaz do terminálu (cd a proměnné zůstávají).',
+        `Jednorázově: ${name} <příkaz> · přepnout: ${kind === 'cmd' ? '/ps' : '/terminal'} · konec: /exit`,
+        'Povely s / (třeba /cv, /boty) fungují dál normálně.',
+      ].join('\n'),
+      steps,
+    }
+  }
+  const out = await runInShell(args)
+  return { reply: `💻 ${kind === 'cmd' ? '>' : 'PS>'} ${args}\n\n${out}`, steps }
+}
+
+function exitShell(): CommandResult {
+  const status = shellStatus()
+  const stopped = stopShell()
+  if (stopped && status) activity('Mary Jane', `vypnula ${SHELL_LABEL[status.kind]}`)
+  return {
+    reply: stopped && status ? `🔌 ${SHELL_LABEL[status.kind]} vypnutý. Zase si povídáme normálně.` : 'Žádný terminál neběží.',
+    steps: ['Mary Jane: /exit'],
+  }
+}
+
+const SHELL_COMMANDS = /^\/(terminal|terminál|cmd|ps|powershell|exit)(\s|$)/i
+
+// Zprávy pro terminál jdou mimo frontu orchestrátoru — jinak by čekaly za dlouhým researchem.
+export function isShellMessage(message: string): boolean {
+  const t = message.trim()
+  return SHELL_COMMANDS.test(t) || (!!shellStatus() && !!t && !t.startsWith('/'))
+}
+
 // ---------- /vse — seznam všech povelů ----------
-function listCommands(): CommandResult {
+async function listCommands(): Promise<CommandResult> {
   return {
     reply: [
       '📖 Všechny povely Mary Jane',
@@ -284,6 +329,20 @@ function listCommands(): CommandResult {
       '',
       'PC',
       '/controlvision (/cv) — spustí ControlVision server (ovládání PC z telefonu)',
+      '/terminal [příkaz] — zapne terminál (cmd), pak každá zpráva = příkaz',
+      '/ps [příkaz] — totéž v PowerShellu',
+      '/exit — vypne terminál',
+      '/py <soubor.py> - <zadání> — Mary napíše Python skript (bez cesty = plocha)',
+      '/skript <soubor> [argumenty] — spustí .py .ps1 .cmd .bat .mjs .js',
+      '/spust <agent> [argumenty] — spustí skript / příkaz agenta',
+      'nebo větou: „udělej kurzy.py na plochu, co … a vytvoř agenta Joozina, ať ho použije“',
+      '',
+      'NOVÉ VĚCI',
+      '/new agent <jméno> - <co dělá>',
+      '/new team <jméno> - <účel> | agenti: a, b',
+      '/new workflow <jméno> - <popis> | kroky: a > b',
+      '/new cli <jméno> - <co dělá>',
+      '/new mcp <téma> · /new skill <téma> — s researchem',
       '',
       'SYSTÉM',
       '/vse — tento seznam',
@@ -291,10 +350,29 @@ function listCommands(): CommandResult {
       '/id — chat id pro .env',
       '/tg-help — nastavení bota',
       '',
+      ...(await commandsJsonSection()),
       'Cokoliv jiného → Mary to pošle orchestrátoru.',
     ].join('\n'),
     steps: ['Mary Jane: /vse'],
   }
+}
+
+// Všechno z commands.json (poznámky, úkoly, připomínky, vlastní příkazy…) — nové se tu objeví samy.
+const LISTED_ABOVE = new Set(['/vse', '/boty', '/new', '/terminal', '/ps', '/exit', '/cv', '/controlvision', '/py', '/skript', '/spust'])
+async function commandsJsonSection(): Promise<string[]> {
+  const data = await readJson(join(AGENTS_DIR, 'mary-jane', 'commands.json'), { commands: [] })
+  const cmds = (Array.isArray(data?.commands) ? data.commands : [])
+    .filter((c: any) => c?.name && !LISTED_ABOVE.has(c.name))
+  if (!cmds.length) return []
+  const when = (s: any) =>
+    s?.type === 'hourly' ? ` ⏰ každou hodinu ${s.from ?? 0}–${s.to ?? 23} h`
+      : s?.type === 'daily' ? ` ⏰ denně ${s.at}`
+        : ''
+  return [
+    'PŘÍKAZY (commands.json)',
+    ...cmds.map((c: any) => `${c.name}${c.enabled === false ? ' ⏸' : ''} — ${c.description ?? ''}${when(c.schedule)}`),
+    '',
+  ]
 }
 
 // ---------- /zapni vše ----------
@@ -341,6 +419,20 @@ async function runAgentsCommand(args: string): Promise<CommandResult> {
 // ---------- router ----------
 export async function tryAgentCommand(message: string): Promise<CommandResult | null> {
   const trimmed = message.trim()
+
+  // režim terminálu: obyčejný text (bez /) jde rovnou do shellu
+  const shell = shellStatus()
+  if (shell && trimmed && !trimmed.startsWith('/')) {
+    const out = await runInShell(trimmed)
+    return { reply: `💻 ${shell.kind === 'cmd' ? '>' : 'PS>'} ${trimmed}\n\n${out}`, steps: [`${SHELL_LABEL[shell.kind]}: ${trimmed.slice(0, 60)}`] }
+  }
+
+  // „udělej neco.py na plochu … a vytvoř agenta Joozina, ať ho použije“
+  if (!trimmed.startsWith('/')) {
+    const natural = await tryNaturalScriptIntent(trimmed).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: [] as string[] }))
+    if (natural) return natural
+  }
+
   const match = trimmed.match(/^\/([A-Za-zÀ-ž0-9-]+)(?:\s+([\s\S]*))?$/)
   if (!match) return null
 
@@ -377,6 +469,33 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
     case 'controlvision':
     case 'cv':
       return runControlVision()
+    case 'terminal':
+    case 'cmd':
+      return shellCommand('cmd', args)
+    case 'ps':
+    case 'powershell':
+      return shellCommand('ps', args)
+    case 'exit':
+      return exitShell()
+    case 'py':
+    case 'python':
+      return pyCommand(args)
+    case 'skript':
+    case 'script':
+      return scriptCommand(args)
+    case 'spust':
+    case 'agent':
+      return runAgentCommand(args)
+    case 'new': {
+      if (!args) return { reply: newUsage(), steps: ['Mary Jane: /new'] }
+      const parsed = parseNewKind(args)
+      // mcp / skill (a čísla 3, 4) dál řeší orchestrátor s researchem
+      if (!parsed) return null
+      return runNewCapability(parsed.kind, parsed.rest).catch((err) => ({
+        reply: `❌ Založení selhalo: ${err?.message ?? err}`,
+        steps: [`Mary Jane: /new ${parsed.kind}`],
+      }))
+    }
     default:
       return null
   }
