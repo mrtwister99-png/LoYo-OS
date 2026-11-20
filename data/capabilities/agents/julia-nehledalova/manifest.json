@@ -1,19 +1,35 @@
 {
   "id": "julia-nehledalova",
   "type": "agent",
-  "displayName": "Julia Nehledalova Agent",
-  "version": "1.0.0",
+  "displayName": "Julia Nehledalová",
+  "version": "1.1.0",
   "status": "active",
-  "description": "Agent julia-nehledalova - auto-fixed manifest",
-  "runtime": "node",
-  "entrypoint": "../../../../agents/julia-nehledalova/index.ts",
-  "packageDir": "agents/julia-nehledalova",
-  "permissions": [],
-  "tags": [
-    "julia-nehledalova",
-    "agent"
+  "description": "Deep Research Analyst — hloubkové rešerše na živém webu: prohledá DuckDuckGo, stáhne obsah nejlepších stránek a napíše report s citacemi do data/reports/.",
+  "runtime": "prompt",
+  "entrypoint": "./01_CORE_IDENTITY.md",
+  "model": "qwen3:8b",
+  "permissions": [
+    "net:fetch:*",
+    "fs:write:data/reports/*",
+    "fs:read:data/reports/*"
   ],
-  "createdAt": "2026-09-02T00:00:00Z",
-  "updatedAt": "2026-09-02T00:00:00Z",
+  "commands": [
+    "/research",
+    "/julia"
+  ],
+  "specialization": [
+    "deep-research",
+    "web-analysis",
+    "report-writing"
+  ],
+  "tags": [
+    "julia",
+    "research",
+    "web",
+    "reports"
+  ],
+  "category": "research",
+  "createdAt": "2026-08-31T00:00:00Z",
+  "updatedAt": "2026-11-20T06:00:00Z",
   "number": 3
 }

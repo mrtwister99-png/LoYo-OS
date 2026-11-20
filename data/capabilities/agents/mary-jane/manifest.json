@@ -1,19 +1,48 @@
 {
   "id": "mary-jane",
   "type": "agent",
-  "displayName": "Mary Jane Agent",
-  "version": "1.0.0",
+  "displayName": "Mary Jane",
+  "version": "1.1.0",
   "status": "active",
-  "description": "Agent mary-jane - auto-fixed manifest",
-  "runtime": "node",
-  "entrypoint": "../../../../agents/mary-jane/index.ts",
-  "packageDir": "agents/mary-jane",
-  "permissions": [],
+  "description": "Elitní asistentka a router LOYO OS — UI chat i Telegram, povely na všechny agenty (/lopatinka, /stepan, /kosterad, /julia), poznámky, úkoly, kalendář a activity feed.",
+  "runtime": "prompt",
+  "entrypoint": "./01_CORE_IDENTITY.md",
+  "model": "qwen3:8b",
+  "command": "/mary",
+  "permissions": [
+    "fs:read:data/ja/*",
+    "fs:write:data/ja/*",
+    "net:fetch:*"
+  ],
+  "commands": [
+    "/help",
+    "/note",
+    "/task",
+    "/status",
+    "/find",
+    "/research",
+    "/julia",
+    "/agents",
+    "/lopatinka",
+    "/stepan",
+    "/kosterad",
+    "/activity",
+    "/boty"
+  ],
+  "specialization": [
+    "routing",
+    "assistant",
+    "telegram",
+    "agents-control"
+  ],
   "tags": [
     "mary-jane",
-    "agent"
+    "router",
+    "assistant",
+    "telegram"
   ],
+  "category": "all",
   "createdAt": "2026-09-02T00:00:00Z",
-  "updatedAt": "2026-09-02T00:00:00Z",
+  "updatedAt": "2026-11-20T06:00:00Z",
   "number": 1
 }

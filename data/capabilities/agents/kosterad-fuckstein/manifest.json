@@ -1,19 +1,33 @@
 {
   "id": "kosterad-fuckstein",
   "type": "agent",
-  "displayName": "Kosterad Fuckstein Agent",
-  "version": "1.0.0",
+  "displayName": "Koštěrad Fuckstein",
+  "version": "1.1.0",
   "status": "active",
-  "description": "Agent kosterad-fuckstein - auto-fixed manifest",
-  "runtime": "node",
-  "entrypoint": "../../../../agents/kosterad-fuckstein/index.ts",
-  "packageDir": "agents/kosterad-fuckstein",
-  "permissions": [],
-  "tags": [
-    "kosterad-fuckstein",
-    "agent"
+  "description": "Builder Agent — generuje a validuje manifesty z Builder UI, opravuje chybějící tools podle failed runs a drží reputaci agentů.",
+  "runtime": "prompt",
+  "entrypoint": "./02_WORKFLOW.md",
+  "model": "qwen3:8b",
+  "permissions": [
+    "fs:read:data/capabilities/*",
+    "fs:write:data/capabilities/*",
+    "fs:read:data/logs/runs/*"
   ],
-  "createdAt": "2026-09-02T00:00:00Z",
-  "updatedAt": "2026-09-02T00:00:00Z",
+  "commands": [
+    "/kosterad"
+  ],
+  "specialization": [
+    "manifest-generation",
+    "validation",
+    "self-repair"
+  ],
+  "tags": [
+    "kosterad",
+    "builder",
+    "internal"
+  ],
+  "category": "internal",
+  "createdAt": "2026-09-05T00:00:00Z",
+  "updatedAt": "2026-11-20T06:00:00Z",
   "number": 4
 }
