@@ -1,0 +1,40 @@
+{
+  "id": "lopatinka",
+  "type": "agent",
+  "displayName": "Lopatinka",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Hledač výhodné elektroniky na Sbazaru a Aukru. Rozpočet 3 500 Kč na kus, vždy vybere 3 nejvýhodnější nabídky (cena vs. medián trhu) a pošle je do Telegramu. Běží lokálně i jako cloudový cron.",
+  "runtime": "node",
+  "entrypoint": "./run.mjs",
+  "model": "qwen3:8b",
+  "permissions": [
+    "net:fetch:www.sbazar.cz",
+    "net:fetch:aukro.cz",
+    "net:fetch:api.telegram.org",
+    "fs:read:data/capabilities/agents/lopatinka",
+    "fs:write:data/capabilities/agents/lopatinka",
+    "fs:write:data/reports"
+  ],
+  "tools": [
+    "web_fetch",
+    "telegram_send",
+    "fs_write"
+  ],
+  "tags": [
+    "bazar",
+    "elektronika",
+    "sbazar",
+    "aukro",
+    "telegram",
+    "slevy",
+    "cloud"
+  ],
+  "category": "shopping",
+  "endpoints": {
+    "run": "POST /api/agents/lopatinka/run"
+  },
+  "number": 20,
+  "createdAt": "2026-11-19T00:00:00Z",
+  "updatedAt": "2026-11-19T00:00:00Z"
+}
