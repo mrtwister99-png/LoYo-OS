@@ -534,6 +534,8 @@ fn sync_agents_from_fs() -> Result<AgentIndex, String> {
             if !path.is_dir() { continue; }
             let folder_name = path.file_name().unwrap().to_string_lossy().to_string();
             if folder_name.starts_with('.') || folder_name == "index.json" { continue; }
+            // pomocné složky (např. lib se sdíleným kódem) nejsou agenti
+            if !path.join("manifest.json").exists() && !path.join("01_CORE_IDENTITY.md").exists() { continue; }
             let mut docs = Vec::new();
             if let Ok(doc_entries) = fs::read_dir(&path) {
                 for d in doc_entries.flatten() {

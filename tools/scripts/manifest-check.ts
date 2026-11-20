@@ -37,6 +37,11 @@ async function checkAllManifests(): Promise<void>
 
       const manifestPath = join(typeDir, id, 'manifest.json')
 
+      // pomocné složky bez manifestu (např. agents/lib se sdíleným kódem) nejsou capability
+      const isDir = (await fs.stat(join(typeDir, id)).catch(() => null))?.isDirectory()
+      if (!isDir) continue
+      if (!(await fs.stat(manifestPath).catch(() => null))) continue
+
       try {
         const raw = await fs.readFile(manifestPath, 'utf-8')
         const json = JSON.parse(raw)
@@ -85,6 +90,9 @@ async function checkAllManifests(): Promise<void>
     const agentsDir = join(CAPABILITIES_DIR, 'agents')
     const folderIds = (await fs.readdir(agentsDir).catch(() => []))
       .filter(f => !f.startsWith('.') && f !== 'index.json')
+    const folderIdsWithManifest: string[] = []
+    for (const f of folderIds) if (await fs.stat(join(agentsDir, f, 'manifest.json')).catch(() => null)) folderIdsWithManifest.push(f)
+    folderIds.splice(0, folderIds.length, ...folderIdsWithManifest)
 
     console.log('\n━━━ KŘÍŽOVÁ KONTROLA index.json vs složky ━━━━━━━━━━━━━\n')
 

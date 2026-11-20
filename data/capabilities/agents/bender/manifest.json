@@ -22,8 +22,8 @@
   "permissions": [
     "fs:read:data/capabilities/agents/bender/*",
     "fs:write:data/capabilities/agents/bender/*",
-    "mcp:blender:*",
-    "net:local:9876",
+    "exec:mcp/blender",
+    "net:fetch:localhost:9876",
     "fs:write:data/reports/bender/*",
     "fs:write:data/reports/bender/kod/*",
     "fs:read:data/capabilities/mcp/blender/*"

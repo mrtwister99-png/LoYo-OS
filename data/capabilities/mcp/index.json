@@ -14,7 +14,7 @@
         "list_directory",
         "delete_file"
       ],
-      "number": "4_01"
+      "number": 1
     },
     {
       "id": "blender",
@@ -31,7 +31,7 @@
         "render_viewport_to_path",
         "get_screenshot_of_area_as_image"
       ],
-      "number": "4_02"
+      "number": 2
     }
   ]
 }

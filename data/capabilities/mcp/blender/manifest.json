@@ -10,15 +10,57 @@
   "packageDir": "capabilities/mcp/blender",
   "command": "uv --directory D:/dev/loyo-os/data/capabilities/mcp/blender/upstream/mcp run blender-mcp",
   "transport": "stdio",
-  "number": "4_02",
+  "number": 2,
   "tools": [
-    "get_blendfile_summary_path_info",
-    "get_objects_summary",
-    "get_object_detail_summary",
-    "execute_blender_code",
-    "render_thumbnail_to_path",
-    "render_viewport_to_path",
-    "get_screenshot_of_area_as_image"
+    {
+      "name": "get_blendfile_summary_path_info",
+      "description": "get blendfile summary path info",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_objects_summary",
+      "description": "get objects summary",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_object_detail_summary",
+      "description": "get object detail summary",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "execute_blender_code",
+      "description": "execute blender code",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "render_thumbnail_to_path",
+      "description": "render thumbnail to path",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "render_viewport_to_path",
+      "description": "render viewport to path",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_screenshot_of_area_as_image",
+      "description": "get screenshot of area as image",
+      "inputSchema": {
+        "type": "object"
+      }
+    }
   ],
   "upstream": "https://projects.blender.org/lab/blender_mcp.git",
   "addedAt": "2026-11-05"

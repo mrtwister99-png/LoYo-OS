@@ -99,7 +99,20 @@ async function main(): Promise<void>
     .replace(/\{\{createdAt\}\}/g, now)
     .replace(/\{\{updatedAt\}\}/g, now)
 
-  await fs.writeFile(join(targetDir, 'manifest.json'), manifest, 'utf-8')
+  // číslo: další volné v rámci typu (Mary = agent 1, každý nový +1). Dřív chybělo → agent měl 0.
+  let maxNumber = 0
+  for (const d of await fs.readdir(join(CAPABILITIES_DIR, typeDir)).catch(() => [] as string[])) {
+    if (d === id) continue
+    try {
+      const n = Number(JSON.parse(await fs.readFile(join(CAPABILITIES_DIR, typeDir, d, 'manifest.json'), 'utf-8')).number)
+      if (Number.isFinite(n) && n > maxNumber) maxNumber = n
+    } catch {}
+  }
+  const number = maxNumber + 1
+  const manifestJson = JSON.parse(manifest)
+  manifestJson.number = number
+
+  await fs.writeFile(join(targetDir, 'manifest.json'), JSON.stringify(manifestJson, null, 2), 'utf-8')
 
   // MD soubory
   await fs.writeFile(join(targetDir, '01_CORE_IDENTITY.md'), `# 01_CORE_IDENTITY.md: Kdo jsi\n\n## Základní identita\n- **Jméno:** ${displayName}\n- **Role:** doplň\n`, 'utf-8')
@@ -133,14 +146,14 @@ async function main(): Promise<void>
       // agent má bohatší záznam, ostatní typy minimální
       const entry = type === 'agent'
         ? {
-            id, folder: id, name: displayName, role: 'doplň',
+            id, number, folder: id, name: displayName, role: 'doplň',
             category: 'general', team: 'LOYO OS v2', status: 'online',
             skills: [], tools: [], workflow: 'prompt',
             prompt_file: '01_CORE_IDENTITY.md',
             docs: ['01_CORE_IDENTITY.md', '02_WORKFLOW.md', '03_GUARDRAILS.md'],
             tasksToday: 0, created: now, lastRun: null,
           }
-        : { id, name: displayName, status: 'active', created: now }
+        : { id, number, name: displayName, status: 'active', created: now }
 
       idx[indexDef.key].push(entry)
       idx.lastSync = now

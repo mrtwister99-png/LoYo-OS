@@ -1,5 +1,75 @@
 [
   {
+    "id": "a5ae1963-c35b-4ca9-afe6-62d887f1f5bb",
+    "ts": "2026-11-20T20:11:54.118Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list 4",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d1bb49e6-6f3d-4c9f-9129-d41146d9b2ed",
+    "ts": "2026-11-20T20:11:39.738Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list 5",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "506cf45e-2756-41a3-8b79-5543b318371e",
+    "ts": "2026-11-20T20:11:29.460Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0215054d-e39b-4fb0-ae1c-a71ea7d3b834",
+    "ts": "2026-11-20T20:01:37.304Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "6062381e-9f81-49a6-9443-ca50e12cab46",
+    "ts": "2026-11-20T20:00:55.289Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "7d43ba3e-6478-48af-84ec-e9220704eed2",
+    "ts": "2026-11-20T19:53:08.092Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "ef0c4808-b518-45b6-a873-875c66bd5cb7",
+    "ts": "2026-11-20T19:52:58.195Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /boty",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
     "id": "9715604b-f0e6-4dbf-bc01-6ee56364ee84",
     "ts": "2026-11-20T19:52:26.134Z",
     "agent": "Mary Jane",
