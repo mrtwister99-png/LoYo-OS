@@ -134,6 +134,13 @@ export async function reindexCapabilities(): Promise<ManifestCache> {
   syncDbWithIds(caps.map(c => c.id));
   cache = { loadedAt: now, capabilities: caps, errors };
 
+  // indexy pro UI: doplnit všechno, co má manifest (Skills, MCP, Týmy, Workflows, Loopy čtou jen index)
+  try {
+    const { syncAllIndexes } = await import('../routes/capabilities.js');
+    const changed = await syncAllIndexes(caps as any[]);
+    if (changed.length) console.log(`[loader] index.json doplněn: ${changed.join(', ')}`);
+  } catch (e: any) { console.warn('[loader] sync indexů selhal', e?.message ?? e); }
+
   // ÚKOL 8 - auto-commit po každém reindexu (neblokuje response)
   const { autoCommitInBackground } = await import('./gitAutoCommit.js');
   autoCommitInBackground(`auto: reindex ${caps.length} caps`);

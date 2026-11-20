@@ -42,7 +42,7 @@ function indexRecord(type: string, m: any): Record<string, unknown> {
     case 'agent': return { ...base, folder: m.id, name, role: m.role ?? m.description ?? '', category: 'all', team: '', status: 'online', skills: [], tools: [], workflow: '', promptFile: '', docs: [], tasksToday: 0, created: m.createdAt ?? new Date().toISOString() };
     case 'team': return { ...base, name, desc: m.description ?? '', color: '#ff6f00', status: 'ACTIVE', purpose: m.description ?? '', agents: Array.isArray(m.members) ? m.members : [], ragFiles: [], canCollaborateWith: [], workflows: [], loops: [], createdAt: m.createdAt ?? new Date().toISOString() };
     case 'skill': return { ...base, name, desc: m.description ?? '', folder: m.id, file: m.entrypoint ?? '', category: 'all', status: m.status ?? 'draft', version: m.version ?? '1.0.0' };
-    case 'mcp': return { ...base, name, command: m.entrypoint ?? '', status: m.status ?? 'draft', tools: Array.isArray(m.tools) ? m.tools.map((t: any) => (typeof t === 'string' ? t : t?.name)).filter(Boolean) : [] };
+    case 'mcp': return { ...base, name, desc: m.description ?? '', command: m.entrypoint ?? '', status: m.status ?? 'draft', tools: Array.isArray(m.tools) ? m.tools.map((t: any) => (typeof t === 'string' ? t : t?.name)).filter(Boolean) : [] };
     case 'loop': return { ...base, name, desc: m.description ?? '', status: m.status ?? 'draft', schedule: typeof m.schedule === 'string' ? m.schedule : '', agent: m.agent ?? '', enabled: m.enabled ?? true, category: 'all' };
     default: return { ...base, name, desc: m.description ?? '', status: m.status ?? 'draft', steps: [], lastRun: '', createdAt: m.createdAt ?? new Date().toISOString() };
   }
@@ -84,6 +84,47 @@ async function syncIndexFromManifest(type: string, m: any): Promise<void> {
   }
   idx.lastSync = new Date().toISOString();
   await fs.writeFile(p, JSON.stringify(idx, null, 2), 'utf-8');
+}
+
+// Po každém reindexu: každá capability s manifestem musí být i v index.json svého typu,
+// jinak ji UI (Skills, MCP, Týmy, Workflows, Loopy čtou jen index přes Tauri) neuvidí.
+// Zapisuje jen při skutečné změně — API má na data/ watcher, který spouští reindex.
+export async function syncAllIndexes(caps: any[]): Promise<string[]> {
+  const changed: string[] = [];
+  const byType: Record<string, any[]> = {};
+  for (const c of caps) {
+    const fp = String(c._filePath ?? '').replace(/\\/g, '/');
+    const folder = TYPE_FOLDER[c.type];
+    // jen data/capabilities/<typ>/<id>/manifest.json (ne vnořené upstream/… manifesty)
+    if (!folder || !INDEX_KEY[c.type] || !fp.endsWith(`/${folder}/${c.id}/manifest.json`)) continue;
+    (byType[c.type] ??= []).push(c);
+  }
+  for (const [type, list] of Object.entries(byType)) {
+    const key = INDEX_KEY[type];
+    const p = join(DATA_DIR, TYPE_FOLDER[type], 'index.json');
+    let idx: any = { version: '2.0', lastSync: '', [key]: [] };
+    try { idx = JSON.parse(await fs.readFile(p, 'utf-8')); } catch {}
+    if (!Array.isArray(idx[key])) idx[key] = [];
+    const before = JSON.stringify(idx[key]);
+    for (const m of list) {
+      const rec: any = indexRecord(type, m);
+      const i = idx[key].findIndex((x: any) => x.id === m.id);
+      if (i < 0) { idx[key].push(rec); continue; }
+      const keep = idx[key][i];
+      const upd: any = { ...keep, number: rec.number };
+      if (!keep.name) upd.name = rec.name;
+      if (type === 'mcp' && !keep.desc && rec.desc) upd.desc = rec.desc;
+      if ((type === 'skill' || type === 'workflow' || type === 'loop' || type === 'team') && !keep.desc && rec.desc) upd.desc = rec.desc;
+      idx[key][i] = upd;
+    }
+    idx[key].sort((a: any, b: any) => (Number(a.number) || 9999) - (Number(b.number) || 9999));
+    if (JSON.stringify(idx[key]) !== before) {
+      idx.lastSync = new Date().toISOString();
+      await fs.writeFile(p, JSON.stringify(idx, null, 2), 'utf-8');
+      changed.push(type);
+    }
+  }
+  return changed;
 }
 
 function schemaWarnings(type: string, m: unknown): string[] {

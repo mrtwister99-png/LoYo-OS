@@ -1,5 +1,299 @@
 [
   {
+    "id": "db6bebd9-0d52-449a-87d4-14e8c531530c",
+    "ts": "2026-11-20T20:47:38.431Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "a515fc10-683e-42c3-ab4b-d7dec7e1c26f",
+    "ts": "2026-11-20T20:45:03.592Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: přečti D:\\dev\\loyo-os\\03todolist.md",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "29da9bcf-4bd3-405e-8eaf-392b2b331e1b",
+    "ts": "2026-11-20T20:45:03.577Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: ukaž mi co je v dokumentech",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "65e953cd-cb9e-4a58-a021-038548b2666e",
+    "ts": "2026-11-20T20:45:03.561Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: co mám ve stažených?",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "10622336-ce80-487b-962b-7a728ffcdf0d",
+    "ts": "2026-11-20T20:45:03.496Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: pouzij filesystem marry a vypis mi vsechny soubory co jsou na plose",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "7399ba80-b393-4e09-a801-ab5ee55f0b68",
+    "ts": "2026-11-20T20:44:22.671Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /ls projekt",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "dd809d40-e954-4936-a935-7ec4fa55bc3b",
+    "ts": "2026-11-20T20:44:22.647Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /cat D:\\dev\\loyo-os\\data\\lib\\pricing.mjs",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "c6aa87b6-9039-4849-adbd-121a3912d8d0",
+    "ts": "2026-11-20T20:44:22.495Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /najdi .lnk v plocha",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "617b3066-87c6-4437-bf15-2092bbb8e00a",
+    "ts": "2026-11-20T20:44:19.043Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: co mám ve stažených?",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "d0a58884-2980-42a1-a8ee-3a094809eb55",
+    "ts": "2026-11-20T20:44:16.258Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: pouzij filesystem marry a vypis mi vsechny soubory co jsou na plose",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "c81b3121-56d2-4097-9054-0e16e392af46",
+    "ts": "2026-11-20T20:41:46.648Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: A) Chci vypsat soubory na **tvém** pracovním stole (locally",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "a6a75ed9-6aea-4cbd-a9bf-82332da9fc76",
+    "ts": "2026-11-20T20:41:11.832Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: A) Chceš vypsat soubory na **tvém** pracovním stole (locally)?",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "0c5bf4d6-fb56-4bbd-94df-7419e9bdadba",
+    "ts": "2026-11-20T20:40:47.185Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: chci vypsat **všechny soubory na plochě** (např. `ls ~/Desktop`)?",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "1e076e09-8c59-4594-8fba-b143bb9d5341",
+    "ts": "2026-11-20T20:40:11.404Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: edělal jsem: ActivityResultLauncher vyžaduje AndroidX, což projekt zakazuje. java.time vyž",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "23e0d4be-927d-4307-922d-6b62f0946542",
+    "ts": "2026-11-20T20:39:39.462Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: A",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "f229aa08-e8ef-4e60-9152-492dd807b8cf",
+    "ts": "2026-11-20T20:38:53.454Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: chci soubory na plose vsehcny vypsat ...",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "d4322c0a-a8e6-4b35-bb66-239cd323d2bd",
+    "ts": "2026-11-20T20:38:11.764Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: pouzij filesystem marry a  vypis mi vsehcny soubory co jsou na plose ...",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "6d68eda6-d131-40b7-950e-05e77055f080",
+    "ts": "2026-11-20T20:36:13.287Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /agents",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "b384132b-605c-4b1a-a57d-00cef0a29c62",
+    "ts": "2026-11-20T20:35:44.076Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 4",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "18ab0784-657a-4865-a204-431af63f7741",
+    "ts": "2026-11-20T20:34:01.864Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "224f910c-ec8f-451e-b077-889f6bad22ba",
+    "ts": "2026-11-20T20:31:41.482Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 3",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "2b05714f-b398-433e-b334-d2602e085f5f",
+    "ts": "2026-11-20T20:31:20.393Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 8",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "40bf8a11-4ed6-4c5e-8455-f3ea622be169",
+    "ts": "2026-11-20T20:31:20.386Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 7",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "662b20a3-77cd-4b7e-8865-674b49694ebc",
+    "ts": "2026-11-20T20:31:20.379Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 6",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "69f5ad16-2ea4-48ad-8272-8d869f853143",
+    "ts": "2026-11-20T20:31:20.372Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 5",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "3287ce4c-d69f-42f8-a1cb-acd0e0f5a50a",
+    "ts": "2026-11-20T20:31:20.365Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 4",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "6436eccc-5557-4437-87d4-939ab1ff6a1d",
+    "ts": "2026-11-20T20:31:20.357Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 3",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "717ce3fd-b449-423c-921d-89eaab664499",
+    "ts": "2026-11-20T20:31:20.350Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 2",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "998ce02c-82b7-46ab-bab8-9d2aa2276399",
+    "ts": "2026-11-20T20:31:20.340Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list 1",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "dcf932d1-1eb2-4d3c-80ab-b84cd82b3dd0",
+    "ts": "2026-11-20T20:31:20.308Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /list",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
     "id": "a5ae1963-c35b-4ca9-afe6-62d887f1f5bb",
     "ts": "2026-11-20T20:11:54.118Z",
     "agent": "Mary_Jane",

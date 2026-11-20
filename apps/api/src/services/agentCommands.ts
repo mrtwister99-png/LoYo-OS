@@ -9,6 +9,7 @@ import { AGENTS_DIR, DATA_DIR } from '../lib/dataPaths.js'
 import { getAgents } from '../lib/manifestLoader.js'
 import { logActivity } from '../routes/activity.js'
 import { newUsage, parseNewKind, runNewCapability } from './capabilityCreate.js'
+import { findFiles, listDirectory, readFileCommand, tryNaturalFileIntent } from './fileCommands.js'
 import { pyCommand, runAgentCommand, scriptCommand, tryNaturalScriptIntent } from './scriptCommands.js'
 import { runInShell, SHELL_LABEL, shellStatus, startShell, stopShell, type ShellKind } from './shellSession.js'
 
@@ -332,6 +333,8 @@ async function listCommands(): Promise<CommandResult> {
       '/terminal [příkaz] — zapne terminál (cmd), pak každá zpráva = příkaz',
       '/ps [příkaz] — totéž v PowerShellu',
       '/exit — vypne terminál',
+      '/ls [plocha|stažené|dokumenty|cesta] — co je ve složce (nebo větou: „vypiš soubory na ploše“)',
+      '/cat <soubor> — přečte textový soubor · /najdi <název> [v složka] — hledá soubory',
       '/py <soubor.py> - <zadání> — Mary napíše Python skript (bez cesty = plocha)',
       '/skript <soubor> [argumenty] — spustí .py .ps1 .cmd .bat .mjs .js',
       '/spust <agent> [argumenty] — spustí skript / příkaz agenta',
@@ -358,7 +361,7 @@ async function listCommands(): Promise<CommandResult> {
 }
 
 // Všechno z commands.json (poznámky, úkoly, připomínky, vlastní příkazy…) — nové se tu objeví samy.
-const LISTED_ABOVE = new Set(['/vse', '/boty', '/new', '/terminal', '/ps', '/exit', '/cv', '/controlvision', '/py', '/skript', '/spust'])
+const LISTED_ABOVE = new Set(['/vse', '/boty', '/new', '/terminal', '/ps', '/exit', '/cv', '/controlvision', '/py', '/skript', '/spust', '/ls', '/cat', '/najdi'])
 async function commandsJsonSection(): Promise<string[]> {
   const data = await readJson(join(AGENTS_DIR, 'mary-jane', 'commands.json'), { commands: [] })
   const cmds = (Array.isArray(data?.commands) ? data.commands : [])
@@ -431,6 +434,9 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
   if (!trimmed.startsWith('/')) {
     const natural = await tryNaturalScriptIntent(trimmed).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: [] as string[] }))
     if (natural) return natural
+    // „vypiš soubory na ploše“, „přečti plocha/x.txt“ — rovnou udělat, ne se vyptávat
+    const files = await tryNaturalFileIntent(trimmed).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: [] as string[] }))
+    if (files) return files
   }
 
   const match = trimmed.match(/^\/([A-Za-zÀ-ž0-9-]+)(?:\s+([\s\S]*))?$/)
@@ -486,6 +492,19 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
     case 'spust':
     case 'agent':
       return runAgentCommand(args)
+    case 'ls':
+    case 'dir':
+    case 'soubory':
+    case 'slozka':
+      return listDirectory(args).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: ['Mary Jane: /ls'] }))
+    case 'cat':
+    case 'precti':
+    case 'otevri':
+      if (!args) return { reply: 'Jak na to: /cat <soubor> — např. /cat plocha/poznamky.txt', steps: ['Mary Jane: /cat'] }
+      return readFileCommand(args).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: ['Mary Jane: /cat'] }))
+    case 'najdi':
+    case 'hledej':
+      return findFiles(args).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: ['Mary Jane: /najdi'] }))
     case 'new': {
       if (!args) return { reply: newUsage(), steps: ['Mary Jane: /new'] }
       const parsed = parseNewKind(args)

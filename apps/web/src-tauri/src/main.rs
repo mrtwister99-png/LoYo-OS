@@ -28,6 +28,16 @@ fn teams_base()     -> String { format!("{}/capabilities/teams",     data_root()
 fn workflows_base() -> String { format!("{}/capabilities/workflows", data_root()) }
 
 // další volné pořadové číslo v typu (pro nové položky)
+// číslo v indexu: 2, "2" i staré "4_02" → 2 (jinak jeden špatný záznam shodí celou stránku)
+fn de_opt_num<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Option<u32>, D::Error> {
+    let v: Option<serde_json::Value> = Option::deserialize(d)?;
+    Ok(match v {
+        Some(serde_json::Value::Number(n)) => n.as_u64().map(|x| x as u32),
+        Some(serde_json::Value::String(s)) => s.rsplit(|c| c == '_' || c == '-').next().and_then(|x| x.trim().parse::<u32>().ok()),
+        _ => None,
+    })
+}
+
 fn next_number(used: impl Iterator<Item = Option<u32>>) -> u32 {
     used.flatten().max().unwrap_or(0) + 1
 }
@@ -127,7 +137,7 @@ struct AgentRecord {
     #[serde(default, deserialize_with = "deserialize_nullable_string")]
     last_run: String,
     // pořadové číslo v typu (1, 2, 3 ...)
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, deserialize_with = "de_opt_num", skip_serializing_if = "Option::is_none")]
     number: Option<u32>,
 }
 
@@ -148,8 +158,8 @@ struct AgentIndex {
     agents: Vec<AgentRecord>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[serde(rename_all = "camelCase", default)]
 struct SkillRecord {
     id: String,
     name: String,
@@ -160,7 +170,7 @@ struct SkillRecord {
     status: String,
     version: String,
     // pořadové číslo v typu (1, 2, 3 ...)
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, deserialize_with = "de_opt_num", skip_serializing_if = "Option::is_none")]
     number: Option<u32>,
 }
 
@@ -177,11 +187,12 @@ struct SkillIndex {
 struct McpRecord {
     id: String,
     name: String,
+    desc: String,
     command: String,
     status: String,
     tools: Vec<String>,
     // pořadové číslo v typu (1, 2, 3 ...)
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, deserialize_with = "de_opt_num", skip_serializing_if = "Option::is_none")]
     number: Option<u32>,
 }
 
@@ -205,7 +216,7 @@ struct LoopRecord {
     enabled: bool,
     category: String,
     // pořadové číslo v typu (1, 2, 3 ...)
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, deserialize_with = "de_opt_num", skip_serializing_if = "Option::is_none")]
     number: Option<u32>,
 }
 
@@ -233,7 +244,7 @@ struct TeamRecord {
     loops: Vec<String>,
     created_at: String,
     // pořadové číslo v typu (1, 2, 3 ...)
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, deserialize_with = "de_opt_num", skip_serializing_if = "Option::is_none")]
     number: Option<u32>,
 }
 
@@ -265,7 +276,7 @@ struct WorkflowRecord {
     last_run: String,
     created_at: String,
     // pořadové číslo v typu (1, 2, 3 ...)
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, deserialize_with = "de_opt_num", skip_serializing_if = "Option::is_none")]
     number: Option<u32>,
 }
 
