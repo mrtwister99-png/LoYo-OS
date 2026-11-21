@@ -92,10 +92,8 @@ async function startBot() {
 function startApi() {
   // stejně jako spouštěč: klasický conhost, minimalizovaný, titulek „LoYo OS - API“
   spawn('taskkill', ['/F', '/T', '/FI', 'WINDOWTITLE eq LoYo OS - API*'], { windowsHide: true }).on('error', () => {})
-  const cmd = `cmd.exe /k title LoYo OS - API && cd /d "${join(ROOT, 'apps', 'api')}" && pnpm dev`
-  spawn('powershell.exe', ['-NoProfile', '-Command',
-    `Start-Process -FilePath "$env:WINDIR\\System32\\conhost.exe" -ArgumentList '${cmd.replace(/'/g, "''")}' -WindowStyle Minimized`],
-  { windowsHide: true, detached: true, stdio: 'ignore' }).unref()
+  // přes start-api.cmd: Node → PowerShell s vnořenými uvozovkami okno nespustil
+  spawn('cmd.exe', ['/d', '/c', join(ROOT, 'tools', 'strazce', 'start-api.cmd')], { windowsHide: true, detached: true, stdio: 'ignore' }).unref()
 }
 
 const state = { since: new Date().toISOString(), lastCheck: null, api: null, bot: null, failures: 0, restarts: 0, lastRestart: null, busy: false }
