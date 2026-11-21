@@ -1,5 +1,5 @@
 // components/SystemPowerButtons.tsx — vpravo nahoře: R = restart celého LoYo OS, ⏻ = vypnout.
-// Volá POST /api/system/power → tools/loyo-power.ps1 (zavře 4 terminály spouštěče, u R nahodí nový LoYo OS).
+// Volá POST /api/system/power → tools/loyo-power.ps1 (R: nahodí nový LoYo OS a ten zavře starý, ⏻: zavře všechno).
 import { useState } from 'react'
 import { API_URL } from '../lib/agentHub'
 
@@ -11,10 +11,13 @@ export default function SystemPowerButtons() {
 
   const run = async (mode: 'restart' | 'off') => {
     const q = mode === 'restart'
-      ? 'Restartovat LoYo OS? Zavřou se 4 terminály (LOYO OS, API, MCP, WEB) a hned naběhnou nové.'
+      ? 'Restartovat LoYo OS? Nejdřív naběhnou nové terminály (LOYO OS, API, MCP, WEB) a pak se zavřou ty staré.'
       : 'Vypnout celý LoYo OS? Zavře se spouštěč, API, MCP, WEB i Mary bot. Strážce ho znovu nenahodí.'
     if (!window.confirm(q)) return
     setPhase(mode); setMsg(mode === 'restart' ? 'Restartuju LoYo OS…' : 'Vypínám LoYo OS…')
+    // pid současného API → po restartu poznáme, že odpovídá už to nové
+    let oldPid: number | undefined
+    if (mode === 'restart') { try { oldPid = (await (await fetch(`${API_URL}/api/health`, { signal: AbortSignal.timeout(2000) })).json())?.pid } catch {} }
     try {
       const r = await fetch(`${API_URL}/api/system/power`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode }) })
       if (!r.ok) throw new Error(`HTTP ${r.status}`)
@@ -23,17 +26,22 @@ export default function SystemPowerButtons() {
       return
     }
     if (mode === 'off') { setTimeout(() => { setPhase('done-off'); setMsg('LoYo OS je vypnutý. Zapneš ho zástupcem „LoYo OS“ na ploše.') }, 4000); return }
-    // restart: počkat, až staré API zmizí a nové naběhne, pak obnovit stránku
+    // restart: nová instance naběhne vedle staré a tu pak zavře → čekat, až odpoví NOVÉ API (jiný pid),
+    // pak obnovit stránku. Bez pidu (starší API) stačí, že API zmizelo a zase naběhlo.
     const t0 = Date.now()
     let wentDown = false
     const tick = async () => {
-      let up = false
-      try { up = (await fetch(`${API_URL}/api/health`, { signal: AbortSignal.timeout(2000) })).ok } catch {}
+      let up = false, pid: number | undefined
+      try {
+        const r = await fetch(`${API_URL}/api/health`, { signal: AbortSignal.timeout(2000) })
+        up = r.ok; if (up) pid = (await r.json())?.pid
+      } catch { up = false }
       if (!up) wentDown = true
+      const isNew = up && (oldPid ? pid !== undefined && pid !== oldPid : wentDown)
       const s = Math.round((Date.now() - t0) / 1000)
-      if (wentDown && up) { setMsg('Naběhlo, obnovuju…'); setTimeout(() => window.location.reload(), 2500); return }
+      if (isNew) { setMsg('Nový LoYo OS naběhl, obnovuju…'); setTimeout(() => window.location.reload(), 2500); return }
       if (s > 180) { setPhase('error'); setMsg('Za 3 min nenaběhlo — mrkni na okno „LOYO OS“ na liště.'); return }
-      setMsg(wentDown ? `Startuju nový LoYo OS… ${s} s` : `Zavírám terminály… ${s} s`)
+      setMsg(wentDown ? `Startuju nový LoYo OS… ${s} s` : `Nabíhají nové terminály, pak zavřu staré… ${s} s`)
       setTimeout(tick, 2000)
     }
     setTimeout(tick, 1500)
@@ -51,7 +59,7 @@ export default function SystemPowerButtons() {
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'center' }}>
-        {btn('R', 'Restart LoYo OS (zavře 4 terminály a nahodí nové)', '#12a4ff', () => run('restart'))}
+        {btn('R', 'Restart LoYo OS (nahodí 4 nové terminály, pak zavře ty staré)', '#12a4ff', () => run('restart'))}
         {btn('⏻', 'Vypnout celý LoYo OS', '#ff1e00', () => run('off'))}
       </div>
       {phase && (

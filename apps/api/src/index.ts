@@ -50,7 +50,8 @@ await app.register((await import('./routes/system.js')).default, { prefix: '/api
 
 app.get('/api/health', async () => {
   const { getHealth } = await import('./services/health.js')
-  return getHealth()
+  // pid: tlačítko R v UI podle něj pozná, že už odpovídá NOVÉ API (restart je bez výpadku)
+  return { ...(await getHealth()), pid: process.pid }
 })
 
 app.post('/api/kosterad/run', async () => {

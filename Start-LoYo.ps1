@@ -2,6 +2,9 @@
 # Hlavní okno: logo + progress podle toho, co SKUTEČNĚ naběhlo (API :3001, MCP, WEB :3000, Mary bot).
 # API / MCP / WEB se spustí najednou rovnou minimalizované; hlavní okno se 5 s po startu taky schová.
 # Q = vypnout vše · R = restart (stačí obnovit 'LOYO OS' z lišty a zmáčknout klávesu).
+# -OldPidFile <soubor> : restart bez výpadku (tlačítko R v UI → tools/loyo-power.ps1). Nejdřív se otevřou nové
+#   terminály API + MCP, pak se zavře stará instance podle PID v souboru a až na uvolněný port 3000 naběhne WEB.
+param([string]$OldPidFile)
 $ErrorActionPreference = 'Continue'
 $ROOT = $PSScriptRoot
 if (-not $ROOT) { $ROOT = "D:\dev\loyo-os" }
@@ -98,15 +101,29 @@ function Start-All {
     Set-MainTitle "LOYO OS - startuje…"
     Show-Logo
 
-    # 1) všechno najednou, minimalizované
-    Write-Host "  $CYAN▸$RST spouštím ${BOLD}API$RST · ${BOLD}MCP$RST · ${BOLD}WEB$RST najednou (minimalizované)…"
-    Write-Host ""
-    # Strážce: zase hlídat (Q ho pozastavil)
-    Remove-Item (Join-Path $ROOT 'data\strazce\pauza') -Force -ErrorAction SilentlyContinue
-    # API už mohl nahodit Strážce → podruhé ho nespouštět (porvaly by se o port 3001)
-    if (Test-Port6 3001) { Write-Host "  $GREY  API už běží (nahodil ho Strážce) — nespouštím znovu$RST" } else { $null = Start-Service-Min 'API' $API_PATH 'pnpm dev' }
-    if ($MCP_PATH) { $null = Start-Service-Min 'MCP' $MCP_PATH 'pnpm dev' }
-    $null = Start-Service-Min 'WEB' $WEB_PATH 'pnpm tauri dev 2>nul || pnpm dev'
+    if ($OldPidFile -and (Test-Path $OldPidFile)) {
+        # 1R) restart bez výpadku: nové API + MCP hned (API si na port 3001 počká samo), pak zavřít starou
+        #     instanci a WEB až na uvolněný port 3000 (vite by jinak utekl na jiný port)
+        Write-Host "  $CYAN▸$RST restart: spouštím nové ${BOLD}API$RST · ${BOLD}MCP$RST vedle běžícího LoYo OS…"
+        $null = Start-Service-Min 'API' $API_PATH 'pnpm dev'
+        if ($MCP_PATH) { $null = Start-Service-Min 'MCP' $MCP_PATH 'pnpm dev' }
+        Start-Sleep -Seconds 2
+        Stop-OldInstance
+        Write-Host "  $CYAN▸$RST spouštím nový ${BOLD}WEB$RST…"
+        $null = Start-Service-Min 'WEB' $WEB_PATH 'pnpm tauri dev 2>nul || pnpm dev'
+        Write-Host ""
+    }
+    else {
+        # 1) všechno najednou, minimalizované
+        Write-Host "  $CYAN▸$RST spouštím ${BOLD}API$RST · ${BOLD}MCP$RST · ${BOLD}WEB$RST najednou (minimalizované)…"
+        Write-Host ""
+        # Strážce: zase hlídat (Q ho pozastavil)
+        Remove-Item (Join-Path $ROOT 'data\strazce\pauza') -Force -ErrorAction SilentlyContinue
+        # API už mohl nahodit Strážce → podruhé ho nespouštět (porvaly by se o port 3001)
+        if (Test-Port6 3001) { Write-Host "  $GREY  API už běží (nahodil ho Strážce) — nespouštím znovu$RST" } else { $null = Start-Service-Min 'API' $API_PATH 'pnpm dev' }
+        if ($MCP_PATH) { $null = Start-Service-Min 'MCP' $MCP_PATH 'pnpm dev' }
+        $null = Start-Service-Min 'WEB' $WEB_PATH 'pnpm tauri dev 2>nul || pnpm dev'
+    }
 
     # 2) progress podle skutečného stavu
     $done = @{ API = $false; MCP = (-not $MCP_PATH); WEB = $false; BOT = $false }
@@ -144,6 +161,8 @@ function Start-All {
     }
     Write-Host ""
     Set-MainTitle "LOYO OS"
+    # Strážce: hlídat (po restartu z UI byl v pauze až do teď, ať mezitím nenahazoval API sám)
+    Remove-Item (Join-Path $ROOT 'data\strazce\pauza') -Force -ErrorAction SilentlyContinue
 
     # 3) za 5 s schovat i hlavní okno
     for ($i = 5; $i -ge 1; $i--) {
@@ -152,6 +171,24 @@ function Start-All {
     }
     Write-Host ""
     Hide-Main
+}
+
+# Restart z UI: zavřít starou instanci podle PID, které si zapsal tools/loyo-power.ps1 ještě před startem
+# téhle (řádky „pid;ticks startu“ — po znovupoužití PID se cizí proces nezabije).
+function Stop-OldInstance {
+    Write-Host "  $AMBER▸$RST zavírám starý LoYo OS (spouštěč, API, MCP, WEB)…"
+    foreach ($line in Get-Content $OldPidFile -ErrorAction SilentlyContinue) {
+        if ($line -notmatch '^(\d+);(\d+)$') { continue }
+        $id = [int]$Matches[1]; $ticks = [long]$Matches[2]
+        if ($id -eq $PID) { continue }
+        $p = Get-Process -Id $id -ErrorAction SilentlyContinue
+        if ($p -and $p.StartTime.Ticks -eq $ticks) { taskkill /F /T /PID $id 2>$null | Out-Null }
+    }
+    Remove-Item $OldPidFile -Force -ErrorAction SilentlyContinue
+    $script:OldPidFile = $null   # další R/Q v tomhle okně už je obyčejný restart
+    # počkat, až starý WEB pustí port 3000 (max 10 s)
+    for ($i = 0; $i -lt 40 -and (Test-Port6 3000); $i++) { Start-Sleep -Milliseconds 250 }
+    Write-Host "  $LIME✓$RST stará instance zavřená"
 }
 
 function Kill-All {
