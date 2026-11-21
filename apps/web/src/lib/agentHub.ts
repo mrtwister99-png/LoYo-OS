@@ -2,7 +2,12 @@
 // agenti z /api/agents, týmy z /api/teams (+ `team` z agents/index.json), aktivita, oznámení.
 import { useCallback, useEffect, useState } from 'react'
 
-export const API_URL = 'http://localhost:3001'
+// Na dev serveru (vite, port 3000) jdeme přes proxy /api → funguje i z jiného zařízení (tunel, Tailscale).
+// Jinde (Tauri build, jiný port) přímo na API.
+export const API_URL =
+  import.meta.env.DEV && typeof window !== 'undefined' && /^https?:$/.test(window.location.protocol) && window.location.port !== '3001'
+    ? ''
+    : 'http://localhost:3001'
 
 export type HubAction = { label: string; command: string; ask?: string }
 export type HubAgent = {

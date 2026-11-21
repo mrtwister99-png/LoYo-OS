@@ -13,7 +13,7 @@ import LuuuPanel from '../components/LuuuPanel'
 import AgentActions, { ActionsEditor, type AgentAction } from '../components/AgentActions'
 import AgentRing from '../components/AgentRing'
 import TeamHouse from '../components/TeamHouse'
-import { groupByTeam, ringParts, NO_TEAM, type HubTeam } from '../lib/agentHub'
+import { groupByTeam, ringParts, NO_TEAM, API_URL, type HubTeam } from '../lib/agentHub'
 
 const ACCENT = '#12a4ff'
 const AGENT_COLOR = categoryColors.agents
@@ -101,7 +101,7 @@ export default function AgentsPro() {
   useEffect(() => { localStorage.setItem('loyo-agents-view', view) }, [view])
   const [teams, setTeams] = useState<HubTeam[]>([])
   useEffect(() => {
-    fetch('http://localhost:3001/api/teams').then(r => r.json())
+    fetch(`${API_URL}/api/teams`).then(r => r.json())
       .then(j => setTeams((j.teams || []).map((t: any) => ({ id: t.id, name: t.name, color: t.color || '#ff6f00', agents: t.agents || [] }))))
       .catch(() => {})
   }, [])
@@ -138,7 +138,6 @@ export default function AgentsPro() {
     return () => clearInterval(id)
   }, [])
 
-   const API_URL = 'http://localhost:3001'
 
   const loadAgentsFromFS = async (isBackground = false) => {
     if (!isBackground) setLoading(true)
@@ -424,7 +423,14 @@ export default function AgentsPro() {
           </div>
         )}
 
-        {filtered.length===0 && !loading && (
+        {syncStatus==='error' && agents.length===0 && !loading && (
+          <div className="mt-10 mx-auto max-w-[560px] bg-[#3a3a3a] border border-[#ff1e00]/60 p-5 text-center">
+            <div className="font-black text-sm">⚠ Agenty se nepodařilo načíst</div>
+            <div className="mt-2 text-[12px] font-mono text-[#9a9a9a]">API (localhost:3001) neodpovídá — zkouším to znovu každých 5 s. Zkontroluj okno „LoYo OS - API“.</div>
+            <button onClick={()=>loadAgentsFromFS(false)} className="mt-4 px-4 py-2 rounded-full bg-[#12a4ff] text-white text-[11px] font-black tracking-widest">ZKUSIT HNED</button>
+          </div>
+        )}
+        {filtered.length===0 && !loading && syncStatus!=='error' && (
           <div className="mt-20 text-center">
             <div className="text-[14px] font-mono text-[#9a9a9a]/70">Žádní agenti pro tento filtr</div>
           </div>

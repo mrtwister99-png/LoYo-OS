@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 export type AgentAction = { label: string; command: string; ask?: string }
 
-const API_URL = 'http://localhost:3001'
+import { API_URL } from '../lib/agentHub'
 const ACCENT = '#12a4ff'
 
 export default function AgentActions({ actions, emptyHint }: { actions: AgentAction[]; emptyHint?: string }) {
