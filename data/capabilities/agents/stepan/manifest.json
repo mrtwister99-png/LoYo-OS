@@ -14,7 +14,6 @@
     "fs:read:data/capabilities/agents/stepan",
     "fs:write:data/capabilities/agents/stepan",
     "net:fetch:login.seznam.cz",
-    "browser:msedge:www.sbazar.cz",
     "fs:write:data/capabilities/agents/stepan/fotky"
   ],
   "tools": [
