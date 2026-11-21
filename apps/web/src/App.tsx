@@ -126,7 +126,7 @@ export default function App() {
     }
     const pickHandler = (e: any) => { const t = e.detail?.type; if (t) setBuilderInitial({ type: t, id: '' }) } // nový builder z menu, bez navigace na stránku
     // log akcí nahoře → „🤖 agent →“ přepne na stránku agentů
-    const navHandler = (e: any) => { const p = e.detail?.page; if (p) setPage(p as any) }
+    const navHandler = (e: any) => { const prof = e.detail?.profile; if (typeof prof === 'number') setActiveProfile(prof); const p = e.detail?.page; if (p) setPage(p as any) }
     window.addEventListener('loyo:open-builder', handler as any)
     window.addEventListener('loyo:builder-pick', pickHandler)
     window.addEventListener('loyo:navigate', navHandler)

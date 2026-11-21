@@ -11,6 +11,9 @@ import MaryTelegramPanel from '../components/MaryTelegramPanel'
 import StepanPanel from '../components/StepanPanel'
 import LuuuPanel from '../components/LuuuPanel'
 import AgentActions, { ActionsEditor, type AgentAction } from '../components/AgentActions'
+import AgentRing from '../components/AgentRing'
+import TeamHouse from '../components/TeamHouse'
+import { groupByTeam, ringParts, NO_TEAM, type HubTeam } from '../lib/agentHub'
 
 const ACCENT = '#12a4ff'
 const AGENT_COLOR = categoryColors.agents
@@ -60,7 +63,6 @@ const CATS = [
   { id: 'rental', name: 'PRONAJÍMATELNÍ', count: 0 },
 ]
 
-const TEAMS = ['Nezařazen', 'Obchod', 'Hračky', 'LOYO OS v2']
 
 function firstName(full: string) {
   if (!full) return '?'
@@ -94,6 +96,15 @@ export default function AgentsPro() {
     patchAgent({ dependencies: has ? deps.filter(d => d.split(':')[0] !== mcpId) : [...deps, num != null ? `${mcpId}:${num}` : mcpId] })
   }
   const [showNew, setShowNew] = useState(false)
+  // zobrazení „baráky“ (agenti v týmu pod jednou střechou) vs. klasická mřížka
+  const [view, setView] = useState<'houses' | 'grid'>(() => (localStorage.getItem('loyo-agents-view') as any) || 'houses')
+  useEffect(() => { localStorage.setItem('loyo-agents-view', view) }, [view])
+  const [teams, setTeams] = useState<HubTeam[]>([])
+  useEffect(() => {
+    fetch('http://localhost:3001/api/teams').then(r => r.json())
+      .then(j => setTeams((j.teams || []).map((t: any) => ({ id: t.id, name: t.name, color: t.color || '#ff6f00', agents: t.agents || [] }))))
+      .catch(() => {})
+  }, [])
   const [demoState, setDemoState] = useState<Record<string, 'starting' | 'error' | undefined>>({})
 
   const openExternal = async (url: string) => {
@@ -153,7 +164,7 @@ export default function AgentsPro() {
         name: a.displayName || a.name || a.id,
         role: a.role || a.description || '',
         category: a.category || a.type || 'all',
-        team: a.team || 'LOYO OS v3',
+        team: a.team || '',
         status: a.status || 'online',
         skills: a.skills || [],
         tools: a.tools || [],
@@ -169,7 +180,12 @@ export default function AgentsPro() {
         hasScript: !!(a.script || a.shell),
       }))
       setAgents(normalized)
+      // dvojklik na agenta v orchestrátoru (dashboard) → otevřít rovnou jeho detail
+      const want = sessionStorage.getItem('loyo-open-agent')
+      if (want) sessionStorage.removeItem('loyo-open-agent')
+      const wanted = want ? normalized.find(n => n.id === want) : undefined
       setSelectedAgent(prev => {
+        if (wanted) return wanted
         if (!prev) return prev
         return normalized.find(n => n.id === prev.id) || prev
       })
@@ -243,64 +259,8 @@ export default function AgentsPro() {
     setAgents(agents.map(a => a.id === updated.id ? updated : a))
   }
 
-  return (
-    <div className="min-h-full bg-[#353535] text-[#f0f0f0] selection:bg-[#444] selection:text-[#f0f0f0]">
-      {/* HEADER */}
-      <div className="px-6 md:px-10 pt-8 pb-6">
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <div className="flex items-baseline gap-3">
-              <h1 className="text-[56px] leading-[0.85] font-black tracking-tighter">AGENTI</h1>
-              <span className="text-[20px] font-mono text-[#9a9a9a]/70">/ {String(filtered.length).padStart(2,'0')}</span>
-            </div>  
-              <div className="mt-3 text- font-mono tracking-wide text-[#9a9a9a] max-w-">
-              Index <span className="font-bold text-[#f0f0f0]">data/index.db ({agents.length} z DB)</span> • zdroj: <span className="font-mono">data/capabilities/agents/*/manifest.json</span> • FTS5 search <span className="font-mono">&lt;5ms</span>
-              <span className="ml-3 inline-flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${syncStatus==='synced'?'bg-[#444]':syncStatus==='syncing'?'bg-[#444] animate-pulse':'bg-[#444]'}`} />
-                <span className="text-[10px] uppercase tracking-widest">{syncStatus}</span>
-              </span>
-            </div>
-          </div>
-          <button onClick={()=>setShowNew(true)} className="shrink-0 px-5 py-3 bg-[#444] text-[#f0f0f0] text-[11px] font-black tracking-[0.2em] rounded-full hover:bg-[#444] transition">+ NOVÝ AGENT</button>
-        </div>
-
-        {/* FILTRY */}
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <div className="flex gap-2">
-            {CATS.map(cat=>{
-              const active = selectedCat===cat.id
-              return (
-                <button
-                  key={cat.id}
-                  onClick={()=>setSelectedCat(cat.id)}
-                  className={`px-4 py-2 rounded-full text-[11px] font-black tracking-widest border transition ${active? 'bg-[#12a4ff] text-white border-[#12a4ff]':'bg-[#3a3a3a] text-[#9a9a9a] border-[#444] hover:border-[#444]'}`}
-                >
-                  <span className={`inline-block w-2 h-2 rounded-full mr-2 ${active?'bg-[#444]':'bg-black/20'}`} />
-                  {cat.name}
-                </button>
-              )
-            })}
-          </div>
-          <input
-            value={search}
-            onChange={e=>setSearch(e.target.value)}
-            placeholder="HLEDAT AGENTA..."
-            className="ml-auto w-[240px] px-4 py-2 rounded-full bg-[#3a3a3a] border border-[#444] text-[11px] font-mono tracking-wide outline-none focus:border-[#444]"
-          />
-        </div>
-      </div>
-
-      {/* ČTVERCE - POUZE KŘESTNÍ JMÉNO */}
-      <div className="px-6 md:px-10 pb-20">
-        {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {Array.from({length:6}).map((_,i)=>(
-              <div key={i} className="aspect-square bg-white/5 animate-pulse rounded-[12px]" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                        {filtered.map((agent, idx)=>{
+  // render jedné karty agenta (sdílí mřížka i baráky)
+  const renderCard = (agent: Agent, idx: number) => {
               const fn = firstName(agent.name)
               const isOnline = agent.status==='online'
               const isBusy = agent.status==='busy'
@@ -372,7 +332,86 @@ export default function AgentsPro() {
                   )}
                 </div>
               )
+            }
+
+  return (
+    <div className="min-h-full bg-[#353535] text-[#f0f0f0] selection:bg-[#444] selection:text-[#f0f0f0]">
+      {/* HEADER */}
+      <div className="px-6 md:px-10 pt-8 pb-6">
+        <div className="flex items-start justify-between gap-6">
+          <div>
+            <div className="flex items-baseline gap-3">
+              <h1 className="text-[56px] leading-[0.85] font-black tracking-tighter">AGENTI</h1>
+              <span className="text-[20px] font-mono text-[#9a9a9a]/70">/ {String(filtered.length).padStart(2,'0')}</span>
+            </div>  
+              <div className="mt-3 text- font-mono tracking-wide text-[#9a9a9a] max-w-">
+              Index <span className="font-bold text-[#f0f0f0]">data/index.db ({agents.length} z DB)</span> • zdroj: <span className="font-mono">data/capabilities/agents/*/manifest.json</span> • FTS5 search <span className="font-mono">&lt;5ms</span>
+              <span className="ml-3 inline-flex items-center gap-2">
+                <span className={`w-2 h-2 rounded-full ${syncStatus==='synced'?'bg-[#444]':syncStatus==='syncing'?'bg-[#444] animate-pulse':'bg-[#444]'}`} />
+                <span className="text-[10px] uppercase tracking-widest">{syncStatus}</span>
+              </span>
+            </div>
+          </div>
+          <button onClick={()=>setShowNew(true)} className="shrink-0 px-5 py-3 bg-[#444] text-[#f0f0f0] text-[11px] font-black tracking-[0.2em] rounded-full hover:bg-[#444] transition">+ NOVÝ AGENT</button>
+        </div>
+
+        {/* FILTRY */}
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="flex gap-2">
+            {CATS.map(cat=>{
+              const active = selectedCat===cat.id
+              return (
+                <button
+                  key={cat.id}
+                  onClick={()=>setSelectedCat(cat.id)}
+                  className={`px-4 py-2 rounded-full text-[11px] font-black tracking-widest border transition ${active? 'bg-[#12a4ff] text-white border-[#12a4ff]':'bg-[#3a3a3a] text-[#9a9a9a] border-[#444] hover:border-[#444]'}`}
+                >
+                  <span className={`inline-block w-2 h-2 rounded-full mr-2 ${active?'bg-[#444]':'bg-black/20'}`} />
+                  {cat.name}
+                </button>
+              )
             })}
+          </div>
+          <div className="ml-auto flex rounded-full border border-[#444] overflow-hidden">
+            {([['houses','🏠 BARÁKY'],['grid','▦ MŘÍŽKA']] as const).map(([v,l])=>(
+              <button key={v} onClick={()=>setView(v)} className={`px-4 py-2 text-[11px] font-black tracking-widest ${view===v?'bg-[#12a4ff] text-white':'bg-[#3a3a3a] text-[#9a9a9a]'}`}>{l}</button>
+            ))}
+          </div>
+          <input
+            value={search}
+            onChange={e=>setSearch(e.target.value)}
+            placeholder="HLEDAT AGENTA..."
+            className=" w-[240px] px-4 py-2 rounded-full bg-[#3a3a3a] border border-[#444] text-[11px] font-mono tracking-wide outline-none focus:border-[#444]"
+          />
+        </div>
+      </div>
+
+      {/* ČTVERCE - POUZE KŘESTNÍ JMÉNO */}
+      <div className="px-6 md:px-10 pb-20">
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {Array.from({length:6}).map((_,i)=>(
+              <div key={i} className="aspect-square bg-white/5 animate-pulse rounded-[12px]" />
+            ))}
+          </div>
+        ) : view === 'houses' ? (
+          <div className="flex flex-wrap gap-6 items-end">
+            {groupByTeam(filtered.map(a => ({ ...a, dependencies: a.dependencies ?? [], actions: a.actions ?? [] })), teams).map(h => {
+              const cols = Math.min(h.agents.length, 6)
+              return (
+                <div key={h.key} style={{ flex: `${cols} 1 ${cols * 175}px`, maxWidth: '100%' }}>
+                  <TeamHouse name={h.name} color={h.color} count={h.agents.length}>
+                    <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(auto-fill, minmax(150px, 1fr))` }}>
+                      {h.agents.map((a, i) => renderCard(filtered.find(f => f.id === a.id)!, i))}
+                    </div>
+                  </TeamHouse>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+{filtered.map((agent, idx)=>renderCard(agent, idx))}
 
             {/* přidat */}
             <button
@@ -400,16 +439,15 @@ export default function AgentsPro() {
             {/* hlavička detailu */}
             <div className="sticky top-0 z-10 bg-[#353535]/90 backdrop-blur border-b border-[#444]">
               <div className="p-7 flex items-start justify-between gap-4">
-                <div className="flex gap-4">
-                  <div className="w-14 h-14 rounded-full bg-[#444] text-[#f0f0f0] flex items-center justify-center text-[20px] font-black">
-                    {firstName(selectedAgent.name)[0]?.toUpperCase()}
-                  </div>
+                <div className="flex gap-4 items-center">
+                  <AgentRing key={selectedAgent.id} size={170} status={selectedAgent.status} initial={firstName(selectedAgent.name)[0]?.toUpperCase() || '?'}
+                    parts={ringParts({ ...selectedAgent, dependencies: selectedAgent.dependencies ?? [], actions: selectedAgent.actions ?? [] })} />
                   <div>
                     <div className="text-[22px] font-black leading-[0.9] tracking-tight">{selectedAgent.name}</div>
                     <div className="mt-1 text-[11px] font-mono text-[#9a9a9a]">{selectedAgent.role}</div>
                     <div className="mt-2 flex gap-2">
                       <span className="text-[10px] px-2.5 py-1 rounded-full text-[#f0f0f0] font-bold tracking-widest" style={{ background: ACCENT }}>{selectedAgent.status.toUpperCase()}</span>
-                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-white/5 font-mono">{selectedAgent.team}</span>
+                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-white/5 font-mono">🏠 {teams.find(t => t.agents.includes(selectedAgent.id))?.name || selectedAgent.team || NO_TEAM}</span>
                     </div>
                     {selectedAgent.endpoints?.demo && (
                       <button
@@ -552,7 +590,8 @@ export default function AgentsPro() {
                     <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
                       <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">TÝM</div>
                       <select value={selectedAgent.team} onChange={e=>patchAgent({ team: e.target.value })} className="mt-2 w-full bg-transparent font-bold text-[13px] outline-none">
-                        {TEAMS.map(t=><option key={t} value={t}>{t}</option>)}
+                        <option value="">{NO_TEAM}</option>
+                        {[...new Set([...agents.map(a => a.team), ...teams.map(t => t.name)].filter(Boolean))].map(t=><option key={t} value={t}>{t}</option>)}
                       </select>
                     </div>
                   </div>

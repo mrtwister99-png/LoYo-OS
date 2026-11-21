@@ -1,4 +1,5 @@
 import NapadyPanel from '../components/NapadyPanel';
+import OrchestratorOverview from '../components/OrchestratorOverview';
 import React, { useState, useMemo, useEffect } from 'react';
 import { categoryColors, categoryNumbers } from '../styles/theme';
 
@@ -106,6 +107,8 @@ export default function Dashboard() {
   const [currentTaskId, setCurrentTaskId] = useState<number | null>(9);
   const [search, setSearch] = useState('');
   const [health, setHealth] = useState<Health | null>(null)
+  const [tab, setTab] = useState<'orch' | 'roadmap'>(() => (localStorage.getItem('loyo-dash-tab') as any) || 'orch')
+  useEffect(() => { localStorage.setItem('loyo-dash-tab', tab) }, [tab])
 
   useEffect(()=>{
     const load=async()=>{
@@ -170,6 +173,16 @@ export default function Dashboard() {
 
       <div className="max-w-[1960px] mx-auto flex gap-6 items-start">
       <div className="flex-1 min-w-0 space-y-6">
+        {/* přepínač ORCHESTRÁTOR (hlavní přehled agentů) / ROADMAPA (původních 60 úkolů) */}
+        <div className="flex items-center gap-3">
+          <div className="flex border border-[#444]">
+            {([['orch', '🤖 ORCHESTRÁTOR'], ['roadmap', '🗺 ROADMAPA 60']] as const).map(([v, l]) => (
+              <button key={v} onClick={() => setTab(v)} className={`px-4 py-2 text-[11px] font-black tracking-widest ${tab === v ? 'bg-[#12a4ff] text-white' : 'bg-[#3a3a3a] text-[#9a9a9a]'}`}>{l}</button>
+            ))}
+          </div>
+          {tab === 'orch' && <span className="text-[10px] font-mono opacity-50">agentský orchestrátor • živě z localhost:3001 • obnova 15 s</span>}
+        </div>
+        {tab === 'orch' ? <OrchestratorOverview /> : (<>
         {/* Header - HADR */}
         <div className="bg-[#444] border border-[#444] rounded-none p-4 md:p-6 flex flex-col md:flex-row justify-between gap-4">
           <div>
@@ -300,6 +313,7 @@ export default function Dashboard() {
           <span>LoYo OS v6.0 FULL SELF • 60 ÚKOLŮ PO 1 • {overallDone} HOTOVO • {60 - overallDone} ZBÝVÁ • CURRENT #{currentTaskId}</span>
           <span className="ml-auto">ROYAL DARK #2b2b2b / #3a3a3a / #444 / #12a4ff / #ff1e00 / #c9a646 • v4.2→v6.0 SINGULARITY</span>
         </div>
+        </>)}
       </div>
 
       {/* 💡 NÁPADY — vpravo, ~40 % výšky obrazovky, drží se při scrollu */}

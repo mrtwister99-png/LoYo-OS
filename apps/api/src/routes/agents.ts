@@ -90,6 +90,7 @@ async function withAttachments(agents: any[]): Promise<any[]> {
     const rec: any = byId.get(a.id) ?? {}
     return {
       ...a,
+      team: a.team || rec.team || '',   // tým je zatím jen v indexu (Tauri) — UI podle něj seskupuje „baráky“
       // ⚙ v UI ukládá do manifestu i indexu zároveň, takže sjednocení odebrané věci nevrací
       skills: union(a.skills, rec.skills),
       tools: union(a.tools, rec.tools),
