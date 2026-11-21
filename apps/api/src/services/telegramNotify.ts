@@ -55,12 +55,16 @@ export async function sendTelegram(text: string): Promise<boolean> {
   const chatId = (await envValue('TELEGRAM_MARY_CHAT_ID')) || (await envValue('TELEGRAM_CHAT_ID'))
   const clean = telegramClean(text)
   if (!token || !chatId || !clean) return false
+  // čekající potvrzení → tlačítka ✅ / ❌ (callback obslouží telegram-bot.mjs)
+  const code = clean.match(/\/ano ([a-z0-9]{4})\b/)?.[1]
+  const markup = code ? { inline_keyboard: [[{ text: '✅ Potvrdit', callback_data: `ok:${code}` }, { text: '❌ Zrušit', callback_data: `no:${code}` }]] } : null
   try {
-    for (const chunk of splitText(clean)) {
+    const chunks = splitText(clean)
+    for (const [i, chunk] of chunks.entries()) {
       const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text: chunk, disable_web_page_preview: true }),
+        body: JSON.stringify({ chat_id: chatId, text: chunk, disable_web_page_preview: true, ...(markup && i === chunks.length - 1 ? { reply_markup: markup } : {}) }),
         signal: AbortSignal.timeout(20_000),
       })
       if (!res.ok) return false

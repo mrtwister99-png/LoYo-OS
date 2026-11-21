@@ -1,5 +1,87 @@
 [
   {
+    "id": "22b60a56-6340-473b-9572-cfd407870a40",
+    "ts": "2026-11-21T03:26:59.514Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula PowerShell"
+  },
+  {
+    "id": "3ba37db7-f805-4b66-a736-fa1f9f001da7",
+    "ts": "2026-11-21T03:21:26.760Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /luuu smaž spam",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "5abf4ed8-988c-41d7-8a57-a12ebc5b7c5d",
+    "ts": "2026-11-21T03:21:19.309Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "roztřídil 0 mailů (0 důležitých)"
+  },
+  {
+    "id": "a8261d52-2777-41cc-9326-f38f1d716740",
+    "ts": "2026-11-21T03:21:17.033Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "čte poštu"
+  },
+  {
+    "id": "d26b1a9c-abed-4bbc-b291-d0a15e9960f0",
+    "ts": "2026-11-21T03:21:17.029Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /luuu",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "4f3372d1-8831-4644-99ab-207f083f8cd6",
+    "ts": "2026-11-21T03:05:46.934Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /luuu smaž spam",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "cfe9604d-8232-4144-a5e3-10de3558e0ed",
+    "ts": "2026-11-21T03:05:36.702Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "roztřídil 0 mailů (0 důležitých)"
+  },
+  {
+    "id": "5540aed7-b9aa-4d70-bfff-ee757a675650",
+    "ts": "2026-11-21T03:05:34.275Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "čte poštu"
+  },
+  {
+    "id": "8bd0d1c1-c66b-475e-bf33-704dbf7c7879",
+    "ts": "2026-11-21T03:05:34.084Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /luuu",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "4cf9dccf-659e-4ba2-9690-c282fcc161ef",
+    "ts": "2026-11-21T03:04:01.152Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
     "id": "8c3e13e5-318f-452e-9606-c8bd0aa818e1",
     "ts": "2026-11-21T02:40:11.188Z",
     "agent": "Mary Jane",

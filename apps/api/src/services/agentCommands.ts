@@ -9,7 +9,7 @@ import { AGENTS_DIR, DATA_DIR } from '../lib/dataPaths.js'
 import { getAgents } from '../lib/manifestLoader.js'
 import { logActivity } from '../routes/activity.js'
 import { newUsage, parseNewKind, runNewCapability } from './capabilityCreate.js'
-import { askConfirm, cancelPending, confirmPending, guarded } from './shellPolicy.js'
+import { askConfirm, cancelPending, confirmPending, guarded, pendingCodes } from './shellPolicy.js'
 import { continueGrill, grillActive, startGrill, stopGrill } from './grillSession.js'
 import { fetchCommand, mcpCommand, screenshotCommand, tryNaturalMcpIntent, webCommand } from './mcpCommands.js'
 import { findFiles, listDirectory, readFileCommand, tryNaturalFileIntent } from './fileCommands.js'
@@ -312,7 +312,37 @@ const SHELL_COMMANDS = /^\/(terminal|terminál|cmd|ps|powershell|exit|ano|ne)(\s
 // Zprávy pro terminál jdou mimo frontu orchestrátoru — jinak by čekaly za dlouhým researchem.
 export function isShellMessage(message: string): boolean {
   const t = message.trim()
-  return SHELL_COMMANDS.test(t) || (!!shellStatus() && !!t && !t.startsWith('/'))
+  const yesNo = /^(ano|jo|jj|potvrzuji|potvrd|potvrdit|ok|yes|y|ne|nee|zrus|zrusit|no|n)$/.test(
+    t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[.!?\s]+$/, ''),
+  )
+  return SHELL_COMMANDS.test(t) || (!!shellStatus() && !!t && !t.startsWith('/')) || (yesNo && pendingCodes().length > 0)
+}
+
+// ---------- „/příkaz ?“ — popis a možnosti z commands.json ----------
+async function commandHelp(name: string): Promise<CommandResult> {
+  const steps = [`Mary Jane: ${name} ?`]
+  const data = await readJson(join(AGENTS_DIR, 'mary-jane', 'commands.json'), { commands: [] })
+  const all: any[] = Array.isArray(data?.commands) ? data.commands : []
+  const want = name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+  const cmd = all.find((c) => String(c.name).toLowerCase() === want)
+  if (!cmd) {
+    const similar = all.filter((c) => String(c.name).toLowerCase().startsWith(want.slice(0, 3))).map((c) => c.name).slice(0, 6)
+    return { reply: `Příkaz ${name} neznám.${similar.length ? `\nMyslíš: ${similar.join(' · ')}?` : ''}\nVšechny: /vse`, steps }
+  }
+  const args: any[] = Array.isArray(cmd.args) ? cmd.args : []
+  const when = cmd.schedule?.type === 'daily' ? `⏰ spouští se sám denně v ${cmd.schedule.at}` : cmd.schedule?.type === 'hourly' ? `⏰ spouští se sám každou hodinu ${cmd.schedule.from ?? 0}–${cmd.schedule.to ?? 23} h` : ''
+  return {
+    reply: [
+      `📖 ${cmd.name}${cmd.enabled === false ? ' (pozastavený)' : ''}`,
+      cmd.description ?? '',
+      ...(when ? [when] : []),
+      '',
+      ...(args.length
+        ? ['Co můžeš napsat za něj:', `${cmd.name} — bez ničeho`, ...args.map((a) => `${cmd.name} ${a.value} — ${a.desc ?? ''}`)]
+        : ['Žádné pevné možnosti — piš normálně za příkaz (viz popis výše).']),
+    ].join('\n'),
+    steps,
+  }
 }
 
 // ---------- Luuu: spam / newslettery z CELÉ schránky (s potvrzením /ano) ----------
@@ -449,6 +479,22 @@ async function runAgentsCommand(args: string): Promise<CommandResult> {
 // ---------- router ----------
 export async function tryAgentCommand(message: string): Promise<CommandResult | null> {
   const trimmed = message.trim()
+
+  // „/luuu ?“ → co můžu napsat za příkaz · „?“ / „/?“ → všechny příkazy
+  if (/^\/?\?$/.test(trimmed)) return listCommands()
+  const helpFor = trimmed.match(/^(\/[^\s?]+)\s*\?$/)
+  if (helpFor) return commandHelp(helpFor[1])
+
+  // „ano“ / „ne“ bez kódu, když na potvrzení čeká právě jedna věc
+  const yesNo = trimmed.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[.!?\s]+$/, '')
+  if (/^(ano|jo|jj|potvrzuji|potvrd|potvrdit|ok|yes|y|ne|nee|zrus|zrusit|no|n)$/.test(yesNo)) {
+    const codes = pendingCodes()
+    if (codes.length === 1) {
+      const yes = /^(ano|jo|jj|potvrzuji|potvrd|potvrdit|ok|yes|y)$/.test(yesNo)
+      return { reply: yes ? await confirmPending(codes[0]) : cancelPending(codes[0]), steps: [`Mary Jane: ${yes ? '/ano' : '/ne'}`] }
+    }
+    if (codes.length > 1) return { reply: await confirmPending(''), steps: ['Mary Jane: /ano'] }
+  }
 
   // režim terminálu: obyčejný text (bez /) jde rovnou do shellu
   const shell = shellStatus()

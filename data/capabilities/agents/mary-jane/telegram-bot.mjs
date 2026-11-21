@@ -106,7 +106,8 @@ async function sendLong(token, chatId, text, replyMarkup = null) {
 // Telegram neumí našeptávat další slovo → u příkazu bez argumentu nabídne možnosti tlačítky
 // (stejné „args“ z commands.json jako našeptávač v UI). Klepnutí rovnou pošle např. „/new agent“.
 async function optionsKeyboard(text) {
-  const m = String(text).trim().match(/^(\/[^\s@]+)(?:@\S+)?$/)
+  // „/new“ i „/new ?“ (nápověda) → tlačítka s možnostmi
+  const m = String(text).trim().match(/^(\/[^\s@?]+)(?:@\S+)?(?:\s*\?)?$/)
   if (!m) return null
   const data = await readJson(join(__dirname, 'commands.json'), { commands: [] })
   const cmd = (Array.isArray(data.commands) ? data.commands : []).find((c) => c?.name?.toLowerCase() === m[1].toLowerCase())
@@ -197,6 +198,33 @@ async function askMary(text) {
 async function handleCallback(query, token, allowedChatId) {
   const [prefix, verdict, indexRaw] = String(query?.data ?? '').split(':')
   const chatId = query.message?.chat?.id
+
+  // ✅ / ❌ u potvrzení (skill Bezpečný shell, Luuu mazání…) → /ano <kód> nebo /ne <kód>
+  if (prefix === 'ok' || prefix === 'no') {
+    if (allowedChatId && String(chatId) !== String(allowedChatId)) {
+      await tg(token, 'answerCallbackQuery', { callback_query_id: query.id, text: 'Tenhle bot patří k jinému chatu.' })
+      return
+    }
+    const yes = prefix === 'ok'
+    await tg(token, 'answerCallbackQuery', { callback_query_id: query.id, text: yes ? 'Potvrzeno, dělám to…' : 'Zrušeno' }).catch(() => {})
+    // tlačítka pryč, ať nejde kliknout dvakrát
+    const original = String(query.message?.text ?? '')
+    await tg(token, 'editMessageText', {
+      chat_id: chatId,
+      message_id: query.message.message_id,
+      text: `${original}\n\n${yes ? '✅ potvrzeno' : '❌ zrušeno'}`,
+      disable_web_page_preview: true,
+      reply_markup: { inline_keyboard: [] },
+    }).catch(() => {})
+    await tg(token, 'sendChatAction', { chat_id: chatId, action: 'typing' }).catch(() => {})
+    try {
+      const result = await askMary(`${yes ? '/ano' : '/ne'} ${verdict}`)
+      await sendLong(token, chatId, result.reply)
+    } catch (err) {
+      await sendLong(token, chatId, `❌ Nepodařilo se spojit s LOYO API: ${String(err?.message ?? err)}`)
+    }
+    return
+  }
 
   // 📄 tlačítko u Julie — pošle celý report jako text
   if (prefix === 'ju') {
@@ -302,7 +330,11 @@ async function handleMessage(message, token, allowedChatId) {
         callback_data: `ju:${id}`,
       })
     } else {
-      const keyboard = await optionsKeyboard(text).catch(() => null)
+      // čeká se na potvrzení → tlačítka ✅ / ❌ (mají přednost před nabídkou možností)
+      const code = String(result?.reply ?? '').match(/\/ano ([a-z0-9]{4})\b/)?.[1]
+      const keyboard = code
+        ? { inline_keyboard: [[{ text: '✅ Potvrdit', callback_data: `ok:${code}` }, { text: '❌ Zrušit', callback_data: `no:${code}` }]] }
+        : await optionsKeyboard(text).catch(() => null)
       await sendLong(token, chatId, result?.reply ?? '', keyboard)
     }
   } catch (err) {

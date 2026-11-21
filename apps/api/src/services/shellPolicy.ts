@@ -61,7 +61,7 @@ export function askConfirm(label: string, why: string, run: () => Promise<string
     `⚠ Tohle chce potvrzení (${why}):`,
     label,
     '',
-    `Spustit: /ano ${code} · zrušit: /ne ${code} (platí 10 min)`,
+    `Spustit: /ano ${code} · zrušit: /ne ${code} (platí 10 min) — nebo klikni na tlačítko / napiš „ano“`,
   ].join('\n')
 }
 
@@ -79,6 +79,12 @@ export async function confirmPending(code: string): Promise<string> {
   if (!p) return `Kód „${code}“ neznám nebo už vypršel. Čekající: /ano`
   pending.delete(p.code)
   return `✅ Potvrzeno: ${p.label.split('\n')[0]}\n\n${await p.run()}`
+}
+
+/** Kódy čekajících potvrzení (nejnovější poslední) — pro „ano“ bez kódu. */
+export function pendingCodes(): string[] {
+  prune()
+  return [...pending.values()].sort((a, b) => a.at - b.at).map((p) => p.code)
 }
 
 export function cancelPending(code: string): string {

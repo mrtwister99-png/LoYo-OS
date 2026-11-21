@@ -556,6 +556,21 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
                 fontSize: 11,
               }}>
                 <LinkifiedText text={msg.text} color={msg.from === 'me' ? '#ffffff' : '#7cc8ff'} />
+                {(() => {
+                  // Mary čeká na potvrzení → tlačítka místo psaní /ano <kód>
+                  const code = msg.from === 'mary' ? msg.text.match(/\/ano ([a-z0-9]{4})\b/)?.[1] : undefined
+                  if (!code) return null
+                  const answered = chatMessages.some(m => m.from === 'me' && new RegExp(`^/(ano|ne) ${code}\\b`).test(m.text.trim()))
+                  if (answered) return <div style={{ marginTop: 6, fontSize: 9, opacity: 0.6 }}>✓ vyřízeno</div>
+                  return (
+                    <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                      <button onClick={() => sendWithValue(`/ano ${code}`)} disabled={isChatLoading}
+                        style={{ background: '#facc15', color: '#111', fontWeight: 900, fontSize: 10, padding: '4px 10px', border: '1px solid black', cursor: 'pointer', boxShadow: '2px 2px 0 black' }}>✅ POTVRDIT</button>
+                      <button onClick={() => sendWithValue(`/ne ${code}`)} disabled={isChatLoading}
+                        style={{ background: '#444', color: '#f0f0f0', fontWeight: 900, fontSize: 10, padding: '4px 10px', border: '1px solid black', cursor: 'pointer', boxShadow: '2px 2px 0 black' }}>❌ ZRUŠIT</button>
+                    </div>
+                  )
+                })()}
               </div>
             </div>
           )
