@@ -1,5 +1,5 @@
 // D:\dev\loyo-os\apps\web\src\components\Chat.tsx - HADR SMALL + DRAGGABLE
-import { useState, useEffect, useLayoutEffect, useRef } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import LinkifiedText, { openExternal } from './LinkifiedText'
 import { replyOptions } from './replyOptions'
 
@@ -375,8 +375,16 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
   // nová zpráva / znovuotevření → zpátky na posledních 50
   useEffect(() => { setVisibleCount(PAGE) }, [chatMessages.length, isOpen])
 
-  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [chatMessages])
-  useEffect(() => { if (isOpen) chatEndRef.current?.scrollIntoView({ behavior: 'auto' }) }, [isOpen])
+  // otevření chatu / nová zpráva / načtená historie → hned dole (bez dojíždění);
+  // ještě jednou po vykreslení, protože odkazy a tlačítka pod zprávami mění výšku
+  const jumpToBottom = useCallback(() => {
+    const go = () => { const el = listRef.current; if (el) el.scrollTop = el.scrollHeight }
+    go()
+    requestAnimationFrame(go)
+    setTimeout(go, 150)
+  }, [])
+  useLayoutEffect(() => { if (isOpen) jumpToBottom() }, [isOpen, jumpToBottom])
+  useLayoutEffect(() => { if (isOpen && prevScrollHeight.current == null) jumpToBottom() }, [chatMessages.length, isChatLoading, isOpen, jumpToBottom])
   useEffect(() => { if (isOpen) chatInputRef.current?.focus() }, [isOpen])
 
   const sendWithValue = async (value: string) => {
