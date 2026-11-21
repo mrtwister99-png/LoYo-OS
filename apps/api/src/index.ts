@@ -179,7 +179,23 @@ app.get('/api/capabilities/watch', (req, reply) => {
   });
 });
 
-app.listen({ port: 3001 }).then(async () => {
+// Při restartu (tsx watch po změně souboru, Strážce) drží starý proces port ještě chvíli.
+// Dřív to skončilo EADDRINUSE a API zůstalo mrtvé → teď se pár sekund zkouší znovu.
+async function listenWithRetry(tries = 30): Promise<void> {
+  for (let i = 1; ; i++) {
+    try { await app.listen({ port: 3001 }); return }
+    catch (e: any) {
+      if (e?.code !== 'EADDRINUSE' || i >= tries) throw e
+      console.warn(`[api] port 3001 je ještě obsazený, zkouším znovu (${i}/${tries})…`)
+      await new Promise((r) => setTimeout(r, 1000))
+    }
+  }
+}
+
+listenWithRetry().catch((e) => {
+  console.error('[api] nepodařilo se spustit na portu 3001:', e?.message ?? e)
+  process.exit(1)
+}).then(async () => {
   console.log('API on http://localhost:3001')
   initDb();
 console.log('[manifestDb] init done, reindexing...');

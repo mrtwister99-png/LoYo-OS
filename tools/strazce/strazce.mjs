@@ -89,9 +89,15 @@ async function startBot() {
   try { await fetch(`${API}/api/agents/mary-jane/telegram/start`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}', signal: AbortSignal.timeout(30_000) }) } catch {}
 }
 
-function startApi() {
+async function startApi() {
   // stejně jako spouštěč: klasický conhost, minimalizovaný, titulek „LoYo OS - API“
-  spawn('taskkill', ['/F', '/T', '/FI', 'WINDOWTITLE eq LoYo OS - API*'], { windowsHide: true }).on('error', () => {})
+  // Nejdřív DOBĚHNOUT taskkill starého okna — dřív běžel souběžně a zabíjel i nově otevřené okno
+  // (stejný titulek) → API se nikdy nenahodilo. Pak chvilku pauza, ať se uvolní port 3001.
+  await new Promise((res) => {
+    const k = spawn('taskkill', ['/F', '/T', '/FI', 'WINDOWTITLE eq LoYo OS - API*'], { windowsHide: true })
+    k.on('error', res); k.on('exit', res)
+  })
+  await new Promise((r) => setTimeout(r, 1500))
   // přes start-api.cmd: Node → PowerShell s vnořenými uvozovkami okno nespustil
   spawn('cmd.exe', ['/d', '/c', join(ROOT, 'tools', 'strazce', 'start-api.cmd')], { windowsHide: true, detached: true, stdio: 'ignore' }).unref()
 }
@@ -105,7 +111,7 @@ async function restore(reason) {
   try {
     log(`nahazuju LoYo API (${reason})`)
     await telegram(`⚠ LoYo OS spadlo (${reason}) — Strážce ho nahazuje…`)
-    startApi()
+    await startApi()
     const t0 = Date.now()
     while (Date.now() - t0 < START_WAIT_MS) {
       await new Promise((r) => setTimeout(r, 3000))
