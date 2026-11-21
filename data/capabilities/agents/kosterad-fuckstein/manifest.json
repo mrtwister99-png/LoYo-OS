@@ -35,5 +35,9 @@
       "label": "🧹 Údržba manifestů",
       "command": "/kosterad"
     }
+  ],
+  "skills": [
+    "find-skills",
+    "ui-taste"
   ]
 }

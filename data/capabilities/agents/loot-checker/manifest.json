@@ -27,5 +27,9 @@
   ],
   "createdAt": "2026-11-14T00:00:00Z",
   "updatedAt": "2026-11-14T00:00:00Z",
-  "number": 18
+  "number": 18,
+  "skills": [
+    "find-skills",
+    "ui-taste"
+  ]
 }

@@ -22,5 +22,9 @@
       "command": "/find {text}",
       "ask": "Co a kde hledat? (např. instalatér Praha)"
     }
+  ],
+  "skills": [
+    "find-skills",
+    "ui-taste"
   ]
 }

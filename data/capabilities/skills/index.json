@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastSync": "2026-11-21T00:31:08.964Z",
+  "lastSync": "2026-11-21T02:08:56.096Z",
   "skills": [
     {
       "id": "ponytail",
@@ -19,6 +19,61 @@
       "name": "Bezpečný shell",
       "desc": "Pravidla pro /terminal, /ps a příkazy agentů: co je zakázané, co jen po /ano a co volné. Vynucuje shellPolicy.ts, pravidla v rules.json.",
       "folder": "bezpecny-shell",
+      "file": "./SKILL.md",
+      "category": "all",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    {
+      "id": "find-skills",
+      "number": 3,
+      "name": "Find Skills",
+      "desc": "Najde a doporučí další skilly ze skills.sh, když se ptáš „jak udělat X“ nebo „je na to skill?“. Pro všechny agenty.",
+      "folder": "find-skills",
+      "file": "./SKILL.md",
+      "category": "all",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    {
+      "id": "grill-me",
+      "number": 4,
+      "name": "Grill Me (brainstorming)",
+      "desc": "Neúnavný výslech nad plánem nebo nápadem: otázky po kolech, ke každé doporučená odpověď, dokud není jasno. Na brainstorming. Obsah je v GRILLING.md.",
+      "folder": "grill-me",
+      "file": "./SKILL.md",
+      "category": "all",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    {
+      "id": "design-mobile-apps",
+      "number": 5,
+      "name": "Design Mobile Apps",
+      "desc": "Návrh obrazovek mobilní appky přes Sleek a jejich implementace v React Native / HTML. Na telefon. Potřebuje SLEEK_API_KEY (placená služba Sleek).",
+      "folder": "design-mobile-apps",
+      "file": "./SKILL.md",
+      "category": "all",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    {
+      "id": "frontend-design",
+      "number": 6,
+      "name": "Frontend Design",
+      "desc": "Výrazný, nešablonovitý vizuální design webového UI: paleta, typografie, layout s vlastním charakterem. Na frontend.",
+      "folder": "frontend-design",
+      "file": "./SKILL.md",
+      "category": "all",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    {
+      "id": "ui-taste",
+      "number": 7,
+      "name": "UI Taste (Uizze)",
+      "desc": "Anti-UI-slop postup od Uizze: výběr layoutu, vizuální hierarchie, doladění detailů pro web i iOS, se závěrečnou kontrolou. Všude, top priorita.",
+      "folder": "ui-taste",
       "file": "./SKILL.md",
       "category": "all",
       "status": "active",

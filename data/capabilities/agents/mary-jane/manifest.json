@@ -90,7 +90,10 @@
     "playwright:4"
   ],
   "skills": [
-    "bezpecny-shell"
+    "bezpecny-shell",
+    "find-skills",
+    "grill-me",
+    "ui-taste"
   ],
   "actions": [
     {

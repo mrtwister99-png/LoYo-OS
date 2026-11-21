@@ -51,5 +51,9 @@
       "command": "/bender {text}",
       "ask": "Co má Bender v Blenderu udělat?"
     }
+  ],
+  "skills": [
+    "find-skills",
+    "ui-taste"
   ]
 }

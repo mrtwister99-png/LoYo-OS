@@ -10,7 +10,11 @@
       "category": "all",
       "team": "LOYO OS v3",
       "status": "active",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "grill-me",
+        "ui-taste"
+      ],
       "tools": [
         "fs_read"
       ],
@@ -33,7 +37,9 @@
       "skills": [
         "lead-generation",
         "cli",
-        "research"
+        "research",
+        "find-skills",
+        "ui-taste"
       ],
       "tools": [
         "cli:firmy",
@@ -61,7 +67,10 @@
       "status": "online",
       "skills": [
         "deep-research",
-        "analysis"
+        "analysis",
+        "find-skills",
+        "grill-me",
+        "ui-taste"
       ],
       "tools": [
         "fs_write",
@@ -90,7 +99,9 @@
       "skills": [
         "manifest-generation",
         "validation",
-        "file-writing"
+        "file-writing",
+        "find-skills",
+        "ui-taste"
       ],
       "tools": [
         "fs_write",
@@ -113,7 +124,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -130,7 +145,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -147,7 +166,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -164,7 +187,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -181,7 +208,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -198,7 +229,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -215,7 +250,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -232,7 +271,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -249,7 +292,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -266,7 +313,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -283,7 +334,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -300,7 +355,10 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -317,7 +375,10 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -334,7 +395,10 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -358,7 +422,10 @@
         "customer-support",
         "chat-widget",
         "tool-calling",
-        "czech-language"
+        "czech-language",
+        "find-skills",
+        "frontend-design",
+        "ui-taste"
       ],
       "tools": [
         "getOrderStatus",
@@ -390,7 +457,11 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "frontend-design",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",
@@ -413,7 +484,9 @@
       "skills": [
         "bazaar-scan",
         "deal-scoring",
-        "telegram-notify"
+        "telegram-notify",
+        "find-skills",
+        "ui-taste"
       ],
       "tools": [
         "web_fetch",
@@ -443,7 +516,9 @@
       "skills": [
         "price-appraisal",
         "listing-writer",
-        "bazaar-scan"
+        "bazaar-scan",
+        "find-skills",
+        "ui-taste"
       ],
       "tools": [
         "web_fetch",
@@ -471,7 +546,10 @@
       "category": "all",
       "team": "",
       "status": "online",
-      "skills": [],
+      "skills": [
+        "find-skills",
+        "ui-taste"
+      ],
       "tools": [],
       "workflow": "",
       "promptFile": "",

@@ -16,5 +16,10 @@
   ],
   "createdAt": "2026-11-16T00:00:00Z",
   "updatedAt": "2026-11-16T00:00:00Z",
-  "number": 20
+  "number": 20,
+  "skills": [
+    "find-skills",
+    "frontend-design",
+    "ui-taste"
+  ]
 }

@@ -36,5 +36,9 @@
       "label": "📂 Roztřídit Stažené",
       "command": "/tridil"
     }
+  ],
+  "skills": [
+    "find-skills",
+    "ui-taste"
   ]
 }

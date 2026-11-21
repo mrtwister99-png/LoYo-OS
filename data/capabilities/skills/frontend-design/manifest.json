@@ -1,0 +1,24 @@
+{
+  "id": "frontend-design",
+  "type": "skill",
+  "displayName": "Frontend Design",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Výrazný, nešablonovitý vizuální design webového UI: paleta, typografie, layout s vlastním charakterem. Na frontend.",
+  "runtime": "prompt",
+  "entrypoint": "./SKILL.md",
+  "pure": true,
+  "number": 6,
+  "source": "https://www.skills.sh/anthropics/skills/frontend-design",
+  "license": "viz LICENSE.txt (anthropics/skills)",
+  "permissions": [
+    "fs:read:data/capabilities/skills/frontend-design"
+  ],
+  "tags": [
+    "frontend",
+    "design",
+    "web"
+  ],
+  "createdAt": "2026-11-21T00:00:00Z",
+  "updatedAt": "2026-11-21T00:00:00Z"
+}

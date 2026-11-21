@@ -42,5 +42,9 @@
       "command": "/stepan {text}",
       "ask": "Co prodáváš? (např. iPhone 13 128 GB, baterie 89 %)"
     }
+  ],
+  "skills": [
+    "find-skills",
+    "ui-taste"
   ]
 }

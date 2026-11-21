@@ -47,5 +47,10 @@
       "command": "/fetch {text}",
       "ask": "Adresa stránky?"
     }
+  ],
+  "skills": [
+    "find-skills",
+    "grill-me",
+    "ui-taste"
   ]
 }

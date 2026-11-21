@@ -43,5 +43,9 @@
       "label": "📅 Poslední 3 dny",
       "command": "/luuu 3"
     }
+  ],
+  "skills": [
+    "find-skills",
+    "ui-taste"
   ]
 }

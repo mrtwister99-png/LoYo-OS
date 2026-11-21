@@ -1,0 +1,24 @@
+{
+  "id": "ui-taste",
+  "type": "skill",
+  "displayName": "UI Taste (Uizze)",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Anti-UI-slop postup od Uizze: výběr layoutu, vizuální hierarchie, doladění detailů pro web i iOS, se závěrečnou kontrolou. Všude, top priorita.",
+  "runtime": "prompt",
+  "entrypoint": "./SKILL.md",
+  "pure": true,
+  "number": 7,
+  "source": "https://www.skills.sh/site/uizze.sh/ui-taste",
+  "license": "Apache-2.0 (uizze.sh)",
+  "permissions": [
+    "fs:read:data/capabilities/skills/ui-taste"
+  ],
+  "tags": [
+    "ui",
+    "design-review",
+    "polish"
+  ],
+  "createdAt": "2026-11-21T00:00:00Z",
+  "updatedAt": "2026-11-21T00:00:00Z"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "find-skills",
+  "type": "skill",
+  "displayName": "Find Skills",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Najde a doporučí další skilly ze skills.sh, když se ptáš „jak udělat X“ nebo „je na to skill?“. Pro všechny agenty.",
+  "runtime": "prompt",
+  "entrypoint": "./SKILL.md",
+  "pure": true,
+  "number": 3,
+  "source": "https://www.skills.sh/vercel-labs/skills/find-skills",
+  "license": "MIT (vercel-labs/skills)",
+  "permissions": [
+    "fs:read:data/capabilities/skills/find-skills"
+  ],
+  "tags": [
+    "skills",
+    "discovery"
+  ],
+  "createdAt": "2026-11-21T00:00:00Z",
+  "updatedAt": "2026-11-21T00:00:00Z"
+}

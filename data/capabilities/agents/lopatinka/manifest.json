@@ -53,6 +53,8 @@
   "skills": [
     "bazaar-scan",
     "deal-scoring",
-    "telegram-notify"
+    "telegram-notify",
+    "find-skills",
+    "ui-taste"
   ]
 }

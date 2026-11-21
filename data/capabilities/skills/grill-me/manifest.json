@@ -1,0 +1,23 @@
+{
+  "id": "grill-me",
+  "type": "skill",
+  "displayName": "Grill Me (brainstorming)",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Neúnavný výslech nad plánem nebo nápadem: otázky po kolech, ke každé doporučená odpověď, dokud není jasno. Na brainstorming. Obsah je v GRILLING.md.",
+  "runtime": "prompt",
+  "entrypoint": "./SKILL.md",
+  "pure": true,
+  "number": 4,
+  "source": "https://www.skills.sh/mattpocock/skills/grill-me",
+  "license": "MIT (mattpocock/skills)",
+  "permissions": [
+    "fs:read:data/capabilities/skills/grill-me"
+  ],
+  "tags": [
+    "brainstorming",
+    "planning"
+  ],
+  "createdAt": "2026-11-21T00:00:00Z",
+  "updatedAt": "2026-11-21T00:00:00Z"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "design-mobile-apps",
+  "type": "skill",
+  "displayName": "Design Mobile Apps",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Návrh obrazovek mobilní appky přes Sleek a jejich implementace v React Native / HTML. Na telefon. Potřebuje SLEEK_API_KEY (placená služba Sleek).",
+  "runtime": "prompt",
+  "entrypoint": "./SKILL.md",
+  "pure": true,
+  "number": 5,
+  "source": "https://www.skills.sh/designed-by-ai/skills/design-mobile-apps",
+  "license": "MIT (designed-by-ai/skills)",
+  "permissions": [
+    "fs:read:data/capabilities/skills/design-mobile-apps"
+  ],
+  "tags": [
+    "mobile",
+    "design",
+    "react-native"
+  ],
+  "createdAt": "2026-11-21T00:00:00Z",
+  "updatedAt": "2026-11-21T00:00:00Z"
+}
