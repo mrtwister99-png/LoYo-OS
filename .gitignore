@@ -93,3 +93,5 @@ data/current_state/
 .DS_Store
 Thumbs.db
 ehthumbs.db
+# Playwright MCP — screenshoty a snímky stránek (runtime)
+data/screenshots/
