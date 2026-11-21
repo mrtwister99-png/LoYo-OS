@@ -82,7 +82,7 @@
   ],
   "category": "all",
   "createdAt": "2026-09-02T00:00:00Z",
-  "updatedAt": "2026-11-20T11:16:22.052Z",
+  "updatedAt": "2026-11-21T02:24:24.942Z",
   "number": 1,
   "dependencies": [
     "filesystem:1",
@@ -116,5 +116,8 @@
       "label": "📋 Aktivita",
       "command": "/activity 10"
     }
+  ],
+  "tools": [
+    "fs_read"
   ]
 }
