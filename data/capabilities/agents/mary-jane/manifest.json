@@ -70,7 +70,9 @@
     "/grill",
     "/napad",
     "/napady",
-    "/strazce"
+    "/strazce",
+    "/navrh",
+    "/mejl"
   ],
   "specialization": [
     "routing",
@@ -133,6 +135,11 @@
     {
       "label": "🛡️ Strážce",
       "command": "/strazce"
+    },
+    {
+      "label": "📧 Mejl",
+      "command": "/mejl {text}",
+      "ask": "Komu (nepovinné), předmět - zpráva"
     }
   ],
   "tools": [

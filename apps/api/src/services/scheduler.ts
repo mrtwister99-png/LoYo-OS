@@ -169,6 +169,8 @@ async function executeScheduled(cmd: CommandDef): Promise<string>
 }
 
 // ---------- notification store (API endpoint si je vyzvedne) ----------
+// type = jeden ze 3 typů v horní liště: new (NOVÉ) · urgent (NUTNÉ) · approval (KE SCHVÁLENÍ)
+export type NotifType = 'new' | 'urgent' | 'approval'
 interface SchedulerNotification
 {
   id: string
@@ -176,7 +178,8 @@ interface SchedulerNotification
   command: string
   message: string
   read: boolean
-  type: 'reminder' | 'daily-brief' | 'system'
+  type: NotifType
+  meta?: Record<string, unknown>
 }
 
 let pendingNotifications: SchedulerNotification[] = []
@@ -210,22 +213,23 @@ export function markAllRead(): void
 // drž max 50 notifikací v paměti
 function addNotification(command: string, message: string): void
 {
-  pendingNotifications.unshift({
-    id: randomUUID().slice(0, 8),
-    ts: new Date().toISOString(),
-    command,
-    message,
-    read: false,
-    type: command === '/daily-brief' ? 'daily-brief' : command.startsWith('/') ? 'reminder' : 'system',
-  })
-  if (pendingNotifications.length > 50)
-  {
-    pendingNotifications = pendingNotifications.slice(0, 50)
-  }
-  // persist na disk (fire-and-forget, chyba nevadí)
-  savePendingNotifications().catch((err) =>
-    console.error('[scheduler] pending save error:', err)
-  )
+  pushNotification('new', command, message)
+}
+
+/** Oznámení do horní lišty (NOVÉ / NUTNÉ / KE SCHVÁLENÍ) — volá ho kdokoli v API. */
+export function pushNotification(type: NotifType, command: string, message: string, meta?: Record<string, unknown>): void
+{
+  pendingNotifications.unshift({ id: randomUUID().slice(0, 8), ts: new Date().toISOString(), command, message: String(message).slice(0, 600), read: false, type, ...(meta ? { meta } : {}) })
+  if (pendingNotifications.length > 80) pendingNotifications = pendingNotifications.slice(0, 80)
+  savePendingNotifications().catch((err) => console.error('[scheduler] pending save error:', err))
+}
+
+/** Vyřízené schválení (potvrzeno / zrušeno / vypršelo) → oznámení zmizí z nepřečtených. */
+export function resolveApproval(code: string): void
+{
+  let changed = false
+  for (const n of pendingNotifications) if (n.type === 'approval' && n.meta?.code === code && !n.read) { n.read = true; changed = true }
+  if (changed) savePendingNotifications().catch(() => {})
 }
 
 // ---------- pending notifications persistence ----------
@@ -235,16 +239,21 @@ async function loadPendingNotifications(): Promise<void>
   {
     const raw = await readFile(PENDING_FILE, 'utf-8')
     const parsed = JSON.parse(raw)
-    if (Array.isArray(parsed)) pendingNotifications = parsed
+    // starší záznamy měly type reminder / daily-brief / system → patří do NOVÉ
+    if (Array.isArray(parsed)) pendingNotifications = parsed.filter((n: any) => n && n.id).map((n: any) => ({ ...n, type: ['new', 'urgent', 'approval'].includes(n.type) ? n.type : 'new' }))
   }
   catch
   {
     // soubor ještě neexistuje — začínáme s prázdným polem
   }
+  pendingLoaded = true
 }
+let pendingLoaded = false
 
 async function savePendingNotifications(): Promise<void>
 {
+  // jen proces, který oznámení načetl (běžící API) — jinak by jiný skript přepsal disk prázdným seznamem
+  if (!pendingLoaded) return
   await mkdir(NOTIFICATIONS_DIR, { recursive: true })
   // drž max 50 i na disku
   const toSave = pendingNotifications.slice(0, 50)

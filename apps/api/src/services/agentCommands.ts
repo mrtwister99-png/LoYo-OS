@@ -425,6 +425,7 @@ async function listCommands(): Promise<CommandResult> {
       '/terminal [příkaz] — zapne terminál (cmd), pak každá zpráva = příkaz',
       '/ps [příkaz] — totéž v PowerShellu',
       '/exit — vypne terminál',
+      '/mejl [komu] Předmět - zpráva — odešle e-mail (po potvrzení)',
       '/strazce — hlídač LoYo OS (nahazuje po pádu) + odkaz pro telefon · /strazce pauza|zapni',
       '/napad <text> — nápad do panelu NÁPADY na dashboardu · /napady — seznam',
       '/ano [kód] · /ne [kód] — potvrdí / zruší riskantní příkaz (skill Bezpečný shell)',
@@ -443,6 +444,7 @@ async function listCommands(): Promise<CommandResult> {
       '/new workflow <jméno> - <popis> | kroky: a > b',
       '/new cli <jméno> - <co dělá>',
       '/new mcp <téma> · /new skill <téma> — s researchem',
+      '/navrh <co má dělat> — Julia research → Koštěrad požadavky a kritéria → ✅ vyrobit',
       '',
       'SYSTÉM',
       '/vse — tento seznam',
@@ -626,6 +628,18 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
     case 'strazc':
     case 'hlidac':
       return strazceCommand(args)
+    case 'mejl':
+    case 'mail':
+    case 'email': {
+      const { mejlCommand } = await import('./mailSend.js')
+      return mejlCommand(args).catch((e: any) => ({ reply: `❌ /mejl: ${e?.message ?? e}`, steps: ['Mary Jane: /mejl'] }))
+    }
+    case 'navrh':
+    case 'vyrob': {
+      if (!args) return { reply: 'Jak na to: /navrh <co má agent dělat>\nnapř. /navrh sledovač cen na Alze\nJulia udělá research → Koštěrad navrhne minimální požadavky a kritéria → ty potvrdíš ✅ → vyrobí se.', steps: ['Mary Jane: /navrh'] }
+      const { startDesign } = await import('./agentDesign.js')
+      return { reply: startDesign(args), steps: ['Mary Jane: /navrh → Julia → Koštěrad'] }
+    }
     case 'napad': {
       if (!args) return { reply: 'Jak na to: /napad <text>\nnapř. /napad agent, co hlídá ceny na Alze\nNápad se objeví na prvním dashboardu v panelu NÁPADY. Seznam: /napady', steps: ['Mary Jane: /napad'] }
       const { addNapad } = await import('../routes/napady.js')

@@ -500,7 +500,7 @@ async function runFind(userMessage: string, runId: string, steps: string[]) {
 // ============================================================
 // /research — Julia: hloubkový report na libovolné téma → .md soubor
 // ============================================================
-async function runResearch(userMessage: string, runId: string, steps: string[]) {
+export async function runResearch(userMessage: string, runId: string, steps: string[]) {
   const query = userMessage.replace(/^\/research\s*/i, '').trim()
   const juliaDocs = await loadAgentDocs('Julia_Nehledalova')
   const juliaModel = await loadAgentModel('Julia_Nehledalova')

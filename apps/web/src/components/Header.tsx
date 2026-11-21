@@ -68,6 +68,7 @@ interface SchedulerNotification {
   message: string
   read: boolean
   type?: NotifType
+  meta?: { code?: string } & Record<string, unknown>
 }
 
 function notifColor(type: NotifType | undefined) {
@@ -195,8 +196,19 @@ export default function Header({
 
   useEffect(() => {
     fetchNotifs()
-    const i = setInterval(fetchNotifs, 15_000)
+    const i = setInterval(fetchNotifs, 8_000)
     return () => clearInterval(i)
+  }, [fetchNotifs])
+
+  // KE SCHVÁLENÍ: ✅ / ❌ přímo v oznámení → /ano <kód> nebo /ne <kód> přes Mary
+  const [approving, setApproving] = useState<string | null>(null)
+  const answerApproval = useCallback(async (code: string, yes: boolean) => {
+    setApproving(code)
+    try {
+      await fetch('/api/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `${yes ? '/ano' : '/ne'} ${code}`, source: 'ui' }) })
+    } catch {}
+    setApproving(null)
+    fetchNotifs()
   }, [fetchNotifs])
 
   // ── rotace notifikací — moderní single view s animací ───────
@@ -774,6 +786,18 @@ export default function Header({
                         <div style={{ fontSize: 10, marginTop: 4, color: 'rgba(255,255,255,0.22)' }}>
                           {timeAgo(n.ts)}
                         </div>
+                        {n.type === 'approval' && !n.read && n.meta?.code && (
+                          <div style={{ display: 'flex', gap: 6, marginTop: 8 }} onClick={e => e.stopPropagation()}>
+                            <button disabled={approving === n.meta.code} onClick={() => answerApproval(String(n.meta!.code), true)}
+                              style={{ background: '#facc15', color: '#111', fontWeight: 900, fontSize: 10, padding: '4px 10px', border: '1px solid black', cursor: 'pointer', boxShadow: '2px 2px 0 black' }}>
+                              {approving === n.meta.code ? '…' : '✅ POTVRDIT'}
+                            </button>
+                            <button disabled={approving === n.meta.code} onClick={() => answerApproval(String(n.meta!.code), false)}
+                              style={{ background: '#444', color: '#f0f0f0', fontWeight: 900, fontSize: 10, padding: '4px 10px', border: '1px solid black', cursor: 'pointer', boxShadow: '2px 2px 0 black' }}>
+                              ❌ ZRUŠIT
+                            </button>
+                          </div>
+                        )}
                       </div>
                       {!n.read && (
                         <div style={{

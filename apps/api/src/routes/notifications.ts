@@ -2,7 +2,7 @@
 // LOYO OS // Scheduler notifications endpoint (Fastify)
 
 import { FastifyInstance } from 'fastify'
-import { getNotifications, markNotificationRead, markAllRead } from '../services/scheduler'
+import { getNotifications, markNotificationRead, markAllRead, pushNotification } from '../services/scheduler'
 
 export default async function notificationsRoutes(app: FastifyInstance)
 {
@@ -18,6 +18,15 @@ export default async function notificationsRoutes(app: FastifyInstance)
   {
     const { id } = req.params as { id: string }
     markNotificationRead(id)
+    return { ok: true }
+  })
+
+  // POST /api/notifications { type: new|urgent|approval, command, message } — pro Strážce a skripty mimo API
+  app.post('/notifications', async (req, reply) =>
+  {
+    const { type, command, message } = (req.body as { type?: string; command?: string; message?: string }) || {}
+    if (!message || !['new', 'urgent', 'approval'].includes(String(type))) { reply.code(400); return { error: 'type (new|urgent|approval) a message jsou povinné' } }
+    pushNotification(type as any, command || 'system', message)
     return { ok: true }
   })
 

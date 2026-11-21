@@ -1,5 +1,92 @@
 [
   {
+    "id": "05ec12be-77e5-48f0-8051-e0f281de37be",
+    "ts": "2026-11-21T05:00:25.348Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"sledovač cen na Alze — co by měl umět software agent na tohle, odkud brát data, existující nástroje, rizika\" → 8 zdrojů, 0 stránek",
+    "meta": {
+      "sources": [
+        "https://www.alza.cz/jak-pracovat-s-cenou",
+        "https://www.alza.cz/media/ai-agenti-a-automatizace-v-praxi-od-pilotu-k-produkcnimu-provozu",
+        "https://aicko.cz/content/jak-monitorovat-ai-agenta-v-produkci-observability",
+        "https://thunderbit.com/cs/blog/best-competitor-price-tracking-software",
+        "https://thunderbit.com/cs/blog/best-online-price-tracker-tools",
+        "https://www.ppc-consulting.cz/blog/srovnani-nastroju-pro-sledovani-cen-konkurence",
+        "https://www.ranktracker.com/cs/blog/best-ai-price-optimization-software-2026/",
+        "https://aicko.cz/content/ai-browser-agent-produkce-vyber-platformy"
+      ]
+    }
+  },
+  {
+    "id": "29b898ed-09d9-496c-88a7-38a5e296e4ca",
+    "ts": "2026-11-21T04:58:34.408Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"ai agent srovnavac cen\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://felloai.com/cs/nejlepsi-ai-agenti/",
+        "https://opora-ai.cz/guides/kolik-stoji-ai-agent.html",
+        "https://felloai.com/cs/srovnani-cen-ai/",
+        "https://bitvea.com/cs/blog/kolik-stoji-ai-agent",
+        "https://speechify.com/cs/blog/how-much-does-an-ai-voice-agent-cost-real-pricing-breakdown-2026/",
+        "https://pavelkovarik.cz/nejlepsi-ai-asistent-2026-srovnani-chatgpt-gemini-claude-a-dalsich/",
+        "https://www.5nej.cz/srovnani-nejlepsich-ai-nastroju/",
+        "https://vojtechbruk.cz/srovnani/nejlepsi-ai-asistenti/"
+      ]
+    }
+  },
+  {
+    "id": "a6d38d9e-646d-4654-a688-cd031924ed0c",
+    "ts": "2026-11-21T04:58:33.331Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /julia ai agent srovnavac cen",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "6f5817ba-d9a2-40ab-8ece-ca105432b019",
+    "ts": "2026-11-21T04:57:15.876Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"ai agent srovnavac cen\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://felloai.com/cs/nejlepsi-ai-agenti/",
+        "https://opora-ai.cz/guides/kolik-stoji-ai-agent.html",
+        "https://bitvea.com/cs/blog/kolik-stoji-ai-agent",
+        "https://felloai.com/cs/srovnani-cen-ai/",
+        "https://speechify.com/cs/blog/how-much-does-an-ai-voice-agent-cost-real-pricing-breakdown-2026/",
+        "https://www.5nej.cz/srovnani-nejlepsich-ai-nastroju/",
+        "https://pavelkovarik.cz/nejlepsi-ai-asistent-2026-srovnani-chatgpt-gemini-claude-a-dalsich/",
+        "https://www.flowhunt.io/cs/blog/best-ai-agent-builder/"
+      ]
+    }
+  },
+  {
+    "id": "ace8bce9-1f4a-4ab2-b145-9c74b22ba8f5",
+    "ts": "2026-11-21T04:57:14.269Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /julia ai agent srovnavac cen",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "96d2d216-6a13-4187-84bb-69a01d676aeb",
+    "ts": "2026-11-21T04:55:48.306Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /ne 9izh",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
     "id": "e5cf802c-e5ff-4ea5-a683-7a21ff639f43",
     "ts": "2026-11-21T04:37:30.331Z",
     "agent": "Mary Jane",

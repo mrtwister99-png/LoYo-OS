@@ -45,23 +45,32 @@ export async function checkCommand(command: string): Promise<Verdict> {
 }
 
 // ---------- čekající potvrzení (/ano <kód>) ----------
-type Pending = { code: string; label: string; why: string; run: () => Promise<string>; at: number }
+type Pending = { code: string; label: string; why: string; run: () => Promise<string>; at: number; ttl: number }
 const pending = new Map<string, Pending>()
 
-function prune() {
-  for (const [k, p] of pending) if (Date.now() - p.at > CONFIRM_TTL_MS) pending.delete(k)
+// oznámení KE SCHVÁLENÍ v horní liště (dynamický import = bez kruhových závislostí)
+function notifyApproval(code: string, why: string, label: string) {
+  import('./scheduler.js').then((s) => s.pushNotification('approval', `/ano ${code}`, `${why}: ${label.split('\n')[0]}`.slice(0, 300), { code })).catch(() => {})
+}
+function resolveNotif(code: string) {
+  import('./scheduler.js').then((s) => s.resolveApproval(code)).catch(() => {})
 }
 
-export function askConfirm(label: string, why: string, run: () => Promise<string>): string {
+function prune() {
+  for (const [k, p] of pending) if (Date.now() - p.at > p.ttl) { pending.delete(k); resolveNotif(k) }
+}
+
+export function askConfirm(label: string, why: string, run: () => Promise<string>, ttlMs = CONFIRM_TTL_MS): string {
   prune()
   let code = ''
   do code = Math.random().toString(36).slice(2, 6); while (pending.has(code))
-  pending.set(code, { code, label, why, run, at: Date.now() })
+  pending.set(code, { code, label, why, run, at: Date.now(), ttl: ttlMs })
+  notifyApproval(code, why, label)
   return [
     `⚠ Tohle chce potvrzení (${why}):`,
     label,
     '',
-    `Spustit: /ano ${code} · zrušit: /ne ${code} (platí 10 min) — nebo klikni na tlačítko / napiš „ano“`,
+    `Spustit: /ano ${code} · zrušit: /ne ${code} (platí ${ttlMs >= 3_600_000 ? `${Math.round(ttlMs / 3_600_000)} h` : `${Math.round(ttlMs / 60_000)} min`}) — nebo klikni na tlačítko / napiš „ano“`,
   ].join('\n')
 }
 
@@ -78,6 +87,7 @@ export async function confirmPending(code: string): Promise<string> {
   const p = pending.get(code.trim().toLowerCase())
   if (!p) return `Kód „${code}“ neznám nebo už vypršel. Čekající: /ano`
   pending.delete(p.code)
+  resolveNotif(p.code)
   return `✅ Potvrzeno: ${p.label.split('\n')[0]}\n\n${await p.run()}`
 }
 
@@ -90,10 +100,14 @@ export function pendingCodes(): string[] {
 export function cancelPending(code: string): string {
   if (!code) {
     const n = pending.size
+    for (const k of pending.keys()) resolveNotif(k)
     pending.clear()
     return n ? `🗑 Zrušeno ${n} čekajících potvrzení.` : 'Nic nečeká na potvrzení.'
   }
-  return pending.delete(code.trim().toLowerCase()) ? `🗑 Zrušeno: ${code}` : `Kód „${code}“ neznám.`
+  const c = code.trim().toLowerCase()
+  if (!pending.delete(c)) return `Kód „${code}“ neznám.`
+  resolveNotif(c)
+  return `🗑 Zrušeno: ${code}`
 }
 
 /** Projde příkaz pravidly: povolené spustí hned, potvrzované odloží na /ano, zakázané odmítne. */

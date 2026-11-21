@@ -186,6 +186,7 @@ const HELP = [
   '/luuu — Luuu roztřídí nové maily · /fetch <url> · /web <url> · /screenshot <url>',
   '/ano · /ne — potvrdit / zrušit riskantní příkaz (nebo tlačítko / „ano“)',
   '/napad <text> — nápad na dashboard · /strazce — hlídač LoYo + odkaz pro telefon',
+  '/navrh <co> — návrh agenta (Julia + Koštěrad) · /mejl [komu] Předmět - zpráva',
   '/ls [plocha|stažené|dokumenty] · /cat <soubor> · /najdi <název> — soubory na PC',
   '/py <soubor.py> - <zadání> — napíšu Python skript (bez cesty = plocha)',
   '/skript <soubor> · /spust <agent> — spustí skript / agenta',

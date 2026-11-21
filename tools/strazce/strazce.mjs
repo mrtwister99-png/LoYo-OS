@@ -130,6 +130,12 @@ async function restore(reason) {
     state.failures = 0
     log(`nahozeno za ${Math.round((Date.now() - t0) / 1000)} s`)
     await telegram('💃 Jsem nahozená!!! :D\n— Mary (díky Strážci)')
+    // oznámení NUTNÉ v horní liště LoYo
+    await fetch(`${API}/api/notifications`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'urgent', command: 'Strážce', message: `LoYo OS spadlo (${reason}) — Strážce ho nahodil za ${Math.round((Date.now() - t0) / 1000)} s` }),
+      signal: AbortSignal.timeout(5000),
+    }).catch(() => {})
   } finally {
     state.busy = false
     save()

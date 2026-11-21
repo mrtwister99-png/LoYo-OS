@@ -38,6 +38,10 @@ export async function logActivity(e: Omit<ActivityEvent, 'id' | 'ts'>): Promise<
   const feed = await readFeed()
   feed.unshift(event)
   await writeFeed(feed.slice(0, MAX_EVENTS))
+  // každá chyba = oznámení NUTNÉ v horní liště
+  if (event.type === 'error') {
+    import('../services/scheduler.js').then((s) => s.pushNotification('urgent', event.agent, event.action)).catch(() => {})
+  }
   return event
 }
 

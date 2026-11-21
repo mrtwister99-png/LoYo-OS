@@ -32,6 +32,11 @@
   "number": 4,
   "actions": [
     {
+      "label": "🧪 Navrhnout agenta",
+      "command": "/navrh {text}",
+      "ask": "Co má nový agent dělat?"
+    },
+    {
       "label": "🧹 Údržba manifestů",
       "command": "/kosterad"
     }

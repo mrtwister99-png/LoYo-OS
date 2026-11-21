@@ -264,7 +264,13 @@ export async function runLuuu(days: number | null = null): Promise<{ text: strin
   await writeState({ ...state, lastRun: new Date().toISOString(), lastSummary: text, lastCounts: Object.fromEntries((Object.keys(CAT_LABEL) as Category[]).map((c) => [c, items.filter((i) => i.cat === c).length])) })
   await mkdir(REPORTS, { recursive: true })
   await writeFile(join(REPORTS, `luuu_${new Date().toISOString().slice(0, 10)}.md`), text + '\n', { encoding: 'utf8', flag: 'a' })
-  await logActivity({ agent: 'Luuu', type: 'system', action: `roztřídil ${items.length} mailů (${items.filter((i) => i.cat === 'dulezite').length} důležitých)` }).catch(() => {})
+  const importantCount = items.filter((i) => i.cat === 'dulezite').length
+  await logActivity({ agent: 'Luuu', type: 'system', action: `roztřídil ${items.length} mailů (${importantCount} důležitých)` }).catch(() => {})
+  // oznámení v horní liště: důležité = NUTNÉ, ostatní nové maily = NOVÉ
+  import('./scheduler.js').then((s) => {
+    if (importantCount) s.pushNotification('urgent', '/luuu', `⭐ ${importantCount} důležitých mailů: ${items.filter((i) => i.cat === 'dulezite').slice(0, 3).map((i) => i.from).join(', ')}`)
+    else if (items.length) s.pushNotification('new', '/luuu', `📬 ${items.length} nových mailů (${items.filter((i) => i.cat === 'faktury').length} faktur)`)
+  }).catch(() => {})
   return { text, count: items.length }
 }
 
