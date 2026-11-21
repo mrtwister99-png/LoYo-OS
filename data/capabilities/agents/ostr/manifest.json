@@ -1,18 +1,61 @@
 {
   "id": "ostr",
-  "displayName": "Ostř",
-  "description": "hlídač a srovnávač cen",
-  "version": "0.1.0",
-  "status": "draft",
-  "model": "qwen3:8b",
-  "tags": [
-    "mary"
-  ],
-  "runtime": "prompt",
-  "entrypoint": "./01_CORE_IDENTITY.md",
-  "systemPrompt": "hlídač a srovnávač cen",
   "type": "agent",
+  "displayName": "Ostř",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Hlídač a kontrolor cen. Zkontroluje cenu nebo cizí inzerát proti trhu na Sbazaru a Aukru (výhodné / férové / předražené / podezřele levné + varovná slova), a hlídá watchlist: cílová cena, poklesy mediánu, nová nejlevnější nabídka.",
+  "runtime": "node",
+  "entrypoint": "./run.mjs",
+  "model": "qwen3:8b",
+  "command": "/ostr",
+  "commands": [
+    "/ostr",
+    "/kontrola"
+  ],
+  "permissions": [
+    "net:fetch:www.sbazar.cz",
+    "net:fetch:aukro.cz",
+    "fs:read:data/capabilities/agents/ostr",
+    "fs:write:data/capabilities/agents/ostr"
+  ],
+  "tools": [
+    "web_fetch",
+    "fs_write"
+  ],
+  "tags": [
+    "mary",
+    "ceny",
+    "kontrola",
+    "hlidani",
+    "watchlist",
+    "podvody",
+    "sbazar",
+    "aukro"
+  ],
+  "category": "shopping",
+  "endpoints": {
+    "state": "GET /api/agents/ostr/state",
+    "run": "POST /api/agents/ostr/run",
+    "watchlist": "POST /api/agents/ostr/watchlist",
+    "watchlistRemove": "POST /api/agents/ostr/watchlist/remove"
+  },
+  "dependencies": [
+    "data/lib/market.mjs",
+    "data/lib/pricing.mjs"
+  ],
+  "actions": [
+    {
+      "label": "🔍 Zkontrolovat cenu",
+      "command": "/ostr {text}",
+      "ask": "Co a za kolik? (např. iPhone 13 128 GB --cena 9500, nebo vlož text inzerátu)"
+    },
+    {
+      "label": "👁️ Projít watchlist",
+      "command": "/ostr hlidani"
+    }
+  ],
   "number": 24,
-  "updatedAt": "2026-11-21T08:40:22.123Z",
-  "createdAt": "2026-11-21T08:40:22.123Z"
+  "createdAt": "2026-11-21T08:40:22.123Z",
+  "updatedAt": "2026-11-21T10:00:00.000Z"
 }
