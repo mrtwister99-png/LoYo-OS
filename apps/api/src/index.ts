@@ -46,6 +46,7 @@ await app.register(searchRoutes, { prefix: '/api' })
 await app.register(tmpRoutes, { prefix: '/api' })
 await app.register(lootCheckerRoutes, { prefix: '/api' })
 await app.register((await import('./routes/napady.js')).default, { prefix: '/api' })
+await app.register((await import('./routes/system.js')).default, { prefix: '/api' })
 
 app.get('/api/health', async () => {
   const { getHealth } = await import('./services/health.js')

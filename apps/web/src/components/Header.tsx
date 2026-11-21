@@ -3,6 +3,7 @@ import ActivityLog from './ActivityLog'
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useCalendarEvents } from '../hooks/useCalendarEvents'
 import { BuilderMenu } from './Builder'
+import SystemPowerButtons from './SystemPowerButtons'
 import { JA_UKOLY_AKTIVNI_DIR, JA_UKOLY_HOTOVE_DIR } from '../lib/dataPaths'
 import ProfileCube from './ProfileCube'
 
@@ -1032,7 +1033,7 @@ export default function Header({
         style={{
           ...sectionBase(6),
           flex: 1,
-          padding: '0 10px 0 14px',
+          padding: '0 8px 0 10px',
           justifyContent: 'space-between',
           alignItems: 'center',
           borderRight: 'none',
@@ -1040,7 +1041,7 @@ export default function Header({
           overflow: 'visible',
         }}
       >
-        <span style={{
+        <span className="loyo-builder-label" style={{
           fontFamily: "'Playfair Display', Georgia, serif",
           fontSize: 13,
           fontWeight: 800,
@@ -1052,17 +1053,23 @@ export default function Header({
         }}>
           Builder
         </span>
-        <BuilderMenu
-          focused={isFocused(6)}
-          externalOpen={showBuilderMenu}
-          onExternalClose={() => setShowBuilderMenu(false)}
-          onPick={(type) => window.dispatchEvent(new CustomEvent('loyo:builder-pick', { detail: { type } }))}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 'auto' }}>
+          <BuilderMenu
+            focused={isFocused(6)}
+            externalOpen={showBuilderMenu}
+            onExternalClose={() => setShowBuilderMenu(false)}
+            onPick={(type) => window.dispatchEvent(new CustomEvent('loyo:builder-pick', { detail: { type } }))}
+          />
+          {/* R = restart LoYo OS, ⏻ = vypnout */}
+          <SystemPowerButtons />
+        </div>
       </div>
 
 
            {/* ── CSS animace — vyjetí dolů + moderní notif rotace ─────── */}
       <style>{`
+        /* úzká obrazovka: popisek „Builder“ pryč, ať se vejdou B + R + ⏻ */
+        @media (max-width: 1799px) { .loyo-builder-label { display: none; } }
         @keyframes loyoPulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.7; }
