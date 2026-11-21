@@ -66,7 +66,8 @@
     "/najdi",
     "/ne",
     "/maily",
-    "/id"
+    "/id",
+    "/grill"
   ],
   "specialization": [
     "routing",
@@ -115,6 +116,11 @@
     {
       "label": "📋 Aktivita",
       "command": "/activity 10"
+    },
+    {
+      "label": "🔥 Grill (brainstorming)",
+      "command": "/grill {text}",
+      "ask": "Co chceš probrat / vygrilovat?"
     }
   ],
   "tools": [

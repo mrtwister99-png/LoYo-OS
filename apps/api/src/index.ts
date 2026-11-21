@@ -30,7 +30,8 @@ import { reindexCapabilities } from './lib/manifestLoader.js'
 const ollama = new Ollama({ host: 'http://localhost:11434' })
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'warn' } })
 
-await app.register(cors, { origin: ['http://localhost:3000'] })
+// PUT/DELETE/PATCH výslovně — výchozí je jen GET,HEAD,POST a prohlížeč pak ukládání (PUT) zablokuje
+await app.register(cors, { origin: ['http://localhost:3000', 'tauri://localhost', 'http://tauri.localhost'], methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'] })
 await app.register(agentRoutes, { prefix: '/api' })
 await app.register(activityRoutes, { prefix: '/api' })
 await app.register(runsRoutes, { prefix: '/api' })

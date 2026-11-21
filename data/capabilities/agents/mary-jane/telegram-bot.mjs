@@ -157,6 +157,7 @@ const HELP = [
   '/cv — ControlVision server (ovládání PC z mobilu)',
   '/terminal · /ps — terminál na PC, každá zpráva = příkaz, /exit konec',
   '/new agent|team|workflow|cli … — založí novou věc (/new = návod)',
+  '/grill <téma> — brainstorming (grill-me), /grill stop = shrnutí',
   '/luuu — Luuu roztřídí nové maily · /fetch <url> · /web <url> · /screenshot <url>',
   '/ano · /ne — potvrdit / zrušit riskantní příkaz',
   '/ls [plocha|stažené|dokumenty] · /cat <soubor> · /najdi <název> — soubory na PC',

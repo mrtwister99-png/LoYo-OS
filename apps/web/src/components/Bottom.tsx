@@ -104,13 +104,15 @@ export default function Bottom() {
             <style>{`
               @keyframes chatMarquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
               @keyframes chatBadgePop { 0% { transform: scale(0.4); } 70% { transform: scale(1.25); } 100% { transform: scale(1); } }
+              @keyframes chatBadgeBlink { 0%, 100% { opacity: 1; box-shadow: 0 0 10px #facc15; } 50% { opacity: 0.35; box-shadow: 0 0 0 #facc15; } }
+              @keyframes chatGlow { 0%, 100% { box-shadow: 0 0 0 1px #facc15, 0 0 14px rgba(250,204,21,0.55); } 50% { box-shadow: 0 0 0 1px rgba(250,204,21,0.25), 0 0 0 rgba(250,204,21,0); } }
             `}</style>
             <button
               onClick={() => setChatOpen(v =>!v)}
               aria-expanded={chatOpen}
               className="bg-[#444] text-[#f0f0f0] rounded-full flex items-center w-full min-w-0 border border-[#444] shadow-[0_8px_24px_rgba(0,0,0,0.35)] active:shadow-[0_8px_24px_rgba(0,0,0,0.35)] active:translate-x-[1px] active:translate-y-[1px] transition-all duration-100"
-              style={{ height: 24, padding: '0 10px', gap: 6 }}
-              title="Chat s Mary"
+              style={{ height: 24, padding: '0 10px', gap: 6, ...(unread > 0 ? { borderColor: '#facc15', animation: 'chatGlow 1.1s ease-in-out infinite' } : {}) }}
+              title={unread > 0 ? `${unread} nových zpráv od Mary` : 'Chat s Mary'}
             >
               <span className="live-dot shrink-0" title="live" />
               <span className="shrink-0 text-[11px] font-bold tracking-[0.08em] leading-none">CHAT: Mary</span>
@@ -126,7 +128,7 @@ export default function Bottom() {
                 <span
                   key={unread}
                   className="shrink-0 ml-auto"
-                  style={{ background: '#444', color: '#f0f0f0', fontSize: 9, fontWeight: 900, lineHeight: 1.2, padding: '2px 6px', borderRadius: 999, animation: 'chatBadgePop 0.35s cubic-bezier(0.34,1.56,0.64,1)' }}
+                  style={{ background: '#facc15', color: '#111', fontSize: 9, fontWeight: 900, lineHeight: 1.2, padding: '2px 6px', borderRadius: 999, animation: 'chatBadgePop 0.35s cubic-bezier(0.34,1.56,0.64,1), chatBadgeBlink 1.1s ease-in-out 0.35s infinite' }}
                 >+{Math.min(unread, 99)}</span>
               )}
             </button>

@@ -46,6 +46,11 @@
       "label": "🌐 Přečíst stránku",
       "command": "/fetch {text}",
       "ask": "Adresa stránky?"
+    },
+    {
+      "label": "🔥 Grill (brainstorming)",
+      "command": "/grill {text}",
+      "ask": "Co chceš probrat / vygrilovat?"
     }
   ],
   "skills": [

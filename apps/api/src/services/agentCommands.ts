@@ -10,6 +10,7 @@ import { getAgents } from '../lib/manifestLoader.js'
 import { logActivity } from '../routes/activity.js'
 import { newUsage, parseNewKind, runNewCapability } from './capabilityCreate.js'
 import { cancelPending, confirmPending, guarded } from './shellPolicy.js'
+import { continueGrill, grillActive, startGrill, stopGrill } from './grillSession.js'
 import { fetchCommand, mcpCommand, screenshotCommand, tryNaturalMcpIntent, webCommand } from './mcpCommands.js'
 import { findFiles, listDirectory, readFileCommand, tryNaturalFileIntent } from './fileCommands.js'
 import { pyCommand, runAgentCommand, scriptCommand, tryNaturalScriptIntent } from './scriptCommands.js'
@@ -328,6 +329,7 @@ async function listCommands(): Promise<CommandResult> {
       '/stepan <věc> [--stav novy|jako-novy|velmi-dobry|dobry|opotrebovany|na-dily]',
       '/kosterad — údržba manifestů a failed runs',
       '/julia <téma> — hloubkový research',
+      '/grill <téma> — brainstorming podle skillu grill-me (otázky po kolech) · /grill stop = shrnutí',
       '/luuu [dny] — Luuu roztřídí nové maily (/maily) — souhrn je i v ranním /daily-brief',
       '/activity [n] — poslední akce agentů',
       '',
@@ -438,6 +440,11 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
     return { reply, steps: [`${SHELL_LABEL[shell.kind]}: ${trimmed.slice(0, 60)}`] }
   }
 
+  // běžící /grill: obyčejný text = odpověď do brainstormingu
+  if (trimmed && !trimmed.startsWith('/') && grillActive()) {
+    return { reply: await continueGrill(trimmed).catch((e: any) => `❌ Grill: ${e?.message ?? e}`), steps: ['Mary Jane: grill'] }
+  }
+
   // „udělej neco.py na plochu … a vytvoř agenta Joozina, ať ho použije“
   if (!trimmed.startsWith('/')) {
     const natural = await tryNaturalScriptIntent(trimmed).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: [] as string[] }))
@@ -504,6 +511,15 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
     case 'screenshot':
     case 'snimek':
       return screenshotCommand(args).catch((e: any) => ({ reply: `❌ Playwright MCP: ${e?.message ?? e}`, steps: ['Mary Jane: /screenshot'] }))
+    case 'grill':
+    case 'brainstorm': {
+      const steps = ['Mary Jane: /grill (skill grill-me)']
+      if (/^(stop|konec|hotovo|end)$/i.test(args)) return { reply: await stopGrill(), steps }
+      if (!args) {
+        return { reply: grillActive() ? 'Grill běží — odpovídej normálně, /grill stop = shrnutí a konec.' : 'Jak na to: /grill <téma>\nnapř. /grill spuštění e-shopu s hračkami\nMary se bude ptát po kolech (s doporučenými odpověďmi), /grill stop = shrnutí.', steps }
+      }
+      return { reply: await startGrill(args).catch((e: any) => `❌ Grill: ${e?.message ?? e}`), steps }
+    }
     case 'luuu':
     case 'maily':
     case 'posta': {

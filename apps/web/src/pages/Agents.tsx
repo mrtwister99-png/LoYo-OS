@@ -545,6 +545,7 @@ export default function AgentsPro() {
                     <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
                       <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">KATEGORIE</div>
                       <select value={selectedAgent.category} onChange={e=>patchAgent({ category: e.target.value })} className="mt-2 w-full bg-transparent font-bold text-[13px] outline-none">
+                        <option value="all">BEZ KATEGORIE</option>
                         {CATS.filter(c=>c.id!=='all').map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
                       </select>
                     </div>

@@ -1,6 +1,6 @@
 {
   "version": "3.0.0",
-  "lastSync": "2026-11-21T00:31:08.962Z",
+  "lastSync": "2026-11-21T02:19:38.794479600+00:00",
   "agents": [
     {
       "id": "mary-jane",
@@ -11,6 +11,7 @@
       "team": "LOYO OS v3",
       "status": "active",
       "skills": [
+        "bezpecny-shell",
         "find-skills",
         "grill-me",
         "ui-taste"
@@ -120,28 +121,10 @@
       "number": 4
     },
     {
-      "folder": "camper",
-      "category": "all",
-      "team": "",
-      "status": "online",
-      "skills": [
-        "find-skills",
-        "design-mobile-apps",
-        "ui-taste"
-      ],
-      "tools": [],
-      "workflow": "",
-      "promptFile": "",
-      "docs": [],
-      "tasksToday": 0,
-      "created": "2026-09-02T00:00:00Z",
       "id": "camper",
-      "number": 5,
+      "folder": "camper",
       "name": "Camper Agent",
-      "role": "Agent camper - auto-fixed manifest"
-    },
-    {
-      "folder": "cancel",
+      "role": "Agent camper - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -156,13 +139,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 5
+    },
+    {
       "id": "cancel",
-      "number": 6,
+      "folder": "cancel",
       "name": "Cancel Agent",
-      "role": "Agent cancel - auto-fixed manifest"
-    },
-    {
-      "folder": "delete",
+      "role": "Agent cancel - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -177,13 +161,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 6
+    },
+    {
       "id": "delete",
-      "number": 7,
+      "folder": "delete",
       "name": "Delete Agent",
-      "role": "Agent delete - auto-fixed manifest"
-    },
-    {
-      "folder": "error",
+      "role": "Agent delete - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -198,13 +183,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 7
+    },
+    {
       "id": "error",
-      "number": 8,
+      "folder": "error",
       "name": "Error Agent",
-      "role": "Agent error - auto-fixed manifest"
-    },
-    {
-      "folder": "eskejp",
+      "role": "Agent error - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -219,13 +205,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 8
+    },
+    {
       "id": "eskejp",
-      "number": 9,
+      "folder": "eskejp",
       "name": "Eskejp Agent",
-      "role": "Agent eskejp - auto-fixed manifest"
-    },
-    {
-      "folder": "fatal",
+      "role": "Agent eskejp - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -240,13 +227,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 9
+    },
+    {
       "id": "fatal",
-      "number": 10,
+      "folder": "fatal",
       "name": "Fatal Agent",
-      "role": "Agent fatal - auto-fixed manifest"
-    },
-    {
-      "folder": "cheater",
+      "role": "Agent fatal - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -261,13 +249,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 10
+    },
+    {
       "id": "cheater",
-      "number": 11,
+      "folder": "cheater",
       "name": "Cheater Agent",
-      "role": "Agent cheater - auto-fixed manifest"
-    },
-    {
-      "folder": "laggy",
+      "role": "Agent cheater - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -282,13 +271,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 11
+    },
+    {
       "id": "laggy",
-      "number": 12,
+      "folder": "laggy",
       "name": "Laggy Agent",
-      "role": "Agent laggy - auto-fixed manifest"
-    },
-    {
-      "folder": "nofps",
+      "role": "Agent laggy - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -303,13 +293,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 12
+    },
+    {
       "id": "nofps",
-      "number": 13,
+      "folder": "nofps",
       "name": "Nofps Agent",
-      "role": "Agent nofps - auto-fixed manifest"
-    },
-    {
-      "folder": "op",
+      "role": "Agent nofps - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -324,13 +315,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 13
+    },
+    {
       "id": "op",
-      "number": 14,
+      "folder": "op",
       "name": "Op Agent",
-      "role": "Agent op - auto-fixed manifest"
-    },
-    {
-      "folder": "pwner",
+      "role": "Agent op - auto-fixed manifest",
       "category": "all",
       "team": "",
       "status": "online",
@@ -345,13 +337,36 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-09-02T00:00:00Z",
-      "id": "pwner",
-      "number": 15,
-      "name": "Pwner Agent",
-      "role": "Agent pwner - auto-fixed manifest"
+      "lastRun": "",
+      "number": 14
     },
     {
+      "id": "pwner",
+      "folder": "pwner",
+      "name": "Pwner Agent",
+      "role": "Agent pwner - auto-fixed manifest",
+      "category": "all",
+      "team": "",
+      "status": "online",
+      "skills": [
+        "find-skills",
+        "design-mobile-apps",
+        "ui-taste"
+      ],
+      "tools": [],
+      "workflow": "",
+      "promptFile": "",
+      "docs": [],
+      "tasksToday": 0,
+      "created": "2026-09-02T00:00:00Z",
+      "lastRun": "",
+      "number": 15
+    },
+    {
+      "id": "bender",
       "folder": "bender",
+      "name": "Bender - Blender Specialist",
+      "role": "Blender 3D specialist - staví scény přes bpy, ovládá oficiální Blender Lab MCP (projects.blender.org/lab/blender_mcp), generuje materiály, světla, rendery. Futurama vibe. Ukládá kód do data/reports/bender/kod/",
       "category": "all",
       "team": "",
       "status": "online",
@@ -365,13 +380,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-11-05T00:00:00Z",
-      "id": "bender",
-      "number": 16,
-      "name": "Bender - Blender Specialist",
-      "role": "Blender 3D specialist - staví scény přes bpy, ovládá oficiální Blender Lab MCP (projects.blender.org/lab/blender_mcp), generuje materiály, světla, rendery. Futurama vibe. Ukládá kód do data/reports/bender/kod/"
+      "lastRun": "",
+      "number": 16
     },
     {
+      "id": "tridil",
       "folder": "tridil",
+      "name": "Třídil - Downloads Sorter",
+      "role": "Každou noc v 00:00 roztřídí nové soubory ve Stažených souborech podle přípony do mp3 / zip / obrazky / pdf / ostatni. Jen přesouvá, nikdy nemaže.",
       "category": "all",
       "team": "",
       "status": "online",
@@ -385,13 +401,14 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-11-13T00:00:00Z",
-      "id": "tridil",
-      "number": 17,
-      "name": "Třídil - Downloads Sorter",
-      "role": "Každou noc v 00:00 roztřídí nové soubory ve Stažených souborech podle přípony do mp3 / zip / obrazky / pdf / ostatni. Jen přesouvá, nikdy nemaže."
+      "lastRun": "",
+      "number": 17
     },
     {
+      "id": "loot-checker",
       "folder": "loot-checker",
+      "name": "Loot Checker - Duplicity & Loot Sorter",
+      "role": "FÁZE 1 (hotová): duplicity podle názvu (1)(2) - kopie -> data/kos + presunute_*.txt. FÁZE 2 (hotová): vision třídění přes Ollama (moondream) podle názvu + popisu složek z UI, práh jistoty, pod prahem nechat na místě.",
       "category": "all",
       "team": "",
       "status": "online",
@@ -405,10 +422,8 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-11-14T00:00:00Z",
-      "id": "loot-checker",
-      "number": 18,
-      "name": "Loot Checker - Duplicity & Loot Sorter",
-      "role": "FÁZE 1 (hotová): duplicity podle názvu (1)(2) - kopie -> data/kos + presunute_*.txt. FÁZE 2 (hotová): vision třídění přes Ollama (moondream) podle názvu + popisu složek z UI, práh jistoty, pod prahem nechat na místě."
+      "lastRun": "",
+      "number": 18
     },
     {
       "id": "proto",
@@ -453,7 +468,10 @@
       "number": 19
     },
     {
+      "id": "niky",
       "folder": "niky",
+      "name": "Niky — recepční Cutanna",
+      "role": "Virtuální recepční pro veřejné informace a směrování zákazníků na rezervace Cutanna.",
       "category": "all",
       "team": "",
       "status": "online",
@@ -468,10 +486,8 @@
       "docs": [],
       "tasksToday": 0,
       "created": "2026-11-16T00:00:00Z",
-      "id": "niky",
-      "number": 20,
-      "name": "Niky — recepční Cutanna",
-      "role": "Virtuální recepční pro veřejné informace a směrování zákazníků na rezervace Cutanna."
+      "lastRun": "",
+      "number": 20
     },
     {
       "id": "lopatinka",
@@ -539,7 +555,6 @@
     },
     {
       "id": "luuu",
-      "number": 23,
       "folder": "luuu",
       "name": "Luuu — mailař",
       "role": "Přečte nové maily (IMAP, jen pro čtení), roztřídí je na důležité / faktury / newslettery / spam / ostatní a ranní souhrn přidá do /daily-brief. Nic neodesílá, nemaže ani neoznačuje jako přečtené.",
@@ -555,7 +570,9 @@
       "promptFile": "",
       "docs": [],
       "tasksToday": 0,
-      "created": "2026-11-21T00:00:00Z"
+      "created": "2026-11-21T00:00:00Z",
+      "lastRun": "",
+      "number": 23
     }
   ]
 }

@@ -1,5 +1,108 @@
 [
   {
+    "id": "746a17df-e6eb-478a-a7b2-895e302a801c",
+    "ts": "2026-11-21T02:28:13.286Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "grill-me brainstorming: nový agent na hlídání cen na Alze"
+  },
+  {
+    "id": "9b7f9177-cbd5-4e17-9fab-aa276a6ee288",
+    "ts": "2026-11-21T02:25:13.514Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "roztřídil 0 mailů (0 důležitých)"
+  },
+  {
+    "id": "0486f4bb-7ea1-4427-8f86-c3c87f330fe0",
+    "ts": "2026-11-21T02:25:11.553Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "čte poštu"
+  },
+  {
+    "id": "cc7246bd-5b57-472a-ac52-b3362d5c3dd5",
+    "ts": "2026-11-21T02:25:11.293Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /luuu smazat vsechny spamy",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "ab9a77cc-187c-4b38-81a6-f5942dc237af",
+    "ts": "2026-11-21T02:24:25.019Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "upraven agent mary-jane (akce / MCP) z UI"
+  },
+  {
+    "id": "057ce934-25fe-4a8b-aebf-f72bd5b45762",
+    "ts": "2026-11-21T02:23:54.729Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "roztřídil 15 mailů (0 důležitých)"
+  },
+  {
+    "id": "3964a3b0-bf6b-47d9-b03e-59d3eb7f06d3",
+    "ts": "2026-11-21T02:22:24.710Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "přesunul 2 mailů do koše (LUUU_DELETE)"
+  },
+  {
+    "id": "6a444a33-11df-41d2-bc4c-31bca6c44c20",
+    "ts": "2026-11-21T02:22:18.066Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "čte poštu"
+  },
+  {
+    "id": "58ab1ea5-331c-46a6-a335-0a854c729a3c",
+    "ts": "2026-11-21T02:22:17.865Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /luuu spam",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "f1709dcd-8c3e-4dbe-ba77-4eb3151e4e32",
+    "ts": "2026-11-21T02:21:53.462Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "00eb849f-f7f0-4153-89dd-e4266907511f",
+    "ts": "2026-11-21T02:21:26.693Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /boty",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "2250aa09-954f-4126-93e6-4c448d52bb2a",
+    "ts": "2026-11-21T02:21:10.971Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "5e8d568b-d2ac-4790-b18b-740d83292a7b",
+    "ts": "2026-11-21T02:17:58.996Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
     "id": "37d92ebf-405c-4f45-9831-3c90d080effe",
     "ts": "2026-11-21T01:54:19.477Z",
     "agent": "Koštěrad",
