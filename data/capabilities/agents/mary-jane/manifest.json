@@ -67,7 +67,10 @@
     "/ne",
     "/maily",
     "/id",
-    "/grill"
+    "/grill",
+    "/napad",
+    "/napady",
+    "/strazce"
   ],
   "specialization": [
     "routing",
@@ -102,6 +105,11 @@
       "command": "/vse"
     },
     {
+      "label": "💡 Nápad",
+      "command": "/napad {text}",
+      "ask": "Co tě napadlo?"
+    },
+    {
       "label": "🤖 Stav bota",
       "command": "/boty"
     },
@@ -121,6 +129,10 @@
       "label": "🔥 Grill (brainstorming)",
       "command": "/grill {text}",
       "ask": "Co chceš probrat / vygrilovat?"
+    },
+    {
+      "label": "🛡️ Strážce",
+      "command": "/strazce"
     }
   ],
   "tools": [
