@@ -41,8 +41,7 @@
     "watchlistRemove": "POST /api/agents/ostr/watchlist/remove"
   },
   "dependencies": [
-    "data/lib/market.mjs",
-    "data/lib/pricing.mjs"
+    "fetch:3"
   ],
   "actions": [
     {

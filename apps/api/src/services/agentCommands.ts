@@ -87,7 +87,7 @@ async function listAgents(): Promise<CommandResult> {
       `🤖 Agenti LOYO OS (${agents.length})`,
       ...lines,
       '',
-      'Spuštění: /lopatinka [rozpočet] · /stepan <co prodáváš> · /kosterad · /julia <téma>',
+      'Spuštění: /lopatinka [rozpočet] · /stepan <co prodáváš> · /ostr <věc> --cena N · /kosterad · /julia <téma>',
       'Stav botů: /boty · Poslední akce: /activity',
     ].join('\n'),
     steps: ['Mary Jane: /agents'],
@@ -147,6 +147,65 @@ async function runStepan(args: string): Promise<CommandResult> {
   )
   return {
     reply: state?.lastChatText || `🏷️ Stěpán doběhl (exit ${code}), ale neuložil stav.`,
+    steps,
+  }
+}
+
+// ---------- /ostr — kontrola a hlídání cen ----------
+const OSTR_USAGE = [
+  '🔍 Ostř — hlídač a kontrolor cen',
+  '/ostr <věc> --cena 9500 — je ta cena v pořádku?',
+  '/ostr <vložený text inzerátu> — cenu najde v textu, hlídá i varovná slova',
+  '/ostr hlidej <věc> --cil 4500 — přidá do watchlistu',
+  '/ostr hlidani — projde watchlist (poklesy, cíle, nová minima)',
+  '/ostr seznam · /ostr nehlidej <id>',
+].join('\n')
+
+async function runOstr(args: string): Promise<CommandResult> {
+  const dir = join(AGENTS_DIR, 'ostr')
+  const script = join(dir, 'run.mjs')
+  const first = (args.split(/\s+/)[0] ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+  const rest = args.slice(args.split(/\s+/)[0]?.length ?? 0).trim()
+  const steps = [`Mary Jane: /ostr${first ? ` ${first}` : ''}`]
+
+  if (!args || first === 'help' || first === 'pomoc') return { reply: OSTR_USAGE, steps }
+
+  if (first === 'seznam' || first === 'list') {
+    const wl = await readJson(join(dir, 'watchlist.json'), { items: [] })
+    const items = (wl.items ?? []).filter((i: any) => i.active !== false)
+    return {
+      reply: items.length
+        ? ['👁️ Ostř hlídá:', ...items.map((i: any) => `• ${i.query}${i.targetPrice ? ` · cíl ${i.targetPrice} Kč` : ''} (${i.id})`)].join('\n')
+        : '👁️ Watchlist je prázdný. `/ostr hlidej RTX 3060 12GB --cil 4500`',
+      steps,
+    }
+  }
+
+  let env: Record<string, string>
+  let label: string
+  if (first === 'hlidani' || first === 'watch' || first === 'kontroluj') {
+    env = { OSTR_MODE: 'watch' }
+    label = 'hlídání watchlistu'
+  } else if (first === 'hlidej' || first === 'sleduj' || first === 'add') {
+    const target = rest.match(/--(?:cil|target)\s+([\d\s.]+)/i)?.[1]?.replace(/\D/g, '') ?? ''
+    env = { OSTR_MODE: 'add', OSTR_ITEM: rest.replace(/--(?:cil|target)\s+[\d\s.]+/i, '').trim(), OSTR_TARGET: target }
+    label = `hlídej "${env.OSTR_ITEM.slice(0, 50)}"`
+  } else if (first === 'nehlidej' || first === 'remove') {
+    env = { OSTR_MODE: 'remove', OSTR_ID: rest }
+    label = `nehlídej ${rest}`
+  } else {
+    const price = args.match(/--(?:cena|price)\s+([\d\s.]+)/i)?.[1]?.replace(/\D/g, '') ?? ''
+    env = { OSTR_MODE: 'check', OSTR_ITEM: args.replace(/--(?:cena|price)\s+[\d\s.]+/i, '').trim(), OSTR_PRICE: price }
+    label = `kontrola "${env.OSTR_ITEM.slice(0, 50)}"`
+  }
+
+  await activity('Mary Jane', `spouští Ostře: ${label}`)
+  const { code, output } = await runNode(script, dir, [], env)
+  const state = await readJson(join(dir, 'state.json'), null)
+  const verdict = state?.mode === 'check' ? state?.check?.verdict?.label : null
+  await activity('Ostř', `${label} ${code === 0 ? 'OK' : `selhalo (${code})`}${verdict ? ` → ${verdict}` : ''}`, { verdict })
+  return {
+    reply: state?.lastChatText || `🔍 Ostř doběhl (exit ${code}), ale neuložil stav.\n${output.slice(-500)}`,
     steps,
   }
 }
@@ -413,6 +472,7 @@ async function listCommands(): Promise<CommandResult> {
       '/zapni lopatinka · /zapni kosterad — jednotlivě',
       '/lopatinka [rozpočet] [--send] — hledání nabídek',
       '/stepan <věc> [--stav novy|jako-novy|velmi-dobry|dobry|opotrebovany|na-dily]',
+      '/ostr <věc> --cena N — kontrola ceny · /ostr hlidej <věc> --cil N · /ostr hlidani',
       '/kosterad — údržba manifestů a failed runs',
       '/julia <téma> — hloubkový research',
       '/grill <téma> — brainstorming podle skillu grill-me (otázky po kolech) · /grill stop = shrnutí',
@@ -585,6 +645,9 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
       return runLopatinka(args)
     case 'stepan':
       return runStepan(args)
+    case 'ostr':
+    case 'kontrola':
+      return runOstr(args)
     case 'kosterad':
     case 'kostrad':
       return runKosteradCommand()

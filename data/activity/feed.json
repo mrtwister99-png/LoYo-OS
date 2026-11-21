@@ -1,5 +1,25 @@
 [
   {
+    "id": "012caebb-090b-4cfa-9a79-8aa069d3ad25",
+    "ts": "2026-11-21T09:00:44.105Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Jo dix kravo",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "410fd1a5-a70b-4518-938e-6e69e9c7eb2f",
+    "ts": "2026-11-21T09:00:24.142Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
     "id": "c1cd8d76-9a09-4ed3-a36a-fecd5de36191",
     "ts": "2026-11-21T08:40:39.898Z",
     "agent": "Mary_Jane",
@@ -5387,26 +5407,6 @@
     "action": "scheduled: /voda",
     "meta": {
       "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "0c271493-4d5c-4461-b56d-61ed89ea7fbe",
-    "ts": "2026-09-28T20:00:25.575Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "e769a906-6ef1-4e9f-9103-243a54088150",
-    "ts": "2026-09-12T17:20:42.611Z",
-    "agent": "Mary_Jane",
-    "type": "routing",
-    "action": "edit agents #2",
-    "meta": {
-      "runId": "2026-09-12T17-20-42-610Z_b87020aa"
     }
   }
 ]

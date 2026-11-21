@@ -498,6 +498,87 @@ export default async function agentRoutes(app: FastifyInstance) {
     })
   })
 
+  // ---------- Ostř: kontrola a hlídání cen ----------
+  const OSTR_DIR = join(AGENTS_DIR, 'ostr')
+  const readOstr = async (file: string, fallback: any) => {
+    try {
+      return JSON.parse(await readFile(join(OSTR_DIR, file), 'utf8'))
+    } catch {
+      return fallback
+    }
+  }
+
+  // Ostř dělá i úpravy watchlistu přes run.mjs — logika (deduplikace, audit) je tak jen na jednom místě.
+  const runOstrProcess = (env: Record<string, string>) =>
+    new Promise<{ code: number; output: string }>((resolvePromise) => {
+      const child = spawn(process.execPath, [join(OSTR_DIR, 'run.mjs')], {
+        cwd: OSTR_DIR,
+        env: { ...process.env, ...env },
+        windowsHide: true,
+      })
+      let output = ''
+      child.stdout?.on('data', (chunk) => { output += chunk.toString() })
+      child.stderr?.on('data', (chunk) => { output += chunk.toString() })
+      child.on('error', (err) => resolvePromise({ code: 1, output: err.message }))
+      child.on('close', (code) => resolvePromise({ code: code ?? 1, output }))
+    })
+
+  // GET /api/agents/ostr/state → poslední kontrola/hlídání, watchlist a historie pro UI
+  app.get('/agents/ostr/state', async () => ({
+    state: await readOstr('state.json', { lastRun: null }),
+    watchlist: (await readOstr('watchlist.json', { items: [] })).items ?? [],
+    history: await readOstr('history.json', {}),
+  }))
+
+  // POST /api/agents/ostr/run → body { mode: "check", item, price? } | { mode: "watch" }
+  app.post('/agents/ostr/run', async (req, reply) => {
+    const { mode = 'check', item, price } = (req.body as { mode?: string; item?: string; price?: number | string }) || {}
+    if (mode !== 'check' && mode !== 'watch') { reply.code(400); return { ok: false, error: 'mode musí být "check" nebo "watch"' } }
+    const text = String(item ?? '').trim()
+    if (mode === 'check' && !text) { reply.code(400); return { ok: false, error: 'Chybí věc nebo text inzerátu (body.item)' } }
+    if (text.length > 3000) { reply.code(400); return { ok: false, error: 'Text je moc dlouhý (max 3000 znaků)' } }
+
+    await logActivity({ agent: 'Ostř', type: 'system', action: mode === 'watch' ? 'hlídání spuštěno z UI' : `kontrola: "${text.slice(0, 80)}"` }).catch(() => {})
+    const { code, output } = await runOstrProcess({
+      OSTR_MODE: mode,
+      OSTR_ITEM: text,
+      OSTR_PRICE: price === undefined || price === null ? '' : String(price),
+    })
+    const state = await readOstr('state.json', null)
+    if (code === 0 && typeof state?.lastChatText === 'string' && state.lastChatText.trim()) {
+      await saveChatMessage('mary', state.lastChatText.trim()).catch(() => {})
+    }
+    await logActivity({
+      agent: 'Ostř',
+      type: code === 0 ? 'system' : 'error',
+      action: code === 0
+        ? mode === 'watch'
+          ? `hlídání: ${state?.watch?.results?.length ?? 0} věcí`
+          : `kontrola: ${state?.check?.verdict?.label ?? 'bez verdiktu'}`
+        : `běh selhal (exit ${code})`,
+    }).catch(() => {})
+    return { ok: code === 0, exitCode: code, output: output.slice(-4000), state }
+  })
+
+  // POST /api/agents/ostr/watchlist → body { query, targetPrice? }
+  app.post('/agents/ostr/watchlist', async (req, reply) => {
+    const { query, targetPrice } = (req.body as { query?: string; targetPrice?: number | string }) || {}
+    const q = String(query ?? '').trim()
+    if (!q || q.length > 200) { reply.code(400); return { ok: false, error: 'Chybí nebo je moc dlouhý dotaz (body.query, max 200)' } }
+    const { code, output } = await runOstrProcess({ OSTR_MODE: 'add', OSTR_ITEM: q, OSTR_TARGET: targetPrice ? String(targetPrice) : '' })
+    if (code !== 0) { reply.code(400); return { ok: false, error: output.trim().slice(-300) } }
+    return { ok: true, watchlist: (await readOstr('watchlist.json', { items: [] })).items ?? [] }
+  })
+
+  // POST /api/agents/ostr/watchlist/remove → body { id }
+  app.post('/agents/ostr/watchlist/remove', async (req, reply) => {
+    const { id } = (req.body as { id?: string }) || {}
+    if (!id) { reply.code(400); return { ok: false, error: 'Chybí id' } }
+    const { code, output } = await runOstrProcess({ OSTR_MODE: 'remove', OSTR_ID: String(id) })
+    if (code !== 0) { reply.code(404); return { ok: false, error: output.trim().slice(-300) } }
+    return { ok: true, watchlist: (await readOstr('watchlist.json', { items: [] })).items ?? [] }
+  })
+
   // ---------- Lopatinka: hlídané dotazy, rozhodnutí z chatu, Telegram bot ----------
 
   // POST /api/agents/lopatinka/watchlist → přidá hlídaný dotaz (body: { query, maxPrice? })

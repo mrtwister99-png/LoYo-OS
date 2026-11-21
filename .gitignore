@@ -49,6 +49,7 @@ data/capabilities/*/audit.json
 
 # Lopatinka runtime - hlídané dotazy, hodnocení tipů, rozhodnutí, pid bota
 data/capabilities/agents/*/watchlist.json
+data/capabilities/agents/*/history.json
 data/capabilities/agents/*/feedback.json
 data/capabilities/agents/*/decisions.json
 data/capabilities/agents/*/*.pid
