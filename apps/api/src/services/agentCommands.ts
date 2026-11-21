@@ -542,7 +542,13 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
     case 'new': {
       if (!args) return { reply: newUsage(), steps: ['Mary Jane: /new'] }
       const parsed = parseNewKind(args)
-      // mcp / skill (a čísla 3, 4) dál řeší orchestrátor s researchem
+      // mcp / skill bez tématu (třeba tlačítko v Telegramu) → jen návod, ať se nespustí research naslepo
+      const bare = args.trim().toLowerCase()
+      if (bare === 'mcp' || bare === 'skill' || bare === '3' || bare === '4') {
+        const what = bare === 'mcp' || bare === '4' ? 'mcp' : 'skill'
+        return { reply: `Napiš téma: /new ${what} <téma>\nnapř. /new ${what} ${what === 'mcp' ? 'počasí z ČHMÚ' : 'psaní inzerátů'}\nJulia k tomu udělá research a Koštěrad předvyplní manifest.`, steps: ['Mary Jane: /new'] }
+      }
+      // mcp / skill s tématem (a čísla 3, 4) dál řeší orchestrátor s researchem
       if (!parsed) return null
       return runNewCapability(parsed.kind, parsed.rest).catch((err) => ({
         reply: `❌ Založení selhalo: ${err?.message ?? err}`,

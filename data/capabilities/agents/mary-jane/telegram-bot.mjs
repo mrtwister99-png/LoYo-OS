@@ -88,12 +88,34 @@ export function splitText(text, max = 3800) {
   return chunks
 }
 
-async function sendLong(token, chatId, text) {
+async function sendLong(token, chatId, text, replyMarkup = null) {
   const clean = String(text ?? '').trim()
   if (!clean) return
-  for (const chunk of splitText(clean)) {
-    await tg(token, 'sendMessage', { chat_id: chatId, text: chunk, disable_web_page_preview: true })
+  const chunks = splitText(clean)
+  for (let i = 0; i < chunks.length; i++) {
+    const last = i === chunks.length - 1
+    await tg(token, 'sendMessage', {
+      chat_id: chatId,
+      text: chunks[i],
+      disable_web_page_preview: true,
+      ...(last && replyMarkup ? { reply_markup: replyMarkup } : {}),
+    })
   }
+}
+
+// Telegram neumí našeptávat další slovo → u příkazu bez argumentu nabídne možnosti tlačítky
+// (stejné „args“ z commands.json jako našeptávač v UI). Klepnutí rovnou pošle např. „/new agent“.
+async function optionsKeyboard(text) {
+  const m = String(text).trim().match(/^(\/[^\s@]+)(?:@\S+)?$/)
+  if (!m) return null
+  const data = await readJson(join(__dirname, 'commands.json'), { commands: [] })
+  const cmd = (Array.isArray(data.commands) ? data.commands : []).find((c) => c?.name?.toLowerCase() === m[1].toLowerCase())
+  const args = Array.isArray(cmd?.args) ? cmd.args.filter((a) => a?.value && !/^https?:\/\/$/.test(a.value)) : []
+  if (!args.length) return null
+  const buttons = args.slice(0, 12).map((a) => ({ text: `${cmd.name} ${a.value}` }))
+  const rows = []
+  for (let i = 0; i < buttons.length; i += 2) rows.push(buttons.slice(i, i + 2))
+  return { keyboard: rows, resize_keyboard: true, one_time_keyboard: true, input_field_placeholder: `${cmd.name} …` }
 }
 
 // pošle text (klidně na části) a tlačítko přilepí k poslední zprávě
@@ -278,7 +300,8 @@ async function handleMessage(message, token, allowedChatId) {
         callback_data: `ju:${id}`,
       })
     } else {
-      await sendLong(token, chatId, result?.reply ?? '')
+      const keyboard = await optionsKeyboard(text).catch(() => null)
+      await sendLong(token, chatId, result?.reply ?? '', keyboard)
     }
   } catch (err) {
     await sendLong(

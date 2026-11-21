@@ -91,5 +91,27 @@
   ],
   "skills": [
     "bezpecny-shell"
+  ],
+  "actions": [
+    {
+      "label": "📖 Všechny příkazy",
+      "command": "/vse"
+    },
+    {
+      "label": "🤖 Stav bota",
+      "command": "/boty"
+    },
+    {
+      "label": "🖥️ ControlVision",
+      "command": "/cv"
+    },
+    {
+      "label": "📁 Plocha",
+      "command": "/ls plocha"
+    },
+    {
+      "label": "📋 Aktivita",
+      "command": "/activity 10"
+    }
   ]
 }

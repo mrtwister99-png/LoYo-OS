@@ -1,5 +1,5 @@
 // D:\dev\loyo-os\apps\web\src\components\Chat.tsx - HADR SMALL + DRAGGABLE
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import LinkifiedText, { openExternal } from './LinkifiedText'
 
 type ChatMsg = { from: 'me' | 'mary'; text: string; meta?: TipMeta | Record<string, any> }
@@ -145,7 +145,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
   const [pickerIdx, setPickerIdx] = useState(0)
 
   // příkazy Mary pro našeptávač (GET /api/commands = commands.json)
-  const [cmdList, setCmdList] = useState<{ name: string; description: string }[]>([])
+  const [cmdList, setCmdList] = useState<{ name: string; description: string; args?: { value: string; desc: string }[] }[]>([])
   const [cmdIdx, setCmdIdx] = useState(0)
   useEffect(() => {
     if (!isOpen || cmdList.length) return
@@ -154,10 +154,24 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
       .then(j => setCmdList(Array.isArray(j.commands) ? j.commands.filter((c: any) => c.enabled !== false) : []))
       .catch(() => {})
   }, [isOpen, cmdList.length])
-  const cmdTyped = /^\/\S*$/.test(chatInput) ? chatInput.toLowerCase() : ''
-  const cmdSuggestions = cmdTyped
-    ? cmdList.filter(c => c.name.toLowerCase().startsWith(cmdTyped)).slice(0, 8)
-    : []
+  // 1) „/ne“ → příkazy   2) „/new “ → jeho možnosti (agent, team, …) z commands.json → args
+  type Suggestion = { key: string; label: string; description: string; fill: string }
+  const cmdSuggestions: Suggestion[] = (() => {
+    if (/^\/\S*$/.test(chatInput)) {
+      const typed = chatInput.toLowerCase()
+      return cmdList.filter(c => c.name.toLowerCase().startsWith(typed)).slice(0, 8)
+        .map(c => ({ key: c.name, label: c.name, description: c.description, fill: `${c.name} ` }))
+    }
+    const m = chatInput.match(/^(\/\S+)\s+(.*)$/)
+    if (!m) return []
+    const cmd = cmdList.find(c => c.name.toLowerCase() === m[1].toLowerCase())
+    const rest = m[2].toLowerCase()
+    if (!cmd?.args?.length) return []
+    return cmd.args
+      .filter(a => a.value.toLowerCase().startsWith(rest) && a.value.toLowerCase() !== rest.trim())
+      .slice(0, 8)
+      .map(a => ({ key: `${cmd.name} ${a.value}`, label: a.value, description: a.desc, fill: `${cmd.name} ${a.value} ` }))
+  })()
 
   // init pos bottom-right small
   useEffect(() => {
@@ -333,6 +347,32 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
     return () => es.close()
   }, [])
 
+  // stránkování: drží se posledních 50, po odjetí nahoru +50, nejvýš 200
+  const PAGE = 50
+  const MAX_SHOWN = 200
+  const [visibleCount, setVisibleCount] = useState(PAGE)
+  const listRef = useRef<HTMLDivElement | null>(null)
+  const prevScrollHeight = useRef<number | null>(null)
+  const shownMessages = chatMessages.slice(-Math.min(visibleCount, MAX_SHOWN))
+  const shownOffset = chatMessages.length - shownMessages.length
+  const onListScroll = () => {
+    const el = listRef.current
+    if (!el || el.scrollTop > 30) return
+    if (visibleCount >= MAX_SHOWN || visibleCount >= chatMessages.length) return
+    prevScrollHeight.current = el.scrollHeight
+    setVisibleCount(v => Math.min(MAX_SHOWN, v + PAGE))
+  }
+  // po načtení starších zpráv drž pozici (obsah přibyl nahoře)
+  useLayoutEffect(() => {
+    const el = listRef.current
+    if (el && prevScrollHeight.current != null) {
+      el.scrollTop = el.scrollHeight - prevScrollHeight.current
+      prevScrollHeight.current = null
+    }
+  }, [visibleCount])
+  // nová zpráva / znovuotevření → zpátky na posledních 50
+  useEffect(() => { setVisibleCount(PAGE) }, [chatMessages.length, isOpen])
+
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [chatMessages])
   useEffect(() => { if (isOpen) chatEndRef.current?.scrollIntoView({ behavior: 'auto' }) }, [isOpen])
   useEffect(() => { if (isOpen) chatInputRef.current?.focus() }, [isOpen])
@@ -481,17 +521,24 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
         )}
       </div>
 
-      <div style={{
+      <div ref={listRef} onScroll={onListScroll} style={{
         flex: 1, overflowY: 'auto', padding: '10px',
         display: 'flex', flexDirection: 'column', gap: 8,
         fontFamily: "'JetBrains Mono', monospace", fontSize: 11, lineHeight: 1.4,
         background: '#2b2b2b',
       }}>
-        {chatMessages.map((msg, i) => {
+        {chatMessages.length > shownMessages.length ? (
+          <div style={{ textAlign: 'center', fontSize: 9, color: '#9a9a9a', padding: '2px 0' }}>
+            ↑ odjeď nahoru pro dalších {Math.min(PAGE, chatMessages.length - shownMessages.length)} · zobrazeno {shownMessages.length} z {chatMessages.length}
+          </div>
+        ) : chatMessages.length > MAX_SHOWN ? (
+          <div style={{ textAlign: 'center', fontSize: 9, color: '#9a9a9a', padding: '2px 0' }}>— maximum {MAX_SHOWN} zpráv —</div>
+        ) : null}
+        {shownMessages.map((msg, i) => {
           const tipMeta = msg.meta && (msg.meta as any).kind === 'lopatinka-tips' ? (msg.meta as TipMeta) : null
           if (tipMeta) {
             return (
-              <div key={i} style={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <div key={shownOffset + i} style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <div style={{ maxWidth: '94%', width: '100%' }}>
                   <TipCard meta={tipMeta} />
                 </div>
@@ -499,7 +546,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
             )
           }
           return (
-            <div key={i} style={{ display: 'flex', justifyContent: msg.from === 'me' ? 'flex-end' : 'flex-start' }}>
+            <div key={shownOffset + i} style={{ display: 'flex', justifyContent: msg.from === 'me' ? 'flex-end' : 'flex-start' }}>
               <div style={{
                 maxWidth: '82%', padding: '6px 10px', border: '1.1px solid black',
                 whiteSpace: 'pre-wrap', wordBreak: 'break-word',
@@ -551,11 +598,11 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
         <div style={{ borderTop: '1px solid black', background: '#3a3a3a', maxHeight: 200, overflowY: 'auto', flexShrink: 0 }}>
           {cmdSuggestions.map((c, idx) => (
             <div
-              key={c.name}
-              onMouseDown={(e) => { e.preventDefault(); setChatInput(`${c.name} `); setCmdIdx(0); chatInputRef.current?.focus() }}
+              key={c.key}
+              onMouseDown={(e) => { e.preventDefault(); setChatInput(c.fill); setCmdIdx(0); chatInputRef.current?.focus() }}
               style={{ padding: '4px 8px', cursor: 'pointer', fontSize: 10, display: 'flex', gap: 8, background: idx === cmdIdx ? '#12a4ff' : 'transparent', color: '#f0f0f0' }}
             >
-              <span style={{ fontWeight: 900, minWidth: 92, fontFamily: "'JetBrains Mono', monospace" }}>{c.name}</span>
+              <span style={{ fontWeight: 900, minWidth: 92, fontFamily: "'JetBrains Mono', monospace" }}>{c.label}</span>
               <span style={{ opacity: idx === cmdIdx ? 0.95 : 0.6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.description}</span>
             </div>
           ))}
@@ -578,8 +625,8 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
               if (e.key === 'ArrowUp') { e.preventDefault(); setCmdIdx(i => Math.max(0, i - 1)); return }
               if (e.key === 'Escape') { e.preventDefault(); setChatInput(''); return }
               // Tab vždy doplní; Enter doplní, jen když ještě není napsaný celý příkaz
-              if (sel && (e.key === 'Tab' || (e.key === 'Enter' && chatInput.trim().toLowerCase() !== sel.name.toLowerCase()))) {
-                e.preventDefault(); setChatInput(`${sel.name} `); setCmdIdx(0); return
+              if (sel && (e.key === 'Tab' || (e.key === 'Enter' && chatInput.trim().toLowerCase() !== sel.fill.trim().toLowerCase()))) {
+                e.preventDefault(); setChatInput(sel.fill); setCmdIdx(0); return
               }
             }
             if (picker) {

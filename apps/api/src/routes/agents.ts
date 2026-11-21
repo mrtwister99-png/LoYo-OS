@@ -90,6 +90,7 @@ async function withAttachments(agents: any[]): Promise<any[]> {
     const rec: any = byId.get(a.id) ?? {}
     return {
       ...a,
+      // ⚙ v UI ukládá do manifestu i indexu zároveň, takže sjednocení odebrané věci nevrací
       skills: union(a.skills, rec.skills),
       tools: union(a.tools, rec.tools),
       loops: union(a.loops, rec.loops),
@@ -136,6 +137,46 @@ async function telegramConfigured(keys: string[] = ['TELEGRAM_BOT_TOKEN', 'TELEG
 
 export default async function agentRoutes(app: FastifyInstance) {
   // GET /api/agents → SQLite SELECT * za ~2ms + FTS5 search
+  // PUT /api/agents/:id/manifest → z ⚙ editu v UI: akce (tlačítka) a připnuté MCP
+  app.put('/agents/:id/manifest', async (req, reply) => {
+    const { id } = req.params as { id: string }
+    if (!/^[a-z0-9-]+$/.test(id)) { reply.code(400); return { error: 'špatné id' } }
+    const body = (req.body as { actions?: any[]; dependencies?: string[]; skills?: string[]; tools?: string[] }) || {}
+    const p = join(AGENTS_DIR, id, 'manifest.json')
+    let m: any
+    try { m = JSON.parse(await readFile(p, 'utf8')) } catch { reply.code(404); return { error: `agent ${id} nemá manifest` } }
+    if (Array.isArray(body.actions)) {
+      m.actions = body.actions
+        .map((a: any) => ({ label: String(a?.label ?? '').trim().slice(0, 40), command: String(a?.command ?? '').trim().slice(0, 300), ...(a?.ask ? { ask: String(a.ask).slice(0, 120) } : {}) }))
+        .filter((a: any) => a.label && a.command.startsWith('/'))
+    }
+    if (Array.isArray(body.dependencies)) {
+      m.dependencies = [...new Set(body.dependencies.map((d) => String(d).trim()).filter((d) => /^[a-z0-9-]+(:\d+)?$/.test(d)))]
+    }
+    const ids = (l: any) => [...new Set((Array.isArray(l) ? l : []).map((x: any) => String(x).trim()).filter((x: string) => /^[a-z0-9:_-]+$/i.test(x)))]
+    if (Array.isArray(body.skills)) m.skills = ids(body.skills)
+    if (Array.isArray(body.tools)) m.tools = ids(body.tools)
+    m.updatedAt = new Date().toISOString()
+    await writeFileFs(p, JSON.stringify(m, null, 2) + '\n', 'utf8')
+    // skilly / nástroje i do agents/index.json (tam je ukládá Tauri) — jinak by odebrané „přežily“ sloučení
+    if (Array.isArray(body.skills) || Array.isArray(body.tools)) {
+      const ip = join(AGENTS_DIR, 'index.json')
+      try {
+        const idx = JSON.parse(await readFile(ip, 'utf8'))
+        const rec = (idx.agents ?? []).find((x: any) => x.id === id)
+        if (rec) {
+          if (Array.isArray(body.skills)) rec.skills = m.skills
+          if (Array.isArray(body.tools)) rec.tools = m.tools
+          await writeFileFs(ip, JSON.stringify(idx, null, 2), 'utf8')
+        }
+      } catch {}
+    }
+    const { getCapabilities } = await import('../lib/manifestLoader.js')
+    await getCapabilities(true)
+    await logActivity({ agent: 'Koštěrad', type: 'save', action: `upraven agent ${id} (akce / MCP) z UI` }).catch(() => {})
+    return { ok: true, actions: m.actions ?? [], dependencies: m.dependencies ?? [], skills: m.skills ?? [], tools: m.tools ?? [] }
+  })
+
   // ---------- Luuu (mailař) — panel v UI ----------
   app.get('/agents/luuu/state', async () => {
     const { luuuStatus } = await import('../services/luuu.js')
@@ -171,7 +212,7 @@ export default async function agentRoutes(app: FastifyInstance) {
     const data = await readFile(join(MARY_DIR, 'commands.json'), 'utf8').then(JSON.parse).catch(() => ({ commands: [] }))
     const commands = (Array.isArray(data.commands) ? data.commands : [])
       .filter((c: any) => c?.name)
-      .map((c: any) => ({ name: c.name, description: c.description ?? '', enabled: c.enabled !== false, schedule: c.schedule ?? null }))
+      .map((c: any) => ({ name: c.name, description: c.description ?? '', enabled: c.enabled !== false, schedule: c.schedule ?? null, args: Array.isArray(c.args) ? c.args : [] }))
       .sort((a: any, b: any) => a.name.localeCompare(b.name))
     return { commands, count: commands.length }
   })

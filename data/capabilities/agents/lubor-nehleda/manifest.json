@@ -15,5 +15,12 @@
   ],
   "createdAt": "2026-09-02T00:00:00Z",
   "updatedAt": "2026-09-02T00:00:00Z",
-  "number": 2
+  "number": 2,
+  "actions": [
+    {
+      "label": "🔎 Najít firmy",
+      "command": "/find {text}",
+      "ask": "Co a kde hledat? (např. instalatér Praha)"
+    }
+  ]
 }

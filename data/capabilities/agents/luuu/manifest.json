@@ -9,16 +9,39 @@
   "entrypoint": "../../../../apps/api/src/services/luuu.ts",
   "model": "qwen3.5:27b",
   "command": "/luuu",
-  "commands": ["/luuu", "/maily"],
+  "commands": [
+    "/luuu",
+    "/maily"
+  ],
   "permissions": [
     "net:fetch:imap",
     "fs:write:data/capabilities/agents/luuu",
     "fs:write:data/reports"
   ],
-  "specialization": ["email", "triage", "daily-brief"],
-  "tags": ["email", "imap", "gmail", "seznam", "daily-brief"],
+  "specialization": [
+    "email",
+    "triage",
+    "daily-brief"
+  ],
+  "tags": [
+    "email",
+    "imap",
+    "gmail",
+    "seznam",
+    "daily-brief"
+  ],
   "category": "all",
   "number": 23,
   "createdAt": "2026-11-21T00:00:00Z",
-  "updatedAt": "2026-11-21T00:00:00Z"
+  "updatedAt": "2026-11-21T00:00:00Z",
+  "actions": [
+    {
+      "label": "📬 Zkontrolovat poštu",
+      "command": "/luuu"
+    },
+    {
+      "label": "📅 Poslední 3 dny",
+      "command": "/luuu 3"
+    }
+  ]
 }

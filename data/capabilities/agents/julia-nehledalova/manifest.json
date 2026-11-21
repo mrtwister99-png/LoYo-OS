@@ -35,5 +35,17 @@
   "dependencies": [
     "fetch:3",
     "playwright:4"
+  ],
+  "actions": [
+    {
+      "label": "🧠 Research",
+      "command": "/julia {text}",
+      "ask": "Téma researche?"
+    },
+    {
+      "label": "🌐 Přečíst stránku",
+      "command": "/fetch {text}",
+      "ask": "Adresa stránky?"
+    }
   ]
 }

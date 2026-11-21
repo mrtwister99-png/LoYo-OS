@@ -44,5 +44,12 @@
   "number": 16,
   "dependencies": [
     "blender:2"
+  ],
+  "actions": [
+    {
+      "label": "🧊 Blender příkaz",
+      "command": "/bender {text}",
+      "ask": "Co má Bender v Blenderu udělat?"
+    }
   ]
 }

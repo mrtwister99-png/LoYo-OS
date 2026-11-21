@@ -35,5 +35,12 @@
   "updatedAt": "2026-11-20T00:00:00Z",
   "dependencies": [
     "fetch:3"
+  ],
+  "actions": [
+    {
+      "label": "🏷️ Ocenit věc",
+      "command": "/stepan {text}",
+      "ask": "Co prodáváš? (např. iPhone 13 128 GB, baterie 89 %)"
+    }
   ]
 }

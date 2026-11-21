@@ -29,5 +29,11 @@
   "category": "internal",
   "createdAt": "2026-09-05T00:00:00Z",
   "updatedAt": "2026-11-20T06:00:00Z",
-  "number": 4
+  "number": 4,
+  "actions": [
+    {
+      "label": "🧹 Údržba manifestů",
+      "command": "/kosterad"
+    }
+  ]
 }

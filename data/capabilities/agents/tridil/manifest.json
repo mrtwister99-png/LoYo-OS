@@ -26,5 +26,15 @@
   ],
   "createdAt": "2026-11-13T00:00:00Z",
   "updatedAt": "2026-11-13T00:00:00Z",
-  "number": 17
+  "number": 17,
+  "actions": [
+    {
+      "label": "👀 Náhled třídění",
+      "command": "/tridil --dry-run"
+    },
+    {
+      "label": "📂 Roztřídit Stažené",
+      "command": "/tridil"
+    }
+  ]
 }

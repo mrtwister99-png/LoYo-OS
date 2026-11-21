@@ -10,6 +10,7 @@ import LopatinkaPanel from '../components/LopatinkaPanel'
 import MaryTelegramPanel from '../components/MaryTelegramPanel'
 import StepanPanel from '../components/StepanPanel'
 import LuuuPanel from '../components/LuuuPanel'
+import AgentActions, { ActionsEditor, type AgentAction } from '../components/AgentActions'
 
 const ACCENT = '#12a4ff'
 const AGENT_COLOR = categoryColors.agents
@@ -19,7 +20,6 @@ const AGENT_NUM = categoryNumbers.agents
 const RENTAL_CAT = 'rental'
 const RENTAL_COLOR = '#facc15'
 
-type Skill = { id: string; name: string }
 type Tool = { id: string; name: string; icon: string }
 type Agent = {
   id: string
@@ -39,16 +39,9 @@ type Agent = {
   dependencies?: string[]
   loops?: string[]
   endpoints?: Record<string, string>
+  actions?: AgentAction[]
+  hasScript?: boolean
 }
-
-const ALL_SKILLS: Skill[] = [
-  { id: 'closer', name: 'Closer' },
-  { id: 'copy', name: 'Copywriter' },
-  { id: 'research', name: 'Researcher' },
-  { id: 'builder', name: 'Builder' },
-  { id: 'enricher', name: 'Enricher' },
-  { id: 'finder', name: 'Finder' },
-]
 
 const ALL_TOOLS: Tool[] = [
   { id: 'rag', name: 'RAG', icon: '◧' },
@@ -84,6 +77,22 @@ export default function AgentsPro() {
   const [search, setSearch] = useState('')
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
   const capNums = useCapNumbers()
+  // ⚙ vpravo nahoře: úpravy (skilly, MCP, CLI, akce, prompt…); normálně jen akce a přehled
+  const [editMode, setEditMode] = useState(false)
+  useEffect(() => { setEditMode(false) }, [selectedAgent?.id])
+  const patchAgent = (upd: Partial<Agent>) => {
+    if (!selectedAgent) return
+    const next = { ...selectedAgent, ...upd }
+    setSelectedAgent(next)
+    setAgents(prev => prev.map(a => (a.id === next.id ? next : a)))
+  }
+  const toggleDep = (mcpId: string) => {
+    if (!selectedAgent) return
+    const deps = selectedAgent.dependencies ?? []
+    const has = deps.some(d => d.split(':')[0] === mcpId)
+    const num = capNums.mcp?.[mcpId]
+    patchAgent({ dependencies: has ? deps.filter(d => d.split(':')[0] !== mcpId) : [...deps, num != null ? `${mcpId}:${num}` : mcpId] })
+  }
   const [showNew, setShowNew] = useState(false)
   const [demoState, setDemoState] = useState<Record<string, 'starting' | 'error' | undefined>>({})
 
@@ -156,6 +165,8 @@ export default function AgentsPro() {
         dependencies: a.dependencies || a.manifest?.dependencies || [],
         loops: a.loops || a.manifest?.loops || [],
         endpoints: a.endpoints || a.manifest?.endpoints || {},
+        actions: Array.isArray(a.actions) ? a.actions : [],
+        hasScript: !!(a.script || a.shell),
       }))
       setAgents(normalized)
       setSelectedAgent(prev => {
@@ -191,14 +202,6 @@ export default function AgentsPro() {
     }
   }
 
-  const toggleSkill = (skillId: string) => {
-    if (!selectedAgent) return
-    const cur = selectedAgent.skills
-    const updated = { ...selectedAgent, skills: cur.includes(skillId) ? cur.filter(s => s !== skillId) : [...cur, skillId] }
-    setSelectedAgent(updated)
-    setAgents(agents.map(a => a.id === updated.id ? updated : a))
-  }
-
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
 
@@ -206,8 +209,23 @@ export default function AgentsPro() {
     if (!selectedAgent) return
     setSaveStatus('saving')
     try {
-      await invoke('save_agent_to_fs', { agent: selectedAgent })
+      // kategorie / tým / prompt přes Tauri (jen v aplikaci); akce, MCP, skilly a nástroje vždy do manifestu přes API
+      if ((window as any).__TAURI_INTERNALS__ || (window as any).__TAURI__) {
+        await invoke('save_agent_to_fs', { agent: selectedAgent }).catch((e) => console.warn('Tauri save:', e))
+      }
+      const res = await fetch(`${API_URL}/api/agents/${selectedAgent.id}/manifest`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          actions: selectedAgent.actions ?? [],
+          dependencies: selectedAgent.dependencies ?? [],
+          skills: selectedAgent.skills,
+          tools: selectedAgent.tools,
+        }),
+      })
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || `HTTP ${res.status}`)
       await loadAgentsFromFS(true)
+      setEditMode(false)
       setSaveStatus('saved')
       setTimeout(() => setSaveStatus('idle'), 2000)
     } catch (err) {
@@ -403,125 +421,170 @@ export default function AgentsPro() {
                     )}
                   </div>
                 </div>
-                <button onClick={()=>setSelectedAgent(null)} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#444] hover:text-[#f0f0f0] transition">✕</button>
+                <div className="flex gap-2 shrink-0">
+                  <button
+                    onClick={()=>setEditMode(v=>!v)}
+                    title={editMode ? 'Zpět na akce' : 'Upravit agenta (skilly, MCP, CLI, akce, prompt)'}
+                    className={`w-9 h-9 rounded-full flex items-center justify-center transition text-[16px] ${editMode ? 'text-white' : 'bg-white/5 hover:bg-[#444]'}`}
+                    style={editMode ? { background: ACCENT } : undefined}
+                  >⚙</button>
+                  <button onClick={()=>setSelectedAgent(null)} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#444] hover:text-[#f0f0f0] transition">✕</button>
+                </div>
               </div>
             </div>
 
             <div className="p-7 space-y-8">
-              {selectedAgent.id === 'mary-jane' && <MaryTelegramPanel />}
-              {selectedAgent.id === 'tridil' && <TridilPanel />}
-              {selectedAgent.id === 'loot-checker' && <LootCheckerPanel />}
-              {selectedAgent.id === 'lopatinka' && <LopatinkaPanel />}
-              {selectedAgent.id === 'stepan' && <StepanPanel />}
-              {selectedAgent.id === 'luuu' && <LuuuPanel />}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
-                  <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">KATEGORIE</div>
-                  <select value={selectedAgent.category} onChange={e=>{const upd={...selectedAgent, category:e.target.value}; setSelectedAgent(upd);}} className="mt-2 w-full bg-transparent font-bold text-[13px] outline-none">
-                    {CATS.filter(c=>c.id!=='all').map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
-                  </select>
-                </div>
-                <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
-                  <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">TÝM</div>
-                  <select value={selectedAgent.team} onChange={e=>{const upd={...selectedAgent, team:e.target.value}; setSelectedAgent(upd);}} className="mt-2 w-full bg-transparent font-bold text-[13px] outline-none">
-                    {TEAMS.map(t=><option key={t} value={t}>{t}</option>)}
-                  </select>
-                </div>
-              </div>
+              {!editMode && (
+                <>
+                  {/* ⚡ AKCE — tlačítka z manifestu; agent se skriptem má navíc „Spustit“ */}
+                  <AgentActions
+                    actions={[
+                      ...(selectedAgent.actions ?? []),
+                      ...(selectedAgent.hasScript && !(selectedAgent.actions ?? []).some(a => a.command.startsWith('/spust')) ? [{ label: '▶ Spustit', command: `/spust ${selectedAgent.id}` }] : []),
+                    ]}
+                  />
 
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="text-[11px] font-bold tracking-[0.2em]">DOKUMENTY • {selectedAgent.folder}</div>
-                  <div className="text-[10px] font-mono text-[#9a9a9a]/70">{selectedAgent.docs.length} souborů</div>
-                </div>
-                <div className="mt-3 space-y-2">
-                  {selectedAgent.docs.map((doc, idx)=>(
-                    <div key={idx} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#3a3a3a] border border-[#444]">
-                      <span className="text-[14px]">📄</span>
-                      <span className="text-[12px] font-mono font-bold">{doc}</span>
+                  {selectedAgent.id === 'mary-jane' && <MaryTelegramPanel />}
+                  {selectedAgent.id === 'tridil' && <TridilPanel />}
+                  {selectedAgent.id === 'loot-checker' && <LootCheckerPanel />}
+                  {selectedAgent.id === 'lopatinka' && <LopatinkaPanel />}
+                  {selectedAgent.id === 'stepan' && <StepanPanel />}
+                  {selectedAgent.id === 'luuu' && <LuuuPanel />}
+
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-[11px] font-bold tracking-[0.2em]">PŘIŘAZENO • typ-číslo</div>
+                      <div className="text-[10px] font-mono text-[#9a9a9a]/70">změny přes ⚙</div>
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {selectedAgent.skills.filter(s => capNums.skill?.[s] != null).map((s, i) => (
+                        <NumBadge key={'s' + s} type={categoryNumbers.skill} n={capNums.skill?.[s]} idx={i} label={s} />
+                      ))}
+                      {selectedAgent.tools.filter(t => t.startsWith('cli:')).map((t, i) => (
+                        <NumBadge key={'c' + t} type={categoryNumbers.cli} n={capNums.cli?.[t.slice(4)]} idx={i} label={t.slice(4)} />
+                      ))}
+                      {(selectedAgent.dependencies || []).map((d, i) => {
+                        const mcpId = d.split(':')[0]
+                        return <NumBadge key={'m' + d} type={categoryNumbers.mcp} n={capNums.mcp?.[mcpId]} idx={i} label={mcpId} />
+                      })}
+                      {(selectedAgent.loops || []).map((l, i) => (
+                        <NumBadge key={'l' + l} type={categoryNumbers.loop} n={capNums.loop?.[l]} idx={i} label={l} />
+                      ))}
+                      {!(selectedAgent.dependencies?.length) && !selectedAgent.skills.some(s => capNums.skill?.[s] != null) && !selectedAgent.tools.some(t => t.startsWith('cli:')) && (
+                        <span className="text-[10px] font-mono text-[#9a9a9a]/60">nic — připneš přes ⚙</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-[11px] font-bold tracking-[0.2em]">DOKUMENTY • {selectedAgent.folder}</div>
+                      <div className="text-[10px] font-mono text-[#9a9a9a]/70">{selectedAgent.docs.length} souborů</div>
+                    </div>
+                    <div className="mt-3 space-y-2">
+                      {selectedAgent.docs.map((doc, idx)=>(
+                        <div key={idx} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#3a3a3a] border border-[#444]">
+                          <span className="text-[14px]">📄</span>
+                          <span className="text-[12px] font-mono font-bold">{doc}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {editMode && (
+                <>
+                  <div className="text-[10px] font-mono tracking-widest" style={{ color: ACCENT }}>⚙ ÚPRAVY — změny se uloží tlačítkem dole</div>
+
+                  <ActionsEditor actions={selectedAgent.actions ?? []} onChange={(actions) => patchAgent({ actions })} />
+
+                  {/* skutečné capability ze systému — klik = připnout / odepnout */}
+                  {([
+                    { title: 'SKILLS', type: categoryNumbers.skill, ids: Object.keys(capNums.skill ?? {}), active: (id: string) => selectedAgent.skills.includes(id),
+                      toggle: (id: string) => patchAgent({ skills: selectedAgent.skills.includes(id) ? selectedAgent.skills.filter(s => s !== id) : [...selectedAgent.skills, id] }), num: (id: string) => capNums.skill?.[id] },
+                    { title: 'MCP', type: categoryNumbers.mcp, ids: Object.keys(capNums.mcp ?? {}), active: (id: string) => (selectedAgent.dependencies ?? []).some(d => d.split(':')[0] === id),
+                      toggle: (id: string) => toggleDep(id), num: (id: string) => capNums.mcp?.[id] },
+                    { title: 'CLI', type: categoryNumbers.cli, ids: Object.keys(capNums.cli ?? {}), active: (id: string) => selectedAgent.tools.includes(`cli:${id}`),
+                      toggle: (id: string) => patchAgent({ tools: selectedAgent.tools.includes(`cli:${id}`) ? selectedAgent.tools.filter(t => t !== `cli:${id}`) : [...selectedAgent.tools, `cli:${id}`] }), num: (id: string) => capNums.cli?.[id] },
+                  ]).map(sec => (
+                    <div key={sec.title}>
+                      <div className="flex items-center justify-between">
+                        <div className="text-[11px] font-bold tracking-[0.2em]">{sec.title}</div>
+                        <div className="text-[10px] font-mono text-[#9a9a9a]/70">{sec.ids.filter(sec.active).length} připnuto</div>
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {sec.ids.map(id => {
+                          const on = sec.active(id)
+                          return (
+                            <button key={id} onClick={() => sec.toggle(id)} className={`px-3.5 py-2 rounded-full text-[11px] font-mono border transition ${on ? 'bg-[#12a4ff] text-white border-[#12a4ff]' : 'bg-[#3a3a3a] border-[#444] text-[#9a9a9a] hover:text-[#f0f0f0]'}`}>
+                              {sec.type}-{String(sec.num(id) ?? '?').padStart(2, '0')} {id} {on ? '✓' : '+'}
+                            </button>
+                          )
+                        })}
+                        {!sec.ids.length && <span className="text-[10px] font-mono text-[#9a9a9a]/60">v systému zatím nic</span>}
+                      </div>
                     </div>
                   ))}
-                </div>
-              </div>
 
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="text-[11px] font-bold tracking-[0.2em]">SKILLS</div>
-                  <div className="text-[10px] font-mono text-[#9a9a9a]/70">{selectedAgent.skills.length} aktivních</div>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {ALL_SKILLS.map(s=>{
-                    const active = selectedAgent.skills.includes(s.id)
-                    return (
-                      <button key={s.id} onClick={()=>toggleSkill(s.id)} className={`px-4 py-2 rounded-full text-[11px] font-bold tracking-widest border transition ${active? 'bg-[#12a4ff] text-white border-[#12a4ff]':'bg-[#3a3a3a] border-[#444] text-[#9a9a9a] hover:border-[#444]'}`}>
-                        {s.name.toUpperCase()} {active?'✓':'+'}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
+                  <div>
+                    <div className="text-[11px] font-bold tracking-[0.2em]">TOOLS</div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {ALL_TOOLS.filter(t => !t.id.startsWith('cli_')).map(t=>{
+                        const active = selectedAgent.tools.includes(t.id)
+                        return (
+                          <button key={t.id} onClick={()=>toggleTool(t.id)} className={`px-3.5 py-2 rounded-full text-[11px] font-mono border flex items-center gap-1.5 transition ${active? 'bg-[#12a4ff] text-white border-[#12a4ff]':'bg-[#3a3a3a] border-[#444] text-[#9a9a9a]'}`}>
+                            <span>{t.icon}</span>{t.id} {active?'•':''}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
 
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="text-[11px] font-bold tracking-[0.2em]">TOOLS</div>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {ALL_TOOLS.map(t=>{
-                    const active = selectedAgent.tools.includes(t.id)
-                    return (
-                      <button key={t.id} onClick={()=>toggleTool(t.id)} className={`px-3.5 py-2 rounded-full text-[11px] font-mono border flex items-center gap-1.5 transition ${active? 'bg-[#12a4ff] text-white border-[#12a4ff]':'bg-[#3a3a3a] border-[#444] text-[#9a9a9a]'}`}>
-                        <span>{t.icon}</span>{t.id} {active?'•':''}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
+                      <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">KATEGORIE</div>
+                      <select value={selectedAgent.category} onChange={e=>patchAgent({ category: e.target.value })} className="mt-2 w-full bg-transparent font-bold text-[13px] outline-none">
+                        {CATS.filter(c=>c.id!=='all').map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+                      </select>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
+                      <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">TÝM</div>
+                      <select value={selectedAgent.team} onChange={e=>patchAgent({ team: e.target.value })} className="mt-2 w-full bg-transparent font-bold text-[13px] outline-none">
+                        {TEAMS.map(t=><option key={t} value={t}>{t}</option>)}
+                      </select>
+                    </div>
+                  </div>
 
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="text-[11px] font-bold tracking-[0.2em]">PŘIŘAZENO • typ-číslo</div>
-                  <div className="text-[10px] font-mono text-[#9a9a9a]/70">/add 3-1 skill • /add 5-1 CLI • /add 4-1 MCP • /remove</div>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {selectedAgent.skills.filter(s => capNums.skill?.[s] != null).map((s, i) => (
-                    <NumBadge key={'s' + s} type={categoryNumbers.skill} n={capNums.skill?.[s]} idx={i} label={s} />
-                  ))}
-                  {selectedAgent.tools.filter(t => t.startsWith('cli:')).map((t, i) => (
-                    <NumBadge key={'c' + t} type={categoryNumbers.cli} n={capNums.cli?.[t.slice(4)]} idx={i} label={t.slice(4)} />
-                  ))}
-                  {(selectedAgent.dependencies || []).map((d, i) => {
-                    const mcpId = d.split(':')[0]
-                    return <NumBadge key={'m' + d} type={categoryNumbers.mcp} n={capNums.mcp?.[mcpId]} idx={i} label={mcpId} />
-                  })}
-                  {(selectedAgent.loops || []).map((l, i) => (
-                    <NumBadge key={'l' + l} type={categoryNumbers.loop} n={capNums.loop?.[l]} idx={i} label={l} />
-                  ))}
-                </div>
-              </div>
+                  <div>
+                    <div className="text-[11px] font-bold tracking-[0.2em]">WORKFLOW & PROMPT</div>
+                    <div className="mt-3 space-y-3">
+                      <input value={selectedAgent.workflow} onChange={e=>patchAgent({ workflow: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-[#444] text-[12px] font-mono" placeholder="workflow id" />
+                      <textarea value={selectedAgent.prompt} onChange={e=>patchAgent({ prompt: e.target.value })} rows={6} className="w-full px-4 py-3 rounded-xl border border-[#444] text-[12px] font-mono" placeholder="System prompt..." />
+                    </div>
+                  </div>
 
-              <div>
-                <div className="text-[11px] font-bold tracking-[0.2em]">WORKFLOW & PROMPT</div>
-                <div className="mt-3 space-y-3">
-                  <input value={selectedAgent.workflow} onChange={e=>{const upd={...selectedAgent, workflow:e.target.value}; setSelectedAgent(upd);}} className="w-full px-4 py-3 rounded-xl border border-[#444] text-[12px] font-mono" placeholder="workflow id" />
-                  <textarea value={selectedAgent.prompt} onChange={e=>{const upd={...selectedAgent, prompt:e.target.value}; setSelectedAgent(upd);}} rows={6} className="w-full px-4 py-3 rounded-xl border border-[#444] text-[12px] font-mono" placeholder="System prompt..." />
-                </div>
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={saveAgent}
-                  disabled={saveStatus === 'saving'}
-                  className="flex-1 py-3.5 rounded-full bg-[#444] text-[#f0f0f0] text-[11px] font-black tracking-widest hover:bg-black/80 transition disabled:opacity-50"
-                >
-                  {saveStatus === 'saving' && 'UKLÁDÁM...'}
-                  {saveStatus === 'saved'  && '✓ ULOŽENO'}
-                  {saveStatus === 'error'  && '✕ CHYBA'}
-                  {saveStatus === 'idle'   && 'ULOŽIT ZMĚNY → data/agents/'}
-                </button>
-                <button onClick={()=>deleteAgent(selectedAgent.id)} className="px-6 py-3.5 rounded-full border border-[#444] text-[11px] font-bold tracking-widest text-[#9a9a9a] hover:text-[#9a9a9a] hover:border-[#444]/30 transition">
-                  SMAZAT
-                </button>
-              </div>
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      onClick={saveAgent}
+                      disabled={saveStatus === 'saving'}
+                      className="flex-1 py-3.5 rounded-full text-white text-[11px] font-black tracking-widest hover:brightness-110 transition disabled:opacity-50"
+                      style={{ background: ACCENT }}
+                    >
+                      {saveStatus === 'saving' && 'UKLÁDÁM...'}
+                      {saveStatus === 'saved'  && '✓ ULOŽENO'}
+                      {saveStatus === 'error'  && '✕ CHYBA'}
+                      {saveStatus === 'idle'   && 'ULOŽIT ZMĚNY'}
+                    </button>
+                    <button onClick={()=>{ setEditMode(false); loadAgentsFromFS(true) }} className="px-5 py-3.5 rounded-full border border-[#444] text-[11px] font-bold tracking-widest text-[#9a9a9a] hover:text-[#f0f0f0] transition">
+                      ZRUŠIT
+                    </button>
+                    <button onClick={()=>deleteAgent(selectedAgent.id)} className="px-5 py-3.5 rounded-full border border-[#444] text-[11px] font-bold tracking-widest text-[#9a9a9a] hover:text-[#ff6b6b] hover:border-[#ff6b6b]/40 transition">
+                      SMAZAT
+                    </button>
+                  </div>
+                </>
+              )}
               <div className="h-[3px] w-full rounded-full" style={{ background: ACCENT }} />
             </div>
           </div>

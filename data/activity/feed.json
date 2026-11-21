@@ -1,5 +1,19 @@
 [
   {
+    "id": "37d92ebf-405c-4f45-9831-3c90d080effe",
+    "ts": "2026-11-21T01:54:19.477Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "upraven agent lopatinka (akce / MCP) z UI"
+  },
+  {
+    "id": "d656542c-2917-485b-bd2e-20b9ad209f5f",
+    "ts": "2026-11-21T01:54:19.463Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "upraven agent lopatinka (akce / MCP) z UI"
+  },
+  {
     "id": "9ffa6932-c7a7-49d9-8156-db44c4b85b23",
     "ts": "2026-11-21T01:44:42.217Z",
     "agent": "Mary Jane",
