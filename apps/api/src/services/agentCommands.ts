@@ -395,7 +395,7 @@ function wholeMailboxWipe(text: string): Promise<CommandResult> | null {
     const L = await import('./luuu.js')
     if (!(await L.luuuConfigured())) return { reply: L.SETUP_HELP, steps }
     const scan = await L.scanWholeMailbox(cat).catch((e: any) => { throw new Error(`Luuu se nedostal do pošty: ${e?.message ?? e}`) })
-    const total = scan.inboxUids.length + (scan.junk?.count ?? 0)
+    const total = L.scanTotal(scan)
     if (!total) return { reply: `${L.describeScan(scan)}\n\nNení co mazat. 🎉`, steps }
     return { reply: askConfirm(L.describeScan(scan), `${total} mailů do Koše`, () => L.trashWholeScan(scan)), steps }
   })().catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: ['Luuu: celá schránka'] }))

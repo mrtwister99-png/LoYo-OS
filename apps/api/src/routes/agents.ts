@@ -200,6 +200,32 @@ export default async function agentRoutes(app: FastifyInstance) {
       return { ok: true, ...r }
     } catch (e: any) { reply.code(500); return { ok: false, error: e?.message ?? String(e) } }
   })
+  // celá schránka s výběrem odesílatelů: 1) sken → skupiny podle odesílatele  2) smazat vybrané
+  app.post('/agents/luuu/wipe/scan', async (req, reply) => {
+    const { category } = (req.body as { category?: string }) || {}
+    if (category !== 'spam' && category !== 'newsletter') { reply.code(400); return { error: 'category = spam | newsletter' } }
+    try {
+      const L = await import('../services/luuu.js')
+      if (!(await L.luuuConfigured())) { reply.code(400); return { error: 'Luuu nemá přístup k mailu (.env)' } }
+      const scan = await L.scanWholeMailbox(category)
+      return {
+        ok: true, id: scan.id, cat: scan.cat, scanned: scan.scanned, total: L.scanTotal(scan),
+        groups: scan.groups.map((g) => ({ addr: g.addr, name: g.name, count: g.inbox.length + g.junk.length, junk: g.junk.length })),
+      }
+    } catch (e: any) { reply.code(500); return { ok: false, error: e?.message ?? String(e) } }
+  })
+  app.post('/agents/luuu/wipe/run', async (req, reply) => {
+    const { id, exclude } = (req.body as { id?: string; exclude?: string[] }) || {}
+    const L = await import('../services/luuu.js')
+    const scan = id ? L.getScan(id) : null
+    if (!scan) { reply.code(410); return { ok: false, error: 'Sken vypršel (30 min) — načti ho znovu.' } }
+    try {
+      const text = await L.trashWholeScan(scan, Array.isArray(exclude) ? exclude : [])
+      await saveChatMessage('mary', text).catch(() => {})
+      return { ok: true, text }
+    } catch (e: any) { reply.code(500); return { ok: false, error: e?.message ?? String(e) } }
+  })
+
   app.put('/agents/luuu/lists', async (req) => {
     const { important, del } = (req.body as { important?: string[]; del?: string[] }) || {}
     const { saveLists, luuuStatus } = await import('../services/luuu.js')

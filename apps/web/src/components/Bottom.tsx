@@ -2,6 +2,7 @@
 // D:\dev\loyo-os\apps\web\src\components\Bottom.tsx - Bottom bar s Chatem vpravo jak Facebook + helpbut.png
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Chat from './Chat'
+import LiveCounters from './LiveCounters'
 import helpbutImg from '../images/helpbut.png'
 
 export default function Bottom() {
@@ -78,11 +79,10 @@ export default function Bottom() {
               <span className="text-[10px] font-black tracking-[0.08em] uppercase">HELP</span>
             </button>
             <span className="opacity-20">|</span>
-            <span>Agenti = 5</span>
-            <span className="opacity-20">|</span>
-            <span>Teamy = 4</span>
-            <span className="opacity-20">|</span>
-            <span>Workflows = 3</span>
+            {/* živá počítadla všeho, zleva doprava */}
+            <span className="flex-1 min-w-0 flex items-center gap-2 overflow-x-auto no-scrollbar">
+              <LiveCounters />
+            </span>
           </div>
 
           <div className="w-px h-4 bg-[#444] shrink-0" />

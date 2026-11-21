@@ -96,19 +96,28 @@ export default function LuuuPanel() {
     } catch (e: any) { setError(e.message) } finally { setBusy(null) }
   }
 
-  // celá schránka: přes Mary (/api/run) → nejdřív sken a počet, pak „/ano <kód>“
-  const [confirmCode, setConfirmCode] = useState<string | null>(null)
-  const askMary = async (key: string, message: string) => {
-    setBusy(key); setError(''); setOutput(''); setConfirmCode(null)
+  // celá schránka: sken → seznam odesílatelů s checkboxy → do koše jen zaškrtnuté
+  type Group = { addr: string; name: string; count: number; junk: number }
+  type Scan = { id: string; cat: 'spam' | 'newsletter'; scanned: number; total: number; groups: Group[] }
+  const [scan, setScan] = useState<Scan | null>(null)
+  const [unchecked, setUnchecked] = useState<Set<string>>(new Set())
+  const startScan = async (category: 'spam' | 'newsletter') => {
+    setBusy(`scan-${category}`); setError(''); setOutput(''); setScan(null); setUnchecked(new Set())
+    try { setScan(await api<Scan>('/api/agents/luuu/wipe/scan', { method: 'POST', body: JSON.stringify({ category }) })) }
+    catch (e: any) { setError(e.message) } finally { setBusy(null) }
+  }
+  const toggle = (addr: string) => setUnchecked((prev) => { const n = new Set(prev); n.has(addr) ? n.delete(addr) : n.add(addr); return n })
+  const chosenCount = scan ? scan.groups.filter((g) => !unchecked.has(g.addr)).reduce((n, g) => n + g.count, 0) : 0
+  const chosenSenders = scan ? scan.groups.filter((g) => !unchecked.has(g.addr)).length : 0
+  const runWipe = async () => {
+    if (!scan || !chosenCount) return
+    if (!confirm(`Přesunout ${chosenCount} mailů od ${chosenSenders} odesílatelů do Koše?
+(Gmail je tam drží 30 dní, pak je sám vysype.)`)) return
+    setBusy('wipe'); setError('')
     try {
-      const res = await fetch(`${API_URL}/api/run`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message, source: 'ui' }) })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`)
-      const reply = String(json.reply ?? '')
-      setOutput(reply)
-      setConfirmCode(reply.match(/\/ano ([a-z0-9]{4})/)?.[1] ?? null)
-      if (message.startsWith('/ano')) await load()
-    } catch (e: any) { setError(e?.message === 'Failed to fetch' ? 'API neběží (localhost:3001)' : e.message) } finally { setBusy(null) }
+      const r = await api<{ text: string }>('/api/agents/luuu/wipe/run', { method: 'POST', body: JSON.stringify({ id: scan.id, exclude: [...unchecked] }) })
+      setOutput(r.text); setScan(null); await load()
+    } catch (e: any) { setError(e.message) } finally { setBusy(null) }
   }
 
   const saveLists = async (lists: { important?: string[]; del?: string[] }) => {
@@ -173,29 +182,59 @@ export default function LuuuPanel() {
           {busy === 'news' ? 'MAŽU…' : '📰 SMAZAT NEWSLETTERY'}
         </button>
       </div>
-      {/* CELÁ SCHRÁNKA — nejdřív spočítá, pak potvrzení */}
+      {/* CELÁ SCHRÁNKA — sken, pak odesílatelé s checkboxy (odškrtnutý = všechny jeho maily zůstanou) */}
       <div>
         <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">CELÁ SCHRÁNKA (všechny maily, nejen 7 dní)</div>
         <div className="mt-2 flex flex-wrap gap-2">
-          <button disabled={!st.configured || !!busy} onClick={() => askMary('wipe-spam', '/luuu smaž spam')}
+          <button disabled={!st.configured || !!busy} onClick={() => startScan('spam')}
             className={`${btn} border-[#444] text-[#f0f0f0] hover:border-[#ff6b6b]`}>
-            {busy === 'wipe-spam' ? 'POČÍTÁM…' : '🗑 VŠECHEN SPAM Z GMAILU'}
+            {busy === 'scan-spam' ? 'PROJÍŽDÍM SCHRÁNKU…' : '🗑 VŠECHEN SPAM Z GMAILU'}
           </button>
-          <button disabled={!st.configured || !!busy} onClick={() => askMary('wipe-news', '/luuu smaž newslettery')}
+          <button disabled={!st.configured || !!busy} onClick={() => startScan('newsletter')}
             className={`${btn} border-[#444] text-[#f0f0f0] hover:border-[#ff6b6b]`}>
-            {busy === 'wipe-news' ? 'POČÍTÁM…' : '📰 VŠECHNY NEWSLETTERY'}
+            {busy === 'scan-newsletter' ? 'PROJÍŽDÍM SCHRÁNKU…' : '📰 VŠECHNY NEWSLETTERY'}
           </button>
-          {confirmCode && (
-            <>
-              <button disabled={!!busy} onClick={() => askMary('confirm', `/ano ${confirmCode}`)}
-                className={`${btn} text-[#111]`} style={{ background: '#facc15', borderColor: '#facc15' }}>
-                {busy === 'confirm' ? 'MAŽU…' : '✅ POTVRDIT — DO KOŠE'}
-              </button>
-              <button disabled={!!busy} onClick={() => askMary('cancel', `/ne ${confirmCode}`)}
-                className={`${btn} border-[#444] text-[#9a9a9a] hover:text-[#f0f0f0]`}>ZRUŠIT</button>
-            </>
-          )}
         </div>
+
+        {scan && (
+          <div className="mt-3 rounded-xl border border-[#444] bg-[#353535] overflow-hidden">
+            <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-[#444]">
+              <div className="text-[10px] font-mono">
+                {scan.cat === 'spam' ? '🗑 spam' : '📰 newslettery'} · {scan.total} mailů od {scan.groups.length} odesílatelů
+                <span className="text-[#9a9a9a]/60"> (prošel jsem {scan.scanned})</span>
+              </div>
+              <div className="flex gap-2 text-[10px] font-mono">
+                <button onClick={() => setUnchecked(new Set())} className="text-[#7cc8ff] hover:underline">vše</button>
+                <button onClick={() => setUnchecked(new Set(scan.groups.map((g) => g.addr)))} className="text-[#7cc8ff] hover:underline">nic</button>
+              </div>
+            </div>
+            <div className="max-h-72 overflow-y-auto">
+              {scan.groups.length === 0 && <div className="px-3 py-4 text-[11px] font-mono text-[#9a9a9a]">Nic k mazání. 🎉</div>}
+              {scan.groups.map((g) => {
+                const on = !unchecked.has(g.addr)
+                return (
+                  <label key={g.addr} className={`flex items-center gap-3 px-3 py-1.5 border-b border-[#3f3f3f] cursor-pointer hover:bg-[#3c3c3c] ${on ? '' : 'opacity-45'}`}>
+                    <input type="checkbox" checked={on} onChange={() => toggle(g.addr)} className="accent-[#ff6b6b] w-3.5 h-3.5" />
+                    <span className="flex-1 min-w-0 text-[11px] font-mono truncate" title={g.addr}>
+                      {g.name && g.name !== g.addr ? <><b>{g.name}</b> <span className="text-[#9a9a9a]">&lt;{g.addr}&gt;</span></> : g.addr}
+                    </span>
+                    {g.junk > 0 && <span className="text-[9px] font-mono text-[#facc15]" title="z toho ve složce Spam">spam {g.junk}</span>}
+                    <span className="shrink-0 min-w-[42px] text-right text-[11px] font-black font-mono">{g.count}×</span>
+                  </label>
+                )
+              })}
+            </div>
+            <div className="flex flex-wrap items-center gap-2 px-3 py-2 border-t border-[#444]">
+              <button disabled={!!busy || !chosenCount} onClick={runWipe}
+                className={`${btn} text-[#111]`} style={{ background: '#facc15', borderColor: '#facc15' }}>
+                {busy === 'wipe' ? 'MAŽU…' : `🗑 DO KOŠE ${chosenCount} mailů (${chosenSenders} odesílatelů)`}
+              </button>
+              <button disabled={!!busy} onClick={() => { setScan(null); setUnchecked(new Set()) }}
+                className={`${btn} border-[#444] text-[#9a9a9a] hover:text-[#f0f0f0]`}>ZRUŠIT</button>
+              {unchecked.size > 0 && <span className="text-[10px] font-mono text-[#9a9a9a]">ponechám {unchecked.size} odesílatelů</span>}
+            </div>
+          </div>
+        )}
       </div>
       {error && <div className="text-[11px] font-mono text-[#ff6b6b]">{error}</div>}
 

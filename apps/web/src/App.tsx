@@ -125,9 +125,12 @@ export default function App() {
       if (pageMap[builderType]) setPage(pageMap[builderType] as any)
     }
     const pickHandler = (e: any) => { const t = e.detail?.type; if (t) setBuilderInitial({ type: t, id: '' }) } // nový builder z menu, bez navigace na stránku
+    // log akcí nahoře → „🤖 agent →“ přepne na stránku agentů
+    const navHandler = (e: any) => { const p = e.detail?.page; if (p) setPage(p as any) }
     window.addEventListener('loyo:open-builder', handler as any)
     window.addEventListener('loyo:builder-pick', pickHandler)
-    return () => { window.removeEventListener('loyo:open-builder', handler as any); window.removeEventListener('loyo:builder-pick', pickHandler) }
+    window.addEventListener('loyo:navigate', navHandler)
+    return () => { window.removeEventListener('loyo:open-builder', handler as any); window.removeEventListener('loyo:builder-pick', pickHandler); window.removeEventListener('loyo:navigate', navHandler) }
   }, [])
 
   useEffect(() => {

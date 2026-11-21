@@ -285,65 +285,92 @@ export async function trashCategory(cat: Category, days = 7): Promise<{ text: st
 }
 
 // ---------- celá schránka: spam / newslettery (jen hlavičky, pravidla — tisíce mailů bez LLM) ----------
+// Výsledek je seskupený podle odesílatele: v UI jde každého odškrtnout (= všechny jeho maily zůstanou).
+export type SenderGroup = { addr: string; name: string; inbox: number[]; junk: number[] }
 export type WholeScan = {
+  id: string
   cat: 'spam' | 'newsletter'
-  inboxUids: number[]
-  sample: string[]
-  junk: { path: string; count: number } | null
   scanned: number
+  junkPath: string | null
+  groups: SenderGroup[]          // seřazené od nejvíc mailů
+  createdAt: number
+}
+
+const scans = new Map<string, WholeScan>()   // pro UI: sken → výběr → smazání (platí 30 min)
+export function getScan(id: string): WholeScan | null {
+  for (const [k, v] of scans) if (Date.now() - v.createdAt > 30 * 60_000) scans.delete(k)
+  return scans.get(id) ?? null
 }
 
 function connectClient(cfg: Awaited<ReturnType<typeof config>>) {
   return new ImapFlow({ host: cfg.host, port: cfg.port, secure: true, auth: { user: cfg.user, pass: cfg.pass }, logger: false })
 }
 
-/** Projde CELOU doručenou poštu (jen pro čtení) + spočítá Gmail složku Spam. Nic nemaže. */
+function toMail(msg: any): Mail {
+  const env: any = msg.envelope ?? {}
+  const from = env.from?.[0] ?? {}
+  return {
+    uid: msg.uid,
+    from: from.name || from.address || '?',
+    fromAddr: String(from.address ?? '').toLowerCase(),
+    subject: String(env.subject ?? ''),
+    date: env.date instanceof Date ? env.date.toISOString() : String(env.date ?? ''),
+    snippet: '',
+    listUnsubscribe: /list-unsubscribe/i.test(String(msg.headers ?? '')),
+    hasPdf: false,
+  }
+}
+
+/** Projde CELOU doručenou poštu (jen pro čtení) + u spamu i Gmail složku Spam. Nic nemaže. */
 export async function scanWholeMailbox(cat: 'spam' | 'newsletter'): Promise<WholeScan> {
   const cfg = await config()
   if (!cfg.ok) throw new Error('not-configured')
   const client = connectClient(cfg)
   await client.connect()
-  const out: WholeScan = { cat, inboxUids: [], sample: [], junk: null, scanned: 0 }
+  const by = new Map<string, SenderGroup>()
+  const add = (m: Mail, where: 'inbox' | 'junk') => {
+    const key = m.fromAddr || m.from
+    const g = by.get(key) ?? { addr: key, name: m.from, inbox: [], junk: [] }
+    g[where].push(m.uid)
+    by.set(key, g)
+  }
+  let scanned = 0
+  let junkPath: string | null = null
   try {
     if (cat === 'spam') {
       const boxes: any[] = await client.list()
-      const junk = boxes.find((b) => b.specialUse === '\\Junk')?.path
-      if (junk) {
-        const st: any = await client.status(junk, { messages: true })
-        out.junk = { path: junk, count: Number(st?.messages) || 0 }
+      junkPath = boxes.find((b) => b.specialUse === '\\Junk')?.path ?? null
+      if (junkPath) {
+        const jb: any = await client.mailboxOpen(junkPath, { readOnly: true })
+        if (jb.exists) for await (const msg of client.fetch('1:*', { uid: true, envelope: true })) add(toMail(msg), 'junk')
       }
     }
     const box: any = await client.mailboxOpen('INBOX', { readOnly: true })
     if (box.exists) {
       for await (const msg of client.fetch('1:*', { uid: true, envelope: true, headers: ['list-unsubscribe'] })) {
-        out.scanned++
-        const env: any = msg.envelope ?? {}
-        const from = env.from?.[0] ?? {}
-        const m: Mail = {
-          uid: msg.uid,
-          from: from.name || from.address || '?',
-          fromAddr: String(from.address ?? '').toLowerCase(),
-          subject: String(env.subject ?? ''),
-          date: (env.date ?? new Date()).toISOString?.() ?? String(env.date),
-          snippet: '',
-          listUnsubscribe: /list-unsubscribe/i.test(String((msg as any).headers ?? '')),
-          hasPdf: false,
-        }
-        const r = classifyByRules(m, cfg.important)
-        if (r?.cat === cat) {
-          out.inboxUids.push(m.uid)
-          if (out.sample.length < 12) out.sample.push(`• ${m.from} — ${m.subject}`)
-        }
+        scanned++
+        const m = toMail(msg)
+        if (classifyByRules(m, cfg.important)?.cat === cat) add(m, 'inbox')
       }
     }
   } finally {
     await client.logout().catch(() => {})
   }
-  return out
+  const groups = [...by.values()].sort((x, y) => (y.inbox.length + y.junk.length) - (x.inbox.length + x.junk.length))
+  const scan: WholeScan = { id: Math.random().toString(36).slice(2, 10), cat, scanned, junkPath, groups, createdAt: Date.now() }
+  scans.set(scan.id, scan)
+  return scan
 }
 
-/** Přesune výsledek skenu do Koše (vratné 30 dní). */
-export async function trashWholeScan(scan: WholeScan): Promise<string> {
+export const scanTotal = (scan: WholeScan, exclude: string[] = []) =>
+  scan.groups.filter((g) => !exclude.includes(g.addr)).reduce((n, g) => n + g.inbox.length + g.junk.length, 0)
+
+/** Přesune do Koše maily ze skenu — kromě odškrtnutých odesílatelů (exclude). Vratné 30 dní. */
+export async function trashWholeScan(scan: WholeScan, exclude: string[] = []): Promise<string> {
+  const keep = new Set(exclude.map((x) => x.toLowerCase()))
+  const chosen = scan.groups.filter((g) => !keep.has(g.addr.toLowerCase()))
+  const inboxUids = chosen.flatMap((g) => g.inbox)
+  const junkUids = chosen.flatMap((g) => g.junk)
   const cfg = await config()
   const client = connectClient(cfg)
   await client.connect()
@@ -354,33 +381,44 @@ export async function trashWholeScan(scan: WholeScan): Promise<string> {
     const boxes: any[] = await client.list()
     trash = boxes.find((b) => b.specialUse === '\\Trash')?.path ?? ''
     if (!trash) throw new Error('nenašel jsem složku Koš (\\Trash)')
-    if (scan.inboxUids.length) {
-      await client.mailboxOpen('INBOX')
-      for (let i = 0; i < scan.inboxUids.length; i += 500) {
-        const chunk = scan.inboxUids.slice(i, i + 500)
+    const move = async (mailbox: string, uids: number[]) => {
+      if (!uids.length) return 0
+      await client.mailboxOpen(mailbox)
+      let n = 0
+      for (let i = 0; i < uids.length; i += 500) {
+        const chunk = uids.slice(i, i + 500)
         await client.messageMove(chunk.join(','), trash, { uid: true })
-        fromInbox += chunk.length
+        n += chunk.length
       }
+      return n
     }
-    if (scan.junk?.count) {
-      const box: any = await client.mailboxOpen(scan.junk.path)
-      if (box.exists) { await client.messageMove('1:*', trash); fromJunk = box.exists }
-    }
+    fromInbox = await move('INBOX', inboxUids)
+    if (scan.junkPath) fromJunk = await move(scan.junkPath, junkUids)
   } finally {
     await client.logout().catch(() => {})
   }
-  await logActivity({ agent: 'Luuu', type: 'system', action: `celá schránka: ${CAT_LABEL[scan.cat]} → koš (${fromInbox} z doručené, ${fromJunk} ze Spamu)` }).catch(() => {})
-  return `🗑 Hotovo → ${trash}\n• z doručené pošty: ${fromInbox}${scan.cat === 'spam' ? `\n• ze složky Spam: ${fromJunk}` : ''}\n\nVrátit jde z Koše v Gmailu (30 dní, pak ho Gmail vysype sám).`
+  scans.delete(scan.id)
+  await logActivity({
+    agent: 'Luuu', type: 'system',
+    action: `celá schránka: ${CAT_LABEL[scan.cat]} → koš (${fromInbox} z doručené, ${fromJunk} ze Spamu; ${keep.size} odesílatelů ponecháno)`,
+    meta: { cat: scan.cat, fromInbox, fromJunk, kept: [...keep], senders: chosen.length },
+  }).catch(() => {})
+  return `🗑 Hotovo → ${trash}\n• z doručené pošty: ${fromInbox}${scan.cat === 'spam' ? `\n• ze složky Spam: ${fromJunk}` : ''}${keep.size ? `\n• ponecháno odesílatelů: ${keep.size}` : ''}\n\nVrátit jde z Koše v Gmailu (30 dní, pak ho Gmail vysype sám).`
 }
 
+/** Text do chatu: jen počty podle odesílatele (žádné předměty). */
 export function describeScan(scan: WholeScan): string {
-  const total = scan.inboxUids.length + (scan.junk?.count ?? 0)
+  const inbox = scan.groups.reduce((n, g) => n + g.inbox.length, 0)
+  const junk = scan.groups.reduce((n, g) => n + g.junk.length, 0)
+  const top = scan.groups.slice(0, 15).map((g) => `• ${g.name !== g.addr ? `${g.name} <${g.addr}>` : g.addr} — ${g.inbox.length + g.junk.length}×`)
   return [
     `📬 ${CAT_LABEL[scan.cat]} v celé schránce (prošel jsem ${scan.scanned} mailů v doručené):`,
-    `• v doručené poště: ${scan.inboxUids.length}`,
-    ...(scan.cat === 'spam' ? [`• ve složce Spam${scan.junk ? ` (${scan.junk.path})` : ''}: ${scan.junk?.count ?? 0}`] : []),
-    `= celkem ${total} do Koše`,
-    ...(scan.sample.length ? ['', 'Ukázka z doručené:', ...scan.sample] : []),
+    `• v doručené poště: ${inbox}`,
+    ...(scan.cat === 'spam' ? [`• ve složce Spam${scan.junkPath ? ` (${scan.junkPath})` : ''}: ${junk}`] : []),
+    `= celkem ${inbox + junk} od ${scan.groups.length} odesílatelů`,
+    ...(top.length ? ['', 'Nejvíc od:', ...top, ...(scan.groups.length > 15 ? [`… a dalších ${scan.groups.length - 15} odesílatelů`] : [])] : []),
+    '',
+    'Odškrtnout jednotlivé odesílatele jde v UI: Agenti → Luuu.',
   ].join('\n')
 }
 

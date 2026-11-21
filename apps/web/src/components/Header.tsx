@@ -1,4 +1,5 @@
 // D:\dev\loyo-os\apps\web\src\components\Header.tsx
+import ActivityLog from './ActivityLog'
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useCalendarEvents } from '../hooks/useCalendarEvents'
 import { BuilderMenu } from './Builder'
@@ -989,24 +990,15 @@ export default function Header({
       <div
         style={{
           ...sectionBase(5),
-          width: '10%',
-          padding: '0 12px',
-          overflow: 'hidden',
+          width: '14%',
+          padding: '0 6px',
           justifyContent: 'center',
           alignItems: 'center',
+          overflow: 'visible',
         }}
       >
-        <span style={{
-          fontFamily: "'Playfair Display', Georgia, serif",
-          fontSize: 15,
-          fontWeight: 800,
-          letterSpacing: '0.1em',
-          color: C.red,
-          textTransform: 'uppercase',
-          whiteSpace: 'nowrap',
-        }}>
-          Aktivita
-        </span>
+        {/* živý log akcí — klik rozjede seznam přes celou šířku */}
+        <ActivityLog />
       </div>
 
       {/* ══════════════════════════════════════════════════════════

@@ -1,5 +1,19 @@
 [
   {
+    "id": "e5cf802c-e5ff-4ea5-a683-7a21ff639f43",
+    "ts": "2026-11-21T04:37:30.331Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn"
+  },
+  {
+    "id": "fa0fd4f4-caf5-4448-b494-1a5a5eb13122",
+    "ts": "2026-11-21T04:37:27.213Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot zastaven"
+  },
+  {
     "id": "44d4ab7c-083c-412e-9f52-52616ad36f40",
     "ts": "2026-11-21T04:36:34.949Z",
     "agent": "Mary Jane",
