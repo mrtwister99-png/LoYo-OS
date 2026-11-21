@@ -96,6 +96,21 @@ export default function LuuuPanel() {
     } catch (e: any) { setError(e.message) } finally { setBusy(null) }
   }
 
+  // celá schránka: přes Mary (/api/run) → nejdřív sken a počet, pak „/ano <kód>“
+  const [confirmCode, setConfirmCode] = useState<string | null>(null)
+  const askMary = async (key: string, message: string) => {
+    setBusy(key); setError(''); setOutput(''); setConfirmCode(null)
+    try {
+      const res = await fetch(`${API_URL}/api/run`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message, source: 'ui' }) })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`)
+      const reply = String(json.reply ?? '')
+      setOutput(reply)
+      setConfirmCode(reply.match(/\/ano ([a-z0-9]{4})/)?.[1] ?? null)
+      if (message.startsWith('/ano')) await load()
+    } catch (e: any) { setError(e?.message === 'Failed to fetch' ? 'API neběží (localhost:3001)' : e.message) } finally { setBusy(null) }
+  }
+
   const saveLists = async (lists: { important?: string[]; del?: string[] }) => {
     setError('')
     try {
@@ -157,6 +172,30 @@ export default function LuuuPanel() {
           className={`${btn} border-[#444] text-[#f0f0f0] hover:border-[#ff6b6b]`}>
           {busy === 'news' ? 'MAŽU…' : '📰 SMAZAT NEWSLETTERY'}
         </button>
+      </div>
+      {/* CELÁ SCHRÁNKA — nejdřív spočítá, pak potvrzení */}
+      <div>
+        <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">CELÁ SCHRÁNKA (všechny maily, nejen 7 dní)</div>
+        <div className="mt-2 flex flex-wrap gap-2">
+          <button disabled={!st.configured || !!busy} onClick={() => askMary('wipe-spam', '/luuu smaž spam')}
+            className={`${btn} border-[#444] text-[#f0f0f0] hover:border-[#ff6b6b]`}>
+            {busy === 'wipe-spam' ? 'POČÍTÁM…' : '🗑 VŠECHEN SPAM Z GMAILU'}
+          </button>
+          <button disabled={!st.configured || !!busy} onClick={() => askMary('wipe-news', '/luuu smaž newslettery')}
+            className={`${btn} border-[#444] text-[#f0f0f0] hover:border-[#ff6b6b]`}>
+            {busy === 'wipe-news' ? 'POČÍTÁM…' : '📰 VŠECHNY NEWSLETTERY'}
+          </button>
+          {confirmCode && (
+            <>
+              <button disabled={!!busy} onClick={() => askMary('confirm', `/ano ${confirmCode}`)}
+                className={`${btn} text-[#111]`} style={{ background: '#facc15', borderColor: '#facc15' }}>
+                {busy === 'confirm' ? 'MAŽU…' : '✅ POTVRDIT — DO KOŠE'}
+              </button>
+              <button disabled={!!busy} onClick={() => askMary('cancel', `/ne ${confirmCode}`)}
+                className={`${btn} border-[#444] text-[#9a9a9a] hover:text-[#f0f0f0]`}>ZRUŠIT</button>
+            </>
+          )}
+        </div>
       </div>
       {error && <div className="text-[11px] font-mono text-[#ff6b6b]">{error}</div>}
 

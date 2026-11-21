@@ -284,6 +284,106 @@ export async function trashCategory(cat: Category, days = 7): Promise<{ text: st
   }
 }
 
+// ---------- celá schránka: spam / newslettery (jen hlavičky, pravidla — tisíce mailů bez LLM) ----------
+export type WholeScan = {
+  cat: 'spam' | 'newsletter'
+  inboxUids: number[]
+  sample: string[]
+  junk: { path: string; count: number } | null
+  scanned: number
+}
+
+function connectClient(cfg: Awaited<ReturnType<typeof config>>) {
+  return new ImapFlow({ host: cfg.host, port: cfg.port, secure: true, auth: { user: cfg.user, pass: cfg.pass }, logger: false })
+}
+
+/** Projde CELOU doručenou poštu (jen pro čtení) + spočítá Gmail složku Spam. Nic nemaže. */
+export async function scanWholeMailbox(cat: 'spam' | 'newsletter'): Promise<WholeScan> {
+  const cfg = await config()
+  if (!cfg.ok) throw new Error('not-configured')
+  const client = connectClient(cfg)
+  await client.connect()
+  const out: WholeScan = { cat, inboxUids: [], sample: [], junk: null, scanned: 0 }
+  try {
+    if (cat === 'spam') {
+      const boxes: any[] = await client.list()
+      const junk = boxes.find((b) => b.specialUse === '\\Junk')?.path
+      if (junk) {
+        const st: any = await client.status(junk, { messages: true })
+        out.junk = { path: junk, count: Number(st?.messages) || 0 }
+      }
+    }
+    const box: any = await client.mailboxOpen('INBOX', { readOnly: true })
+    if (box.exists) {
+      for await (const msg of client.fetch('1:*', { uid: true, envelope: true, headers: ['list-unsubscribe'] })) {
+        out.scanned++
+        const env: any = msg.envelope ?? {}
+        const from = env.from?.[0] ?? {}
+        const m: Mail = {
+          uid: msg.uid,
+          from: from.name || from.address || '?',
+          fromAddr: String(from.address ?? '').toLowerCase(),
+          subject: String(env.subject ?? ''),
+          date: (env.date ?? new Date()).toISOString?.() ?? String(env.date),
+          snippet: '',
+          listUnsubscribe: /list-unsubscribe/i.test(String((msg as any).headers ?? '')),
+          hasPdf: false,
+        }
+        const r = classifyByRules(m, cfg.important)
+        if (r?.cat === cat) {
+          out.inboxUids.push(m.uid)
+          if (out.sample.length < 12) out.sample.push(`• ${m.from} — ${m.subject}`)
+        }
+      }
+    }
+  } finally {
+    await client.logout().catch(() => {})
+  }
+  return out
+}
+
+/** Přesune výsledek skenu do Koše (vratné 30 dní). */
+export async function trashWholeScan(scan: WholeScan): Promise<string> {
+  const cfg = await config()
+  const client = connectClient(cfg)
+  await client.connect()
+  let fromInbox = 0
+  let fromJunk = 0
+  let trash = ''
+  try {
+    const boxes: any[] = await client.list()
+    trash = boxes.find((b) => b.specialUse === '\\Trash')?.path ?? ''
+    if (!trash) throw new Error('nenašel jsem složku Koš (\\Trash)')
+    if (scan.inboxUids.length) {
+      await client.mailboxOpen('INBOX')
+      for (let i = 0; i < scan.inboxUids.length; i += 500) {
+        const chunk = scan.inboxUids.slice(i, i + 500)
+        await client.messageMove(chunk.join(','), trash, { uid: true })
+        fromInbox += chunk.length
+      }
+    }
+    if (scan.junk?.count) {
+      const box: any = await client.mailboxOpen(scan.junk.path)
+      if (box.exists) { await client.messageMove('1:*', trash); fromJunk = box.exists }
+    }
+  } finally {
+    await client.logout().catch(() => {})
+  }
+  await logActivity({ agent: 'Luuu', type: 'system', action: `celá schránka: ${CAT_LABEL[scan.cat]} → koš (${fromInbox} z doručené, ${fromJunk} ze Spamu)` }).catch(() => {})
+  return `🗑 Hotovo → ${trash}\n• z doručené pošty: ${fromInbox}${scan.cat === 'spam' ? `\n• ze složky Spam: ${fromJunk}` : ''}\n\nVrátit jde z Koše v Gmailu (30 dní, pak ho Gmail vysype sám).`
+}
+
+export function describeScan(scan: WholeScan): string {
+  const total = scan.inboxUids.length + (scan.junk?.count ?? 0)
+  return [
+    `📬 ${CAT_LABEL[scan.cat]} v celé schránce (prošel jsem ${scan.scanned} mailů v doručené):`,
+    `• v doručené poště: ${scan.inboxUids.length}`,
+    ...(scan.cat === 'spam' ? [`• ve složce Spam${scan.junk ? ` (${scan.junk.path})` : ''}: ${scan.junk?.count ?? 0}`] : []),
+    `= celkem ${total} do Koše`,
+    ...(scan.sample.length ? ['', 'Ukázka z doručené:', ...scan.sample] : []),
+  ].join('\n')
+}
+
 /** Stav pro panel v UI. Heslo se nikdy nevrací. */
 export async function luuuStatus() {
   const cfg = await config()

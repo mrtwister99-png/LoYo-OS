@@ -1,5 +1,53 @@
 [
   {
+    "id": "8c3e13e5-318f-452e-9606-c8bd0aa818e1",
+    "ts": "2026-11-21T02:40:11.188Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "ControlVision běží (pid 38644)"
+  },
+  {
+    "id": "84b8d223-b5f3-43ee-a031-0079c5daa673",
+    "ts": "2026-11-21T02:40:09.689Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští ControlVision server"
+  },
+  {
+    "id": "6dfac742-c96b-4dba-b13f-2eb89e309bce",
+    "ts": "2026-11-21T02:40:09.392Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "14f3af73-f6a0-481c-92d3-5e26f3887c56",
+    "ts": "2026-11-21T02:39:41.740Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "ea775726-a067-4e13-88b3-cf1323e7d5c7",
+    "ts": "2026-11-21T02:38:15.997Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "53c56908-b805-43a2-afa7-d1d8763faa7f",
+    "ts": "2026-11-21T02:32:52.387Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "grill hotový: nový agent na hlídání cen na Alze → D:\\dev\\loyo-os\\data\\reports\\grill_2026-11-21_novy-agent-na-hlidani-cen-na-alze.md"
+  },
+  {
     "id": "746a17df-e6eb-478a-a7b2-895e302a801c",
     "ts": "2026-11-21T02:28:13.286Z",
     "agent": "Mary Jane",

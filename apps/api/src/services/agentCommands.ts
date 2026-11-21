@@ -9,7 +9,7 @@ import { AGENTS_DIR, DATA_DIR } from '../lib/dataPaths.js'
 import { getAgents } from '../lib/manifestLoader.js'
 import { logActivity } from '../routes/activity.js'
 import { newUsage, parseNewKind, runNewCapability } from './capabilityCreate.js'
-import { cancelPending, confirmPending, guarded } from './shellPolicy.js'
+import { askConfirm, cancelPending, confirmPending, guarded } from './shellPolicy.js'
 import { continueGrill, grillActive, startGrill, stopGrill } from './grillSession.js'
 import { fetchCommand, mcpCommand, screenshotCommand, tryNaturalMcpIntent, webCommand } from './mcpCommands.js'
 import { findFiles, listDirectory, readFileCommand, tryNaturalFileIntent } from './fileCommands.js'
@@ -315,6 +315,24 @@ export function isShellMessage(message: string): boolean {
   return SHELL_COMMANDS.test(t) || (!!shellStatus() && !!t && !t.startsWith('/'))
 }
 
+// ---------- Luuu: spam / newslettery z CELÉ schránky (s potvrzením /ano) ----------
+// „/luuu smaž spam“, „Luuu, smaž všechny spamy z celého gmailu“, „vymaž newslettery z pošty“
+function wholeMailboxWipe(text: string): Promise<CommandResult> | null {
+  const t = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+  if (!/(smaz|vymaz|zajeb|vyhod|vycist|uklid|trash|kos)/.test(t)) return null
+  const cat = /(newslett|reklam|rozesil|letak)/.test(t) ? 'newsletter' : /spam/.test(t) ? 'spam' : null
+  if (!cat) return null
+  return (async () => {
+    const steps = [`Luuu: celá schránka — ${cat}`]
+    const L = await import('./luuu.js')
+    if (!(await L.luuuConfigured())) return { reply: L.SETUP_HELP, steps }
+    const scan = await L.scanWholeMailbox(cat).catch((e: any) => { throw new Error(`Luuu se nedostal do pošty: ${e?.message ?? e}`) })
+    const total = scan.inboxUids.length + (scan.junk?.count ?? 0)
+    if (!total) return { reply: `${L.describeScan(scan)}\n\nNení co mazat. 🎉`, steps }
+    return { reply: askConfirm(L.describeScan(scan), `${total} mailů do Koše`, () => L.trashWholeScan(scan)), steps }
+  })().catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: ['Luuu: celá schránka'] }))
+}
+
 // ---------- /vse — seznam všech povelů ----------
 async function listCommands(): Promise<CommandResult> {
   return {
@@ -331,6 +349,7 @@ async function listCommands(): Promise<CommandResult> {
       '/julia <téma> — hloubkový research',
       '/grill <téma> — brainstorming podle skillu grill-me (otázky po kolech) · /grill stop = shrnutí',
       '/luuu [dny] — Luuu roztřídí nové maily (/maily) — souhrn je i v ranním /daily-brief',
+      '/luuu smaž spam · /luuu smaž newslettery — z CELÉ schránky do Koše (nejdřív počet, pak /ano)',
       '/activity [n] — poslední akce agentů',
       '',
       'PC',
@@ -445,6 +464,12 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
     return { reply: await continueGrill(trimmed).catch((e: any) => `❌ Grill: ${e?.message ?? e}`), steps: ['Mary Jane: grill'] }
   }
 
+  // „Luuu, smaž všechny spamy z celého gmailu“ (musí zmínit poštu / gmail / Luua)
+  if (!trimmed.startsWith('/') && /(gmail|mail|post|schrank|luuu)/i.test(trimmed.normalize('NFD').replace(/[̀-ͯ]/g, ''))) {
+    const wipe = wholeMailboxWipe(trimmed)
+    if (wipe) return wipe
+  }
+
   // „udělej neco.py na plochu … a vytvoř agenta Joozina, ať ho použije“
   if (!trimmed.startsWith('/')) {
     const natural = await tryNaturalScriptIntent(trimmed).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: [] as string[] }))
@@ -523,6 +548,9 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
     case 'luuu':
     case 'maily':
     case 'posta': {
+      // /luuu smaž spam | newslettery → celá schránka, nejdřív spočítá a čeká na /ano
+      const wipe = wholeMailboxWipe(args)
+      if (wipe) return wipe
       // /luuu = nové od minula · /luuu 3 = posledních 3 dní
       const days = Number(args.match(/\d+/)?.[0]) || null
       const { runLuuu } = await import('./luuu.js')

@@ -158,6 +158,7 @@ const HELP = [
   '/terminal · /ps — terminál na PC, každá zpráva = příkaz, /exit konec',
   '/new agent|team|workflow|cli … — založí novou věc (/new = návod)',
   '/grill <téma> — brainstorming (grill-me), /grill stop = shrnutí',
+  '/luuu smaž spam — všechen spam z celého Gmailu do Koše (potvrdíš /ano)',
   '/luuu — Luuu roztřídí nové maily · /fetch <url> · /web <url> · /screenshot <url>',
   '/ano · /ne — potvrdit / zrušit riskantní příkaz',
   '/ls [plocha|stažené|dokumenty] · /cat <soubor> · /najdi <název> — soubory na PC',
