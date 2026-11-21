@@ -31,5 +31,9 @@
   "category": "research",
   "createdAt": "2026-08-31T00:00:00Z",
   "updatedAt": "2026-11-20T06:00:00Z",
-  "number": 3
+  "number": 3,
+  "dependencies": [
+    "fetch:3",
+    "playwright:4"
+  ]
 }

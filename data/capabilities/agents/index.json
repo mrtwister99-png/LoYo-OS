@@ -1,6 +1,6 @@
 {
   "version": "3.0.0",
-  "lastSync": "2026-11-20T20:20:29.444Z",
+  "lastSync": "2026-11-21T00:31:08.962Z",
   "agents": [
     {
       "id": "mary-jane",
@@ -461,6 +461,23 @@
       "created": "2026-11-20T00:00:00Z",
       "lastRun": "",
       "number": 22
+    },
+    {
+      "id": "luuu",
+      "number": 23,
+      "folder": "luuu",
+      "name": "Luuu — mailař",
+      "role": "Přečte nové maily (IMAP, jen pro čtení), roztřídí je na důležité / faktury / newslettery / spam / ostatní a ranní souhrn přidá do /daily-brief. Nic neodesílá, nemaže ani neoznačuje jako přečtené.",
+      "category": "all",
+      "team": "",
+      "status": "online",
+      "skills": [],
+      "tools": [],
+      "workflow": "",
+      "promptFile": "",
+      "docs": [],
+      "tasksToday": 0,
+      "created": "2026-11-21T00:00:00Z"
     }
   ]
 }

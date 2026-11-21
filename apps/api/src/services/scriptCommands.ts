@@ -7,6 +7,7 @@ import { basename, isAbsolute, join } from 'node:path'
 import { AGENTS_DIR } from '../lib/dataPaths.js'
 import { logActivity } from '../routes/activity.js'
 import { findCapability, runNewCapability } from './capabilityCreate.js'
+import { guarded } from './shellPolicy.js'
 import { CODE_MODEL, desktopDir, resolveUserPath, runScriptFile, runShellOnce, SCRIPT_EXT, writePythonScript } from './scriptRunner.js'
 
 type CommandResult = { reply: string; steps: string[] }
@@ -105,9 +106,14 @@ export async function runAgentCommand(args: string): Promise<CommandResult> {
   if (agent.shell?.command) {
     const kind = agent.shell.kind === 'cmd' ? 'cmd' : 'ps'
     const command = [agent.shell.command, ...rest].join(' ')
-    await activity(name, `spuštěn přes Mary (${kind})`)
-    const { code, output } = await runShellOnce(kind, command)
-    return { reply: `🤖 ${name} → ${kind === 'ps' ? 'PS>' : '>'} ${command}\n\n${output || '(bez výstupu)'}${code ? `\n\n⚠ exit ${code}` : ''}`, steps }
+    const label = `🤖 ${name} → ${kind === 'ps' ? 'PS>' : '>'} ${command}`
+    // skill Bezpečný shell platí i pro agenty
+    const reply = await guarded(label, command, async () => {
+      await activity(name, `spuštěn přes Mary (${kind})`)
+      const { code, output } = await runShellOnce(kind, command)
+      return `${label}\n\n${output || '(bez výstupu)'}${code ? `\n\n⚠ exit ${code}` : ''}`
+    })
+    return { reply, steps }
   }
 
   return {

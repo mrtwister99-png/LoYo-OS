@@ -1,0 +1,16 @@
+{
+  "id": "bezpecny-shell",
+  "type": "skill",
+  "displayName": "Bezpečný shell",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Pravidla pro /terminal, /ps a příkazy agentů: co je zakázané, co jen po /ano a co volné. Vynucuje shellPolicy.ts, pravidla v rules.json.",
+  "runtime": "prompt",
+  "entrypoint": "./SKILL.md",
+  "pure": true,
+  "permissions": ["fs:read:data/capabilities/skills/bezpecny-shell"],
+  "tags": ["security", "shell", "terminal", "powershell"],
+  "number": 2,
+  "createdAt": "2026-11-21T00:00:00Z",
+  "updatedAt": "2026-11-21T00:00:00Z"
+}

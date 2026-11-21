@@ -32,6 +32,34 @@
         "get_screenshot_of_area_as_image"
       ],
       "number": 2
+    },
+    {
+      "id": "fetch",
+      "number": 3,
+      "name": "Fetch MCP",
+      "desc": "Stáhne a přečte libovolnou webovou stránku (převede HTML na čitelný text / markdown). Oficiální mcp-server-fetch.",
+      "command": "uvx mcp-server-fetch",
+      "status": "active",
+      "tools": [
+        "fetch"
+      ]
+    },
+    {
+      "id": "playwright",
+      "number": 4,
+      "name": "Playwright MCP (prohlížeč)",
+      "desc": "Ovládá skutečný prohlížeč (Edge, bez okna): otevře web, proklikne, vyplní formulář, udělá screenshot. Na weby, kam obyčejné stažení nestačí. Oficiální @playwright/mcp.",
+      "command": "npx @playwright/mcp",
+      "status": "active",
+      "tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_click",
+        "browser_type",
+        "browser_take_screenshot",
+        "browser_close"
+      ]
     }
-  ]
+  ],
+  "lastSync": "2026-11-21T00:31:08.963Z"
 }

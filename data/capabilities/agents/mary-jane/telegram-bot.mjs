@@ -135,6 +135,8 @@ const HELP = [
   '/cv — ControlVision server (ovládání PC z mobilu)',
   '/terminal · /ps — terminál na PC, každá zpráva = příkaz, /exit konec',
   '/new agent|team|workflow|cli … — založí novou věc (/new = návod)',
+  '/luuu — Luuu roztřídí nové maily · /fetch <url> · /web <url> · /screenshot <url>',
+  '/ano · /ne — potvrdit / zrušit riskantní příkaz',
   '/py <soubor.py> - <zadání> — napíšu Python skript (bez cesty = plocha)',
   '/skript <soubor> · /spust <agent> — spustí skript / agenta',
   'nebo větou: „udělej kurzy.py na plochu … a vytvoř agenta Joozina, ať ho použije“',

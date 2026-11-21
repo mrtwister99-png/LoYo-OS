@@ -1,0 +1,91 @@
+{
+  "_popis": "Pravidla pro /terminal, /ps a příkazy agentů (ps:/cmd:). Regulární výrazy, velikost písmen nehraje roli. Pořadí: deny > confirm > allow. Co nesedí nikam, je volné.",
+  "deny": [
+    {
+      "re": "\\bformat(\\.com)?\\s+[a-z]:",
+      "why": "formátování disku"
+    },
+    {
+      "re": "\\bdiskpart\\b|\\bClear-Disk\\b|\\bInitialize-Disk\\b",
+      "why": "práce s oddíly disku"
+    },
+    {
+      "re": "\\bbcdedit\\b|\\bbootrec\\b",
+      "why": "zavaděč systému"
+    },
+    {
+      "re": "\\bcipher\\s+/w",
+      "why": "nevratné přepsání volného místa"
+    },
+    {
+      "re": "\\bvssadmin\\s+delete\\b|\\bwbadmin\\s+delete\\b",
+      "why": "mazání záloh / stínových kopií"
+    },
+    {
+      "re": "(iwr|irm|Invoke-WebRequest|Invoke-RestMethod|curl|wget)[^|]*\\|\\s*(iex|Invoke-Expression)",
+      "why": "spuštění kódu staženého z internetu"
+    },
+    {
+      "re": "\\b(rd|rmdir|del|erase|Remove-Item|rm|ri)\\b[^|;&]*?(^|[\\s\"'])[a-z]:[\\\\/]?((windows|program files( \\(x86\\))?|users|programdata)[\\\\/]?)?[\"']?(\\s|$)",
+      "why": "mazání kořene disku nebo systémové složky"
+    },
+    {
+      "re": "\\b(reg\\s+delete|Remove-Item(Property)?)\\s+[\"']?(HKLM|HKEY_LOCAL_MACHINE)",
+      "why": "mazání systémového registru"
+    },
+    {
+      "re": "\\bnet\\s+user\\s+\\S+\\s+/delete\\b|\\bRemove-LocalUser\\b",
+      "why": "mazání uživatelského účtu"
+    },
+    {
+      "re": "\\bSet-MpPreference\\b.*-Disable|\\bnetsh\\s+advfirewall\\s+set\\s+\\S+\\s+state\\s+off",
+      "why": "vypnutí antiviru / firewallu"
+    }
+  ],
+  "confirm": [
+    {
+      "re": "\\b(del|erase|rd|rmdir|Remove-Item|rm|ri)\\b",
+      "why": "mazání souborů"
+    },
+    {
+      "re": "\\b(move|Move-Item|mv|ren|rename|Rename-Item)\\b",
+      "why": "přesun / přejmenování"
+    },
+    {
+      "re": "(^|[^>2])>(?!\\s*\\$?null)|\\b(Set-Content|Out-File|Clear-Content)\\b",
+      "why": "přepsání souboru"
+    },
+    {
+      "re": "\\b(taskkill|Stop-Process|kill)\\b",
+      "why": "ukončení procesu"
+    },
+    {
+      "re": "\\b(shutdown|Restart-Computer|Stop-Computer|logoff)\\b",
+      "why": "vypnutí / restart PC"
+    },
+    {
+      "re": "\\breg\\s+(add|import)\\b|\\b(Set-ItemProperty|New-ItemProperty)\\b",
+      "why": "změna registru"
+    },
+    {
+      "re": "\\bsc(\\.exe)?\\s+(config|delete|stop)\\b|\\b(Set-Service|Stop-Service|New-Service)\\b",
+      "why": "služby Windows"
+    },
+    {
+      "re": "\\b(winget|choco|scoop)\\s+(install|uninstall|upgrade)\\b|\\b(npm|pnpm|yarn)\\s+(i|install|add|remove|uninstall)\\b|\\bpip3?\\s+(install|uninstall)\\b",
+      "why": "instalace / odinstalace"
+    },
+    {
+      "re": "\\bgit\\s+(push|reset\\s+--hard|clean\\s+-\\w*f|checkout\\s+--|branch\\s+-D|rebase)\\b",
+      "why": "nevratná operace v gitu"
+    },
+    {
+      "re": "\\bSet-ExecutionPolicy\\b|\\bnetsh\\b|\\bSet-NetFirewall",
+      "why": "bezpečnostní nastavení"
+    },
+    {
+      "re": "-OutFile\\b|\\bcurl\\b.*\\s-o\\s|\\bwget\\b",
+      "why": "stahování souboru z internetu"
+    }
+  ]
+}

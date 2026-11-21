@@ -36,5 +36,8 @@
   },
   "number": 21,
   "createdAt": "2026-11-19T00:00:00Z",
-  "updatedAt": "2026-11-19T00:00:00Z"
+  "updatedAt": "2026-11-19T00:00:00Z",
+  "dependencies": [
+    "fetch:3"
+  ]
 }

@@ -1,0 +1,99 @@
+// apps/api/src/services/shellPolicy.ts
+// LOYO OS // skill „Bezpečný shell“ — co smí /terminal, /ps a agenti (ps:/cmd:) spustit sami,
+// co jen po /ano a co nikdy. Pravidla: data/capabilities/skills/bezpecny-shell/rules.json.
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { DATA_DIR } from '../lib/dataPaths.js'
+
+type Rule = { re: string; why: string }
+type Rules = { deny: Rule[]; confirm: Rule[] }
+export type Verdict = { level: 'allow' | 'confirm' | 'deny'; why?: string }
+
+const RULES_FILE = join(DATA_DIR, 'capabilities', 'skills', 'bezpecny-shell', 'rules.json')
+const CONFIRM_TTL_MS = 10 * 60_000
+
+// když soubor chybí nebo je rozbitý, platí aspoň tohle
+const FALLBACK: Rules = {
+  deny: [
+    { re: String.raw`\bformat(\.com)?\s+[a-z]:|\bdiskpart\b|\bbcdedit\b`, why: 'disk / zavaděč' },
+    { re: String.raw`(iwr|irm|Invoke-WebRequest|curl|wget)[^|]*\|\s*(iex|Invoke-Expression)`, why: 'kód z internetu' },
+  ],
+  confirm: [{ re: String.raw`\b(del|erase|rd|rmdir|Remove-Item|rm|move|Move-Item|taskkill|Stop-Process|shutdown)\b`, why: 'nevratná akce' }],
+}
+
+let cache: { at: number; rules: Rules } | null = null
+async function loadRules(): Promise<Rules> {
+  if (cache && Date.now() - cache.at < 10_000) return cache.rules
+  let rules = FALLBACK
+  try {
+    const raw = JSON.parse(await readFile(RULES_FILE, 'utf8'))
+    if (Array.isArray(raw.deny) && Array.isArray(raw.confirm)) rules = raw
+  } catch {}
+  cache = { at: Date.now(), rules }
+  return rules
+}
+
+export async function checkCommand(command: string): Promise<Verdict> {
+  const rules = await loadRules()
+  const text = command.replace(/\s+/g, ' ')
+  const hit = (list: Rule[]) => list.find((r) => { try { return new RegExp(r.re, 'i').test(text) } catch { return false } })
+  const deny = hit(rules.deny)
+  if (deny) return { level: 'deny', why: deny.why }
+  const confirm = hit(rules.confirm)
+  if (confirm) return { level: 'confirm', why: confirm.why }
+  return { level: 'allow' }
+}
+
+// ---------- čekající potvrzení (/ano <kód>) ----------
+type Pending = { code: string; label: string; why: string; run: () => Promise<string>; at: number }
+const pending = new Map<string, Pending>()
+
+function prune() {
+  for (const [k, p] of pending) if (Date.now() - p.at > CONFIRM_TTL_MS) pending.delete(k)
+}
+
+export function askConfirm(label: string, why: string, run: () => Promise<string>): string {
+  prune()
+  let code = ''
+  do code = Math.random().toString(36).slice(2, 6); while (pending.has(code))
+  pending.set(code, { code, label, why, run, at: Date.now() })
+  return [
+    `⚠ Tohle chce potvrzení (${why}):`,
+    label,
+    '',
+    `Spustit: /ano ${code} · zrušit: /ne ${code} (platí 10 min)`,
+  ].join('\n')
+}
+
+export function denyMessage(label: string, why: string): string {
+  return `⛔ Tohle nespustím (${why}):\n${label}\n\nPravidla: skill Bezpečný shell (data/capabilities/skills/bezpecny-shell/rules.json).`
+}
+
+export async function confirmPending(code: string): Promise<string> {
+  prune()
+  if (!code) {
+    if (!pending.size) return 'Nic nečeká na potvrzení.'
+    return ['⏳ Čeká na potvrzení:', ...[...pending.values()].map((p) => `/ano ${p.code} — ${p.why}: ${p.label.split('\n')[0]}`)].join('\n')
+  }
+  const p = pending.get(code.trim().toLowerCase())
+  if (!p) return `Kód „${code}“ neznám nebo už vypršel. Čekající: /ano`
+  pending.delete(p.code)
+  return `✅ Potvrzeno: ${p.label.split('\n')[0]}\n\n${await p.run()}`
+}
+
+export function cancelPending(code: string): string {
+  if (!code) {
+    const n = pending.size
+    pending.clear()
+    return n ? `🗑 Zrušeno ${n} čekajících potvrzení.` : 'Nic nečeká na potvrzení.'
+  }
+  return pending.delete(code.trim().toLowerCase()) ? `🗑 Zrušeno: ${code}` : `Kód „${code}“ neznám.`
+}
+
+/** Projde příkaz pravidly: povolené spustí hned, potvrzované odloží na /ano, zakázané odmítne. */
+export async function guarded(label: string, command: string, run: () => Promise<string>): Promise<string> {
+  const v = await checkCommand(command)
+  if (v.level === 'deny') return denyMessage(label, v.why ?? 'zakázaný příkaz')
+  if (v.level === 'confirm') return askConfirm(label, v.why ?? 'riskantní příkaz', run)
+  return run()
+}

@@ -46,6 +46,11 @@
   "updatedAt": "2026-11-20T11:16:22.052Z",
   "number": 1,
   "dependencies": [
-    "filesystem:1"
+    "filesystem:1",
+    "fetch:3",
+    "playwright:4"
+  ],
+  "skills": [
+    "bezpecny-shell"
   ]
 }

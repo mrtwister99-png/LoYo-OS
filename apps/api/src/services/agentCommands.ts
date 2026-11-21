@@ -9,6 +9,8 @@ import { AGENTS_DIR, DATA_DIR } from '../lib/dataPaths.js'
 import { getAgents } from '../lib/manifestLoader.js'
 import { logActivity } from '../routes/activity.js'
 import { newUsage, parseNewKind, runNewCapability } from './capabilityCreate.js'
+import { cancelPending, confirmPending, guarded } from './shellPolicy.js'
+import { fetchCommand, mcpCommand, screenshotCommand, tryNaturalMcpIntent, webCommand } from './mcpCommands.js'
 import { findFiles, listDirectory, readFileCommand, tryNaturalFileIntent } from './fileCommands.js'
 import { pyCommand, runAgentCommand, scriptCommand, tryNaturalScriptIntent } from './scriptCommands.js'
 import { runInShell, SHELL_LABEL, shellStatus, startShell, stopShell, type ShellKind } from './shellSession.js'
@@ -290,8 +292,8 @@ async function shellCommand(kind: ShellKind, args: string): Promise<CommandResul
       steps,
     }
   }
-  const out = await runInShell(args)
-  return { reply: `💻 ${kind === 'cmd' ? '>' : 'PS>'} ${args}\n\n${out}`, steps }
+  const label = `💻 ${kind === 'cmd' ? '>' : 'PS>'} ${args}`
+  return { reply: await guarded(label, args, async () => `${label}\n\n${await runInShell(args)}`), steps }
 }
 
 function exitShell(): CommandResult {
@@ -304,7 +306,7 @@ function exitShell(): CommandResult {
   }
 }
 
-const SHELL_COMMANDS = /^\/(terminal|terminál|cmd|ps|powershell|exit)(\s|$)/i
+const SHELL_COMMANDS = /^\/(terminal|terminál|cmd|ps|powershell|exit|ano|ne)(\s|$)/i
 
 // Zprávy pro terminál jdou mimo frontu orchestrátoru — jinak by čekaly za dlouhým researchem.
 export function isShellMessage(message: string): boolean {
@@ -326,6 +328,7 @@ async function listCommands(): Promise<CommandResult> {
       '/stepan <věc> [--stav novy|jako-novy|velmi-dobry|dobry|opotrebovany|na-dily]',
       '/kosterad — údržba manifestů a failed runs',
       '/julia <téma> — hloubkový research',
+      '/luuu [dny] — Luuu roztřídí nové maily (/maily) — souhrn je i v ranním /daily-brief',
       '/activity [n] — poslední akce agentů',
       '',
       'PC',
@@ -333,6 +336,9 @@ async function listCommands(): Promise<CommandResult> {
       '/terminal [příkaz] — zapne terminál (cmd), pak každá zpráva = příkaz',
       '/ps [příkaz] — totéž v PowerShellu',
       '/exit — vypne terminál',
+      '/ano [kód] · /ne [kód] — potvrdí / zruší riskantní příkaz (skill Bezpečný shell)',
+      '/mcp — MCP servery · /mcp <id> nástroje · /mcp <id> <nástroj> {json}',
+      '/fetch <url> — přečte stránku (Fetch MCP) · /web <url> — přes prohlížeč · /screenshot <url> (Playwright MCP)',
       '/ls [plocha|stažené|dokumenty|cesta] — co je ve složce (nebo větou: „vypiš soubory na ploše“)',
       '/cat <soubor> — přečte textový soubor · /najdi <název> [v složka] — hledá soubory',
       '/py <soubor.py> - <zadání> — Mary napíše Python skript (bez cesty = plocha)',
@@ -361,7 +367,7 @@ async function listCommands(): Promise<CommandResult> {
 }
 
 // Všechno z commands.json (poznámky, úkoly, připomínky, vlastní příkazy…) — nové se tu objeví samy.
-const LISTED_ABOVE = new Set(['/vse', '/boty', '/new', '/terminal', '/ps', '/exit', '/cv', '/controlvision', '/py', '/skript', '/spust', '/ls', '/cat', '/najdi'])
+const LISTED_ABOVE = new Set(['/vse', '/boty', '/new', '/terminal', '/ps', '/exit', '/cv', '/controlvision', '/py', '/skript', '/spust', '/ls', '/cat', '/najdi', '/ano', '/ne', '/mcp', '/fetch', '/web', '/screenshot', '/luuu'])
 async function commandsJsonSection(): Promise<string[]> {
   const data = await readJson(join(AGENTS_DIR, 'mary-jane', 'commands.json'), { commands: [] })
   const cmds = (Array.isArray(data?.commands) ? data.commands : [])
@@ -426,14 +432,19 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
   // režim terminálu: obyčejný text (bez /) jde rovnou do shellu
   const shell = shellStatus()
   if (shell && trimmed && !trimmed.startsWith('/')) {
-    const out = await runInShell(trimmed)
-    return { reply: `💻 ${shell.kind === 'cmd' ? '>' : 'PS>'} ${trimmed}\n\n${out}`, steps: [`${SHELL_LABEL[shell.kind]}: ${trimmed.slice(0, 60)}`] }
+    // skill Bezpečný shell: zakázané odmítne, riskantní až po /ano
+    const label = `💻 ${shell.kind === 'cmd' ? '>' : 'PS>'} ${trimmed}`
+    const reply = await guarded(label, trimmed, async () => `${label}\n\n${await runInShell(trimmed)}`)
+    return { reply, steps: [`${SHELL_LABEL[shell.kind]}: ${trimmed.slice(0, 60)}`] }
   }
 
   // „udělej neco.py na plochu … a vytvoř agenta Joozina, ať ho použije“
   if (!trimmed.startsWith('/')) {
     const natural = await tryNaturalScriptIntent(trimmed).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: [] as string[] }))
     if (natural) return natural
+    // „přečti stránku https://…“, „udělej screenshot seznam.cz“
+    const web = await tryNaturalMcpIntent(trimmed).catch((e: any) => ({ reply: `❌ MCP: ${e?.message ?? e}`, steps: [] as string[] }))
+    if (web) return web
     // „vypiš soubory na ploše“, „přečti plocha/x.txt“ — rovnou udělat, ne se vyptávat
     const files = await tryNaturalFileIntent(trimmed).catch((e: any) => ({ reply: `❌ ${e?.message ?? e}`, steps: [] as string[] }))
     if (files) return files
@@ -483,6 +494,29 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
       return shellCommand('ps', args)
     case 'exit':
       return exitShell()
+    case 'mcp':
+      return mcpCommand(args).catch((e: any) => ({ reply: `❌ MCP: ${e?.message ?? e}`, steps: ['Mary Jane: /mcp'] }))
+    case 'fetch':
+    case 'stahni':
+      return fetchCommand(args).catch((e: any) => ({ reply: `❌ Fetch MCP: ${e?.message ?? e}`, steps: ['Mary Jane: /fetch'] }))
+    case 'web':
+      return webCommand(args).catch((e: any) => ({ reply: `❌ Playwright MCP: ${e?.message ?? e}`, steps: ['Mary Jane: /web'] }))
+    case 'screenshot':
+    case 'snimek':
+      return screenshotCommand(args).catch((e: any) => ({ reply: `❌ Playwright MCP: ${e?.message ?? e}`, steps: ['Mary Jane: /screenshot'] }))
+    case 'luuu':
+    case 'maily':
+    case 'posta': {
+      // /luuu = nové od minula · /luuu 3 = posledních 3 dní
+      const days = Number(args.match(/\d+/)?.[0]) || null
+      const { runLuuu } = await import('./luuu.js')
+      const { text } = await runLuuu(days)
+      return { reply: text, steps: ['Mary Jane: /luuu → Luuu'] }
+    }
+    case 'ano':
+      return { reply: await confirmPending(args), steps: ['Mary Jane: /ano'] }
+    case 'ne':
+      return { reply: cancelPending(args), steps: ['Mary Jane: /ne'] }
     case 'py':
     case 'python':
       return pyCommand(args)

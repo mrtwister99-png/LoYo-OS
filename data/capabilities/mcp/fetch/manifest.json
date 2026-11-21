@@ -1,0 +1,55 @@
+{
+  "type": "mcp",
+  "version": "1.0.0",
+  "status": "active",
+  "runtime": "composite",
+  "transport": "stdio",
+  "model": "qwen3:8b",
+  "createdAt": "2026-11-21T00:00:00Z",
+  "updatedAt": "2026-11-21T00:00:00Z",
+  "id": "fetch",
+  "displayName": "Fetch MCP",
+  "number": 3,
+  "description": "Stáhne a přečte libovolnou webovou stránku (převede HTML na čitelný text / markdown). Oficiální mcp-server-fetch.",
+  "entrypoint": "uvx mcp-server-fetch",
+  "launch": {
+    "command": "uvx",
+    "args": [
+      "mcp-server-fetch"
+    ]
+  },
+  "tools": [
+    {
+      "name": "fetch",
+      "description": "Stáhne URL a vrátí obsah jako markdown",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "max_length": {
+            "type": "number"
+          },
+          "start_index": {
+            "type": "number"
+          },
+          "raw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    }
+  ],
+  "permissions": [
+    "net:fetch:*"
+  ],
+  "tags": [
+    "web",
+    "fetch",
+    "scraping"
+  ]
+}

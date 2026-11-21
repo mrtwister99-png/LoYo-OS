@@ -704,7 +704,10 @@ async function runDailyBrief(userMessage: string, runId: string, steps: string[]
   const taskFilesHotove = (await readDirSafe(UKOLY_HOTOVE_DIR)).map(f => ({ dir: UKOLY_HOTOVE_DIR, f })).filter(x => x.f.endsWith('.md'))
   const noteFiles = (await readDirSafe(POZNAMKY_DIR)).filter(f => f.endsWith('.md'))
   const eventFiles = (await readDirSafe(KALENDAR_DIR)).filter(f => f.endsWith('.md'))
-  const reply = [`☀️ **Daily Brief**`, `• Aktivní úkoly: ${taskFilesAktivni.length}`, `• Hotové: ${taskFilesHotove.length}`, `• Poznámky: ${noteFiles.length}`, `• Kalendář dnes: ${eventFiles.length}`, ``, `Napiš /status pro detail.`].join('\n')
+  // Luuu: souhrn pošty za posledních 24 h (když má přístup k mailu)
+  const { luuuBriefSection } = await import('./luuu.js')
+  const mail = await luuuBriefSection().catch(() => '')
+  const reply = [`☀️ **Daily Brief**`, `• Aktivní úkoly: ${taskFilesAktivni.length}`, `• Hotové: ${taskFilesHotove.length}`, `• Poznámky: ${noteFiles.length}`, `• Kalendář dnes: ${eventFiles.length}`, ...(mail ? ['', mail] : []), ``, `Napiš /status pro detail.`].join('\n')
   steps.push('Mary Jane: daily-brief sestaven')
   await logRun(runId, { userMessage, mode: 'daily-brief' })
   return { reply, steps }

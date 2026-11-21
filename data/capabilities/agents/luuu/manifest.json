@@ -1,0 +1,24 @@
+{
+  "id": "luuu",
+  "type": "agent",
+  "displayName": "Luuu — mailař",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Přečte nové maily (IMAP, jen pro čtení), roztřídí je na důležité / faktury / newslettery / spam / ostatní a ranní souhrn přidá do /daily-brief. Nic neodesílá, nemaže ani neoznačuje jako přečtené.",
+  "runtime": "node",
+  "entrypoint": "../../../../apps/api/src/services/luuu.ts",
+  "model": "qwen3.5:27b",
+  "command": "/luuu",
+  "commands": ["/luuu", "/maily"],
+  "permissions": [
+    "net:fetch:imap",
+    "fs:write:data/capabilities/agents/luuu",
+    "fs:write:data/reports"
+  ],
+  "specialization": ["email", "triage", "daily-brief"],
+  "tags": ["email", "imap", "gmail", "seznam", "daily-brief"],
+  "category": "all",
+  "number": 23,
+  "createdAt": "2026-11-21T00:00:00Z",
+  "updatedAt": "2026-11-21T00:00:00Z"
+}

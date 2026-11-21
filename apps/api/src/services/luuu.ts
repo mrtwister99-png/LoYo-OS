@@ -1,0 +1,230 @@
+// apps/api/src/services/luuu.ts
+// LOYO OS // LUUU — mailař. Přečte nové maily (IMAP, jen pro čtení), roztřídí je
+// (⭐ důležité · 🧾 faktury · 📰 newslettery · 🗑 spam · 📨 ostatní) a souhrn dá do /daily-brief.
+//
+// NIKDY: neodesílá, nemaže, nepřesouvá, neoznačuje jako přečtené (schránka readOnly), neklikne na odkaz.
+//
+// .env:
+//   LUUU_IMAP_USER=ty@gmail.com
+//   LUUU_IMAP_PASS=heslo-pro-aplikace        (ne hlavní heslo — „App password“ / „Heslo pro aplikace“)
+//   LUUU_PROVIDER=gmail | seznam | outlook   (nebo LUUU_IMAP_HOST + LUUU_IMAP_PORT ručně)
+//   LUUU_IMPORTANT=sef@firma.cz, @klient.cz  (volitelně: tihle odesílatelé = vždy důležité)
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { ImapFlow } from 'imapflow'
+import { simpleParser } from 'mailparser'
+import { Ollama } from 'ollama'
+import { AGENTS_DIR, DATA_DIR } from '../lib/dataPaths.js'
+import { logActivity } from '../routes/activity.js'
+import { envValue } from './telegramNotify.js'
+
+const DIR = join(AGENTS_DIR, 'luuu')
+const STATE = join(DIR, 'state.json')
+const REPORTS = join(DATA_DIR, 'reports')
+const MAX_MAILS = 60
+
+const PRESETS: Record<string, { host: string; port: number }> = {
+  gmail: { host: 'imap.gmail.com', port: 993 },
+  seznam: { host: 'imap.seznam.cz', port: 993 },
+  outlook: { host: 'outlook.office365.com', port: 993 },
+  hotmail: { host: 'outlook.office365.com', port: 993 },
+  centrum: { host: 'imap.centrum.cz', port: 993 },
+  email: { host: 'imap.email.cz', port: 993 },
+}
+
+export type Category = 'dulezite' | 'faktury' | 'newsletter' | 'spam' | 'ostatni'
+export const CAT_LABEL: Record<Category, string> = {
+  dulezite: '⭐ Důležité', faktury: '🧾 Faktury a platby', newsletter: '📰 Newslettery a reklama', spam: '🗑 Spam', ostatni: '📨 Ostatní',
+}
+
+export type Mail = { uid: number; from: string; fromAddr: string; subject: string; date: string; snippet: string; listUnsubscribe: boolean; hasPdf: boolean }
+type Classified = Mail & { cat: Category; why: string }
+
+async function readState(): Promise<any> {
+  try { return JSON.parse(await readFile(STATE, 'utf8')) } catch { return {} }
+}
+async function writeState(s: any) {
+  await mkdir(DIR, { recursive: true })
+  await writeFile(STATE, JSON.stringify(s, null, 2), 'utf8')
+}
+
+async function config() {
+  const user = await envValue('LUUU_IMAP_USER')
+  const pass = await envValue('LUUU_IMAP_PASS')
+  const provider = (await envValue('LUUU_PROVIDER')).toLowerCase() || (user.split('@')[1] ?? '').split('.')[0]
+  const preset = PRESETS[provider]
+  const host = (await envValue('LUUU_IMAP_HOST')) || preset?.host || ''
+  const port = Number(await envValue('LUUU_IMAP_PORT')) || preset?.port || 993
+  const important = (await envValue('LUUU_IMPORTANT')).split(/[,;\s]+/).map((x) => x.trim().toLowerCase()).filter(Boolean)
+  return { user, pass, host, port, important, ok: !!(user && pass && host) }
+}
+
+export async function luuuConfigured(): Promise<boolean> {
+  return (await config()).ok
+}
+
+export const SETUP_HELP = [
+  '📬 Luuu ještě nemá přístup k mailu. Do .env v rootu projektu (D:\\dev\\loyo-os\\.env) dej:',
+  '',
+  'LUUU_IMAP_USER=tvuj@email.cz',
+  'LUUU_IMAP_PASS=heslo-pro-aplikace',
+  'LUUU_PROVIDER=gmail        (nebo seznam / outlook)',
+  '',
+  'Heslo NENÍ tvoje hlavní heslo, ale „heslo pro aplikace“:',
+  '• Gmail: Účet Google → Zabezpečení → Dvoufázové ověření → Hesla aplikací',
+  '• Seznam: Nastavení → Hesla pro aplikace (a zapnout IMAP v nastavení pošty)',
+  '• Outlook: Zabezpečení účtu → Hesla aplikací',
+  '',
+  'Pak /luuu. Luuu poštu jen čte — nic neodešle, nesmaže ani neoznačí jako přečtené.',
+].join('\n')
+
+// ---------- stažení nových mailů ----------
+async function fetchNew(days: number | null): Promise<{ mails: Mail[]; lastUid: number }> {
+  const cfg = await config()
+  if (!cfg.ok) throw new Error('not-configured')
+  const state = await readState()
+  const client = new ImapFlow({ host: cfg.host, port: cfg.port, secure: true, auth: { user: cfg.user, pass: cfg.pass }, logger: false })
+  await client.connect()
+  const mails: Mail[] = []
+  let lastUid = Number(state.lastUid) || 0
+  try {
+    // readOnly = nic se neoznačí jako přečtené
+    const box = await client.mailboxOpen('INBOX', { readOnly: true })
+    if (state.uidValidity && String(state.uidValidity) !== String(box.uidValidity)) lastUid = 0
+    const since = new Date(Date.now() - (days ?? 1) * 86_400_000)
+    const query: any = lastUid && days == null ? { uid: `${lastUid + 1}:*` } : { since }
+    const uids = ((await client.search(query, { uid: true })) || []).filter((u: number) => u > (days == null ? lastUid : 0))
+    for await (const msg of client.fetch(uids.slice(-MAX_MAILS), { uid: true, source: true }, { uid: true })) {
+      const parsed: any = await simpleParser(msg.source as Buffer)
+      const fromObj = parsed.from?.value?.[0] ?? {}
+      const text = String(parsed.text ?? parsed.html?.replace(/<[^>]+>/g, ' ') ?? '').replace(/\s+/g, ' ').trim()
+      mails.push({
+        uid: msg.uid,
+        from: fromObj.name || fromObj.address || '?',
+        fromAddr: String(fromObj.address ?? '').toLowerCase(),
+        subject: String(parsed.subject ?? '(bez předmětu)'),
+        date: (parsed.date ?? new Date()).toISOString(),
+        snippet: text.slice(0, 400),
+        listUnsubscribe: !!parsed.headers?.get?.('list-unsubscribe'),
+        hasPdf: (parsed.attachments ?? []).some((a: any) => /pdf/i.test(a.contentType ?? '') || /\.pdf$/i.test(a.filename ?? '')),
+      })
+      lastUid = Math.max(lastUid, msg.uid)
+    }
+    await writeState({ ...state, lastUid, uidValidity: String(box.uidValidity) })
+  } finally {
+    await client.logout().catch(() => {})
+  }
+  return { mails, lastUid }
+}
+
+// ---------- třídění: pravidla, pak lokální LLM na zbytek ----------
+const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+export function classifyByRules(m: Mail, important: string[] = []): { cat: Category; why: string } | null {
+  const subj = norm(m.subject)
+  const body = norm(m.snippet)
+  const from = m.fromAddr
+  if (important.some((x) => (x.startsWith('@') ? from.endsWith(x) : from === x))) return { cat: 'dulezite', why: 'odesílatel ze seznamu důležitých' }
+  if (/(vyhral|vyhra|lottery|bitcoin|crypto\s*invest|viagra|casino|nigerian|inheritance|dedictvi|urgent\s+transfer)/.test(subj + ' ' + body)) return { cat: 'spam', why: 'typický spam' }
+  if (/(faktur|invoice|vyuctovani|uctenk|receipt|platb|zaplat|upominka|splatnost|dobropis|proforma|objednavk.*zaplacen|payment)/.test(subj) || (m.hasPdf && /(faktur|invoice|doklad)/.test(subj + body)))
+    return { cat: 'faktury', why: 'faktura / platba' }
+  if (m.listUnsubscribe || /(newsletter|odhlasit|unsubscribe|sleva|akce|vyprodej|% off|black friday|novinky)/.test(subj + ' ' + body.slice(0, 200)))
+    return { cat: 'newsletter', why: m.listUnsubscribe ? 'hromadná rozesílka (List-Unsubscribe)' : 'reklama / newsletter' }
+  if (/(no-?reply|noreply|notification|notifikace|mailer-daemon)/.test(from)) return { cat: 'ostatni', why: 'automatická zpráva' }
+  return null
+}
+
+async function classifyByLlm(mails: Mail[]): Promise<Map<number, Category>> {
+  const out = new Map<number, Category>()
+  if (!mails.length) return out
+  const model = (await envValue('LUUU_MODEL')) || 'qwen3.5:27b'
+  const list = mails.map((m, i) => `${i + 1}) Od: ${m.from} <${m.fromAddr}> | Předmět: ${m.subject} | ${m.snippet.slice(0, 160)}`).join('\n')
+  try {
+    const ollama = new Ollama({ host: process.env.OLLAMA_HOST || 'http://localhost:11434' })
+    const timeout = new Promise<never>((_, rej) => setTimeout(() => rej(new Error('timeout')), 90_000))
+    const res: any = await Promise.race([
+      ollama.chat({
+        model,
+        messages: [
+          { role: 'system', content: 'Roztřiď e-maily. Ke každému číslu napiš jedno slovo: dulezite (osobní, pracovní, vyžaduje odpověď/akci), ostatni, spam. Formát řádku: "1: dulezite". Nic dalšího.' },
+          { role: 'user', content: list },
+        ],
+        options: { temperature: 0 },
+      }),
+      timeout,
+    ])
+    for (const line of String(res?.message?.content ?? '').split('\n')) {
+      const m = line.match(/(\d+)\s*[:.)-]\s*(dulezite|důležité|ostatni|ostatní|spam)/i)
+      if (!m) continue
+      const mail = mails[Number(m[1]) - 1]
+      if (mail) out.set(mail.uid, norm(m[2]).startsWith('dulez') ? 'dulezite' : norm(m[2]) === 'spam' ? 'spam' : 'ostatni')
+    }
+  } catch {}
+  return out
+}
+
+export async function classify(mails: Mail[], important: string[] = []): Promise<Classified[]> {
+  const rest: Mail[] = []
+  const done: Classified[] = []
+  for (const m of mails) {
+    const r = classifyByRules(m, important)
+    if (r) done.push({ ...m, ...r })
+    else rest.push(m)
+  }
+  const llm = await classifyByLlm(rest)
+  // když model neodpoví: člověk z osobní adresy (ne rozesílka) = spíš důležité
+  const PERSONAL = /@(gmail|seznam|email|centrum|post|volny|atlas|outlook|hotmail|icloud|yahoo|tiscali)\./
+  for (const m of rest) {
+    const cat = llm.get(m.uid)
+    if (cat) done.push({ ...m, cat, why: 'LLM' })
+    else if (PERSONAL.test(m.fromAddr) && !m.listUnsubscribe) done.push({ ...m, cat: 'dulezite', why: 'osobní adresa' })
+    else done.push({ ...m, cat: 'ostatni', why: 'bez pravidla' })
+  }
+  return done
+}
+
+export function formatSummary(items: Classified[], title = '📬 Luuu — nové maily'): string {
+  if (!items.length) return `${title}\nNic nového. 🎉`
+  const order: Category[] = ['dulezite', 'faktury', 'ostatni', 'newsletter', 'spam']
+  const lines = [`${title}: ${items.length}`]
+  for (const cat of order) {
+    const list = items.filter((i) => i.cat === cat).sort((a, b) => b.date.localeCompare(a.date))
+    if (!list.length) continue
+    lines.push('', `${CAT_LABEL[cat]} (${list.length})`)
+    const detailed = cat === 'dulezite' || cat === 'faktury' || cat === 'ostatni'
+    for (const m of list.slice(0, detailed ? 10 : 5)) lines.push(`• ${m.from} — ${m.subject}${m.hasPdf && cat === 'faktury' ? ' 📎PDF' : ''}`)
+    if (list.length > (detailed ? 10 : 5)) lines.push(`  … a dalších ${list.length - (detailed ? 10 : 5)}`)
+  }
+  return lines.join('\n')
+}
+
+/** Spustí Luua: stáhne nové maily, roztřídí, uloží souhrn. days = podívat se zpět X dní (jinak jen nové od minula). */
+export async function runLuuu(days: number | null = null): Promise<{ text: string; count: number }> {
+  if (!(await luuuConfigured())) return { text: SETUP_HELP, count: 0 }
+  await logActivity({ agent: 'Luuu', type: 'system', action: `čte poštu${days ? ` (posledních ${days} dní)` : ''}` }).catch(() => {})
+  let mails: Mail[]
+  try {
+    ;({ mails } = await fetchNew(days))
+  } catch (e: any) {
+    const msg = String(e?.message ?? e)
+    const hint = /auth|login|credential|invalid/i.test(msg) ? '\nNejspíš špatné heslo pro aplikace, nebo nemáš ve schránce zapnutý IMAP.' : ''
+    await logActivity({ agent: 'Luuu', type: 'error', action: `pošta selhala: ${msg.slice(0, 120)}` }).catch(() => {})
+    return { text: `❌ Luuu se nedostal do pošty: ${msg}${hint}`, count: 0 }
+  }
+  const cfg = await config()
+  const items = await classify(mails, cfg.important)
+  const text = formatSummary(items)
+  const state = await readState()
+  await writeState({ ...state, lastRun: new Date().toISOString(), lastSummary: text, lastCounts: Object.fromEntries((Object.keys(CAT_LABEL) as Category[]).map((c) => [c, items.filter((i) => i.cat === c).length])) })
+  await mkdir(REPORTS, { recursive: true })
+  await writeFile(join(REPORTS, `luuu_${new Date().toISOString().slice(0, 10)}.md`), text + '\n', { encoding: 'utf8', flag: 'a' })
+  await logActivity({ agent: 'Luuu', type: 'system', action: `roztřídil ${items.length} mailů (${items.filter((i) => i.cat === 'dulezite').length} důležitých)` }).catch(() => {})
+  return { text, count: items.length }
+}
+
+/** Sekce do ranního přehledu. Když Luuu není nastavený, vrátí prázdný řetězec. */
+export async function luuuBriefSection(): Promise<string> {
+  if (!(await luuuConfigured())) return ''
+  const { text } = await runLuuu(1).catch(() => ({ text: '' }))
+  return text
+}

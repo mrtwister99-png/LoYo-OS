@@ -1,0 +1,81 @@
+{
+  "type": "mcp",
+  "version": "1.0.0",
+  "status": "active",
+  "runtime": "composite",
+  "transport": "stdio",
+  "model": "qwen3:8b",
+  "createdAt": "2026-11-21T00:00:00Z",
+  "updatedAt": "2026-11-21T00:00:00Z",
+  "id": "playwright",
+  "displayName": "Playwright MCP (prohlížeč)",
+  "number": 4,
+  "description": "Ovládá skutečný prohlížeč (Edge, bez okna): otevře web, proklikne, vyplní formulář, udělá screenshot. Na weby, kam obyčejné stažení nestačí. Oficiální @playwright/mcp.",
+  "entrypoint": "npx @playwright/mcp",
+  "launch": {
+    "command": "npx",
+    "args": [
+      "-y",
+      "@playwright/mcp@latest",
+      "--headless",
+      "--browser",
+      "msedge",
+      "--output-dir",
+      "../../../screenshots"
+    ]
+  },
+  "tools": [
+    {
+      "name": "browser_navigate",
+      "description": "browser navigate",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "browser_snapshot",
+      "description": "browser snapshot",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "browser_click",
+      "description": "browser click",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "browser_type",
+      "description": "browser type",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "browser_take_screenshot",
+      "description": "browser take screenshot",
+      "inputSchema": {
+        "type": "object"
+      }
+    },
+    {
+      "name": "browser_close",
+      "description": "browser close",
+      "inputSchema": {
+        "type": "object"
+      }
+    }
+  ],
+  "permissions": [
+    "net:fetch:*",
+    "fs:write:data/screenshots"
+  ],
+  "tags": [
+    "web",
+    "browser",
+    "playwright",
+    "screenshot"
+  ]
+}

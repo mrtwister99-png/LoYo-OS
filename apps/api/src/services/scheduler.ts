@@ -142,7 +142,11 @@ async function executeScheduled(cmd: CommandDef): Promise<string>
     const result = await runOrchestrator('/status')
     const statusText = result.reply
 
-    return `☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n${statusText}\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?`
+    // Luuu přidá souhrn pošty za posledních 24 h (když má v .env přístup k mailu)
+    const { luuuBriefSection } = await import('./luuu.js')
+    const mail = await luuuBriefSection().catch(() => '')
+
+    return `☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n${statusText}${mail ? `\n\n${mail}` : ''}\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?`
   }
 
   // noční sumarizace paměti (ÚKOL 34.1)

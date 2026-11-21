@@ -1,5 +1,175 @@
 [
   {
+    "id": "4b1c66ee-a8a2-494f-ac2e-6c0d2042c430",
+    "ts": "2026-11-21T00:26:35.796Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula PowerShell"
+  },
+  {
+    "id": "2a67c33a-5ce0-4b75-8d3f-2db0fda2b019",
+    "ts": "2026-11-21T00:26:32.984Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "otevírá https://example.com/ v prohlížeči (Playwright MCP)"
+  },
+  {
+    "id": "4d494dbd-8fbb-412a-b7da-7d957126151b",
+    "ts": "2026-11-21T00:26:28.047Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "čte stránku https://example.com/ (Fetch MCP)"
+  },
+  {
+    "id": "35fccc4a-ac0c-48af-9983-1c483eb0c11f",
+    "ts": "2026-11-21T00:26:18.161Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula PowerShell"
+  },
+  {
+    "id": "a62a7772-33fb-4107-84e6-914e245cd50d",
+    "ts": "2026-11-21T00:26:07.419Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "čte stránku https://example.com/ (Fetch MCP)"
+  },
+  {
+    "id": "fc229da3-5ddf-40af-abe7-905a166329f7",
+    "ts": "2026-11-21T00:26:04.814Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "fotí https://example.com/ (Playwright MCP)"
+  },
+  {
+    "id": "3227b175-d520-48a1-8120-bb7a5c0daa25",
+    "ts": "2026-11-20T23:18:19.265Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "ControlVision běží (pid 27992)"
+  },
+  {
+    "id": "3a034d46-0847-4e87-a674-8a03f22a6dd4",
+    "ts": "2026-11-20T23:18:17.830Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští ControlVision server"
+  },
+  {
+    "id": "6046422f-1e74-48fa-847c-8dfc021d3ae6",
+    "ts": "2026-11-20T23:18:17.576Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "8162e295-a50a-4c35-b365-eb44bf4045e9",
+    "ts": "2026-11-20T23:05:02.481Z",
+    "agent": "Tridil",
+    "type": "save",
+    "action": "🗂 Třídil: nic nového k roztřídění",
+    "meta": {
+      "dir": "C:\\Users\\loyo-\\Downloads",
+      "since": "2026-11-20T23:00:00.302Z",
+      "dryRun": false,
+      "moved": [],
+      "errors": []
+    }
+  },
+  {
+    "id": "0c7880ee-c447-4eb3-b97d-d02bfd6b994c",
+    "ts": "2026-11-20T23:00:00.342Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /tridil",
+    "meta": {
+      "message": "🗂 Třídil přesunul 7 souborů (obrazky: 3, zip: 1, ostatni: 3)"
+    }
+  },
+  {
+    "id": "41e8c2be-3861-4c91-8065-68065c7de829",
+    "ts": "2026-11-20T23:00:00.313Z",
+    "agent": "Tridil",
+    "type": "save",
+    "action": "🗂 Třídil přesunul 7 souborů (obrazky: 3, zip: 1, ostatni: 3)",
+    "meta": {
+      "dir": "C:\\Users\\loyo-\\Downloads",
+      "since": "2026-11-19T23:05:04.994Z",
+      "dryRun": false,
+      "moved": [
+        "imagggge1.png → obrazky/imagggge1.png",
+        "odpoved.zip → zip/odpoved.zip",
+        "TapDrop.apk → ostatni/TapDrop.apk",
+        "TapDrop.exe → ostatni/TapDrop.exe",
+        "Tomory-1.0.apk → ostatni/Tomory-1.0.apk",
+        "udelej-kosticku.png → obrazky/udelej-kosticku.png",
+        "zmenit-barvu.png → obrazky/zmenit-barvu.png"
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "04715a4c-b31c-47db-b576-f840b2f1e09a",
+    "ts": "2026-11-20T22:56:00.961Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "4e9fc143-3f6a-4e95-a873-c0a5120223d7",
+    "ts": "2026-11-20T21:27:54.162Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "ControlVision spuštěn, proces zatím nevidím"
+  },
+  {
+    "id": "3a17829f-0d16-4130-acb1-5740676b9188",
+    "ts": "2026-11-20T21:27:41.893Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští ControlVision server"
+  },
+  {
+    "id": "4757a602-22ce-4b53-b726-9a43c3d72027",
+    "ts": "2026-11-20T21:27:41.595Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "1fb311d7-c70c-4419-a332-d0195422b293",
+    "ts": "2026-11-20T21:23:44.046Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "5993a1cb-2dc1-4f7b-b9d6-2df6bf2754c6",
+    "ts": "2026-11-20T21:21:01.335Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "cff2c71a-7e22-4fa1-b000-a0a9e7a50551",
+    "ts": "2026-11-20T21:21:01.216Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
     "id": "22c370d2-b8f5-45e2-bfa1-2bc447c46889",
     "ts": "2026-11-20T21:00:37.796Z",
     "agent": "Scheduler",
