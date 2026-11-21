@@ -2,9 +2,9 @@
   "id": "stepan",
   "type": "agent",
   "displayName": "Stěpán",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "active",
-  "description": "Opačný pól Lopatinky: dostane věc, zjistí, co to je a za kolik se prodává na Sbazaru a Aukru, a napíše hotový inzerát na prodej včetně doporučené ceny.",
+  "description": "Dostane věc (a volitelně tvoji přibližnou cenu), zjistí, za kolik se prodává na Sbazaru a Aukru, napíše hotový inzerát a na přání ho předvyplní na Sbazaru pod tvým účtem (Edge). Zveřejnění vždy kliká uživatel.",
   "runtime": "node",
   "entrypoint": "./run.mjs",
   "model": "qwen3:8b",
@@ -12,11 +12,15 @@
     "net:fetch:www.sbazar.cz",
     "net:fetch:aukro.cz",
     "fs:read:data/capabilities/agents/stepan",
-    "fs:write:data/capabilities/agents/stepan"
+    "fs:write:data/capabilities/agents/stepan",
+    "net:fetch:login.seznam.cz",
+    "browser:msedge:www.sbazar.cz",
+    "fs:write:data/capabilities/agents/stepan/fotky"
   ],
   "tools": [
     "web_fetch",
-    "fs_write"
+    "fs_write",
+    "browser_fill"
   ],
   "tags": [
     "bazar",
@@ -28,11 +32,14 @@
   ],
   "category": "sales",
   "endpoints": {
-    "run": "POST /api/agents/stepan/run"
+    "run": "POST /api/agents/stepan/run",
+    "photos": "POST /api/agents/stepan/photos",
+    "sbazarLogin": "POST /api/agents/stepan/sbazar/login",
+    "sbazarPost": "POST /api/agents/stepan/sbazar/post"
   },
   "number": 22,
   "createdAt": "2026-11-20T00:00:00Z",
-  "updatedAt": "2026-11-20T00:00:00Z",
+  "updatedAt": "2026-11-21T20:00:00Z",
   "dependencies": [
     "fetch:3"
   ],
@@ -41,6 +48,15 @@
       "label": "🏷️ Ocenit věc",
       "command": "/stepan {text}",
       "ask": "Co prodáváš? (např. iPhone 13 128 GB, baterie 89 %)"
+    },
+    {
+      "label": "📝 Ocenit a vložit na Sbazar",
+      "command": "/stepan {text} --vlozit",
+      "ask": "Co prodáváš a za kolik? (např. PS5 Slim, jako nový --cena 11000)"
+    },
+    {
+      "label": "🔑 Přihlásit Sbazar",
+      "command": "/stepan prihlasit"
     }
   ],
   "skills": [
