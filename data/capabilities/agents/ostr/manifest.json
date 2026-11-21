@@ -1,0 +1,18 @@
+{
+  "id": "ostr",
+  "displayName": "Ostř",
+  "description": "hlídač a srovnávač cen",
+  "version": "0.1.0",
+  "status": "draft",
+  "model": "qwen3:8b",
+  "tags": [
+    "mary"
+  ],
+  "runtime": "prompt",
+  "entrypoint": "./01_CORE_IDENTITY.md",
+  "systemPrompt": "hlídač a srovnávač cen",
+  "type": "agent",
+  "number": 24,
+  "updatedAt": "2026-11-21T08:40:22.123Z",
+  "createdAt": "2026-11-21T08:40:22.123Z"
+}
