@@ -175,6 +175,9 @@ export default function Layout({ children, page, setPage, activeProfile, setActi
       if (isTyping(target) && !(e.shiftKey && code?.startsWith('Digit'))) {
         if (!e.shiftKey) return
       }
+      // Česká klávesnice: číslice se píšou se Shiftem (Shift+1 = „1“). V políčku to musí
+      // napsat číslo, ne přepnout profil — zkratky jen když z klávesy neleze číslice (EN: Shift+1 = „!“).
+      if (isTyping(target) && /^[0-9]$/.test(e.key)) return
 
       if (e.shiftKey && (code === 'Digit1' || e.key === '1' || e.key === '!')) {
         e.preventDefault()

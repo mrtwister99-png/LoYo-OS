@@ -2,13 +2,15 @@
 // LOYO OS // LUUU — mailař. Přečte nové maily (IMAP, jen pro čtení), roztřídí je
 // (⭐ důležité · 🧾 faktury · 📰 newslettery · 🗑 spam · 📨 ostatní) a souhrn dá do /daily-brief.
 //
-// NIKDY: neodesílá, nemaže, nepřesouvá, neoznačuje jako přečtené (schránka readOnly), neklikne na odkaz.
+// NIKDY: neodesílá, nemaže natrvalo, neoznačuje jako přečtené (čte readOnly), neklikne na odkaz.
+// JEDINÁ VÝJIMKA: maily od odesílatelů v LUUU_DELETE přesune do Koše (vratné, Gmail drží 30 dní).
 //
 // .env:
 //   LUUU_IMAP_USER=ty@gmail.com
 //   LUUU_IMAP_PASS=heslo-pro-aplikace        (ne hlavní heslo — „App password“ / „Heslo pro aplikace“)
 //   LUUU_PROVIDER=gmail | seznam | outlook   (nebo LUUU_IMAP_HOST + LUUU_IMAP_PORT ručně)
 //   LUUU_IMPORTANT=sef@firma.cz, @klient.cz  (volitelně: tihle odesílatelé = vždy důležité)
+//   LUUU_DELETE=news@alza.cz, @spammer.cz    (volitelně: maily od nich rovnou do Koše)
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { ImapFlow } from 'imapflow'
@@ -56,8 +58,11 @@ async function config() {
   const preset = PRESETS[provider]
   const host = (await envValue('LUUU_IMAP_HOST')) || preset?.host || ''
   const port = Number(await envValue('LUUU_IMAP_PORT')) || preset?.port || 993
-  const important = (await envValue('LUUU_IMPORTANT')).split(/[,;\s]+/).map((x) => x.trim().toLowerCase()).filter(Boolean)
-  return { user, pass, host, port, important, ok: !!(user && pass && host) }
+  const list = async (key: string) => (await envValue(key)).split(/[,;\s]+/).map((x) => x.trim().toLowerCase()).filter(Boolean)
+  const important = await list('LUUU_IMPORTANT')
+  // odesílatelé, jejichž maily jdou rovnou do koše (adresa nebo @domena)
+  const del = await list('LUUU_DELETE')
+  return { user, pass, host, port, important, del, ok: !!(user && pass && host) }
 }
 
 export async function luuuConfigured(): Promise<boolean> {
@@ -118,6 +123,29 @@ async function fetchNew(days: number | null): Promise<{ mails: Mail[]; lastUid: 
     await client.logout().catch(() => {})
   }
   return { mails, lastUid }
+}
+
+// ---------- cílené mazání: LUUU_DELETE → Koš (ne natrvalo; Gmail ho drží 30 dní) ----------
+export function matchesSender(fromAddr: string, list: string[]): boolean {
+  const a = fromAddr.toLowerCase()
+  return list.some((x) => (x.startsWith('@') ? a.endsWith(x) : a === x))
+}
+
+async function moveToTrash(uids: number[]): Promise<{ moved: number; trash: string }> {
+  if (!uids.length) return { moved: 0, trash: '' }
+  const cfg = await config()
+  const client = new ImapFlow({ host: cfg.host, port: cfg.port, secure: true, auth: { user: cfg.user, pass: cfg.pass }, logger: false })
+  await client.connect()
+  try {
+    const boxes: any[] = await client.list()
+    const trash = boxes.find((b) => b.specialUse === '\\Trash')?.path
+    if (!trash) throw new Error('nenašel jsem složku Koš (\\Trash)')
+    await client.mailboxOpen('INBOX') // tady je potřeba zápis — jen pro přesun vybraných mailů
+    await client.messageMove(uids.join(','), trash, { uid: true })
+    return { moved: uids.length, trash }
+  } finally {
+    await client.logout().catch(() => {})
+  }
 }
 
 // ---------- třídění: pravidla, pak lokální LLM na zbytek ----------
@@ -215,8 +243,23 @@ export async function runLuuu(days: number | null = null): Promise<{ text: strin
     return { text: `❌ Luuu se nedostal do pošty: ${msg}${hint}`, count: 0 }
   }
   const cfg = await config()
+
+  // LUUU_DELETE: tihle odesílatelé jdou do koše a do souhrnu se nepočítají
+  const toTrash = cfg.del.length ? mails.filter((m) => matchesSender(m.fromAddr, cfg.del)) : []
+  let trashNote = ''
+  if (toTrash.length) {
+    try {
+      const { moved, trash } = await moveToTrash(toTrash.map((m) => m.uid))
+      mails = mails.filter((m) => !toTrash.includes(m))
+      trashNote = [`🗑 Do koše (${trash}) podle LUUU_DELETE: ${moved}`, ...toTrash.slice(0, 10).map((m) => `• ${m.from} — ${m.subject}`), ...(toTrash.length > 10 ? [`  … a dalších ${toTrash.length - 10}`] : [])].join('\n')
+      await logActivity({ agent: 'Luuu', type: 'system', action: `přesunul ${moved} mailů do koše (LUUU_DELETE)` }).catch(() => {})
+    } catch (e: any) {
+      trashNote = `⚠ Mazání podle LUUU_DELETE selhalo: ${e?.message ?? e}`
+    }
+  }
+
   const items = await classify(mails, cfg.important)
-  const text = formatSummary(items)
+  const text = trashNote ? `${formatSummary(items)}\n\n${trashNote}` : formatSummary(items)
   const state = await readState()
   await writeState({ ...state, lastRun: new Date().toISOString(), lastSummary: text, lastCounts: Object.fromEntries((Object.keys(CAT_LABEL) as Category[]).map((c) => [c, items.filter((i) => i.cat === c).length])) })
   await mkdir(REPORTS, { recursive: true })

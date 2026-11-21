@@ -1,5 +1,49 @@
 [
   {
+    "id": "ab0fc78e-ba6a-4ec7-bbe6-64bca531b332",
+    "ts": "2026-11-21T01:29:59.050Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "841a6259-8d43-40da-a1c5-ff8fa5f84da8",
+    "ts": "2026-11-21T01:22:37.064Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /luuu",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "809f22b1-4b78-4043-8e14-93c00b09c8d6",
+    "ts": "2026-11-21T01:12:02.541Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /luuu 3",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "c5d603d5-bd55-432c-83f6-734b7b2c5939",
+    "ts": "2026-11-21T01:11:40.085Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /luu 3",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "7a97d6f9-55af-4ced-8610-185e9f7e9e50",
+    "ts": "2026-11-21T01:10:44.752Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
     "id": "4b1c66ee-a8a2-494f-ac2e-6c0d2042c430",
     "ts": "2026-11-21T00:26:35.796Z",
     "agent": "Mary Jane",

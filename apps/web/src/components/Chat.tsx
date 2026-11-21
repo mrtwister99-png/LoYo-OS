@@ -1,5 +1,6 @@
 // D:\dev\loyo-os\apps\web\src\components\Chat.tsx - HADR SMALL + DRAGGABLE
 import { useState, useEffect, useRef } from 'react'
+import LinkifiedText, { openExternal } from './LinkifiedText'
 
 type ChatMsg = { from: 'me' | 'mary'; text: string; meta?: TipMeta | Record<string, any> }
 
@@ -80,6 +81,7 @@ function TipCard({ meta }: { meta: TipMeta }) {
                   href={tip.url}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={(e) => { e.preventDefault(); openExternal(tip.url) }}
                   style={{ padding: '2px 6px', fontSize: 9, fontWeight: 700, color: '#f0f0f0', background: '#444', border: '1px solid black', textDecoration: 'none' }}
                 >OTEVŘÍT</a>
                 <button
@@ -491,7 +493,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
                 boxShadow: '2px 2px 0px black',
                 fontSize: 11,
               }}>
-                {msg.text}
+                <LinkifiedText text={msg.text} color={msg.from === 'me' ? '#ffffff' : '#7cc8ff'} />
               </div>
             </div>
           )
