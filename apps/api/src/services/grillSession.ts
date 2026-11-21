@@ -46,7 +46,12 @@ async function ask(messages: Msg[], numPredict = 1400): Promise<string> {
   try {
     const res: any = await Promise.race([ollama.chat({ model, messages, options: { temperature: 0.4, num_predict: numPredict } }), timeout])
     // qwen3 občas pošle <think>…</think>
-    return String(res?.message?.content ?? '').replace(/<think>[\s\S]*?<\/think>/g, '').trim() || '(model mlčí)'
+    // qwen3 občas pošle <think>…</think>; ``` opisuje z ukázkového formátu ve skillu
+    return String(res?.message?.content ?? '')
+      .replace(/<think>[\s\S]*?<\/think>/g, '')
+      .replace(/^\s*```[a-z]*\s*$/gim, '')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim() || '(model mlčí)'
   } finally {
     clearTimeout(timer!)
   }
