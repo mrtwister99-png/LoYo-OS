@@ -14,7 +14,7 @@
 //   TELEGRAM_MARY_BOT_TOKEN   volitelný override, kdybys chtěl MarySeparátního bota
 //   TELEGRAM_MARY_CHAT_ID     tvůj chat id (když chybí, použije se TELEGRAM_CHAT_ID)
 
-import { readFile, writeFile } from 'node:fs/promises'
+import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -25,6 +25,8 @@ const PID_PATH = join(__dirname, 'mary-telegram.pid')
 const LOPATINKA_STATE = join(__dirname, '..', 'lopatinka', 'state.json')
 const LOPATINKA_FEEDBACK = join(__dirname, '..', 'lopatinka', 'feedback.json')
 const JULIA_INDEX = join(__dirname, 'julia-index.json')
+// zásobník fotek pro Stěpána — použije je při /stepan … --vlozit
+const STEPAN_INBOX = join(__dirname, '..', 'stepan', 'fotky', 'inbox')
 
 const API_URL = (process.env.LOYO_API_URL || 'http://localhost:3001').replace(/\/+$/, '')
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -173,7 +175,8 @@ const HELP = [
   '/agents — seznam agentů',
   '/zapni vše — spustí celou sestavu (Lopatinka + Koštěrad)',
   '/lopatinka [rozpočet] — hledat výhodnou elektroniku',
-  '/stepan <co prodáváš> — ocenění + inzerát',
+  '/stepan <co prodáváš> [--cena N] [--vlozit] — ocenění + inzerát, --vlozit předvyplní Sbazar',
+  '📸 pošli fotky → uloží se pro Stěpána, pak /stepan … --vlozit',
   '/kosterad — zkontrolovat a opravit agenty',
   '/julia <téma> — hloubkový research (výsledek otevřeš tlačítkem 📄)',
   '/activity — poslední akce agentů',
@@ -316,13 +319,42 @@ async function handleCallback(query, token, allowedChatId) {
   }
 }
 
+// Fotka z Telegramu → největší velikost → stepan/fotky/inbox/
+async function savePhotoForStepan(message, token) {
+  const sizes = message.photo ?? []
+  const fileId = sizes.length ? sizes[sizes.length - 1].file_id : message.document?.file_id
+  if (!fileId) return 0
+  const file = await tg(token, 'getFile', { file_id: fileId })
+  const res = await fetch(`https://api.telegram.org/file/bot${token}/${file.file_path}`, { signal: AbortSignal.timeout(60_000) })
+  if (!res.ok) throw new Error(`stažení fotky: HTTP ${res.status}`)
+  await mkdir(STEPAN_INBOX, { recursive: true })
+  const ext = (String(file.file_path).match(/\.(jpe?g|png|webp|heic)$/i)?.[0] ?? '.jpg').toLowerCase()
+  await writeFile(join(STEPAN_INBOX, `${Date.now()}-${message.message_id}${ext}`), Buffer.from(await res.arrayBuffer()))
+  return (await readdir(STEPAN_INBOX)).length
+}
+
 async function handleMessage(message, token, allowedChatId) {
   const chatId = message?.chat?.id
   const text = String(message?.text ?? '').trim()
-  if (!chatId || !text) return
+  const isPhoto = Array.isArray(message?.photo) || /^image\//.test(String(message?.document?.mime_type ?? ''))
+  if (!chatId || (!text && !isPhoto)) return
 
   if (allowedChatId && String(chatId) !== String(allowedChatId)) {
     await sendLong(token, chatId, 'Tenhle bot patří k jinému chatu. Tvoje chat id je ' + chatId)
+    return
+  }
+
+  if (isPhoto) {
+    try {
+      const count = await savePhotoForStepan(message, token)
+      // album = víc zpráv najednou → odpověď jen na tu s popiskem nebo každou pátou, ať to nespamuje
+      if (message.caption || !message.media_group_id || count % 5 === 1) {
+        await sendLong(token, chatId, `📸 Uloženo pro Stěpána (${count} v zásobníku).
+Teď: /stepan <věc> --cena N --vlozit`)
+      }
+    } catch (err) {
+      await sendLong(token, chatId, `❌ Fotku se nepodařilo uložit: ${err?.message ?? err}`)
+    }
     return
   }
 

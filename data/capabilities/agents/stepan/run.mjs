@@ -10,10 +10,14 @@
 // ENV:
 //   STEPAN_ITEM        (totéž jako --item; používá API, aby se nemusely escapovat argumenty)
 //   STEPAN_CONDITION   (totéž jako --condition)
+//   STEPAN_PRICE       (totéž jako --price / --cena: tvoje přibližná cena, jde do inzerátu)
+//   STEPAN_PHOTOS      (totéž jako --fotky: složka nebo soubory oddělené ;)
+//   STEPAN_POST=1      (totéž jako --vlozit: po napsání předvyplní inzerát na Sbazaru, nezveřejní)
 //
 // Výstup: report inzerat_*.md, state.json, audit.json, memory.json a text do UI chatu.
 
-import { readFile, writeFile } from 'node:fs/promises'
+import { readFile, writeFile, readdir, rename, mkdir } from 'node:fs/promises'
+import { spawn } from 'node:child_process'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { priceStats } from '../../../lib/pricing.mjs'
@@ -125,7 +129,8 @@ function resolveCondition(config, requested, text) {
 function buildQueryTokens(item, config) {
   const stop = new Set((config.stopwords ?? []).map(normalize))
   const words = normalize(cleanItemText(item)).split(' ').filter(Boolean)
-  return [...new Set(words.filter((w) => w.length >= 2 && !stop.has(w)))]
+  // jednociferné číslo nese model (PlayStation 5, iPhone 8) — nesmí vypadnout
+  return [...new Set(words.filter((w) => (w.length >= 2 || /^\d$/.test(w)) && !stop.has(w)))]
 }
 
 // ---------- stahování ----------
@@ -238,7 +243,11 @@ function isComparable(offer, tokens, config) {
 
   const title = normalize(offer.title)
   const compact = title.replace(/\s+/g, '')
-  const hit = (token) => hasWord(title, token) || compact.includes(token)
+  // jedna číslice jako podřetězec by sedla na cokoli ("500GB" obsahuje 5) — musí stát samostatně nebo za písmeny (ps5)
+  const hit = (token) =>
+    token.length < 2
+      ? new RegExp(`(^|[a-z ])${token}( |$)`).test(title)
+      : hasWord(title, token) || compact.includes(token)
 
   const digits = tokens.filter((t) => /\d/.test(t))
   const words = tokens.filter((t) => !/\d/.test(t))
@@ -262,7 +271,7 @@ function cleanTitle(raw) {
     .trim()
 }
 
-function buildListing(item, conditionLabel, prices, config) {
+function buildListing(item, conditionLabel, prices, config, userPrice = null) {
   const firstLine = String(item).split(/\r?\n/)[0].trim()
   const parts = firstLine.split(',')
   const title = truncate(cleanTitle(parts[0]), Number(config.listingTitleMaxChars ?? 60))
@@ -274,7 +283,7 @@ function buildListing(item, conditionLabel, prices, config) {
   if (details.length) lines.push('', details.join('\n'))
 
   lines.push('', `Stav: ${conditionLabel}.`)
-  const price = prices?.recommended ?? null
+  const price = userPrice ?? prices?.recommended ?? null
   const negotiable = config.listing?.negotiable !== false
   lines.push(price ? `Cena: ${formatCzk(price)}${negotiable ? ' (dohodou)' : ''}.` : 'Cena: doplň.')
 
@@ -287,7 +296,7 @@ function buildListing(item, conditionLabel, prices, config) {
 }
 
 // ---------- zpráva do UI chatu ----------
-function buildChatMessage(item, conditionLabel, prices, listing, reportPath, errors) {
+function buildChatMessage(item, conditionLabel, prices, listing, reportPath, errors, userPrice = null) {
   const head = `🏷️ Stěpán — ocenění a inzerát`
   const lines = [head, truncate(String(item).split(/\r?\n/)[0], 90)]
 
@@ -299,8 +308,15 @@ function buildChatMessage(item, conditionLabel, prices, listing, reportPath, err
       `Doporučená cena: ${formatCzk(prices.recommended)} · rychle ${formatCzk(prices.quick)} · když počkáš ${formatCzk(prices.patient)}`,
     )
     if (prices.lowConfidence) lines.push('⚠️ Málo srovnatelných nabídek — cenu ber s rezervou.')
+    if (userPrice) {
+      const diff = Math.round(((userPrice - prices.median) / prices.median) * 100)
+      const note = diff > 15 ? 'nad trhem, počítej s dlouhým prodejem' : diff < -20 ? 'hluboko pod trhem, zvaž víc' : 'sedí s trhem'
+      lines.push(`Tvoje cena: ${formatCzk(userPrice)} (${diff > 0 ? '+' : ''}${diff} % vs. medián) — ${note}.`)
+    }
   } else {
-    lines.push('', 'Na trhu jsem nenašel srovnatelné nabídky — cenu budeš muset doplnit ručně.')
+    lines.push('', userPrice
+      ? `Na trhu jsem nenašel srovnatelné nabídky — dávám tvoji cenu ${formatCzk(userPrice)} bez srovnání.`
+      : 'Na trhu jsem nenašel srovnatelné nabídky — cenu budeš muset doplnit ručně.')
   }
 
   lines.push('', `Inzerát — ${listing.title}`, listing.body)
@@ -393,6 +409,16 @@ async function saveState(state) {
   await writeFile(MEMORY_PATH, JSON.stringify(memory.slice(-50), null, 2), 'utf8')
 }
 
+async function takeInboxPhotos(startedAt) {
+  const inbox = join(__dirname, 'fotky', 'inbox')
+  const files = await readdir(inbox).catch(() => [])
+  if (!files.length) return ''
+  const target = join(__dirname, 'fotky', nowStamp(startedAt))
+  await mkdir(join(__dirname, 'fotky'), { recursive: true })
+  await rename(inbox, target)
+  return target
+}
+
 // ---------- main ----------
 function argValue(name) {
   const index = process.argv.indexOf(name)
@@ -403,9 +429,15 @@ async function main() {
   const startedAt = new Date()
   const item = String(process.env.STEPAN_ITEM ?? argValue('--item') ?? '').trim()
   const requestedCondition = String(process.env.STEPAN_CONDITION ?? argValue('--condition') ?? '').trim()
+  const rawPrice = String(process.env.STEPAN_PRICE ?? argValue('--price') ?? argValue('--cena') ?? '').replace(/\D/g, '')
+  const userPrice = rawPrice ? Number(rawPrice) : null
+  let photos = String(process.env.STEPAN_PHOTOS || argValue('--fotky') || '').trim()
+  const postToSbazar = /^(1|true|ano)$/i.test(String(process.env.STEPAN_POST ?? '')) || process.argv.includes('--vlozit')
+  // Fotky poslané přes Telegram čekají v fotky/inbox — při vkládání si je inzerát vezme a zásobník se vyprázdní
+  if (postToSbazar && !photos) photos = await takeInboxPhotos(startedAt)
 
   if (!item) {
-    console.error('Použití: node run.mjs --item "co prodáváš" [--condition novy|jako-novy|velmi-dobry|dobry|opotrebovany|na-dily]')
+    console.error('Použití: node run.mjs --item "co prodáváš" [--cena 6000] [--fotky <složka>] [--vlozit] [--condition novy|jako-novy|velmi-dobry|dobry|opotrebovany|na-dily]')
     process.exit(1)
   }
 
@@ -472,7 +504,7 @@ async function main() {
   }
 
   const prices = priceStats(comparables.map((o) => o.price), { ...config, __factor: condition.factor })
-  const listing = buildListing(item, condition.label, prices, config)
+  const listing = buildListing(item, condition.label, prices, config, userPrice)
   const reportPath = await writeReport(item, condition, tokens, query, comparables, prices, listing, errors, startedAt, config)
 
   // nejčastější kategorie z Aukra řekne, co to vlastně je
@@ -483,7 +515,8 @@ async function main() {
   }
   const detectedCategory = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? ''
 
-  const chatText = buildChatMessage(item, condition.label, prices, listing, reportPath, errors)
+  let chatText = buildChatMessage(item, condition.label, prices, listing, reportPath, errors, userPrice)
+  if (postToSbazar) chatText += '\n\n📝 Otevírám Sbazar a předvyplňuju inzerát (nezveřejním ho, klikneš sám).'
   const state = {
     lastRun: new Date().toISOString(),
     item,
@@ -494,6 +527,8 @@ async function main() {
     comparableCount: comparables.length,
     price: prices,
     listing,
+    userPrice,
+    photos,
     comparables: comparables.slice(0, 25).map((o) => ({
       title: o.title,
       price: o.price,
@@ -506,6 +541,18 @@ async function main() {
     lastErrors: errors,
   }
   await saveState(state)
+
+  // Sbazar běží v Edge odděleně — okno zůstane otevřené pro kontrolu, tenhle proces skončí hned.
+  if (postToSbazar) {
+    const child = spawn(process.execPath, [join(__dirname, 'sbazar-post.mjs')], {
+      cwd: __dirname,
+      env: { ...process.env, STEPAN_PHOTOS: photos },
+      detached: true,
+      stdio: 'ignore',
+    })
+    child.unref()
+    console.log('[Stěpán] Sbazar: předvyplňování spuštěno v Edge')
+  }
 
   console.log('\n--- OCENĚNÍ ---')
   if (prices) {

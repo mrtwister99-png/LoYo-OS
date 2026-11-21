@@ -16,6 +16,13 @@
 | 10 | Zapiš `inzerat_YYYY-MM-DD_HH-MM-SS.md`, `state.json` (+ `lastChatText`), `audit.json`, `memory.json`. |
 | 11 | API pošle `lastChatText` do UI chatu (stejný kanál jako Lopatinka). |
 
+## Tvoje cena a Sbazar
+* `--cena` / `STEPAN_PRICE` přebije doporučenou cenu v inzerátu. Chat ukáže odchylku od mediánu (nad +15 % = dlouhý prodej, pod −20 % = zvaž víc).
+* `--vlozit` / `STEPAN_POST=1`: po zápisu `state.json` se odpojeně spustí `sbazar-post.mjs` a běh Stěpána skončí hned.
+* Fotky: `--fotky` / `STEPAN_PHOTOS` (složka nebo soubory oddělené `;`). Bez nich se při `--vlozit` vezme Telegram zásobník `fotky/inbox` a přesune se do `fotky/<čas>/`. Z UI se nahrají přes `POST /api/agents/stepan/photos`.
+* `sbazar-post.mjs`: Edge (Playwright, `channel: msedge`) s trvalým profilem `.edge-profile/` → `/nova-nabidka`. Když Seznam chce přihlášení nebo souhlas s cookies, čeká max 10 min na uživatele. Pak nahraje fotky, vyplní titulek, popis, cenu (hledá podle popisku, placeholderu, name/id), uloží `sbazar-form.json` a screenshot `sbazar_*.png`, výsledek zapíše do `state.json → sbazar` a `lastSbazarText`. Okno nechá otevřené 30 min. **Nikdy neklikne na zveřejnění.**
+* Co se nevyplní (kategorie, lokalita, neznámé pole), jde do „Doplň ručně“.
+
 ## Jak se počítá cena
 * **Medián** = referenční trh pro daný model. Průměr nepoužívej — přetahují ho extrémní nabídky.
 * Při 5+ nabídkách se odstraní ceny mimo rozsah `medián/3 … medián×3` (aukce za 1 Kč, nesmyslně nadhodnocené kusy).
@@ -43,3 +50,5 @@ POST http://localhost:3001/api/agents/stepan/run   # body { "item": "…", "cond
 | `audit.json` | každý běh: věc, stav, počet srovnatelných, doporučená cena |
 | `memory.json` | krátká paměť posledních ocenění |
 | `inzerat_*.md` | report běhu: cena, inzerát, tabulka srovnatelných nabídek |
+| `sbazar-post.mjs` | předvyplnění na Sbazaru (Edge), `--login`, `--dump` |
+| `.edge-profile/`, `fotky/`, `sbazar_*.png`, `sbazar-form.json` | přihlášení, fotky a ladicí výstupy (gitignore) |

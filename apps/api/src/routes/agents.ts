@@ -453,7 +453,8 @@ export default async function agentRoutes(app: FastifyInstance) {
   // POST /api/agents/stepan/run → ocení věc a napíše inzerát (body: { item, condition? })
   // Vstup jde přes ENV, aby se nemusely escapovat argumenty (Windows).
   app.post('/agents/stepan/run', async (req, reply) => {
-    const { item, condition } = (req.body as { item?: string; condition?: string }) || {}
+    const { item, condition, price, photos, post } =
+      (req.body as { item?: string; condition?: string; price?: number | string; photos?: string; post?: boolean }) || {}
     const text = String(item ?? '').trim()
     if (!text) { reply.code(400); return { ok: false, error: 'Chybí věc k ocenění (body.item)' } }
     if (text.length > 500) { reply.code(400); return { ok: false, error: 'Popis věci je moc dlouhý (max 500 znaků)' } }
@@ -464,7 +465,14 @@ export default async function agentRoutes(app: FastifyInstance) {
     return await new Promise((resolvePromise) => {
       const child = spawn(process.execPath, [script], {
         cwd: agentDir,
-        env: { ...process.env, STEPAN_ITEM: text, STEPAN_CONDITION: String(condition ?? '') },
+        env: {
+          ...process.env,
+          STEPAN_ITEM: text,
+          STEPAN_CONDITION: String(condition ?? ''),
+          STEPAN_PRICE: price === undefined || price === null ? '' : String(price),
+          STEPAN_PHOTOS: String(photos ?? ''),
+          STEPAN_POST: post ? '1' : '',
+        },
         windowsHide: true,
       })
 
@@ -497,6 +505,53 @@ export default async function agentRoutes(app: FastifyInstance) {
         resolvePromise({ ok: code === 0, exitCode: code, output: output.slice(-4000), state })
       })
     })
+  })
+
+  // ---------- Stěpán → Sbazar: fotky, přihlášení, předvyplnění ----------
+  const STEPAN_DIR = join(AGENTS_DIR, 'stepan')
+  // Edge okno musí přežít HTTP požadavek → odpojený proces, API nečeká
+  const spawnSbazar = (args: string[], env: Record<string, string> = {}) => {
+    const child = spawn(process.execPath, [join(STEPAN_DIR, 'sbazar-post.mjs'), ...args], {
+      cwd: STEPAN_DIR,
+      env: { ...process.env, ...env },
+      detached: true,
+      stdio: 'ignore',
+    })
+    child.unref()
+  }
+
+  // POST /api/agents/stepan/photos → body { files: [{ name, data (base64 / data URL) }] } → { folder }
+  app.post('/agents/stepan/photos', { bodyLimit: 60 * 1024 * 1024 }, async (req, reply) => {
+    const { files } = (req.body as { files?: { name?: string; data?: string }[] }) || {}
+    if (!Array.isArray(files) || !files.length) { reply.code(400); return { ok: false, error: 'Žádné fotky (body.files)' } }
+    if (files.length > 20) { reply.code(400); return { ok: false, error: 'Max 20 fotek' } }
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
+    const folder = join(STEPAN_DIR, 'fotky', stamp)
+    await mkdir(folder, { recursive: true })
+    let saved = 0
+    for (const [i, f] of files.entries()) {
+      const ext = (String(f.name ?? '').match(/\.(jpe?g|png|webp|heic|gif)$/i)?.[0] ?? '.jpg').toLowerCase()
+      const b64 = String(f.data ?? '').replace(/^data:[^;]+;base64,/, '')
+      if (!b64) continue
+      await writeFileFs(join(folder, `${String(i + 1).padStart(2, '0')}${ext}`), Buffer.from(b64, 'base64'))
+      saved++
+    }
+    return { ok: true, folder, saved }
+  })
+
+  // POST /api/agents/stepan/sbazar/login → otevře Edge s přihlášením Seznamu (heslo zadává uživatel)
+  app.post('/agents/stepan/sbazar/login', async () => {
+    spawnSbazar(['--login'])
+    await logActivity({ agent: 'Stěpán', type: 'system', action: 'Sbazar: otevřeno přihlášení' }).catch(() => {})
+    return { ok: true }
+  })
+
+  // POST /api/agents/stepan/sbazar/post → předvyplní poslední inzerát (body { photos? }), nezveřejní
+  app.post('/agents/stepan/sbazar/post', async (req) => {
+    const { photos } = (req.body as { photos?: string }) || {}
+    spawnSbazar([], { STEPAN_PHOTOS: String(photos ?? '') })
+    await logActivity({ agent: 'Stěpán', type: 'system', action: 'Sbazar: předvyplňuji inzerát' }).catch(() => {})
+    return { ok: true }
   })
 
   // ---------- Ostř: kontrola a hlídání cen ----------

@@ -30,3 +30,9 @@ Tato pravidla mají absolutní prioritu. Jejich porušení je nepřijatelné.
 ## Zákon č. 6: Transparentnost
 - Každý běh: report `inzerat_*.md` + `state.json` + `audit.json`.
 - Chyba jednoho portálu nesmí zastavit druhý a musí být vidět v chatu jako poznámka.
+
+## Zákon č. 7: Sbazar jen předvyplnit
+- Agent inzerát nikdy sám nezveřejní, nepřihazuje, nepíše kupcům.
+- Heslo, CAPTCHA, souhlas s cookies a podmínky řeší uživatel v okně Edge. Agent jen čeká.
+- Přihlášení se drží v `.edge-profile/` jen na tomhle počítači a nikdy se necommituje.
+- Fotky jen ty, které dal uživatel (složka, UI, Telegram zásobník). Nikdy cizí fotky z jiných inzerátů.

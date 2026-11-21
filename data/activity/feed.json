@@ -1,5 +1,549 @@
 [
   {
+    "id": "bdc23278-eb55-4668-ad4e-474104ed472e",
+    "ts": "2026-11-21T18:00:42.427Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "715968fc-4d08-4715-80d3-279c1c568790",
+    "ts": "2026-11-21T17:16:51.084Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: super darek pro maminku na vanoce → D:\\dev\\loyo-os\\data\\reports\\super-darek-pro-maminku-na-vanoce_2026-11-21-17-16-51.md",
+    "meta": {
+      "runId": "2026-11-21T17-14-47-798Z_7ad8b8db",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\super-darek-pro-maminku-na-vanoce_2026-11-21-17-16-51.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "25c13252-3f67-40e4-add2-1427c2f17c7a",
+    "ts": "2026-11-21T17:14:50.713Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"super darek pro maminku na vanoce\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://duckduckgo.com/y.js?ad_domain=manboxeo.cz&ad_provider=bingv7aa&ad_type=txad&click_metadata=q073zjqsKRXYWWR0yLU3Y3otInTTIR7rxNAIYUWIuyQJlFKmgfoGcqpJ%2DflF2NcyNQzctx2oZ3e0AqLDw1HMRPaL4G4C_wbb%2DVEqAT8N%2DDbGSVEqI3Wgua7AA4toFqslYZL1Wnq24smI8qx0fPMsgoku4s_FgwE2YJA9q5N3IcM.8QH0jfk6YJxEVDvvgJvx7w&rut=a8ebe3c05cfa0450c56488c46337a0b49cf83e4013c0b1e590d59d88e818151a&u3=https%3A%2F%2Fwww.bing.com%2Faclick%3Fld%3De8AIGwIHx23Gs_ZYPzpUPQozVUCUyru5OwqL8eyetxz8VkvpYVdFrVMdT53fzj_3mFsDljXM671gDUvu6twJLl%2DkliSx5Gt_pxVlNfWjxL8nsktyBVeXx70XjEmU_EBTq4_gSz8_3pXvFmGUzr5ezaKiQTcmnJk7fNr5u4hI9yhhR%2DJZuLhwHjKSGb1Fs_fFWK4cSzDFHejAYk%2DLwmYeGy6OnRZHg%26u%3DaHR0cHMlM2ElMmYlMmZtYW5ib3hlby5jeiUyZmVzaG9wJTJmZGFya3ktcHJvLXplbnklM2Ztc2Nsa2lkJTNkMzAyY2M1OGZkMDBjMTlmNzk0NzlhZThlMDE4NTllMTUlMjZ1dG1fc291cmNlJTNkYmluZyUyNnV0bV9tZWRpdW0lM2RjcGMlMjZ1dG1fY2FtcGFpZ24lM2RQTUFYJTI1MjAlMjU3QyUyNTIwVHJ1aGx5JTI2dXRtX3Rlcm0lM2RtYW5ib3hlby5jeiUyNnV0bV9jb250ZW50JTNkVHJ1aGx5X1Zhbm9jZV8yMDI2%26rlid%3D302cc58fd00c19f79479ae8e01859e15&vqd=4-248060804113996066840201201768052007103&iurl=%7B1%7DIG%3DDCA92BEA325A4E9A98D7E2973B08EAE7%26CID%3D18B94CAE5F7F6F95151E54B65E976EEE%26ID%3DDevEx%2C5036.1",
+        "https://duckduckgo.com/y.js?ad_domain=oveckarna.cz&ad_provider=bingv7aa&ad_type=txad&click_metadata=79Z5H3ZPBIkj_NaREEE1%2DXgPJE25LILXmUE4CQ09fHhJOt7OBiTtXJb9YjmEHb57g0yGpLNw6uv0e_qpS8KqLkLMBY5TvR7vo3lilvcwchvLHmjGWPMbebup8mJy6MExLnRpcTilBwx9xDIalRbVyF_pMQmH5uj3p3ghYb2R%2DYg.2mZ6vXaytPn_RnKteIM5BQ&rut=3043056afcae764c02c042e9e88f98803095a09f6b84323b9a7c1b070a54512c&u3=https%3A%2F%2Fwww.bing.com%2Faclick%3Fld%3De8MRwbQ138NDj0aAfU%2DJf8yDVUCUyNROUCRi5bwidOGEeZnOlymX8alRdJ6H2f1cnD8rK1fNBzMwQXnoTEMAsz7ziy%2DqPC7Sea6Ak0CcUZsopwpacafH1TrCKBi5EJGsuO06y1mBOBeeusfKhGOlPuFbhSHjZ8rtHXjd86DbrHa1XA%2DXznH3O9cJ%2Dn4p509qK39ZAHG_Vb6oF2LnGN7V1CTgAytLo%26u%3DaHR0cHMlM2ElMmYlMmZ3d3cub3ZlY2thcm5hLmN6JTJmcHJvLW1hbWlua3UlMmYlM2Ztc2Nsa2lkJTNkMDM4ZjJjNmE2YzhjMTVjNTk3OWY0NzZiYmQwNTk0MjAlMjZ1dG1fc291cmNlJTNkYmluZyUyNnV0bV9tZWRpdW0lM2RjcGMlMjZ1dG1fY2FtcGFpZ24lM2RDWiUyNTIwJTI1N0MlMjUyMFNFQSUyNTIwJTI1N0MlMjUyMFppbW4lYzMlYWQlMjUyMCUyNTdDJTI1MjAyX1NFQSUyNnV0bV90ZXJtJTNkdiVjMyVhMW5vJWM0JThkbiVjMyVhZCUyNTIwZCVjMyVhMXJlayUyNTIwcHJvJTI1MjBtYW1pbmt1JTI2dXRtX2NvbnRlbnQlM2QxOSUyNTIwRCVjMyVhMXJreQ%26rlid%3D038f2c6a6c8c15c5979f476bbd059420&vqd=4-181619234020560366559155731777902458970&iurl=%7B1%7DIG%3DDCA92BEA325A4E9A98D7E2973B08EAE7%26CID%3D18B94CAE5F7F6F95151E54B65E976EEE%26ID%3DDevEx%2C5040.1",
+        "https://www.darkoviny.cz/vanocni-darky-pro-maminku/",
+        "https://praktickedarky.cz/darky-pro-maminku-k-vanocum/",
+        "https://www.nejlepsiveci.cz/jaky-darek-pro-maminku-k-vanocum",
+        "https://www.maminka.cz/clanek/vanocni-darek-pro-maminku-darek-pro-zenu-a-manzelku-vanoce",
+        "https://czechtheworld.com/darek-pro-maminku/",
+        "https://mygift.cz/darek-pro-mamu-na-vanoce"
+      ]
+    }
+  },
+  {
+    "id": "5d495dcb-f2bd-477b-860b-2f3ab49403c2",
+    "ts": "2026-11-21T17:14:47.796Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia super darek pro maminku na vanoce",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "555951ce-48a9-4469-9a9e-43dd32e5cd28",
+    "ts": "2026-11-21T17:00:41.966Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "0929fb7d-a5c8-4c50-946c-1a11df30fd80",
+    "ts": "2026-11-21T16:00:41.942Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "3c5b940e-116f-476d-8890-773865e1be35",
+    "ts": "2026-11-21T15:45:24.111Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0a75605a-bf9a-400b-998b-1f46f4ee5248",
+    "ts": "2026-11-21T15:44:53.556Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: / ?",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "656fa5d3-2d3d-40bc-bcfc-45fc067b7c64",
+    "ts": "2026-11-21T15:21:05.611Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "eefadbd7-3675-4401-b7d0-bc58f388794f",
+    "ts": "2026-11-21T15:00:41.598Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "d68d899d-3b9a-40ed-b655-1b87754420b3",
+    "ts": "2026-11-21T14:07:41.906Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "dcaec83e-cf7c-4c9d-ab1f-e4ecc6a2bb42",
+    "ts": "2026-11-21T14:00:36.274Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "2c71dd8f-5f3c-4fe6-8afb-8429b2166fcb",
+    "ts": "2026-11-21T13:48:21.629Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Pockej to mi chces rict ze tam mam jako 24,5k mailu jeste. ? Whew",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "7d515b0e-e48c-45f9-9050-df03a9f04ce3",
+    "ts": "2026-11-21T13:44:43.248Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "celá schránka: 🗑 Spam → koš (86 z doručené, 12 ze Spamu; 0 odesílatelů ponecháno)",
+    "meta": {
+      "cat": "spam",
+      "fromInbox": 86,
+      "fromJunk": 12,
+      "kept": [],
+      "senders": 29
+    }
+  },
+  {
+    "id": "57e4f306-8f0e-4447-a8a3-1fc708de670a",
+    "ts": "2026-11-21T13:44:38.905Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ano",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "77917575-a447-4f40-91d1-1a0b49b33819",
+    "ts": "2026-11-21T13:44:38.395Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: náhoda → D:\\dev\\loyo-os\\data\\reports\\nhoda_2026-11-21-13-44-38.md",
+    "meta": {
+      "runId": "2026-11-21T13-42-46-742Z_ac986d86",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\nhoda_2026-11-21-13-44-38.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "66e4b88c-def7-42a9-9a0c-23fcb24c3876",
+    "ts": "2026-11-21T13:42:47.931Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"náhoda\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://cs.wikipedia.org/wiki/N%C3%A1hoda",
+        "https://www.nahoda.com/",
+        "https://cs.wiktionary.org/wiki/n%C3%A1hoda",
+        "https://www.csfd.cz/film/40722-nahoda/prehled/",
+        "https://cs.glosbe.com/cs/cs/n%C3%A1hoda",
+        "https://www.nahoda.com/stranka-seznamka-nahoda-555",
+        "https://www.think.cz/ceska/kultura/nahoda/",
+        "https://prirucka.ujc.cas.cz/?slovo=n%C3%A1hoda"
+      ]
+    }
+  },
+  {
+    "id": "764259cc-19ab-406a-bb7c-0585bf95dd57",
+    "ts": "2026-11-21T13:42:46.740Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia náhoda",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0c2610f2-005d-412f-97b6-321ff182498c",
+    "ts": "2026-11-21T13:42:02.649Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /maily smaž spam",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "fe4fe2eb-5e03-47f6-a26b-ef4bef0c234d",
+    "ts": "2026-11-21T13:41:27.044Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /ne kjg3",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "6b8a418a-0a57-401c-b517-df32000d6dee",
+    "ts": "2026-11-21T13:41:24.578Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /ne yw9f",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "691db798-d4c3-4327-9659-394c6a07a5dd",
+    "ts": "2026-11-21T13:28:12.865Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: best glitch effect of 2026 → D:\\dev\\loyo-os\\data\\reports\\best-glitch-effect-of-2026_2026-11-21-13-28-12.md",
+    "meta": {
+      "runId": "2026-11-21T13-27-01-410Z_67796fcc",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\best-glitch-effect-of-2026_2026-11-21-13-28-12.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "763e3e15-a60f-4c8b-99a4-9dab0ce18caa",
+    "ts": "2026-11-21T13:27:02.607Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"best glitch effect of 2026\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://aaeplugins.com/blog/best-glitch-effect-plugins-after-effects/",
+        "https://worldmetrics.org/best/glitch-art-software/",
+        "https://www.candyfx.com/blog/best-glitch-vst-plugins",
+        "https://audiophiles.co/glitch-plugin/",
+        "https://plugindrop.net/posts/best-glitch-effect-plugins/",
+        "https://blackoutaudio.com/blogs/buying-guides/best-creative-effects-plugins-in-2026",
+        "https://www.youworkforthem.com/collection/top-10-glitch-effects-of-2026",
+        "https://arefyevstudio.com/en/2026/05/01/best-glitch-plugins-vst/"
+      ]
+    }
+  },
+  {
+    "id": "ac40329f-1b24-4a83-b686-95de6f5a4ec3",
+    "ts": "2026-11-21T13:27:01.406Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia best glitch effect of 2026",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "a0fb549c-7b6f-4ed7-94a0-c8856b319f71",
+    "ts": "2026-11-21T13:25:38.386Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Tu?",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "488e9e60-cb57-4f53-af4f-4a00c65cb9cb",
+    "ts": "2026-11-21T13:22:10.696Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "afb0f9cb-8ef1-41c8-9918-c968438e80af",
+    "ts": "2026-11-21T13:20:34.339Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "89d5c901-f46b-4c7e-9450-570477fb181a",
+    "ts": "2026-11-21T13:19:44.115Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"how to make best brainrot game ?\" → 8 zdrojů, 0 stránek",
+    "meta": {
+      "sources": [
+        "https://devforum.roblox.com/t/how-to-make-roblox-%E2%80%9Csteal-a-brainrot%E2%80%9D-game-tutorial-series/4137672",
+        "https://builtbybit.com/resources/brainrot-game-kit.119127/",
+        "https://www.youtube.com/watch?v=BxFZr7r2qcU",
+        "https://www.youtube.com/watch?v=7m_ppTvkAW4",
+        "https://www.creation.dev/templates/brain-rot-template",
+        "https://www.findingdulcinea.com/all-brainrot-crafting-recipes-list/",
+        "https://roonby.com/2026/01/13/all-190-craft-a-brainrot-recipes-guide-how-to-craft-every-brainrot-easily/",
+        "https://boundbyflame.com/all-craft-a-brainrot-recipes-guide/"
+      ]
+    }
+  },
+  {
+    "id": "2cf846b9-5f84-414e-b276-397cc99a9bdd",
+    "ts": "2026-11-21T13:19:42.591Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia how to make best brainrot game ?",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "9b273097-0f39-45c6-8629-cdfdc5329168",
+    "ts": "2026-11-21T13:19:12.073Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /stav",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "f77d24b2-6891-4f86-a3c7-581fd988f7bc",
+    "ts": "2026-11-21T13:19:11.844Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /ano",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "1f95df74-e7f7-4882-befc-0fcbeb1eba84",
+    "ts": "2026-11-21T13:19:11.774Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "f041b847-aa00-41e5-a50a-91cb48c9b26b",
+    "ts": "2026-11-21T13:11:47.849Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /maily smaž newslettery",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "89a1a4e8-b82a-4975-bc16-8bab74ba6bc9",
+    "ts": "2026-11-21T13:11:23.131Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /maily ?",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "771ae2ee-6a08-47bd-89aa-e9fa63e96f11",
+    "ts": "2026-11-21T13:11:15.528Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /mail ?",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "bd597a9a-c882-4fd0-84c5-bda52e0a74aa",
+    "ts": "2026-11-21T13:04:35.173Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "00d762bc-881f-4d78-9e83-3071d2ac4642",
+    "ts": "2026-11-21T13:02:35.389Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "56749347-e76b-415f-bc6e-d5470703c97f",
+    "ts": "2026-11-21T13:01:40.915Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "10c26bf1-a622-44a0-93c9-e6ff2dc55954",
+    "ts": "2026-11-21T13:01:40.886Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Ahoj",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "e2245a29-0f91-47ea-b532-48df110b4150",
+    "ts": "2026-11-21T13:01:40.144Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "b2dc8533-28ce-4df9-8da6-a616e7d92aba",
+    "ts": "2026-11-21T12:46:34.497Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "a03f6165-a366-45d9-aceb-d175b47d4ae6",
+    "ts": "2026-11-21T12:36:04.390Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "75215872-d12a-4c9b-a6f0-a67fb72f1f19",
+    "ts": "2026-11-21T12:34:10.458Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "783f1044-e6cf-4979-a5cc-63a64efadc65",
+    "ts": "2026-11-21T12:33:56.742Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "263c2c97-55ab-4f7e-aef8-cd862925520c",
+    "ts": "2026-11-21T12:00:50.762Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "de7aca4a-2129-49c2-a515-9999f4e3f104",
+    "ts": "2026-11-21T11:51:16.949Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "18daed5e-b4da-4fe9-a071-2a66e85dd254",
+    "ts": "2026-11-21T11:19:56.008Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: tajemstvi napinavych pribehu → D:\\dev\\loyo-os\\data\\reports\\tajemstvi-napinavych-pribehu_2026-11-21-11-19-56.md",
+    "meta": {
+      "runId": "2026-11-21T11-17-55-157Z_29fe53a7",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\tajemstvi-napinavych-pribehu_2026-11-21-11-19-56.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "e26a3e5f-0dc5-4ab9-9438-793023c11e0a",
+    "ts": "2026-11-21T11:17:56.991Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"tajemstvi napinavych pribehu\" → 8 zdrojů, 1 stránek",
+    "meta": {
+      "sources": [
+        "https://www.tajemstvihistorie.cz/pribehy.html",
+        "https://www.youtube.com/@Tajemnepribehy_YT/videos",
+        "https://skutecnepribehy.cz/category/tajemne-pribehy/",
+        "https://skutecnepribehy.cz/category/tajemne-pribehy/page/75/",
+        "https://www.youtube.com/watch?v=LP1-IYpzHck",
+        "https://www.lifee.cz/tema/tajemne-pribehy/3",
+        "https://www.renenekuda.cz/obchod/tajemstvi-pribehu/",
+        "https://forbes.cz/bojite-se-tmy-pokud-ne-zactete-se-do-techto-napinavych-pribehu/"
+      ]
+    }
+  },
+  {
+    "id": "34e9fac3-f8b4-4a4f-9da5-87197ee77511",
+    "ts": "2026-11-21T11:17:55.155Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia tajemstvi napinavych pribehu",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "301ecd65-abbe-45d7-8ac4-fd454a5116de",
+    "ts": "2026-11-21T11:00:50.349Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "ce404b40-49d7-4977-9bc9-dbbbbef249bb",
+    "ts": "2026-11-21T10:00:49.925Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "b098a04c-a815-43b8-9d9c-1d3594dad8a5",
+    "ts": "2026-11-21T09:34:09.108Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /agents",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
     "id": "012caebb-090b-4cfa-9a79-8aa069d3ad25",
     "ts": "2026-11-21T09:00:44.105Z",
     "agent": "Mary_Jane",
@@ -4620,793 +5164,5 @@
     "agent": "Mary Jane",
     "type": "system",
     "action": "Telegram bot zastaven"
-  },
-  {
-    "id": "392555b1-5a39-48a0-9832-e609ece2d8a6",
-    "ts": "2026-11-20T06:01:06.537Z",
-    "agent": "Julia_Nehledalova",
-    "type": "report",
-    "action": "chyba reportu: Ollama neodpověděla do 180s (model: devstral-small-2:latest). Zkontroluj, jestli se model vejde do VRAM, nebo zkus menší model.",
-    "meta": {
-      "runId": "2026-11-20T05-58-04-424Z_2caf2a12"
-    }
-  },
-  {
-    "id": "516276e4-65f0-49a0-8203-c070d457f337",
-    "ts": "2026-11-20T06:00:25.163Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /daily-brief",
-    "meta": {
-      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n⏳ Fronta: úkol #ba0a24 zařazen (priorita 1), před tebou 1 úkolů.\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?"
-    }
-  },
-  {
-    "id": "a5ef3875-05ff-452d-9e5a-89f0fd0f3173",
-    "ts": "2026-11-20T06:00:25.153Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "8161f143-f7c7-4512-a761-440f93fde877",
-    "ts": "2026-11-20T05:52:56.554Z",
-    "agent": "Mary_Jane",
-    "type": "chat",
-    "action": "Telegram: /vse",
-    "meta": {
-      "source": "telegram"
-    }
-  },
-  {
-    "id": "22a1c5b1-eeaf-4fce-b82a-b224ef3419d8",
-    "ts": "2026-11-20T05:51:01.721Z",
-    "agent": "Lopatinka",
-    "type": "system",
-    "action": "běh OK → 5 tipů",
-    "meta": {
-      "picks": 5
-    }
-  },
-  {
-    "id": "1827554c-2fe1-410f-b12b-fbe6fb5ff28e",
-    "ts": "2026-11-20T05:50:38.180Z",
-    "agent": "Mary Jane",
-    "type": "system",
-    "action": "spouští Lopatinku",
-    "meta": {
-      "budget": "3500"
-    }
-  },
-  {
-    "id": "f80b46a2-568e-4f8d-959c-b61c5076853b",
-    "ts": "2026-11-20T05:50:38.179Z",
-    "agent": "Mary_Jane",
-    "type": "chat",
-    "action": "Telegram: /lopatinka 3500 --send",
-    "meta": {
-      "source": "telegram"
-    }
-  },
-  {
-    "id": "0d07a091-f7e8-43e0-89f8-c645beda4c63",
-    "ts": "2026-11-20T05:45:22.535Z",
-    "agent": "Mary_Jane",
-    "type": "chat",
-    "action": "Telegram: /activity",
-    "meta": {
-      "source": "telegram"
-    }
-  },
-  {
-    "id": "1e70cbc0-1540-44ff-bdfa-6c6d763dcd72",
-    "ts": "2026-11-20T05:45:11.510Z",
-    "agent": "Mary_Jane",
-    "type": "chat",
-    "action": "Telegram: /activity",
-    "meta": {
-      "source": "telegram"
-    }
-  },
-  {
-    "id": "733c26c3-ea07-418d-9e86-ca3a15ba9dc2",
-    "ts": "2026-11-20T05:44:28.256Z",
-    "agent": "Mary_Jane",
-    "type": "chat",
-    "action": "Telegram: Ahoj",
-    "meta": {
-      "source": "telegram"
-    }
-  },
-  {
-    "id": "d3f17cec-eba8-423a-89a1-003f8fc1217d",
-    "ts": "2026-11-20T05:41:21.038Z",
-    "agent": "Mary Jane",
-    "type": "system",
-    "action": "Telegram bot spuštěn"
-  },
-  {
-    "id": "46752a61-f0c1-478a-b35f-1392f38b74cd",
-    "ts": "2026-11-20T05:41:19.113Z",
-    "agent": "Mary Jane",
-    "type": "system",
-    "action": "Telegram bot zastaven"
-  },
-  {
-    "id": "d17750cd-4fb0-4503-90c9-ce9022f90ebd",
-    "ts": "2026-11-20T05:29:00.098Z",
-    "agent": "Mary_Jane",
-    "type": "chat",
-    "action": "Telegram: Ahoj",
-    "meta": {
-      "source": "telegram"
-    }
-  },
-  {
-    "id": "f0c7350e-e90b-43ed-b135-1f5bfa4caf14",
-    "ts": "2026-11-20T05:28:41.155Z",
-    "agent": "Mary_Jane",
-    "type": "chat",
-    "action": "Telegram: Ahoj",
-    "meta": {
-      "source": "telegram"
-    }
-  },
-  {
-    "id": "19a379a1-65df-457f-876a-295a577a3acb",
-    "ts": "2026-11-20T05:28:10.744Z",
-    "agent": "Mary_Jane",
-    "type": "chat",
-    "action": "Telegram: Ai",
-    "meta": {
-      "source": "telegram"
-    }
-  },
-  {
-    "id": "15f21fc2-062d-4949-add5-dbccd26360fc",
-    "ts": "2026-11-20T05:28:10.726Z",
-    "agent": "Mary Jane",
-    "type": "system",
-    "action": "Telegram bot spuštěn"
-  },
-  {
-    "id": "b3210e35-e1b1-4930-b2d2-0a5d61880b6c",
-    "ts": "2026-11-20T05:27:03.796Z",
-    "agent": "Mary Jane",
-    "type": "system",
-    "action": "spouští Koštěrada"
-  },
-  {
-    "id": "1833935e-3e93-4b48-9354-a42310aeebe4",
-    "ts": "2026-11-20T05:27:03.792Z",
-    "agent": "Mary_Jane",
-    "type": "chat",
-    "action": "UI: /zapni vse",
-    "meta": {
-      "source": "ui"
-    }
-  },
-  {
-    "id": "6db8fb56-6cbb-4bec-b2ce-00b646659fd3",
-    "ts": "2026-11-20T02:00:44.205Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /memory-nightly",
-    "meta": {
-      "message": "🧠 paměť mary-jane: 18 zpráv, není co shrnout\n🗂 chat 2026-11-19: 0 zpráv, nic k uložení"
-    }
-  },
-  {
-    "id": "d39f1c9d-e286-49f1-9c80-6ac6970a3836",
-    "ts": "2026-11-19T23:05:05.001Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil přesunul 2 souborů (zip: 2)",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": "2026-11-18T23:05:04.983Z",
-      "dryRun": false,
-      "moved": [
-        "fazt_review.zip → zip/fazt_review.zip",
-        "fazt_review_v2.zip → zip/fazt_review_v2.zip"
-      ],
-      "errors": []
-    }
-  },
-  {
-    "id": "92b20a19-d00a-400d-aaac-e822fc3b8bf4",
-    "ts": "2026-11-18T23:05:04.999Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil: nic nového k roztřídění",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": "2026-11-17T23:05:04.017Z",
-      "dryRun": false,
-      "moved": [],
-      "errors": []
-    }
-  },
-  {
-    "id": "d8701ef0-c091-4e38-9568-4c3da7ae651a",
-    "ts": "2026-11-17T23:05:04.020Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil: nic nového k roztřídění",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": "2026-11-16T23:05:04.446Z",
-      "dryRun": false,
-      "moved": [],
-      "errors": []
-    }
-  },
-  {
-    "id": "54dc72d6-5b34-4faf-bdc7-99d4132f87a3",
-    "ts": "2026-11-16T23:05:04.491Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil přesunul 30 souborů (obrazky: 20, mp3: 10)",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": "2026-11-15T23:05:03.449Z",
-      "dryRun": false,
-      "moved": [
-        "fazt_09_origami.png → obrazky/fazt_09_origami.png",
-        "fazt_10_exclamation.png → obrazky/fazt_10_exclamation.png",
-        "fazt_BGEO_03.png → obrazky/fazt_BGEO_03.png",
-        "fazt_GPG_05.png → obrazky/fazt_GPG_05.png",
-        "fazt_MACH_02.png → obrazky/fazt_MACH_02.png",
-        "fazt_MACH_05.png → obrazky/fazt_MACH_05.png",
-        "fazt_MIN3D_06.png → obrazky/fazt_MIN3D_06.png",
-        "fazt_MIN3D_07.png → obrazky/fazt_MIN3D_07.png",
-        "fazt_MIN3D_09.png → obrazky/fazt_MIN3D_09.png",
-        "fazt_MIN_02.png → obrazky/fazt_MIN_02.png",
-        "fazt_MIN_04.png → obrazky/fazt_MIN_04.png",
-        "fazt_MIN_06.png → obrazky/fazt_MIN_06.png",
-        "fazt_MIN_10.png → obrazky/fazt_MIN_10.png",
-        "fazt_NBGEO_02.png → obrazky/fazt_NBGEO_02.png",
-        "fazt_NBGEO_06.png → obrazky/fazt_NBGEO_06 (1).png",
-        "fazt_NBGEO_07.png → obrazky/fazt_NBGEO_07.png",
-        "fazt_RGM_02.png → obrazky/fazt_RGM_02.png",
-        "fazt_RGM_05.png → obrazky/fazt_RGM_05.png",
-        "fazt_RPIX_04.png → obrazky/fazt_RPIX_04.png",
-        "fazt_RPIX_05.png → obrazky/fazt_RPIX_05.png",
-        "Záznam (7) (mp3cut.net) (1).m4a → mp3/Záznam (7) (mp3cut.net) (1).m4a",
-        "Záznam (7) (mp3cut.net) (2).m4a → mp3/Záznam (7) (mp3cut.net) (2).m4a",
-        "Záznam (7) (mp3cut.net).m4a → mp3/Záznam (7) (mp3cut.net).m4a",
-        "Záznam (8) (mp3cut.net) (1).m4a → mp3/Záznam (8) (mp3cut.net) (1).m4a",
-        "Záznam (8) (mp3cut.net) (2).m4a → mp3/Záznam (8) (mp3cut.net) (2).m4a",
-        "Záznam (8) (mp3cut.net) (3).m4a → mp3/Záznam (8) (mp3cut.net) (3).m4a",
-        "Záznam (8) (mp3cut.net) (4).m4a → mp3/Záznam (8) (mp3cut.net) (4).m4a",
-        "Záznam (8) (mp3cut.net) (5).m4a → mp3/Záznam (8) (mp3cut.net) (5).m4a",
-        "Záznam (8) (mp3cut.net) (6).m4a → mp3/Záznam (8) (mp3cut.net) (6).m4a",
-        "Záznam (8) (mp3cut.net).m4a → mp3/Záznam (8) (mp3cut.net).m4a"
-      ],
-      "errors": []
-    }
-  },
-  {
-    "id": "9eb354a5-f3dc-44fc-8b0a-91d986fe796b",
-    "ts": "2026-11-15T23:05:03.470Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil přesunul 18 souborů (obrazky: 17, zip: 1)",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": "2026-11-14T23:05:03.309Z",
-      "dryRun": false,
-      "moved": [
-        "dddd.png → obrazky/dddd.png",
-        "dej-oblicej-2.png → obrazky/dej-oblicej-2.png",
-        "fazt_EXCH_02.png → obrazky/fazt_EXCH_02.png",
-        "fazt_FGLITCH_01.png → obrazky/fazt_FGLITCH_01.png",
-        "fazt_FGLITCH_02.png → obrazky/fazt_FGLITCH_02.png",
-        "fazt_NBGEO_04.png → obrazky/fazt_NBGEO_04.png",
-        "fazt_NBGEO_06.png → obrazky/fazt_NBGEO_06.png",
-        "fazt_RBL_05.png → obrazky/fazt_RBL_05.png",
-        "image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n-3.jpg → obrazky/image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n-3.jpg",
-        "image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n-6.jpg → obrazky/image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n-6.jpg",
-        "image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n.jpg → obrazky/image_20261017_171947-udelej-merch-podle-toho---a-udelej-mikinu-presne-n.jpg",
-        "image_20261017_171947-udlej-kulich-salu-kobeerec-pak-piano-zachod-v-tomt-2.jpg → obrazky/image_20261017_171947-udlej-kulich-salu-kobeerec-pak-piano-zachod-v-tomt-2.jpg",
-        "image_20261017_171947-udlej-kulich-salu-kobeerec-pak-piano-zachod-v-tomt.jpg → obrazky/image_20261017_171947-udlej-kulich-salu-kobeerec-pak-piano-zachod-v-tomt.jpg",
-        "key_with_face.png → obrazky/key_with_face.png",
-        "LoYo_OS_v4_Full_Docs.zip → zip/LoYo_OS_v4_Full_Docs (1).zip",
-        "style_1_realistic_cutout.png → obrazky/style_1_realistic_cutout.png",
-        "yx.png → obrazky/yx.png",
-        "zero_cutout.png → obrazky/zero_cutout.png"
-      ],
-      "errors": []
-    }
-  },
-  {
-    "id": "01530595-ae00-4db3-a104-f30b1f994fef",
-    "ts": "2026-11-15T06:00:53.789Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /daily-brief",
-    "meta": {
-      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n📋 **Status LoYo OS** [fast-devstral-2048 <1s]\n• Otevřené úkoly: 1 / 3\n• Poznámky celkem: 7\n• Kalendářní události: 0\n• Systém: agent 4 • team 1 • loop 0 • wor"
-    }
-  },
-  {
-    "id": "17b45e43-c6c1-434d-8411-c1254a4e6f9d",
-    "ts": "2026-11-15T06:00:53.736Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "aa0205fc-4ebd-42f6-827b-2e27cfde444d",
-    "ts": "2026-11-14T23:05:03.339Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil přesunul 24 souborů (zip: 3, obrazky: 20, ostatni: 1)",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": "2026-11-14T08:11:35.167Z",
-      "dryRun": false,
-      "moved": [
-        "ASAP_2_soubory.zip → zip/ASAP_2_soubory.zip",
-        "fazt_04.png → obrazky/fazt_04.png",
-        "fazt_08.png → obrazky/fazt_08.png",
-        "fazt_BG_02.png → obrazky/fazt_BG_02.png",
-        "fazt_BK_05.png → obrazky/fazt_BK_05.png",
-        "fazt_BRO_10.png → obrazky/fazt_BRO_10.png",
-        "fazt_DERP_02.png → obrazky/fazt_DERP_02.png",
-        "fazt_DERP_03.png → obrazky/fazt_DERP_03.png",
-        "fazt_FK_01.png → obrazky/fazt_FK_01.png",
-        "fazt_FK_02.png → obrazky/fazt_FK_02.png",
-        "fazt_FK_04.png → obrazky/fazt_FK_04.png",
-        "fazt_FK_05.png → obrazky/fazt_FK_05.png",
-        "fazt_NK_03.png → obrazky/fazt_NK_03.png",
-        "fazt_TROLL_03.png → obrazky/fazt_TROLL_03.png",
-        "fazt_WORD_07.png → obrazky/fazt_WORD_07.png",
-        "fazt_WORD_09.png → obrazky/fazt_WORD_09.png",
-        "Freebuff-0.0.202-win-x64--fb_v1.de022400-b0ee-40ba-8c45-4e0f94e7fe32.toi940.windows.FvmHab-EUYnIF-OB848s7jye2lPbK-i6y6GFLZX_gl0.exe → ostatni/Freebuff-0.0.202-win-x64--fb_v1.de022400-b0ee-40ba-8c45-4e0f94e7fe32.toi940.windows.FvmHab-EUYnIF-OB848s7jye2lPbK-i6y6GFLZX_gl0.exe",
-        "image_20261114_192656.jpg → obrazky/image_20261114_192656.jpg",
-        "onestroke_02.png → obrazky/onestroke_02.png",
-        "onestroke_06.png → obrazky/onestroke_06.png",
-        "onestroke_10.png → obrazky/onestroke_10.png",
-        "porovnani.zip → zip/porovnani.zip",
-        "rfk2_10.png → obrazky/rfk2_10.png",
-        "Tomory-FIX-uprava-textu.zip → zip/Tomory-FIX-uprava-textu.zip"
-      ],
-      "errors": []
-    }
-  },
-  {
-    "id": "3a7752bd-095b-4c3c-8a5e-1495d31e9955",
-    "ts": "2026-11-14T10:00:40.726Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "48145ffe-31e5-4f56-a2e9-25fb9412baba",
-    "ts": "2026-11-14T09:00:18.571Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "514ebe3c-ed6a-4248-a573-42c19f13e101",
-    "ts": "2026-11-14T08:11:35.193Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil přesunul 13 souborů (obrazky: 5, zip: 6, mp3: 2)",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": null,
-      "dryRun": false,
-      "moved": [
-        "30937_funny_dolan.jpg → obrazky/30937_funny_dolan.jpg",
-        "ASAP_review_1_az_6.zip → zip/ASAP_review_1_az_6.zip",
-        "colibri-main.zip → zip/colibri-main.zip",
-        "fast_03.png → obrazky/fast_03.png",
-        "fast_final_01.png → obrazky/fast_final_01.png",
-        "fast_v2_03.png → obrazky/fast_v2_03.png",
-        "hihihichachacha.mp3 → mp3/hihihichachacha.mp3",
-        "loot-checker-v2.zip → zip/loot-checker-v2.zip",
-        "loot-checker-v3.zip → zip/loot-checker-v3.zip",
-        "loot-checker-v31.zip → zip/loot-checker-v31.zip",
-        "loot-checker.zip → zip/loot-checker.zip",
-        "reallyfastbrowser.png → obrazky/reallyfastbrowser.png",
-        "Záznam 2026-11-14 072303.mp3 → mp3/Záznam 2026-11-14 072303.mp3"
-      ],
-      "errors": []
-    }
-  },
-  {
-    "id": "327750c9-d071-4edc-b948-df9e8a4bbb74",
-    "ts": "2026-11-14T08:00:23.174Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "032d4779-8bd5-4e2a-a038-8a1081424aaf",
-    "ts": "2026-11-13T23:05:01.890Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil: nic nového k roztřídění",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": "2026-11-13T21:03:13.663Z",
-      "dryRun": false,
-      "moved": [],
-      "errors": []
-    }
-  },
-  {
-    "id": "c8b87856-3b65-4063-95f7-6529fcb0ad56",
-    "ts": "2026-11-13T21:03:13.774Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil přesunul 69 souborů (obrazky: 8, zip: 32, mp3: 7, ostatni: 17, pdf: 5)",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": null,
-      "dryRun": false,
-      "moved": [
-        "02_green_aurora_fluid.webp → obrazky/02_green_aurora_fluid.webp",
-        "08 Bookmark_1.svg → obrazky/08 Bookmark_1.svg",
-        "2.zip → zip/2.zip",
-        "airy-prototyp.zip → zip/airy-prototyp.zip",
-        "airy-tvorba-1794011570922.png → obrazky/airy-tvorba-1794011570922.png",
-        "bez_zastaveni.mp3 → mp3/bez_zastaveni.mp3",
-        "bez_zastaveni_full.mp3 → mp3/bez_zastaveni_full.mp3",
-        "Bez_zastavení (mp3cut.net).mp3 → mp3/Bez_zastavení (mp3cut.net).mp3",
-        "bo.txt → ostatni/bo.txt",
-        "Claude Setup.exe → ostatni/Claude Setup.exe",
-        "Cute Doggie.json → ostatni/Cute Doggie.json",
-        "Finale.pdf → pdf/Finale.pdf",
-        "futura-mini-sprite.svg → obrazky/futura-mini-sprite.svg",
-        "glitch-digital-rain.webm → ostatni/glitch-digital-rain.webm",
-        "gotmyphoto.mp3 → mp3/gotmyphoto.mp3",
-        "Happy Character Throwing Ball.json → ostatni/Happy Character Throwing Ball.json",
-        "home_cutout.png → obrazky/home_cutout.png",
-        "index.json.example → ostatni/index.json.example",
-        "LoYo-ERP-Core-Finalni-Prehled-Vylepseni.pdf → pdf/LoYo-ERP-Core-Finalni-Prehled-Vylepseni.pdf",
-        "LoYo-ERP-Core-Konverzace.pdf → pdf/LoYo-ERP-Core-Konverzace.pdf",
-        "LoYo-OS-V5-0-NOVY-SEZNAM-UKOLU.md → ostatni/LoYo-OS-V5-0-NOVY-SEZNAM-UKOLU.md",
-        "LOyo_Bender_Blender_MCP.zip → zip/LOyo_Bender_Blender_MCP.zip",
-        "loyo_bender_mary_fix (1).zip → zip/loyo_bender_mary_fix (1).zip",
-        "loyo_bender_mary_fix.zip → zip/loyo_bender_mary_fix.zip",
-        "loyo_bender_pack.zip → zip/loyo_bender_pack.zip",
-        "LoYo_OS_v4_Full_Docs.zip → zip/LoYo_OS_v4_Full_Docs.zip",
-        "LTWR-ULTIMATNI-BACKEND-WIKI.md → ostatni/LTWR-ULTIMATNI-BACKEND-WIKI.md",
-        "Matrix-Gold-Glitch-Bg.html → ostatni/Matrix-Gold-Glitch-Bg.html",
-        "mcp_blender_fix.zip → zip/mcp_blender_fix.zip",
-        "meme_anim_v2 (1).mp4 → ostatni/meme_anim_v2 (1).mp4",
-        "meme_anim_v2.mp4 → ostatni/meme_anim_v2.mp4",
-        "myChat_final-main.zip → zip/myChat_final-main.zip",
-        "novesoubory (1).zip → zip/novesoubory (1).zip",
-        "novesoubory (2).zip → zip/novesoubory (2).zip",
-        "novesoubory (3).zip → zip/novesoubory (3).zip",
-        "novesoubory (4).zip → zip/novesoubory (4).zip",
-        "novesoubory (5).zip → zip/novesoubory (5).zip",
-        "novesoubory (6).zip → zip/novesoubory (6).zip",
-        "novesoubory (7).zip → zip/novesoubory (7).zip",
-        "novesoubory (8).zip → zip/novesoubory (8).zip",
-        "novesoubory.zip → zip/novesoubory.zip",
-        "OneDrive_2026-07-26.zip → zip/OneDrive_2026-07-26.zip",
-        "Paint Brush.json → ostatni/Paint Brush.json",
-        "Positive feedback Like.json → ostatni/Positive feedback Like.json",
-        "preview-dark.png → obrazky/preview-dark.png",
-        "preview_grid.png → obrazky/preview_grid.png",
-        "RAG_Tydennik_ideal.txt → ostatni/RAG_Tydennik_ideal.txt",
-        "Remix of Rabbit Hi Without Statemachine.json → ostatni/Remix of Rabbit Hi Without Statemachine.json",
-        "Remix of Untitled file.svg → obrazky/Remix of Untitled file.svg",
-        "seznam-nastaveni (1).pdf → pdf/seznam-nastaveni (1).pdf",
-        "seznam-nastaveni.pdf → pdf/seznam-nastaveni.pdf",
-        "Start (mp3cut.net).mp3 → mp3/Start (mp3cut.net).mp3",
-        "Start.mp3 → mp3/Start.mp3",
-        "tailscale-setup-1.104.5.exe → ostatni/tailscale-setup-1.104.5.exe",
-        "Tetris (Techno Version) [N_U8xzru9q0].mp3 → mp3/Tetris (Techno Version) [N_U8xzru9q0].mp3",
-        "TOVI-LAB-v4-LIVE.zip → zip/TOVI-LAB-v4-LIVE.zip",
-        "ve-opraveny.zip → zip/ve-opraveny.zip",
-        "Yt-Dlp-Tahak.txt → ostatni/Yt-Dlp-Tahak.txt",
-        "zehlicka.zip → zip/zehlicka.zip",
-        "zmena (1).zip → zip/zmena (1).zip",
-        "zmena (2).zip → zip/zmena (2).zip",
-        "zmena.zip → zip/zmena.zip",
-        "zmeny36.zip → zip/zmeny36.zip",
-        "zmeny37.zip → zip/zmeny37.zip",
-        "zmeny38.zip → zip/zmeny38.zip",
-        "zmeny39.zip → zip/zmeny39.zip",
-        "zmeny40 (1).zip → zip/zmeny40 (1).zip",
-        "zmeny40.zip → zip/zmeny40.zip",
-        "zmeny41.zip → zip/zmeny41.zip"
-      ],
-      "errors": []
-    }
-  },
-  {
-    "id": "9f00fc6d-56dd-427a-bb81-9ce03412a2b5",
-    "ts": "2026-11-13T21:03:07.282Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil by přesunul 69 souborů (obrazky: 8, zip: 32, mp3: 7, ostatni: 17, pdf: 5)",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": null,
-      "dryRun": true,
-      "moved": [
-        "02_green_aurora_fluid.webp → obrazky/02_green_aurora_fluid.webp",
-        "08 Bookmark_1.svg → obrazky/08 Bookmark_1.svg",
-        "2.zip → zip/2.zip",
-        "airy-prototyp.zip → zip/airy-prototyp.zip",
-        "airy-tvorba-1794011570922.png → obrazky/airy-tvorba-1794011570922.png",
-        "bez_zastaveni.mp3 → mp3/bez_zastaveni.mp3",
-        "bez_zastaveni_full.mp3 → mp3/bez_zastaveni_full.mp3",
-        "Bez_zastavení (mp3cut.net).mp3 → mp3/Bez_zastavení (mp3cut.net).mp3",
-        "bo.txt → ostatni/bo.txt",
-        "Claude Setup.exe → ostatni/Claude Setup.exe",
-        "Cute Doggie.json → ostatni/Cute Doggie.json",
-        "Finale.pdf → pdf/Finale.pdf",
-        "futura-mini-sprite.svg → obrazky/futura-mini-sprite.svg",
-        "glitch-digital-rain.webm → ostatni/glitch-digital-rain.webm",
-        "gotmyphoto.mp3 → mp3/gotmyphoto.mp3",
-        "Happy Character Throwing Ball.json → ostatni/Happy Character Throwing Ball.json",
-        "home_cutout.png → obrazky/home_cutout.png",
-        "index.json.example → ostatni/index.json.example",
-        "LoYo-ERP-Core-Finalni-Prehled-Vylepseni.pdf → pdf/LoYo-ERP-Core-Finalni-Prehled-Vylepseni.pdf",
-        "LoYo-ERP-Core-Konverzace.pdf → pdf/LoYo-ERP-Core-Konverzace.pdf",
-        "LoYo-OS-V5-0-NOVY-SEZNAM-UKOLU.md → ostatni/LoYo-OS-V5-0-NOVY-SEZNAM-UKOLU.md",
-        "LOyo_Bender_Blender_MCP.zip → zip/LOyo_Bender_Blender_MCP.zip",
-        "loyo_bender_mary_fix (1).zip → zip/loyo_bender_mary_fix (1).zip",
-        "loyo_bender_mary_fix.zip → zip/loyo_bender_mary_fix.zip",
-        "loyo_bender_pack.zip → zip/loyo_bender_pack.zip",
-        "LoYo_OS_v4_Full_Docs.zip → zip/LoYo_OS_v4_Full_Docs.zip",
-        "LTWR-ULTIMATNI-BACKEND-WIKI.md → ostatni/LTWR-ULTIMATNI-BACKEND-WIKI.md",
-        "Matrix-Gold-Glitch-Bg.html → ostatni/Matrix-Gold-Glitch-Bg.html",
-        "mcp_blender_fix.zip → zip/mcp_blender_fix.zip",
-        "meme_anim_v2 (1).mp4 → ostatni/meme_anim_v2 (1).mp4",
-        "meme_anim_v2.mp4 → ostatni/meme_anim_v2.mp4",
-        "myChat_final-main.zip → zip/myChat_final-main.zip",
-        "novesoubory (1).zip → zip/novesoubory (1).zip",
-        "novesoubory (2).zip → zip/novesoubory (2).zip",
-        "novesoubory (3).zip → zip/novesoubory (3).zip",
-        "novesoubory (4).zip → zip/novesoubory (4).zip",
-        "novesoubory (5).zip → zip/novesoubory (5).zip",
-        "novesoubory (6).zip → zip/novesoubory (6).zip",
-        "novesoubory (7).zip → zip/novesoubory (7).zip",
-        "novesoubory (8).zip → zip/novesoubory (8).zip",
-        "novesoubory.zip → zip/novesoubory.zip",
-        "OneDrive_2026-07-26.zip → zip/OneDrive_2026-07-26.zip",
-        "Paint Brush.json → ostatni/Paint Brush.json",
-        "Positive feedback Like.json → ostatni/Positive feedback Like.json",
-        "preview-dark.png → obrazky/preview-dark.png",
-        "preview_grid.png → obrazky/preview_grid.png",
-        "RAG_Tydennik_ideal.txt → ostatni/RAG_Tydennik_ideal.txt",
-        "Remix of Rabbit Hi Without Statemachine.json → ostatni/Remix of Rabbit Hi Without Statemachine.json",
-        "Remix of Untitled file.svg → obrazky/Remix of Untitled file.svg",
-        "seznam-nastaveni (1).pdf → pdf/seznam-nastaveni (1).pdf",
-        "seznam-nastaveni.pdf → pdf/seznam-nastaveni.pdf",
-        "Start (mp3cut.net).mp3 → mp3/Start (mp3cut.net).mp3",
-        "Start.mp3 → mp3/Start.mp3",
-        "tailscale-setup-1.104.5.exe → ostatni/tailscale-setup-1.104.5.exe",
-        "Tetris (Techno Version) [N_U8xzru9q0].mp3 → mp3/Tetris (Techno Version) [N_U8xzru9q0].mp3",
-        "TOVI-LAB-v4-LIVE.zip → zip/TOVI-LAB-v4-LIVE.zip",
-        "ve-opraveny.zip → zip/ve-opraveny.zip",
-        "Yt-Dlp-Tahak.txt → ostatni/Yt-Dlp-Tahak.txt",
-        "zehlicka.zip → zip/zehlicka.zip",
-        "zmena (1).zip → zip/zmena (1).zip",
-        "zmena (2).zip → zip/zmena (2).zip",
-        "zmena.zip → zip/zmena.zip",
-        "zmeny36.zip → zip/zmeny36.zip",
-        "zmeny37.zip → zip/zmeny37.zip",
-        "zmeny38.zip → zip/zmeny38.zip",
-        "zmeny39.zip → zip/zmeny39.zip",
-        "zmeny40 (1).zip → zip/zmeny40 (1).zip",
-        "zmeny40.zip → zip/zmeny40.zip",
-        "zmeny41.zip → zip/zmeny41.zip"
-      ],
-      "errors": []
-    }
-  },
-  {
-    "id": "52c3a5d7-f831-4ad0-83f0-948e291b80b3",
-    "ts": "2026-11-13T20:53:16.309Z",
-    "agent": "Tridil",
-    "type": "save",
-    "action": "🗂 Třídil přesunul 3 souborů (ostatni: 1, zip: 2)",
-    "meta": {
-      "dir": "C:\\Users\\loyo-\\Downloads",
-      "since": "2026-11-11T23:00:00.000Z",
-      "dryRun": false,
-      "moved": [
-        "app-debug.apk → ostatni/app-debug.apk",
-        "file-manager-rust.zip → zip/file-manager-rust.zip",
-        "krono---kotlin-poznámky-&-úkoly.zip → zip/krono---kotlin-poznámky-&-úkoly.zip"
-      ],
-      "errors": []
-    }
-  },
-  {
-    "id": "d390bcf9-f4a6-417b-b9c2-3888f0d6e7e6",
-    "ts": "2026-11-05T20:00:12.779Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "007a41f1-c645-452b-b70e-0fc44312cbb4",
-    "ts": "2026-11-05T19:00:12.301Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "08b11fa1-bc30-42b8-a263-e23f8c401d27",
-    "ts": "2026-11-05T16:00:58.300Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "030a8549-4398-46cb-a3ee-3b80c41043d0",
-    "ts": "2026-11-05T15:00:30.731Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "f14347c7-a7b7-47a1-83dc-41b4c303fb1d",
-    "ts": "2026-11-05T14:00:07.493Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "60992e26-9d15-4f1b-8b70-598524d308b8",
-    "ts": "2026-11-05T08:00:52.442Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "15ed6e99-c2d3-4c0e-bdf9-5af0e799a7fd",
-    "ts": "2026-10-06T03:00:12.691Z",
-    "agent": "Mary_Jane",
-    "type": "routing",
-    "action": "edit agents #2",
-    "meta": {
-      "runId": "2026-10-06T03-00-12-691Z_99245641"
-    }
-  },
-  {
-    "id": "c9cf582f-52bb-456d-9bb2-2c0be9351419",
-    "ts": "2026-10-06T03:00:12.687Z",
-    "agent": "Mary_Jane",
-    "type": "routing",
-    "action": "edit mcp #1",
-    "meta": {
-      "runId": "2026-10-06T03-00-12-686Z_5cab16c8"
-    }
-  },
-  {
-    "id": "5f1d18ac-7a9b-4d88-9ce4-fe6c831f6532",
-    "ts": "2026-10-03T14:00:25.505Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "41b90097-3160-40a5-8e70-ee1f7bfe811e",
-    "ts": "2026-10-03T13:00:25.028Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "f4ea3102-053a-4da4-94c1-e94ae2c04aea",
-    "ts": "2026-10-03T12:00:24.588Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "1713bc16-178d-48f2-9612-957f6c323a41",
-    "ts": "2026-09-29T20:00:25.444Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "5825b350-2752-4ec6-8496-9243ee9d4f0a",
-    "ts": "2026-09-29T12:00:38.776Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "e0f53078-5e6d-4312-b63d-3c8da7ee7ba8",
-    "ts": "2026-09-29T11:00:55.606Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "6f44adb9-ec8f-47e2-b15c-429f9bbe009d",
-    "ts": "2026-09-29T07:00:04.472Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "cfb4fa39-d16f-4e60-8e24-78d304df6426",
-    "ts": "2026-09-29T05:00:32.087Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /daily-brief",
-    "meta": {
-      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n📋 **Status LoYo OS** [fast-3b <1s]\n• Otevřené úkoly: 1 / 3\n• Poznámky celkem: 7\n• Kalendářní události: 0\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?"
-    }
-  },
-  {
-    "id": "6b3cdc59-47c7-45e5-aaa0-3f511741c4d4",
-    "ts": "2026-09-29T05:00:32.061Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
   }
 ]

@@ -64,3 +64,15 @@ Volitelné ENV: `STEPAN_ITEM`, `STEPAN_CONDITION`.
 - `state.json` — poslední věc, cena, inzerát a srovnatelné nabídky
 - `inzerat_*.md` — report konkrétního běhu
 - `audit.json`, `memory.json` — historie běhů (gitignore)
+
+## Vložení na Sbazar
+
+```
+/stepan prihlasit                                   jednou: přihlásíš se v okně Edge, přihlášení zůstane
+/stepan PS5 Slim, jako nový --cena 11000 --vlozit   ocení, napíše inzerát a předvyplní ho na Sbazaru
+/stepan … --fotky D:\foto\ps5 --vlozit              fotky ze složky
+```
+
+Fotky můžeš i **poslat Mary do Telegramu**: uloží se do zásobníku a další `--vlozit` si je vezme. V UI (Agenti → Stěpán) je na to výběr fotek, pole na cenu a tlačítka 🔑 PŘIHLÁSIT SBAZAR / 📝 VLOŽIT POSLEDNÍ INZERÁT.
+
+Štěpán vyplní titulek, popis, cenu a fotky a **zastaví se před zveřejněním**. Kategorii, lokalitu a zveřejnění zkontroluješ a odklikneš sám. Okno zůstane otevřené 30 minut.

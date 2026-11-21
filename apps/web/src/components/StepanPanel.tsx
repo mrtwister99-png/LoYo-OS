@@ -33,6 +33,9 @@ type State = {
   comparables?: Comparable[]
   lastReport?: string
   lastErrors?: string[]
+  userPrice?: number | null
+  sbazar?: { ok?: boolean; filled?: string[]; missing?: string[]; photos?: number; loggedIn?: boolean; error?: string; at?: string }
+  lastSbazarText?: string
 }
 type Config = { conditions: Condition[]; defaultCondition: string; minComparableCount: number; portals: string[] }
 type RunResult = { ok: boolean; output?: string; error?: string; state?: State }
@@ -61,6 +64,51 @@ export default function StepanPanel() {
   const [runError, setRunError] = useState('')
   const [output, setOutput] = useState('')
   const [copied, setCopied] = useState(false)
+  const [userPrice, setUserPrice] = useState('')
+  const [photoFiles, setPhotoFiles] = useState<File[]>([])
+  const [photoFolder, setPhotoFolder] = useState('')
+  const [postToSbazar, setPostToSbazar] = useState(true)
+  const [sbazarMsg, setSbazarMsg] = useState('')
+
+  // fotky → base64 → API je uloží do stepan/fotky/<čas>/ a vrátí složku pro Sbazar
+  const uploadPhotos = async (): Promise<string> => {
+    if (!photoFiles.length) return photoFolder.trim()
+    const files = await Promise.all(
+      photoFiles.map(
+        (f) =>
+          new Promise<{ name: string; data: string }>((resolve, reject) => {
+            const r = new FileReader()
+            r.onload = () => resolve({ name: f.name, data: String(r.result) })
+            r.onerror = () => reject(new Error(`Nejde načíst ${f.name}`))
+            r.readAsDataURL(f)
+          }),
+      ),
+    )
+    const res = await api<{ folder: string }>('/api/agents/stepan/photos', { method: 'POST', body: JSON.stringify({ files }) })
+    return res.folder
+  }
+
+  const sbazarLogin = async () => {
+    setSbazarMsg('')
+    try {
+      await api('/api/agents/stepan/sbazar/login', { method: 'POST', body: '{}' })
+      setSbazarMsg('Na počítači se otevřel Edge — přihlas se k Seznamu. Okno se pak samo zavře.')
+    } catch (e: any) {
+      setSbazarMsg(e.message)
+    }
+  }
+
+  const sbazarPostNow = async () => {
+    setSbazarMsg('')
+    try {
+      const photos = await uploadPhotos()
+      await api('/api/agents/stepan/sbazar/post', { method: 'POST', body: JSON.stringify({ photos }) })
+      setSbazarMsg('Otevírám Sbazar v Edge a vyplňuju poslední inzerát. Zveřejníš sám.')
+      setTimeout(load, 15000)
+    } catch (e: any) {
+      setSbazarMsg(e.message)
+    }
+  }
 
   const load = async () => {
     setLoadError('')
@@ -90,8 +138,18 @@ export default function StepanPanel() {
     try {
       const r = await api<RunResult>('/api/agents/stepan/run', {
         method: 'POST',
-        body: JSON.stringify({ item, condition }),
+        body: JSON.stringify({
+          item,
+          condition,
+          price: userPrice.replace(/\D/g, '') || undefined,
+          photos: postToSbazar ? await uploadPhotos() : undefined,
+          post: postToSbazar,
+        }),
       })
+      if (postToSbazar) {
+        setSbazarMsg('Edge se otevírá se Sbazarem — inzerát předvyplním, zveřejníš sám.')
+        setTimeout(load, 20000)
+      }
       if (!r.ok) throw new Error(r.error || 'běh selhal')
       if (r.state) setState(r.state)
       setOutput(r.output ?? '')
@@ -167,17 +225,65 @@ export default function StepanPanel() {
               <option key={c.id} value={c.id}>{c.label.toUpperCase()}</option>
             ))}
           </select>
+          <input
+            value={userPrice}
+            onChange={(e) => setUserPrice(e.target.value)}
+            inputMode="numeric"
+            placeholder="TVOJE CENA (Kč)"
+            className="w-36 px-3 py-2 rounded-full bg-[#353535] border border-[#444] text-[11px] font-bold tracking-wide outline-none focus:border-[#12a4ff]"
+          />
           <button
             onClick={run}
             disabled={running}
             className="flex-1 px-5 py-3 rounded-full text-[#f0f0f0] text-[11px] font-black tracking-widest hover:opacity-90 transition disabled:opacity-50"
             style={{ background: ACCENT }}
           >
-            {running ? 'ZJIŠŤUJI CENU...' : 'OCENIT A NAPSAT INZERÁT'}
+            {running ? 'ZJIŠŤUJI CENU...' : postToSbazar ? 'OCENIT A VLOŽIT NA SBAZAR' : 'OCENIT A NAPSAT INZERÁT'}
           </button>
         </div>
         <div className="mt-1.5 text-[9px] font-mono text-[#9a9a9a]/70">
           Projde Sbazar i Aukro, najde stejný model a spočítá cenu z mediánu trhu. Trvá ~10–40 s.
+        </div>
+
+        {/* SBAZAR */}
+        <div className="mt-3 p-3 rounded-xl bg-[#353535] border border-[#444] space-y-2">
+          <label className="flex items-center gap-2 text-[10px] font-bold tracking-widest cursor-pointer">
+            <input type="checkbox" checked={postToSbazar} onChange={(e) => setPostToSbazar(e.target.checked)} />
+            PŘEDVYPLNIT NA SBAZARU <span className="font-mono font-normal text-[#9a9a9a]/70">(zveřejníš sám)</span>
+          </label>
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="px-3 py-1.5 rounded-full border border-[#444] text-[9px] font-bold tracking-widest text-[#9a9a9a] hover:text-[#f0f0f0] transition cursor-pointer">
+              📸 FOTKY{photoFiles.length ? ` (${photoFiles.length})` : ''}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => setPhotoFiles([...(e.target.files ?? [])].slice(0, 20))}
+              />
+            </label>
+            <input
+              value={photoFolder}
+              onChange={(e) => setPhotoFolder(e.target.value)}
+              placeholder="nebo cesta ke složce, např. D:oto\ps5"
+              className="flex-1 min-w-[180px] px-3 py-1.5 rounded-full bg-[#3a3a3a] border border-[#444] text-[10px] font-mono outline-none focus:border-[#12a4ff]"
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button onClick={sbazarLogin} className="px-3 py-1.5 rounded-full border border-[#444] text-[9px] font-bold tracking-widest text-[#9a9a9a] hover:text-[#f0f0f0] transition">
+              🔑 PŘIHLÁSIT SBAZAR
+            </button>
+            {listing && (
+              <button onClick={sbazarPostNow} className="px-3 py-1.5 rounded-full border border-[#444] text-[9px] font-bold tracking-widest text-[#9a9a9a] hover:text-[#f0f0f0] transition">
+                📝 VLOŽIT POSLEDNÍ INZERÁT
+              </button>
+            )}
+            <span className="text-[9px] font-mono text-[#9a9a9a]/70">fotky z Telegramu (Mary) se přiberou samy</span>
+          </div>
+          {sbazarMsg && <div className="text-[10px] font-mono text-[#12a4ff]">{sbazarMsg}</div>}
+          {state?.lastSbazarText && (
+            <div className="text-[10px] font-mono whitespace-pre-wrap text-[#9a9a9a]">{state.lastSbazarText}</div>
+          )}
         </div>
 
         {runError && <div className="mt-3 text-[11px] font-mono text-[#ff6b6b]">{runError}</div>}

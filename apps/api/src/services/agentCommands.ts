@@ -121,14 +121,36 @@ async function runLopatinka(args: string): Promise<CommandResult> {
 
 // ---------- /stepan ----------
 async function runStepan(args: string): Promise<CommandResult> {
-  const condition = args.match(/--stav\s+([a-z-]+)/i)?.[1] ?? ''
-  const item = args.replace(/--stav\s+[a-z-]+/i, '').trim()
   const dir = join(AGENTS_DIR, 'stepan')
   const steps = ['Mary Jane: /stepan']
 
+  // /stepan prihlasit → jednorázové přihlášení k Sbazaru v Edge (heslo zadává uživatel sám)
+  if (/^p[řr]ihl[áa]sit\b|^login\b/i.test(args.trim())) {
+    const child = spawn(process.execPath, [join(dir, 'sbazar-post.mjs'), '--login'], { cwd: dir, detached: true, stdio: 'ignore' })
+    child.unref()
+    await activity('Stěpán', 'Sbazar: otevřeno přihlášení')
+    return { reply: '🔑 Na počítači se otevřel Edge s přihlášením Seznamu. Přihlas se, okno se pak samo zavře a přihlášení zůstane uložené.', steps }
+  }
+
+  const condition = args.match(/--stav\s+([a-z-]+)/i)?.[1] ?? ''
+  const price = args.match(/--cena\s+([\d\s.]+)/i)?.[1]?.replace(/\D/g, '') ?? ''
+  const photos = args.match(/--fotky\s+("[^"]+"|\S+)/i)?.[1]?.replace(/^"|"$/g, '') ?? ''
+  const post = /--vlozit\b|--vložit\b/i.test(args)
+  const item = args
+    .replace(/--stav\s+[a-z-]+/i, '')
+    .replace(/--cena\s+[\d\s.]+/i, ' ')
+    .replace(/--fotky\s+("[^"]+"|\S+)/i, '')
+    .replace(/--vlo[zž]it\b/i, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+
   if (!item) {
     return {
-      reply: 'Napiš, co prodáváš: `/stepan iPhone 13 128 GB, baterie 89 %, drobné škrábance`\nVolitelně stav: `--stav novy|jako-novy|velmi-dobry|dobry|opotrebovany|na-dily`',
+      reply: [
+        'Napiš, co prodáváš: `/stepan iPhone 13 128 GB, baterie 89 %, drobné škrábance`',
+        'Volitelně: `--cena 6000` (tvoje cena) · `--fotky D:\\foto\\iphone` · `--vlozit` (předvyplní Sbazar, zveřejníš sám)',
+        'Stav: `--stav novy|jako-novy|velmi-dobry|dobry|opotrebovany|na-dily` · první přihlášení: `/stepan prihlasit`',
+      ].join('\n'),
       steps,
     }
   }
@@ -137,6 +159,9 @@ async function runStepan(args: string): Promise<CommandResult> {
   const { code } = await runNode(join(dir, 'run.mjs'), dir, [], {
     STEPAN_ITEM: item,
     STEPAN_CONDITION: condition,
+    STEPAN_PRICE: price,
+    STEPAN_PHOTOS: photos,
+    STEPAN_POST: post ? '1' : '',
   })
   const state = await readJson(join(dir, 'state.json'), null)
 
@@ -471,7 +496,8 @@ async function listCommands(): Promise<CommandResult> {
       '/zapni vše — Koštěrad + Lopatinka (dry-run)',
       '/zapni lopatinka · /zapni kosterad — jednotlivě',
       '/lopatinka [rozpočet] [--send] — hledání nabídek',
-      '/stepan <věc> [--stav novy|jako-novy|velmi-dobry|dobry|opotrebovany|na-dily]',
+      '/stepan <věc> [--cena N] [--fotky <složka>] [--vlozit] [--stav …] — ocenění + inzerát, --vlozit předvyplní Sbazar',
+      '/stepan prihlasit — jednorázové přihlášení k Sbazaru (Edge)',
       '/ostr <věc> --cena N — kontrola ceny · /ostr hlidej <věc> --cil N · /ostr hlidani',
       '/kosterad — údržba manifestů a failed runs',
       '/julia <téma> — hloubkový research',

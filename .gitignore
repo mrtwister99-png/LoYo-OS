@@ -100,3 +100,9 @@ data/screenshots/
 # Strážce — stav, pid, pauza (runtime)
 data/strazce/
 tools/strazce/strazce.vbs
+
+# Stěpán → Sbazar: přihlášený profil Edge, fotky, screenshoty formuláře
+data/capabilities/agents/stepan/.edge-profile/
+data/capabilities/agents/stepan/fotky/
+data/capabilities/agents/stepan/sbazar_*.png
+data/capabilities/agents/stepan/sbazar-form.json
