@@ -1,5 +1,670 @@
 [
   {
+    "id": "c1cd8d76-9a09-4ed3-a36a-fecd5de36191",
+    "ts": "2026-11-21T08:40:39.898Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /agents",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d059bd00-bb27-4270-bcba-0fb84ec7425c",
+    "ts": "2026-11-21T08:40:22.152Z",
+    "agent": "Koštěrad",
+    "type": "save",
+    "action": "vytvořen agent: Ostř (ostr)",
+    "meta": {
+      "type": "agent",
+      "id": "ostr"
+    }
+  },
+  {
+    "id": "7513a919-34fd-4702-8b71-7ae2afe7caa1",
+    "ts": "2026-11-21T08:40:22.101Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /new agent Ostř - hlídač a srovnávač cen",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "e3bd0188-34e3-4ac2-b366-7dcdbbdfc16f",
+    "ts": "2026-11-21T08:35:17.210Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /new agent",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "c9abb88e-25c3-4606-aa17-ae9c69e87a8d",
+    "ts": "2026-11-21T08:35:12.861Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /new ?",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "8d587b62-d002-4d6f-afcd-379a747f6c60",
+    "ts": "2026-11-21T08:34:56.683Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Okey",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0cf97b44-b39d-4da0-8651-0f9359b2955e",
+    "ts": "2026-11-21T08:20:47.266Z",
+    "agent": "Stěpán",
+    "type": "system",
+    "action": "ocenění OK: xiaomi eletric scooter 4 pro → 4400 Kč",
+    "meta": {
+      "recommended": 4400
+    }
+  },
+  {
+    "id": "e0fe81af-852a-454e-8f8c-a003be3e5901",
+    "ts": "2026-11-21T08:20:43.974Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští Stěpána: \"xiaomi eletric scooter 4 pro\"",
+    "meta": {
+      "condition": "dobry"
+    }
+  },
+  {
+    "id": "f2807acd-dbf4-4f84-b1cc-14268347591e",
+    "ts": "2026-11-21T08:20:43.971Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /stepan xiaomi eletric scooter 4 pro --stav dobry",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0df7c837-e6db-4030-82e9-32fe37a118e6",
+    "ts": "2026-11-21T08:19:53.813Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /stepan ?",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "6b710edc-b636-4502-86ee-375fe300dfb9",
+    "ts": "2026-11-21T08:10:41.292Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: xiaomi eletric scooter 4 pro bazar pouzite koupit ceny → D:\\dev\\loyo-os\\data\\reports\\xiaomi-eletric-scooter-4-pro-bazar-pouzite-koupit-ceny_2026-11-21-08-10-41.md",
+    "meta": {
+      "runId": "2026-11-21T08-08-43-477Z_e2645f94",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\xiaomi-eletric-scooter-4-pro-bazar-pouzite-koupit-ceny_2026-11-21-08-10-41.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "280fa329-e3f0-4341-a737-319da443c64c",
+    "ts": "2026-11-21T08:08:45.658Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"xiaomi eletric scooter 4 pro bazar pouzite koupit ceny\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://duckduckgo.com/y.js?ad_domain=zbozi.cz&ad_provider=bingv7aa&ad_type=txad&click_metadata=3VMtxoqBYr1mw6zfYZcii5pHnwQcbV4Ehna4IdeiSrXMIJpGkID7JfKP295Q63BJHPCQ7UE8Py5Qvsbf__aKOSAMrwbg2YVnh2nNinc%2DnlR4sT9kwCotRq8PXv7u93IRSVQyEBS_iB09i9K17kOOjsIaTgDvh01%2DFfaiU0cQ0Hg.Dux4Xlwmsni8ezHvsgzMYg&rut=3f903fd2066a7736a46a67f5fc82aa3306f7f1c63f3f46523a317cb61a52d2ba&u3=https%3A%2F%2Fwww.bing.com%2Faclick%3Fld%3De8_P5Debfsa1_WUVxy75q3XTVUCUxVELbShWsl9UvL23edDrvxgQIoowIP59K6sZdLvJkI9S9%2DznRVMFcYjK7cdx8mpnxHPqTZyrZ7dYSL1ia7KK8BcGbHZMWhfp5P7mq5gTxpDGvJJsIQdztpotHlEPYNQJ14Es1OYjXMERXPOOM64mbEvK9P8rK3PjjcUjrdcX%2DzlS8N6pHNkheFfBkUUhehDJk%26u%3DaHR0cHMlM2ElMmYlMmZ3d3cuemJvemkuY3olMmZ2eXJvYmVrJTJmeGlhb21pLWVsZWN0cmljLXNjb290ZXItNCUyZiUzZnV0bV9jb250ZW50JTNkY2UyOTVkNzM2YiUyYiUyNTdDJTJiWGlhb21pJTJiRWxlY3RyaWMlMmJTY29vdGVyJTJiNCUyNnV0bV9tZWRpdW0lM2RjcGMlMjZ1dG1fc291cmNlJTNkYmluZyUyNnV0bV9jYW1wYWlnbiUzZFBST0RfU3BvcnRfQ3lrbGlzdGlrYV9Nb3Rvcm92ZS1rb2xvYmV6a3lfRWxla3Ryb2tvbG9iZXpreSUyNnBwY2JlZS1hZHRleHQtdmFyaWFudCUzZEhvZG5vY2VuJTI1QzMlMjVBRCUyYnByb2R1a3QlMjVDNSUyNUFGJTI2bXNjbGtpZCUzZDYyMjRjYmM0YzYwNjE1NjNjZDFhYTBjNTk3OGE1ZGI0%26rlid%3D6224cbc4c6061563cd1aa0c5978a5db4&vqd=4-169159060959501483458513438831112118786&iurl=%7B1%7DIG%3D777922D2657444DAB4A0B37262B6D57A%26CID%3D05C9E3F6F9C96F3725EDFBEEF89C6EED%26ID%3DDevEx%2C5037.1",
+        "https://elektro.bazos.cz/inzeraty/scooter-4/",
+        "https://elektro.bazos.cz/inzeraty/kolob%C4%9B%C5%BEka-xiaomi/",
+        "https://www.alza.cz/levne-bazar/xiaomi-electric-scooter-4-pro-7375458.htm",
+        "https://www.alza.cz/levne-bazar/xiaomi-electric-scooter-4-pro-2nd-gen-12297233.htm",
+        "https://www.sbazar.cz/inzerat/230369006-xiaomi-electric-scooter-4-pro-2-gen",
+        "https://www.sbazar.cz/inzerat/232202958-elektrokolobezka-xiaomi-electric-scooter-4-pro-max",
+        "https://sport.bazos.cz/inzeraty/xiaomi-scooter/"
+      ]
+    }
+  },
+  {
+    "id": "9ece8316-ce66-4ea1-988b-baa94490f2a4",
+    "ts": "2026-11-21T08:08:43.475Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia xiaomi eletric scooter 4 pro bazar pouzite koupit ceny",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "05009268-e1eb-470b-b0ae-ab8df8a2435f",
+    "ts": "2026-11-21T08:00:23.734Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "3ddc30ad-3808-4baa-90f7-dd0fe59a9724",
+    "ts": "2026-11-21T07:59:11.300Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv restart",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "726f34f3-11ff-470b-a5c3-dfe0d2b3d1ff",
+    "ts": "2026-11-21T07:57:43.284Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv restart",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d07f69ed-d001-4f07-92ce-c09ccc2143c9",
+    "ts": "2026-11-21T07:56:09.173Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula PowerShell"
+  },
+  {
+    "id": "4ed1f71e-0bc3-4e4a-91f4-7b671526b90c",
+    "ts": "2026-11-21T07:56:08.486Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /ps Test-NetConnection -ComputerName 100.105.33.46 -Port 47865",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "60a6425b-1bd9-4ab0-a98c-31df78ec78c9",
+    "ts": "2026-11-21T07:55:01.717Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "vypnula PowerShell"
+  },
+  {
+    "id": "0bc048bd-b4c7-4b2d-9f5d-3b31d828ee2b",
+    "ts": "2026-11-21T07:55:01.700Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /exit",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "383499ac-0471-476f-8ddf-e9b4bfedef33",
+    "ts": "2026-11-21T07:52:56.645Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: jevole ?",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "52b8dd65-6dc9-4ab6-bcc5-0bf1f483608f",
+    "ts": "2026-11-21T07:52:56.450Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Halo marry co ri je",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "d1451681-5f16-42ad-bc4b-5c4276221381",
+    "ts": "2026-11-21T07:51:25.301Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /ps Get-NetFirewallRule | Get-NetFirewallPortFilter | Where-Object LocalPort -eq 47865",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2dbc51fd-dae6-4353-a13b-000237e14406",
+    "ts": "2026-11-21T07:50:50.072Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /ps Get-NetFirewallPortFilter -LocalPort 47865",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "8b50fb3d-b835-4e2b-a105-dfa5f9288c46",
+    "ts": "2026-11-21T07:47:47.574Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /ps Get-NetTCPConnection -State Listen -LocalPort 47865",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "8c863a33-6dbd-4a10-9242-ebaa749733be",
+    "ts": "2026-11-21T07:46:11.600Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /ps tailscale status",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "a941957a-7b8a-4816-8e75-698167741ea9",
+    "ts": "2026-11-21T07:41:34.461Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: ipconfig",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "0d9ba875-a014-4ddf-839c-5ad4aa5fd183",
+    "ts": "2026-11-21T07:38:58.943Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv status",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "3ab2982c-9f27-4a96-a271-6f354b08acfc",
+    "ts": "2026-11-21T07:38:53.413Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "cfaf8b7d-4382-4d07-80c0-5e4169689b92",
+    "ts": "2026-11-21T07:38:44.274Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "zapnula PowerShell"
+  },
+  {
+    "id": "29b0023e-f8f3-4ba9-b3bd-6c333086750a",
+    "ts": "2026-11-21T07:38:43.430Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /ps",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "a1d0d0a1-747d-4beb-9485-4a8e9395ead0",
+    "ts": "2026-11-21T07:26:54.449Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Cau",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "c632855b-cd64-4351-8076-eac656251446",
+    "ts": "2026-11-21T07:19:07.171Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "843fa157-f843-4ba4-bf7e-ade1e27d2595",
+    "ts": "2026-11-21T07:18:59.117Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: rust lord → D:\\dev\\loyo-os\\data\\reports\\rust-lord_2026-11-21-07-18-59.md",
+    "meta": {
+      "runId": "2026-11-21T07-17-08-764Z_e6b7c64b",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\rust-lord_2026-11-21-07-18-59.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "d4aadc9d-fa7d-4881-9623-193d2cd337b1",
+    "ts": "2026-11-21T07:17:09.695Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"rust lord\" → 8 zdrojů, 0 stránek",
+    "meta": {
+      "sources": [
+        "https://fortnite.fandom.com/wiki/Rust_Lord",
+        "https://fortnite.gg/cosmetics?id=845",
+        "https://fortnite.weirdgloop.org/w/Rust_Lord",
+        "https://progameguides.com/fortnite-cosmetic/rust-lord/",
+        "https://liquipedia.net/fortnite/Rust_Lord",
+        "https://fortnite-skins.fandom.com/wiki/Rust_Lord",
+        "https://www.theclick.gg/rust-lord-fortnite-skin/",
+        "https://fortnite.gg/cosmetics?id=2890"
+      ]
+    }
+  },
+  {
+    "id": "2a6aa8e9-432f-49f7-8604-53600d3687fd",
+    "ts": "2026-11-21T07:17:08.756Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia rust lord",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "50f435c2-d54e-4f97-8189-b896918a5150",
+    "ts": "2026-11-21T07:08:55.389Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: jak ss jmenuje claude - tak abych ho spustil prikazem pres ps → D:\\dev\\loyo-os\\data\\reports\\jak-ss-jmenuje-claude---tak-abych-ho-spustil-prikazem-pres-p_2026-11-21-07-08-55.md",
+    "meta": {
+      "runId": "2026-11-21T07-07-00-044Z_dd2c26f8",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\jak-ss-jmenuje-claude---tak-abych-ho-spustil-prikazem-pres-p_2026-11-21-07-08-55.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
+    "id": "578609ba-ae3e-472d-afa8-8b983c3eecca",
+    "ts": "2026-11-21T07:07:04.778Z",
+    "agent": "Julia_Nehledalova",
+    "type": "search",
+    "action": "deep research: \"jak ss jmenuje claude - tak abych ho spustil prikazem pres ps\" → 8 zdrojů, 2 stránek",
+    "meta": {
+      "sources": [
+        "https://zacinamsai.cz/articles/jak-nechat-claude-ovladat-pocitac",
+        "https://stiburekmartin.cz/blog/claude-ai-kompletni-pruvodce-vsechny-funkce",
+        "https://www.jiribenedikt.com/claude-navod/",
+        "https://www.jarvis-ai.cz/jak-spravne-pouzivat-claude-code-10-osvedcenych-tipu-od-vyvojaru-anthropicu-i-ceske-praxe",
+        "https://zacinamsai.cz/articles/claude-ai",
+        "https://vojtechbruk.cz/claude-code/",
+        "https://cs.wikipedia.org/wiki/Claude_(jazykov%C3%BD_model)",
+        "https://www.youtube.com/watch?v=ZSX-zANgZZI"
+      ]
+    }
+  },
+  {
+    "id": "a6508598-0a42-4dab-8364-4093e884f544",
+    "ts": "2026-11-21T07:07:00.041Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /julia jak ss jmenuje claude - tak abych ho spustil prikazem pres ps",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "95ead66c-63ed-4293-a9a5-dd07fdd27ffb",
+    "ts": "2026-11-21T07:00:43.381Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /vse",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2d7aa9d2-88b5-40a8-97bf-34801c23d792",
+    "ts": "2026-11-21T07:00:23.275Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "bf92b76d-8a54-40b5-a44d-5c38c5ceba44",
+    "ts": "2026-11-21T06:30:33.028Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "8aed9a0a-db2a-453e-8b8c-3b984c86531c",
+    "ts": "2026-11-21T06:29:15.254Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: Čau",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "2781d420-6653-4f51-beb3-680fc2f15302",
+    "ts": "2026-11-21T06:10:13.362Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /boty",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "726bf662-93ba-40b7-beda-5291c6c5a861",
+    "ts": "2026-11-21T06:06:42.490Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list 7",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "406bb607-19a0-4b6a-ab17-1556369c5263",
+    "ts": "2026-11-21T06:06:38.579Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /list",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "db761afe-230f-40f8-94b2-e13057e7fd68",
+    "ts": "2026-11-21T06:02:55.266Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /daily-brief",
+    "meta": {
+      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n📋 **Status LoYo OS** [fast-devstral-2048 <1s]\n• Otevřené úkoly: 1 / 3\n• Poznámky celkem: 8\n• Kalendářní události: 0\n• Systém: agent 23 • team 1 • loop 0 • wo"
+    }
+  },
+  {
+    "id": "fd20ddc6-cb09-47b5-8de2-1eb31b479e29",
+    "ts": "2026-11-21T06:02:55.255Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "roztřídil 16 mailů (0 důležitých)"
+  },
+  {
+    "id": "637541f2-94eb-484e-a7b9-754d2551d4b5",
+    "ts": "2026-11-21T06:01:55.803Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /daily-brief",
+    "meta": {
+      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n📋 **Status LoYo OS** [fast-devstral-2048 <1s]\n• Otevřené úkoly: 1 / 3\n• Poznámky celkem: 8\n• Kalendářní události: 0\n• Systém: agent 23 • team 1 • loop 0 • wo"
+    }
+  },
+  {
+    "id": "c2e2a204-7205-4b0a-b01d-34345a616fd6",
+    "ts": "2026-11-21T06:01:55.790Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "roztřídil 16 mailů (0 důležitých)"
+  },
+  {
+    "id": "39186500-130f-4ac6-a410-ac0aac901e7f",
+    "ts": "2026-11-21T06:01:22.866Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "čte poštu (posledních 1 dní)"
+  },
+  {
+    "id": "f16f2bbf-23f5-4c59-bbdd-74c705cb4df2",
+    "ts": "2026-11-21T06:01:22.846Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "f1a586fd-3b57-491c-b07f-8b456c6205d5",
+    "ts": "2026-11-21T06:00:23.323Z",
+    "agent": "Luuu",
+    "type": "system",
+    "action": "čte poštu (posledních 1 dní)"
+  },
+  {
+    "id": "888d3b4b-997d-45b5-89e0-1789ea75643a",
+    "ts": "2026-11-21T06:00:22.853Z",
+    "agent": "Scheduler",
+    "type": "system",
+    "action": "scheduled: /voda",
+    "meta": {
+      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
+    }
+  },
+  {
+    "id": "5a9855f4-2cf4-4a4e-a441-c593b3632c99",
+    "ts": "2026-11-21T05:50:23.509Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "3c0411dd-4fab-4e08-8d91-5e999df9a4ab",
+    "ts": "2026-11-21T05:44:10.914Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "ControlVision běží (pid 34108)"
+  },
+  {
+    "id": "4650b73c-1b44-49b0-af3e-7cbff3ed5ef5",
+    "ts": "2026-11-21T05:44:09.484Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští ControlVision server"
+  },
+  {
+    "id": "b5a7e37c-f425-46b4-aeea-9732e24eaa47",
+    "ts": "2026-11-21T05:44:09.299Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /cv",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "3a6f69b1-979e-4790-b083-a237a43ba9b1",
+    "ts": "2026-11-21T05:40:51.980Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "ControlVision běží (pid 31408)"
+  },
+  {
+    "id": "ddd545b7-7817-4a10-ac68-20b09038479c",
+    "ts": "2026-11-21T05:40:50.536Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "spouští ControlVision server"
+  },
+  {
+    "id": "ac1a35fe-34ab-4798-9a4e-d6145edca35f",
+    "ts": "2026-11-21T05:40:50.323Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "Telegram: /cv",
+    "meta": {
+      "source": "telegram"
+    }
+  },
+  {
+    "id": "b447874a-27d7-443d-b126-ed0c727ef8b2",
+    "ts": "2026-11-21T05:39:16.449Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "50a6b5ce-1596-4719-9891-7ae1a44ceef0",
+    "ts": "2026-11-21T05:38:07.338Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "78dba42d-d35a-456b-9922-7343cd716bbe",
+    "ts": "2026-11-21T05:30:31.943Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /strazce",
+    "meta": {
+      "source": "ui"
+    }
+  },
+  {
+    "id": "96f54398-ebd7-45d4-900a-6bf0400c2e56",
+    "ts": "2026-11-21T05:30:16.050Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "f46f7be3-13ca-4f52-947c-caadc4c517a4",
+    "ts": "2026-11-21T05:10:33.642Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn"
+  },
+  {
+    "id": "73875a8b-df5e-4893-bcdc-3448ae9a62c6",
+    "ts": "2026-11-21T05:05:15.438Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "55481b5c-dff2-41f0-8f6f-a7b75a26af21",
+    "ts": "2026-11-21T05:02:22.412Z",
+    "agent": "Julia_Nehledalova",
+    "type": "report",
+    "action": "research: sledovač cen na Alze — co by měl umět software agent na tohle, odkud brát data, existující nástroje, rizika → D:\\dev\\loyo-os\\data\\reports\\sledova-cen-na-Alze--co-by-ml-umt-software-agent-na-tohle-od_2026-11-21-05-02-22.md",
+    "meta": {
+      "runId": "preview-1795237224443",
+      "file": "D:\\dev\\loyo-os\\data\\reports\\sledova-cen-na-Alze--co-by-ml-umt-software-agent-na-tohle-od_2026-11-21-05-02-22.md",
+      "sourcesUsed": 8
+    }
+  },
+  {
     "id": "05ec12be-77e5-48f0-8051-e0f281de37be",
     "ts": "2026-11-21T05:00:25.348Z",
     "agent": "Julia_Nehledalova",
@@ -4743,442 +5408,5 @@
     "meta": {
       "runId": "2026-09-12T17-20-42-610Z_b87020aa"
     }
-  },
-  {
-    "id": "90efb86c-0e1c-40d2-84f0-3c1a88ba09eb",
-    "ts": "2026-09-12T17:20:01.772Z",
-    "agent": "Mary_Jane",
-    "type": "routing",
-    "action": "edit agents #2",
-    "meta": {
-      "runId": "2026-09-12T17-20-01-771Z_518e3037"
-    }
-  },
-  {
-    "id": "9c5adc83-63cd-4694-91d8-b4dc3646c891",
-    "ts": "2026-09-12T17:00:18.424Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "d402beae-59da-484e-9c83-b88c2cba8bba",
-    "ts": "2026-09-12T16:55:28.630Z",
-    "agent": "Mary_Jane",
-    "type": "routing",
-    "action": "edit agents #2",
-    "meta": {
-      "runId": "2026-09-12T16-55-28-629Z_5053cd91"
-    }
-  },
-  {
-    "id": "2683e02a-6116-46ca-8a63-ec8ea245387a",
-    "ts": "2026-09-12T12:00:04.398Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "34214409-fa70-49bd-b027-29a9d8359cbc",
-    "ts": "2026-09-12T09:00:16.227Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "d62dd787-5c5b-4af6-a41a-8826f5c78444",
-    "ts": "2026-09-12T08:00:15.765Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "c1664142-d5f5-416a-8c1d-26991b322043",
-    "ts": "2026-09-11T06:00:33.300Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "52e72a35-ffbf-4d19-b8a8-91d33b3dde42",
-    "ts": "2026-09-11T05:00:49.565Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /daily-brief",
-    "meta": {
-      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n📋 **Status LoYo OS** [fast-3b <1s]\n• Otevřené úkoly: 1 / 3\n• Poznámky celkem: 6\n• Kalendářní události: 0\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?"
-    }
-  },
-  {
-    "id": "4425b9e8-b61a-41b4-af58-001200107273",
-    "ts": "2026-09-11T05:00:49.547Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "4e29783e-5cc8-4e5c-a97a-7048da4eb7fe",
-    "ts": "2026-09-09T09:00:23.331Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "5077cbb3-6ba0-4b8d-aa80-4edc3e7989da",
-    "ts": "2026-09-07T05:00:46.459Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /daily-brief",
-    "meta": {
-      "message": "☀️ Čauky, Tome! Tady tvůj ranní přehled:\n\n**Status:**  \nSystém je aktivní a připraven na příkazy.\n\nChceš se na něco zaměřit, nebo jedeme podle plánu?"
-    }
-  },
-  {
-    "id": "feab1213-dcc7-43b5-956d-d56390102e6b",
-    "ts": "2026-09-07T05:00:35.991Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "894bbe5f-ac6e-42ea-8c98-49deae53048d",
-    "ts": "2026-09-06T19:00:32.128Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "517f5275-950e-4d5e-972f-86e79b4adc8f",
-    "ts": "2026-09-06T18:00:31.722Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "6a41d414-9f98-4487-bba5-247e0d34e60e",
-    "ts": "2026-09-06T17:00:31.214Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "a7b452e7-f15a-4839-92ac-22de7ed6281a",
-    "ts": "2026-09-06T16:00:30.760Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "c6af0fc0-fe93-48a3-8e3c-9c2f7e71589c",
-    "ts": "2026-09-06T15:00:27.292Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "609462fb-0b14-4973-9054-c53b86dbdbf7",
-    "ts": "2026-09-06T14:00:26.925Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "d9a638fd-3f13-4396-bb8d-0754bc85c064",
-    "ts": "2026-09-06T08:00:23.997Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "da3c2476-bde0-419d-85c3-cbf845345edd",
-    "ts": "2026-09-06T07:00:23.513Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "e279eae4-8f9d-4f73-821e-55daa7c7fff6",
-    "ts": "2026-09-06T06:00:22.961Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "12f36ab8-1a75-47eb-8c52-972b64e3e932",
-    "ts": "2026-09-05T20:00:45.623Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "23906e19-d231-418b-9364-13409100da9e",
-    "ts": "2026-09-05T11:00:53.995Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "96062cbe-2dfe-4074-95f4-da7d7ddcb66d",
-    "ts": "2026-09-05T10:00:14.067Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "3faaffc9-6a90-440e-b4b8-77f8665c3b16",
-    "ts": "2026-09-05T09:05:03.011Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "poznámka: \"JDEME NA TOOOO yes\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\4poznamka_jdeme-na-toooo-yes.md",
-    "meta": {
-      "runId": "2026-09-05T09-05-03-008Z_af74ce1d",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\4poznamka_jdeme-na-toooo-yes.md"
-    }
-  },
-  {
-    "id": "fe5cad4c-0cc4-4f8f-b761-1cf35e8b8e9e",
-    "ts": "2026-09-05T09:00:13.581Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "ce0eeed5-53b7-4e39-b165-ccba01455ce7",
-    "ts": "2026-09-05T08:00:13.044Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "37e12202-bb8f-47d7-a419-6f36895bd7e4",
-    "ts": "2026-09-05T07:00:12.467Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "bcb61d08-907c-4e48-b55d-0b86c5dab9cb",
-    "ts": "2026-09-01T07:00:27.576Z",
-    "agent": "Scheduler",
-    "type": "system",
-    "action": "scheduled: /voda",
-    "meta": {
-      "message": "💧 NAPIJ SE VODY!!! blbečku :*"
-    }
-  },
-  {
-    "id": "f4dd8a1e-9606-4c4d-ae7d-23486861a2a3",
-    "ts": "2026-09-01T04:53:59.980Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "poznámka: \"test\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\1poznamka_test.md",
-    "meta": {
-      "runId": "2026-09-01T04-53-59-976Z_cd7301b6",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\1poznamka_test.md"
-    }
-  },
-  {
-    "id": "ebd5f4c3-29b0-4138-82b2-da3013a7786f",
-    "ts": "2026-09-01T04:52:34.411Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "nový příkaz: /voda",
-    "meta": {
-      "runId": "2026-09-01T04-52-34-408Z_370f27a9"
-    }
-  },
-  {
-    "id": "7d7650b2-0bc6-4f0e-8a0c-6bc782b32e2e",
-    "ts": "2026-09-01T03:42:35.806Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "úkol: \"DNES\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\aktivni\\2ukol_dnes.md",
-    "meta": {
-      "runId": "2026-09-01T03-42-35-804Z_f9191bdc",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\aktivni\\2ukol_dnes.md"
-    }
-  },
-  {
-    "id": "2efc22fa-4981-4887-a0e1-97a41b8fef05",
-    "ts": "2026-09-01T03:09:57.010Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "poznámka: \"bazerant\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\1poznamka_bazerant.md",
-    "meta": {
-      "runId": "2026-09-01T03-09-57-009Z_23e4bac9",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\1poznamka_bazerant.md"
-    }
-  },
-  {
-    "id": "1ad9e53a-a189-4f5e-ac58-405f5bdd6169",
-    "ts": "2026-09-01T02:50:02.760Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "úkol: \"testukolu\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\aktivni\\1ukol_testukolu.md",
-    "meta": {
-      "runId": "2026-09-01T02-50-02-758Z_472e2ba9",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\aktivni\\1ukol_testukolu.md"
-    }
-  },
-  {
-    "id": "bfa2c916-f158-4b32-aa49-c4f79c3a57b9",
-    "ts": "2026-09-01T02:47:54.695Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "poznámka: \"testukolu\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\6poznamka_testukolu.md",
-    "meta": {
-      "runId": "2026-09-01T02-47-54-693Z_2ea8901f",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\6poznamka_testukolu.md"
-    }
-  },
-  {
-    "id": "eaa14dfa-78e6-4209-8623-4b0b1ecfd2fd",
-    "ts": "2026-08-31T04:41:29.201Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "úkol: \"posta.\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\3ukol_posta.md",
-    "meta": {
-      "runId": "2026-08-31T04-41-29-200Z_70c4eda2",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\3ukol_posta.md"
-    }
-  },
-  {
-    "id": "c41cb2dc-18dc-4c83-9053-45946e0bf523",
-    "ts": "2026-08-31T04:40:33.198Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "poznámka: \"Posta.\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\5poznamka_posta.md",
-    "meta": {
-      "runId": "2026-08-31T04-40-33-197Z_67699c78",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\5poznamka_posta.md"
-    }
-  },
-  {
-    "id": "a96f24c1-17b0-4f84-a9f4-bbd9fc8a909b",
-    "ts": "2026-08-31T04:39:15.413Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "úkol: \"koupit jar, mleko, maso, sladke, vajicka\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\2ukol_koupit-jar-mleko-maso-sladke-vajicka.md",
-    "meta": {
-      "runId": "2026-08-31T04-39-15-413Z_40285c86",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\2ukol_koupit-jar-mleko-maso-sladke-vajicka.md"
-    }
-  },
-  {
-    "id": "b284afb2-cc2f-4c33-b4bd-3147d3305170",
-    "ts": "2026-08-31T04:38:28.109Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "úkol: \"Koupit rohliky\" → D:\\dev\\loyo-os\\data\\ja\\ukoly\\1ukol_koupit-rohliky.md",
-    "meta": {
-      "runId": "2026-08-31T04-38-28-108Z_9d71b7c4",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\ukoly\\1ukol_koupit-rohliky.md"
-    }
-  },
-  {
-    "id": "7f41c576-570a-4cc9-a595-b382ae06147a",
-    "ts": "2026-08-31T04:16:36.689Z",
-    "agent": "Mary_Jane",
-    "type": "save",
-    "action": "poznámka: \"Bagr - ahoj ja jsem bagr.\" → D:\\dev\\loyo-os\\data\\ja\\poznamky\\poznamka-1788149796689.md",
-    "meta": {
-      "runId": "2026-08-31T04-16-36-688Z_625bc52c",
-      "file": "D:\\dev\\loyo-os\\data\\ja\\poznamky\\poznamka-1788149796689.md"
-    }
-  },
-  {
-    "id": "cf0a20af-334e-465d-8a5f-4338ca64c7c0",
-    "ts": "2026-08-31T03:14:07.632Z",
-    "agent": "Julia_Nehledalova",
-    "type": "report",
-    "action": "research: kdo v čR prodava hracky Mondo → D:\\dev\\loyo-os\\data\\reports\\kdo-v-R-prodava-hracky-Mondo_2026-08-31-03-14-07.md",
-    "meta": {
-      "runId": "2026-08-31T03-13-42-193Z_91bead1d",
-      "file": "D:\\dev\\loyo-os\\data\\reports\\kdo-v-R-prodava-hracky-Mondo_2026-08-31-03-14-07.md",
-      "sourcesUsed": 5
-    }
-  },
-  {
-    "id": "7fa542b2-823c-4a0a-aa84-f004650167dd",
-    "ts": "2026-08-31T03:13:42.197Z",
-    "agent": "Julia_Nehledalova",
-    "type": "search",
-    "action": "web_search: \"kdo v čR prodava hracky Mondo\""
-  },
-  {
-    "id": "06876a47-8150-40e2-b41a-d47717162bf3",
-    "ts": "2026-08-31T03:13:42.193Z",
-    "agent": "Mary_Jane",
-    "type": "routing",
-    "action": "\"/research kdo v čR prodava hracky Mondo\" → Julia_Nehledalova"
   }
 ]

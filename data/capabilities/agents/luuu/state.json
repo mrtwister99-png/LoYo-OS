@@ -1,13 +1,13 @@
 {
-  "lastUid": 53827,
+  "lastUid": 53828,
   "uidValidity": "3",
-  "lastRun": "2026-11-21T03:21:19.308Z",
-  "lastSummary": "📬 Luuu — nové maily\nNic nového. 🎉",
+  "lastRun": "2026-11-21T06:02:55.253Z",
+  "lastSummary": "📬 Luuu — nové maily: 16\n\n📨 Ostatní (12)\n• Google — Se službou Tailscale sdílíte některá data z účtu Google\n• Google — Bezpečnostní upozornění\n• Google — Bezpečnostní upozornění\n• Google — Dvoufázové ověření je zapnuto\n• Google — Bezpečnostní upozornění\n• Google — Bezpečnostní upozornění\n• Velkoobchod hračky - B2B VJM — [Velkoobchod hračky - B2B VJM] Potvrzení objednávky\n• Railway — Scheduled agent automations, linked billing with Claude Platform\n• Cognition — Your wiki for mrtwister99-png/LoYo-OS is now ready!\n• GitHub — [GitHub] Please verify your device\n  … a dalších 2\n\n📰 Newslettery a reklama (2)\n• GitKraken — Early access: 60% off GitKraken Pro starts now\n• Booking.com — Připravit, pozor, rezervovat! Až 40 % levněji s nabídkami Black Friday 🖤\n\n🗑 Spam (2)\n• Paybis Team — 🤯 10,763 Bitcoin ATMs vanished in 68 days! What happened? [70% OFF, 3 trades]\n• Paybis Team — 💥 Crypto Digest – DOJ Seized $1.2B From North Korea, Bitcoin Crashed to $62K, and Stablecoins Lost $14 Billion in 30 Days",
   "lastCounts": {
     "dulezite": 0,
     "faktury": 0,
-    "newsletter": 0,
-    "spam": 0,
-    "ostatni": 0
+    "newsletter": 2,
+    "spam": 2,
+    "ostatni": 12
   }
 }

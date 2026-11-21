@@ -1,206 +1,206 @@
 {
-  "lastRun": "2026-11-20T05:14:34.595Z",
-  "item": "Prodám iPhone 13 128 GB, baterie 89 %, velmi dobrý stav",
-  "condition": "velmi-dobry",
-  "conditionLabel": "Velmi dobrý",
-  "query": "iphone 13 128 gb",
+  "lastRun": "2026-11-21T08:20:47.249Z",
+  "item": "xiaomi eletric scooter 4 pro",
+  "condition": "dobry",
+  "conditionLabel": "Dobrý",
+  "query": "xiaomi eletric scooter pro",
   "detectedCategory": "",
-  "comparableCount": 45,
+  "comparableCount": 39,
   "price": {
-    "count": 45,
-    "min": 2100,
-    "p25": 5200,
-    "median": 6000,
-    "p75": 8700,
-    "max": 11491,
-    "recommended": 5700,
-    "quick": 5150,
-    "patient": 6250,
+    "count": 37,
+    "min": 2800,
+    "p25": 4500,
+    "median": 4999,
+    "p75": 6999,
+    "max": 13000,
+    "recommended": 4400,
+    "quick": 3950,
+    "patient": 4850,
     "lowConfidence": false
   },
   "listing": {
-    "title": "iPhone 13 128 GB",
-    "body": "Prodám iPhone 13 128 GB.\n\nbaterie 89 %, velmi dobrý stav\n\nStav: Velmi dobrý.\nCena: 5 700 Kč (dohodou).\n\nOsobní předání po dohodě.\nPosílám i poštou / Zásilkovnou po platbě předem.",
-    "price": 5700
+    "title": "xiaomi eletric scooter 4 pro",
+    "body": "Prodám xiaomi eletric scooter 4 pro.\n\nStav: Dobrý.\nCena: 4 400 Kč (dohodou).\n\nOsobní předání po dohodě.\nPosílám i poštou / Zásilkovnou po platbě předem.",
+    "price": 4400
   },
   "comparables": [
     {
-      "title": "Apple iPhone 13 s pamětí 128 GB v černé barvě",
-      "price": 2100,
+      "title": "Nová duše Xiaomi 1S, 2 M365, Essential, Pro, Pro 2",
+      "price": 100,
       "portal": "Sbazar",
-      "location": "v Dobruška",
-      "url": "https://www.sbazar.cz/inzerat/235994850-apple-iphone-13-s-pameti-128-gb-v-cerne-barve"
+      "location": "v Praha 22",
+      "url": "https://www.sbazar.cz/inzerat/235461162-nova-duse-xiaomi-1s-2-m365-essential-pro-pro-2"
     },
     {
-      "title": "iPhone 13 mini / 128GB",
-      "price": 3800,
+      "title": "Mi Electric Scooter zámek na brzdový kotouč",
+      "price": 290,
       "portal": "Sbazar",
-      "location": "v Zlín",
-      "url": "https://www.sbazar.cz/inzerat/234477054-iphone-13-mini-128gb"
+      "location": "v Praha",
+      "url": "https://www.sbazar.cz/inzerat/225110005-mi-electric-scooter-zamek-na-brzdovy-kotouc"
     },
     {
-      "title": "Apple iPhone 13 128 GB Midnight +originální balení",
+      "title": "Elektrická koloběžka Xiaomi Mijia M365",
+      "price": 2800,
+      "portal": "Sbazar",
+      "location": "v Praha, Kolovraty",
+      "url": "https://www.sbazar.cz/inzerat/234737496-elektricka-kolobezka-xiaomi-mijia-m365"
+    },
+    {
+      "title": "Xiaomi Mi Electric Scooter Pro 2",
+      "price": 3499,
+      "portal": "Sbazar",
+      "location": "v Příbram",
+      "url": "https://www.sbazar.cz/inzerat/235366269-xiaomi-mi-electric-scooter-pro-2"
+    },
+    {
+      "title": "Koloběžka Xiaomi Mi Electric Scooter Pro 2",
+      "price": 3499,
+      "portal": "Sbazar",
+      "location": "v Příbram",
+      "url": "https://www.sbazar.cz/inzerat/235366491-kolobezka-xiaomi-mi-electric-scooter-pro-2"
+    },
+    {
+      "title": "Prodám NOVOU el. koloběžku Xiaomi 4Lite (2.Gen).",
+      "price": 3990,
+      "portal": "Sbazar",
+      "location": "v Třebíč",
+      "url": "https://www.sbazar.cz/inzerat/235159446-prodam-novou-el-kolobezku-xiaomi-4lite-2gen?lokalita=41292666"
+    },
+    {
+      "title": "Elektrická koloběžka Xiaomi",
+      "price": 3999,
+      "portal": "Sbazar",
+      "location": "v Opava",
+      "url": "https://www.sbazar.cz/inzerat/235938324-elektricka-kolobezka-xiaomi"
+    },
+    {
+      "title": "Xiaomi Electric Scooter 4 Lite 2nd Gen",
+      "price": 4000,
+      "portal": "Sbazar",
+      "location": "v Ostrava",
+      "url": "https://www.sbazar.cz/inzerat/234793677-xiaomi-electric-scooter-4-lite-2nd-gen"
+    },
+    {
+      "title": "Elektrokoloběžka Xiaomi ElectricScooter 4lite 2gen",
       "price": 4490,
       "portal": "Sbazar",
-      "location": "v Praha",
-      "url": "https://www.sbazar.cz/inzerat/235935891-apple-iphone-13-128-gb-midnight-originalni-baleni"
+      "location": "v Pelhřimov",
+      "url": "https://www.sbazar.cz/inzerat/233560608-elektrokolobezka-xiaomi-electricscooter-4lite-2gen"
     },
     {
-      "title": "iPhone 13, 128 GB, růžový",
+      "title": "Xiaomi Electric Scooter 4 Lite (2nd Gen)",
+      "price": 4498,
+      "portal": "Sbazar",
+      "location": "v Klatovy",
+      "url": "https://www.sbazar.cz/inzerat/233979660-xiaomi-electric-scooter-4-lite-2nd-gen"
+    },
+    {
+      "title": "Elektrická koloběžka Xiaomi Scooter Pro 2",
+      "price": 4499,
+      "portal": "Sbazar",
+      "location": "v Otrokovice",
+      "url": "https://www.sbazar.cz/inzerat/233022788-elektricka-kolobezka-xiaomi-scooter-pro-2"
+    },
+    {
+      "title": "Xiaomi Electric Scooter 4 Lite 2nd Gen",
       "price": 4500,
       "portal": "Sbazar",
-      "location": "v Praha",
-      "url": "https://www.sbazar.cz/inzerat/235281732-iphone-13-128-gb-ruzovy?lokalita=41378937"
+      "location": "v Borovany",
+      "url": "https://www.sbazar.cz/inzerat/233222151-xiaomi-electric-scooter-4-lite-2nd-gen"
     },
     {
-      "title": "iPhone 13 128 GB Midnight",
-      "price": 4600,
+      "title": "Xiaomi Electric Scooter 4 Lite (2nd Gen)",
+      "price": 4500,
       "portal": "Sbazar",
-      "location": "v Valašská Polanka",
-      "url": "https://www.sbazar.cz/inzerat/235192860-iphone-13-128-gb-midnight"
+      "location": "v Praha 7",
+      "url": "https://www.sbazar.cz/inzerat/236004873-xiaomi-electric-scooter-4-lite-2nd-gen"
     },
     {
-      "title": "IPhone 13 128 GB",
-      "price": 4900,
+      "title": "Xiaomi Electric Scooter 4 Lite (2nd Gen)",
+      "price": 4500,
       "portal": "Sbazar",
-      "location": "v Dolní Břežany",
-      "url": "https://www.sbazar.cz/inzerat/235457703-iphone-13-128-gb"
+      "location": "v Praha, Karlín",
+      "url": "https://www.sbazar.cz/inzerat/235487622-xiaomi-electric-scooter-4-lite-2nd-gen"
     },
     {
-      "title": "IPhone 13 128 Gb Top Stav",
-      "price": 4900,
+      "title": "Xiaomi Electric Scooter 4 Lite 2nd Gen",
+      "price": 4500,
       "portal": "Sbazar",
-      "location": "v Praha",
-      "url": "https://www.sbazar.cz/inzerat/234730095-iphone-13-128-gb-top-stav?lokalita=40971786"
+      "location": "v Stříbro",
+      "url": "https://www.sbazar.cz/inzerat/235360215-xiaomi-electric-scooter-4-lite-2nd-gen"
     },
     {
-      "title": "Prodám Apple iPhone 13 Pro Max 128 GBAlpine Green",
-      "price": 4900,
+      "title": "Koloběžka Xiaomi Electric Scooter 4 lite (2nd gen)",
+      "price": 4500,
       "portal": "Sbazar",
-      "location": "v Uherské Hradiště",
-      "url": "https://www.sbazar.cz/inzerat/235648440-prodam-apple-iphone-13-pro-max-128-gbalpine-green"
+      "location": "v Hořice",
+      "url": "https://www.sbazar.cz/inzerat/234387549-kolobezka-xiaomi-electric-scooter-4-lite-2nd-gen"
     },
     {
-      "title": "Apple iPhone 13 mini, 128GB Pink C použitý",
+      "title": "Xiaomi Mi Electric Scooter 1S - nájezd jen 258 km",
+      "price": 4500,
+      "portal": "Sbazar",
+      "location": "v Brno, Zábrdovice",
+      "url": "https://www.sbazar.cz/inzerat/235450989-xiaomi-mi-electric-scooter-1s-najezd-jen-258-km"
+    },
+    {
+      "title": "Koloběžka XIAOMI Electric Scooter 4Lite (2nd Gen)",
+      "price": 4800,
+      "portal": "Sbazar",
+      "location": "v Kralupy nad Vltavou",
+      "url": "https://www.sbazar.cz/inzerat/234475554-kolobezka-xiaomi-electric-scooter-4lite-2nd-gen"
+    },
+    {
+      "title": "Xiaomi Mi Electric Scooter 3",
       "price": 4990,
       "portal": "Sbazar",
-      "location": "Mobil Pohotovost",
-      "url": "https://www.sbazar.cz/rozbalena-nabidka/apple-iphone-13-mini-128gb-pink-c-pouzity-6c6c0000144e312a12686bae5c2d286c2298c747"
+      "location": "v Praha, Košíře",
+      "url": "https://www.sbazar.cz/inzerat/235848408-xiaomi-mi-electric-scooter-3?lokalita=41781734"
     },
     {
-      "title": "iPhone 13 128gb midnight",
+      "title": "Xiaomi Electric Scooter 4 Lite (2nd Gen) NOVÁ",
       "price": 4990,
       "portal": "Sbazar",
-      "location": "v Louny",
-      "url": "https://www.sbazar.cz/inzerat/235228368-iphone-13-128gb-midnight"
+      "location": "v Říčany",
+      "url": "https://www.sbazar.cz/inzerat/235835967-xiaomi-electric-scooter-4-lite-2nd-gen-nova?lokalita=41772861"
     },
     {
-      "title": "Apple iPhone 13 128 GB PRODUCT(RED)",
+      "title": "ELEKTROKOLOBĚŽKA XIAOMI SCOOTER 3",
       "price": 4999,
       "portal": "Sbazar",
-      "location": "v Humpolec",
-      "url": "https://www.sbazar.cz/inzerat/235612269-apple-iphone-13-128-gb-productred"
+      "location": "v Ústí nad Labem",
+      "url": "https://www.sbazar.cz/inzerat/229469543-elektrokolobezka-xiaomi-scooter-3"
     },
     {
-      "title": "iPhone 13, 128GB",
-      "price": 5200,
-      "portal": "Sbazar",
-      "location": "v Plzeň",
-      "url": "https://www.sbazar.cz/inzerat/235971450-iphone-13-128gb"
-    },
-    {
-      "title": "Apple iPhone 13 128 GB MidnightCena: 5 270 Kč",
-      "price": 5270,
-      "portal": "Sbazar",
-      "location": "v Praha",
-      "url": "https://www.sbazar.cz/inzerat/234879456-apple-iphone-13-128-gb-midnightcena-5-270-kc"
-    },
-    {
-      "title": "Apple iPhone 13 128 GB Midnight",
-      "price": 5490,
-      "portal": "Sbazar",
-      "location": "v Ostrov",
-      "url": "https://www.sbazar.cz/inzerat/235561809-apple-iphone-13-128-gb-midnight"
-    },
-    {
-      "title": "Iphone 13 128GB, midnight, 100% bat.",
-      "price": 5490,
-      "portal": "Sbazar",
-      "location": "v Praha",
-      "url": "https://www.sbazar.cz/inzerat/235660449-iphone-13-128gb-midnight-100-bat"
-    },
-    {
-      "title": "Mobilní telefon iPhone 13, 128 GB, barvy Midnight",
-      "price": 5500,
-      "portal": "Sbazar",
-      "location": "v Brno, Komárov",
-      "url": "https://www.sbazar.cz/inzerat/236018886-mobilni-telefon-iphone-13-128-gb-barvy-midnight"
-    },
-    {
-      "title": "iPhone 13 128GB Růžová – stav Uspokojivý",
-      "price": 5799,
-      "portal": "Sbazar",
-      "location": "MobileGear.cz",
-      "url": "https://www.sbazar.cz/rozbalena-nabidka/iphone-13-128gb-ruzova-stav-uspokojivy-162e0200b7a2a48dc2dbfada129dfc0fa0326a8b"
-    },
-    {
-      "title": "Apple iPhone 13 ,128 GB",
-      "price": 5800,
-      "portal": "Sbazar",
-      "location": "v Kolín, Kolín II",
-      "url": "https://www.sbazar.cz/inzerat/233630445-apple-iphone-13-128-gb"
-    },
-    {
-      "title": "Mobil iPhone 13, kondice baterie 85%, 128 GB",
-      "price": 5890,
-      "portal": "Sbazar",
-      "location": "v České Budějovice",
-      "url": "https://www.sbazar.cz/inzerat/229258256-mobil-iphone-13-kondice-baterie-85-128-gb"
-    },
-    {
-      "title": "iPhone 13 128GB Nová baterie 100%",
-      "price": 5999,
-      "portal": "Sbazar",
-      "location": "v Praha",
-      "url": "https://www.sbazar.cz/inzerat/235959780-iphone-13-128gb-nova-baterie-100"
-    },
-    {
-      "title": "iPhone 13 128 GB Midnight",
-      "price": 6000,
+      "title": "Nová koloběžka Xiaomi Electric Scooter Elite",
+      "price": 5000,
       "portal": "Sbazar",
       "location": "v Brno",
-      "url": "https://www.sbazar.cz/inzerat/235886568-iphone-13-128-gb-midnight"
+      "url": "https://www.sbazar.cz/inzerat/235261065-nova-kolobezka-xiaomi-electric-scooter-elite"
     },
     {
-      "title": "iphone 13 128 GB",
-      "price": 6000,
+      "title": "Koloběžka XIAOMI Electric Scooter 4 Lite (2nd Gen)",
+      "price": 5000,
       "portal": "Sbazar",
       "location": "v Praha",
-      "url": "https://www.sbazar.cz/inzerat/234627819-iphone-13-128-gb"
+      "url": "https://www.sbazar.cz/inzerat/234861255-kolobezka-xiaomi-electric-scooter-4-lite-2nd-gen"
     },
     {
-      "title": "iPhone 13, 128 GB, 100% funkční, skvělý stav",
-      "price": 6000,
+      "title": "Nová elektrická koloběžka XIAOMI",
+      "price": 5000,
       "portal": "Sbazar",
-      "location": "v Slaný",
-      "url": "https://www.sbazar.cz/inzerat/235809849-iphone-13-128-gb-100-funkcni-skvely-stav"
+      "location": "v Starý Plzenec",
+      "url": "https://www.sbazar.cz/inzerat/234627654-nova-elektricka-kolobezka-xiaomi"
     },
     {
-      "title": "iPhone 13 128GB Hvězdně bílý (Starlight)",
-      "price": 6200,
+      "title": "Xiaomi Electric Scooter 4 Lite (2nd Gen)",
+      "price": 5200,
       "portal": "Sbazar",
-      "location": "v Břeclav",
-      "url": "https://www.sbazar.cz/inzerat/234929286-iphone-13-128gb-hvezdne-bily-starlight"
-    },
-    {
-      "title": "iPhone 13 128GB Modrá – stav Dobrý",
-      "price": 6299,
-      "portal": "Sbazar",
-      "location": "MobileGear.cz",
-      "url": "https://www.sbazar.cz/rozbalena-nabidka/iphone-13-128gb-modra-stav-dobry-162e0200765da855aa580b73ef9469c2c9bd5fac"
+      "location": "v Hustopeče",
+      "url": "https://www.sbazar.cz/inzerat/236039782-xiaomi-electric-scooter-4-lite-2nd-gen"
     }
   ],
-  "lastReport": "D:\\dev\\loyo-os\\data\\capabilities\\agents\\stepan\\inzerat_2026-11-20_06-14-31.md",
-  "lastChatText": "🏷️ Stěpán — ocenění a inzerát\nProdám iPhone 13 128 GB, baterie 89 %, velmi dobrý stav\n\nTrh: 45 srovnatelných nabídek · medián 6 000 Kč (2 100 Kč–11 491 Kč)\nDoporučená cena: 5 700 Kč · rychle 5 150 Kč · když počkáš 6 250 Kč\n\nInzerát — iPhone 13 128 GB\nProdám iPhone 13 128 GB.\n\nbaterie 89 %, velmi dobrý stav\n\nStav: Velmi dobrý.\nCena: 5 700 Kč (dohodou).\n\nOsobní předání po dohodě.\nPosílám i poštou / Zásilkovnou po platbě předem.\n\nReport: D:\\dev\\loyo-os\\data\\capabilities\\agents\\stepan\\inzerat_2026-11-20_06-14-31.md",
+  "lastReport": "D:\\dev\\loyo-os\\data\\capabilities\\agents\\stepan\\inzerat_2026-11-21_09-20-44.md",
+  "lastChatText": "🏷️ Stěpán — ocenění a inzerát\nxiaomi eletric scooter 4 pro\n\nTrh: 37 srovnatelných nabídek · medián 4 999 Kč (2 800 Kč–13 000 Kč)\nDoporučená cena: 4 400 Kč · rychle 3 950 Kč · když počkáš 4 850 Kč\n\nInzerát — xiaomi eletric scooter 4 pro\nProdám xiaomi eletric scooter 4 pro.\n\nStav: Dobrý.\nCena: 4 400 Kč (dohodou).\n\nOsobní předání po dohodě.\nPosílám i poštou / Zásilkovnou po platbě předem.\n\nReport: D:\\dev\\loyo-os\\data\\capabilities\\agents\\stepan\\inzerat_2026-11-21_09-20-44.md",
   "lastErrors": []
 }

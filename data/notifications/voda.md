@@ -59,3 +59,7 @@
 20. 11. 2026 20:00 — připomenuto
 20. 11. 2026 21:00 — připomenuto
 20. 11. 2026 22:00 — připomenuto
+21. 11. 2026 07:00 — připomenuto
+21. 11. 2026 07:01 — připomenuto
+21. 11. 2026 08:00 — připomenuto
+21. 11. 2026 09:00 — připomenuto
