@@ -50,7 +50,8 @@ async function writeState(s: any) {
 
 async function config() {
   const user = await envValue('LUUU_IMAP_USER')
-  const pass = await envValue('LUUU_IMAP_PASS')
+  // Google ukazuje heslo pro aplikace s mezerami („abcd efgh ijkl mnop“) — pryč s nimi
+  const pass = (await envValue('LUUU_IMAP_PASS')).replace(/\s+/g, '')
   const provider = (await envValue('LUUU_PROVIDER')).toLowerCase() || (user.split('@')[1] ?? '').split('.')[0]
   const preset = PRESETS[provider]
   const host = (await envValue('LUUU_IMAP_HOST')) || preset?.host || ''
