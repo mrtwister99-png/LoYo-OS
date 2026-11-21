@@ -9,6 +9,7 @@ import LootCheckerPanel from '../components/LootCheckerPanel'
 import LopatinkaPanel from '../components/LopatinkaPanel'
 import MaryTelegramPanel from '../components/MaryTelegramPanel'
 import StepanPanel from '../components/StepanPanel'
+import LuuuPanel from '../components/LuuuPanel'
 
 const ACCENT = '#12a4ff'
 const AGENT_COLOR = categoryColors.agents
@@ -54,7 +55,6 @@ const ALL_TOOLS: Tool[] = [
   { id: 'web_search', name: 'web_search', icon: '🌐' },
   { id: 'fs_read', name: 'fs_read', icon: '📁' },
   { id: 'fs_write', name: 'fs_write', icon: '✎' },
-  { id: 'sms', name: 'sms_send', icon: '' },
   { id: 'cli_firmy', name: 'cli:firmy', icon: '⚙' },
 ]
 
@@ -413,6 +413,7 @@ export default function AgentsPro() {
               {selectedAgent.id === 'loot-checker' && <LootCheckerPanel />}
               {selectedAgent.id === 'lopatinka' && <LopatinkaPanel />}
               {selectedAgent.id === 'stepan' && <StepanPanel />}
+              {selectedAgent.id === 'luuu' && <LuuuPanel />}
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-4 rounded-2xl bg-[#3a3a3a] border border-[#444]">
                   <div className="text-[10px] font-mono tracking-widest text-[#9a9a9a]/70">KATEGORIE</div>

@@ -268,6 +268,53 @@ export async function runLuuu(days: number | null = null): Promise<{ text: strin
   return { text, count: items.length }
 }
 
+/** Tlačítka v UI: maily dané kategorie (spam / newslettery) za posledních N dní přesune do Koše. */
+export async function trashCategory(cat: Category, days = 7): Promise<{ text: string; moved: number }> {
+  if (!(await luuuConfigured())) return { text: SETUP_HELP, moved: 0 }
+  if (cat !== 'spam' && cat !== 'newsletter') return { text: 'Do koše jde hromadně jen spam a newslettery.', moved: 0 }
+  const cfg = await config()
+  const { mails } = await fetchNew(days)
+  const items = (await classify(mails, cfg.important)).filter((m) => m.cat === cat)
+  if (!items.length) return { text: `${CAT_LABEL[cat]}: za posledních ${days} dní nic. 🎉`, moved: 0 }
+  const { moved, trash } = await moveToTrash(items.map((m) => m.uid))
+  await logActivity({ agent: 'Luuu', type: 'system', action: `${CAT_LABEL[cat]} → koš: ${moved} (${days} dní)` }).catch(() => {})
+  return {
+    text: [`🗑 ${CAT_LABEL[cat]} → ${trash}: ${moved}`, ...items.slice(0, 15).map((m) => `• ${m.from} — ${m.subject}`), ...(items.length > 15 ? [`… a dalších ${items.length - 15}`] : []), '', 'Vrátit jde z Koše v Gmailu (30 dní).'].join('\n'),
+    moved,
+  }
+}
+
+/** Stav pro panel v UI. Heslo se nikdy nevrací. */
+export async function luuuStatus() {
+  const cfg = await config()
+  const state = await readState()
+  return {
+    configured: cfg.ok,
+    user: cfg.user || null,
+    host: cfg.host || null,
+    important: cfg.important,
+    del: cfg.del,
+    lastRun: state.lastRun ?? null,
+    lastCounts: state.lastCounts ?? null,
+    lastSummary: state.lastSummary ?? null,
+    setupHelp: cfg.ok ? null : SETUP_HELP,
+  }
+}
+
+/** Uloží seznamy LUUU_IMPORTANT / LUUU_DELETE do .env (ostatní řádky nechá být). */
+export async function saveLists(lists: { important?: string[]; del?: string[] }): Promise<void> {
+  const ENV = join(DATA_DIR, '..', '.env')
+  let raw = await readFile(ENV, 'utf8').catch(() => '')
+  const clean = (l: string[]) => [...new Set(l.map((x) => x.trim().toLowerCase()).filter((x) => /^(@[\w.-]+\.[a-z]{2,}|[\w.+-]+@[\w.-]+\.[a-z]{2,})$/i.test(x)))].join(', ')
+  const setKey = (key: string, value: string) => {
+    const re = new RegExp(`^\\s*${key}\\s*=.*$`, 'm')
+    raw = re.test(raw) ? raw.replace(re, `${key}=${value}`) : `${raw.replace(/\s*$/, '')}\n${key}=${value}\n`
+  }
+  if (lists.important) setKey('LUUU_IMPORTANT', clean(lists.important))
+  if (lists.del) setKey('LUUU_DELETE', clean(lists.del))
+  await writeFile(ENV, raw, 'utf8')
+}
+
 /** Sekce do ranního přehledu. Když Luuu není nastavený, vrátí prázdný řetězec. */
 export async function luuuBriefSection(): Promise<string> {
   if (!(await luuuConfigured())) return ''

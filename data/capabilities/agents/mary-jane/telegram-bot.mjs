@@ -137,6 +137,7 @@ const HELP = [
   '/new agent|team|workflow|cli … — založí novou věc (/new = návod)',
   '/luuu — Luuu roztřídí nové maily · /fetch <url> · /web <url> · /screenshot <url>',
   '/ano · /ne — potvrdit / zrušit riskantní příkaz',
+  '/ls [plocha|stažené|dokumenty] · /cat <soubor> · /najdi <název> — soubory na PC',
   '/py <soubor.py> - <zadání> — napíšu Python skript (bez cesty = plocha)',
   '/skript <soubor> · /spust <agent> — spustí skript / agenta',
   'nebo větou: „udělej kurzy.py na plochu … a vytvoř agenta Joozina, ať ho použije“',
@@ -288,6 +289,23 @@ async function handleMessage(message, token, allowedChatId) {
   }
 }
 
+// Telegram bere jen názvy a-z, 0-9, _ (max 32 znaků), popis max 256, nejvýš 100 příkazů
+async function syncTelegramCommands(token) {
+  const data = await readJson(join(__dirname, 'commands.json'), { commands: [] })
+  const seen = new Set()
+  const commands = []
+  for (const c of Array.isArray(data.commands) ? data.commands : []) {
+    if (c?.enabled === false) continue
+    const name = String(c?.name ?? '').replace(/^\//, '').toLowerCase()
+    if (!/^[a-z0-9_]{1,32}$/.test(name) || seen.has(name)) continue
+    seen.add(name)
+    commands.push({ command: name, description: String(c.description || name).slice(0, 256) })
+  }
+  commands.sort((a, b) => a.command.localeCompare(b.command))
+  await tg(token, 'setMyCommands', { commands: commands.slice(0, 100) })
+  console.log(`[mary-bot] menu příkazů: ${Math.min(commands.length, 100)}`)
+}
+
 let stopping = false
 
 async function cleanupPid() {
@@ -345,6 +363,9 @@ async function main() {
   await tg(token, 'deleteWebhook', { drop_pending_updates: false }).catch((err) =>
     console.warn(`[mary-bot] deleteWebhook: ${err?.message ?? err}`),
   )
+
+  // menu příkazů v Telegramu (po napsání „/“) = commands.json, stejně jako našeptávač v UI
+  await syncTelegramCommands(token).catch((err) => console.warn(`[mary-bot] setMyCommands: ${err?.message ?? err}`))
 
   await writeFile(PID_PATH, String(process.pid), 'utf8')
   console.log(`[mary-bot] @${me.username} spuštěn (pid ${process.pid}) · API ${API_URL} · chat ${allowedChatId || 'jakýkoli'}`)

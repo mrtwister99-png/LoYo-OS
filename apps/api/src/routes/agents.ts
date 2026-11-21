@@ -136,6 +136,46 @@ async function telegramConfigured(keys: string[] = ['TELEGRAM_BOT_TOKEN', 'TELEG
 
 export default async function agentRoutes(app: FastifyInstance) {
   // GET /api/agents → SQLite SELECT * za ~2ms + FTS5 search
+  // ---------- Luuu (mailař) — panel v UI ----------
+  app.get('/agents/luuu/state', async () => {
+    const { luuuStatus } = await import('../services/luuu.js')
+    return luuuStatus()
+  })
+  app.post('/agents/luuu/run', async (req, reply) => {
+    const { days } = (req.body as { days?: number }) || {}
+    try {
+      const { runLuuu } = await import('../services/luuu.js')
+      const r = await runLuuu(Number(days) || null)
+      await saveChatMessage('mary', r.text).catch(() => {})
+      return { ok: true, ...r }
+    } catch (e: any) { reply.code(500); return { ok: false, error: e?.message ?? String(e) } }
+  })
+  app.post('/agents/luuu/trash', async (req, reply) => {
+    const { category, days } = (req.body as { category?: string; days?: number }) || {}
+    try {
+      const { trashCategory } = await import('../services/luuu.js')
+      const r = await trashCategory(category as any, Number(days) || 7)
+      await saveChatMessage('mary', r.text).catch(() => {})
+      return { ok: true, ...r }
+    } catch (e: any) { reply.code(500); return { ok: false, error: e?.message ?? String(e) } }
+  })
+  app.put('/agents/luuu/lists', async (req) => {
+    const { important, del } = (req.body as { important?: string[]; del?: string[] }) || {}
+    const { saveLists, luuuStatus } = await import('../services/luuu.js')
+    await saveLists({ important, del })
+    return luuuStatus()
+  })
+
+  // GET /api/commands → všechny příkazy Mary (commands.json) — našeptávač v chatu, přehledy v UI
+  app.get('/commands', async () => {
+    const data = await readFile(join(MARY_DIR, 'commands.json'), 'utf8').then(JSON.parse).catch(() => ({ commands: [] }))
+    const commands = (Array.isArray(data.commands) ? data.commands : [])
+      .filter((c: any) => c?.name)
+      .map((c: any) => ({ name: c.name, description: c.description ?? '', enabled: c.enabled !== false, schedule: c.schedule ?? null }))
+      .sort((a: any, b: any) => a.name.localeCompare(b.name))
+    return { commands, count: commands.length }
+  })
+
   app.get('/agents', async (req) => {
     const { search, stats } = (req.query as any) || {}
     if (stats === 'true' || stats === '1') {

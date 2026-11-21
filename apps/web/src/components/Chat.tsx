@@ -144,6 +144,21 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
   const [picker, setPicker] = useState<PickerState>(null)
   const [pickerIdx, setPickerIdx] = useState(0)
 
+  // příkazy Mary pro našeptávač (GET /api/commands = commands.json)
+  const [cmdList, setCmdList] = useState<{ name: string; description: string }[]>([])
+  const [cmdIdx, setCmdIdx] = useState(0)
+  useEffect(() => {
+    if (!isOpen || cmdList.length) return
+    fetch('http://localhost:3001/api/commands')
+      .then(r => r.json())
+      .then(j => setCmdList(Array.isArray(j.commands) ? j.commands.filter((c: any) => c.enabled !== false) : []))
+      .catch(() => {})
+  }, [isOpen, cmdList.length])
+  const cmdTyped = /^\/\S*$/.test(chatInput) ? chatInput.toLowerCase() : ''
+  const cmdSuggestions = cmdTyped
+    ? cmdList.filter(c => c.name.toLowerCase().startsWith(cmdTyped)).slice(0, 8)
+    : []
+
   // init pos bottom-right small
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -531,6 +546,22 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
         }
       `}</style>
 
+      {/* našeptávač příkazů: napiš „/“ a vyber šipkami, Tab / Enter doplní */}
+      {cmdSuggestions.length > 0 && (
+        <div style={{ borderTop: '1px solid black', background: '#3a3a3a', maxHeight: 200, overflowY: 'auto', flexShrink: 0 }}>
+          {cmdSuggestions.map((c, idx) => (
+            <div
+              key={c.name}
+              onMouseDown={(e) => { e.preventDefault(); setChatInput(`${c.name} `); setCmdIdx(0); chatInputRef.current?.focus() }}
+              style={{ padding: '4px 8px', cursor: 'pointer', fontSize: 10, display: 'flex', gap: 8, background: idx === cmdIdx ? '#12a4ff' : 'transparent', color: '#f0f0f0' }}
+            >
+              <span style={{ fontWeight: 900, minWidth: 92, fontFamily: "'JetBrains Mono', monospace" }}>{c.name}</span>
+              <span style={{ opacity: idx === cmdIdx ? 0.95 : 0.6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.description}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div style={{
         display: 'flex', alignItems: 'center', gap: 6,
         padding: '8px', borderTop: '1px solid black',
@@ -539,8 +570,18 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
         <input
           ref={chatInputRef}
           value={chatInput}
-          onChange={e => setChatInput(e.target.value)}
+          onChange={e => { setChatInput(e.target.value); setCmdIdx(0) }}
           onKeyDown={e => {
+            if (cmdSuggestions.length > 0 && !picker) {
+              const sel = cmdSuggestions[cmdIdx]
+              if (e.key === 'ArrowDown') { e.preventDefault(); setCmdIdx(i => Math.min(cmdSuggestions.length - 1, i + 1)); return }
+              if (e.key === 'ArrowUp') { e.preventDefault(); setCmdIdx(i => Math.max(0, i - 1)); return }
+              if (e.key === 'Escape') { e.preventDefault(); setChatInput(''); return }
+              // Tab vždy doplní; Enter doplní, jen když ještě není napsaný celý příkaz
+              if (sel && (e.key === 'Tab' || (e.key === 'Enter' && chatInput.trim().toLowerCase() !== sel.name.toLowerCase()))) {
+                e.preventDefault(); setChatInput(`${sel.name} `); setCmdIdx(0); return
+              }
+            }
             if (picker) {
               if (e.key === 'ArrowUp') { e.preventDefault(); setPickerIdx(i => Math.max(0, i - 1)) }
               if (e.key === 'ArrowDown') { e.preventDefault(); setPickerIdx(i => Math.min(picker.items.length - 1, i + 1)) }
@@ -549,7 +590,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
             }
             if (e.key === 'Enter') sendChatMessage()
           }}
-          placeholder={picker? `Vyber ${picker.type} ↑↓ Enter — nebo piš...` : "Napiš… /note /task /find /edit"}
+          placeholder={picker? `Vyber ${picker.type} ↑↓ Enter — nebo piš...` : "Napiš… nebo „/“ pro příkazy (/vse = všechny)"}
           style={{
             flex: 1, background: '#3a3a3a', color: '#f0f0f0',
             fontSize: 11, fontFamily: "'JetBrains Mono', monospace", padding: '6px 8px',
