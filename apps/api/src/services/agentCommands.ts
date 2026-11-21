@@ -318,6 +318,44 @@ export function isShellMessage(message: string): boolean {
   return SHELL_COMMANDS.test(t) || (!!shellStatus() && !!t && !t.startsWith('/')) || (yesNo && pendingCodes().length > 0)
 }
 
+// ---------- /strazce — hlídač LoYo OS (tools/strazce/strazce.mjs) ----------
+async function strazceCommand(args: string): Promise<CommandResult> {
+  const steps = ['Mary Jane: /strazce']
+  const dir = join(DATA_DIR, 'strazce')
+  const pause = join(dir, 'pauza')
+  const a = args.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+  const { writeFile: wf, rm, mkdir: mk } = await import('node:fs/promises')
+  if (/^(pauza|stop|vypni)$/.test(a)) {
+    await mk(dir, { recursive: true }); await wf(pause, new Date().toISOString(), 'utf8')
+    return { reply: '⏸ Strážce pozastaven — když LoYo spadne, nenahodí ho. Zapneš: /strazce zapni', steps }
+  }
+  if (/^(zapni|start|on)$/.test(a)) {
+    await rm(pause, { force: true })
+    return { reply: '▶ Strážce zase hlídá (API + Mary bot každých 30 s).', steps }
+  }
+  const st = await readJson(join(dir, 'state.json'), null)
+  const pidRaw = await readFile(join(dir, 'strazce.pid'), 'utf8').catch(() => '')
+  const alive = pidAlive(Number(pidRaw))
+  const { envValue } = await import('./telegramNotify.js')
+  const token = await envValue('LOYO_STRAZCE_TOKEN')
+  const ts = Object.values(networkInterfaces()).flat().find((x) => x?.family === 'IPv4' && x.address.startsWith('100.'))?.address
+  const fmt = (s?: string | null) => (s ? new Date(s).toLocaleString('cs-CZ') : '—')
+  return {
+    reply: [
+      `🛡️ Strážce ${alive ? `běží (pid ${Number(pidRaw)})` : 'NEBĚŽÍ — spusť: powershell -File tools\\strazce\\install.ps1'}`,
+      ...(st ? [
+        `hlídání: ${st.paused ? '⏸ pauza' : '▶ zapnuto'} · nahozeno: ${st.restarts ?? 0}× · poslední: ${fmt(st.lastRestart)}`,
+        `poslední kontrola: ${fmt(st.lastCheck)}`,
+      ] : []),
+      '',
+      ...(ts && token ? ['📱 Pro telefon (přes Tailscale):', `http://${ts}:3099/?token=${token}`] : ['📱 Odkaz pro telefon: chybí Tailscale nebo token (vznikne při prvním startu Strážce).']),
+      '',
+      '/strazce pauza · /strazce zapni',
+    ].join('\n'),
+    steps,
+  }
+}
+
 // ---------- „/příkaz ?“ — popis a možnosti z commands.json ----------
 async function commandHelp(name: string): Promise<CommandResult> {
   const steps = [`Mary Jane: ${name} ?`]
@@ -387,6 +425,8 @@ async function listCommands(): Promise<CommandResult> {
       '/terminal [příkaz] — zapne terminál (cmd), pak každá zpráva = příkaz',
       '/ps [příkaz] — totéž v PowerShellu',
       '/exit — vypne terminál',
+      '/strazce — hlídač LoYo OS (nahazuje po pádu) + odkaz pro telefon · /strazce pauza|zapni',
+      '/napad <text> — nápad do panelu NÁPADY na dashboardu · /napady — seznam',
       '/ano [kód] · /ne [kód] — potvrdí / zruší riskantní příkaz (skill Bezpečný shell)',
       '/mcp — MCP servery · /mcp <id> nástroje · /mcp <id> <nástroj> {json}',
       '/fetch <url> — přečte stránku (Fetch MCP) · /web <url> — přes prohlížeč · /screenshot <url> (Playwright MCP)',
@@ -582,6 +622,26 @@ export async function tryAgentCommand(message: string): Promise<CommandResult | 
     case 'screenshot':
     case 'snimek':
       return screenshotCommand(args).catch((e: any) => ({ reply: `❌ Playwright MCP: ${e?.message ?? e}`, steps: ['Mary Jane: /screenshot'] }))
+    case 'strazce':
+    case 'strazc':
+    case 'hlidac':
+      return strazceCommand(args)
+    case 'napad': {
+      if (!args) return { reply: 'Jak na to: /napad <text>\nnapř. /napad agent, co hlídá ceny na Alze\nNápad se objeví na prvním dashboardu v panelu NÁPADY. Seznam: /napady', steps: ['Mary Jane: /napad'] }
+      const { addNapad } = await import('../routes/napady.js')
+      const n = await addNapad(args, 'chat')
+      return { reply: `💡 Nápad uložen: „${n.title}“\nNajdeš ho na dashboardu v panelu NÁPADY (podrobnosti přidáš malým +). Všechny: /napady`, steps: ['Mary Jane: /napad'] }
+    }
+    case 'napady': {
+      const { loadNapady } = await import('../routes/napady.js')
+      const list = (await loadNapady()).filter((n) => !n.done)
+      return {
+        reply: list.length
+          ? ['💡 NÁPADY', ...list.slice(0, 30).map((n, i) => `${i + 1}. ${n.title}${n.notes.length ? ` (+${n.notes.length})` : ''}`), ...(list.length > 30 ? [`… a dalších ${list.length - 30}`] : [])].join('\n')
+          : '💡 Zatím žádné nápady. Přidej: /napad <text>',
+        steps: ['Mary Jane: /napady'],
+      }
+    }
     case 'grill':
     case 'brainstorm': {
       const steps = ['Mary Jane: /grill (skill grill-me)']

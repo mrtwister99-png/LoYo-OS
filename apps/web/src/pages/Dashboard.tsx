@@ -1,3 +1,4 @@
+import NapadyPanel from '../components/NapadyPanel';
 import React, { useState, useMemo, useEffect } from 'react';
 import { categoryColors, categoryNumbers } from '../styles/theme';
 
@@ -167,7 +168,8 @@ export default function Dashboard() {
         * { font-family: 'JetBrains Mono', monospace; }
       `}</style>
 
-      <div className="max-w-[1600px] mx-auto space-y-6">
+      <div className="max-w-[1960px] mx-auto flex gap-6 items-start">
+      <div className="flex-1 min-w-0 space-y-6">
         {/* Header - HADR */}
         <div className="bg-[#444] border border-[#444] rounded-none p-4 md:p-6 flex flex-col md:flex-row justify-between gap-4">
           <div>
@@ -298,6 +300,12 @@ export default function Dashboard() {
           <span>LoYo OS v6.0 FULL SELF • 60 ÚKOLŮ PO 1 • {overallDone} HOTOVO • {60 - overallDone} ZBÝVÁ • CURRENT #{currentTaskId}</span>
           <span className="ml-auto">ROYAL DARK #2b2b2b / #3a3a3a / #444 / #12a4ff / #ff1e00 / #c9a646 • v4.2→v6.0 SINGULARITY</span>
         </div>
+      </div>
+
+      {/* 💡 NÁPADY — vpravo, ~40 % výšky obrazovky, drží se při scrollu */}
+      <aside className="hidden lg:block w-[340px] shrink-0 sticky top-4 h-[40vh] min-h-[280px]">
+        <NapadyPanel />
+      </aside>
       </div>
     </div>
   );

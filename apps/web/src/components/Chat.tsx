@@ -1,6 +1,7 @@
 // D:\dev\loyo-os\apps\web\src\components\Chat.tsx - HADR SMALL + DRAGGABLE
 import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import LinkifiedText, { openExternal } from './LinkifiedText'
+import { replyOptions } from './replyOptions'
 
 type ChatMsg = { from: 'me' | 'mary'; text: string; meta?: TipMeta | Record<string, any> }
 
@@ -355,6 +356,7 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
   const prevScrollHeight = useRef<number | null>(null)
   const shownMessages = chatMessages.slice(-Math.min(visibleCount, MAX_SHOWN))
   const shownOffset = chatMessages.length - shownMessages.length
+  const lastMaryIndex = (() => { for (let k = chatMessages.length - 1; k >= 0; k--) if (chatMessages[k].from === 'mary') return k; return -1 })()
   const onListScroll = () => {
     const el = listRef.current
     if (!el || el.scrollTop > 30) return
@@ -568,6 +570,22 @@ export default function Chat({ isOpen, onClose, onUnreadMessage, onSaved, docked
                         style={{ background: '#facc15', color: '#111', fontWeight: 900, fontSize: 10, padding: '4px 10px', border: '1px solid black', cursor: 'pointer', boxShadow: '2px 2px 0 black' }}>✅ POTVRDIT</button>
                       <button onClick={() => sendWithValue(`/ne ${code}`)} disabled={isChatLoading}
                         style={{ background: '#444', color: '#f0f0f0', fontWeight: 900, fontSize: 10, padding: '4px 10px', border: '1px solid black', cursor: 'pointer', boxShadow: '2px 2px 0 black' }}>❌ ZRUŠIT</button>
+                    </div>
+                  )
+                })()}
+                {(() => {
+                  // nabízené možnosti (/příkaz …, A) B)…) → tlačítka, jen u poslední zprávy od Mary
+                  if (msg.from !== 'mary' || shownOffset + i !== lastMaryIndex) return null
+                  const opts = replyOptions(msg.text)
+                  if (!opts.length) return null
+                  return (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 8 }}>
+                      {opts.map(o => (
+                        <button key={o.send} onClick={() => sendWithValue(o.send)} disabled={isChatLoading} title={o.send}
+                          style={{ background: '#2b2b2b', color: '#7cc8ff', fontWeight: 700, fontSize: 10, padding: '3px 8px', border: '1px solid #12a4ff', borderRadius: 999, cursor: 'pointer', fontFamily: "'JetBrains Mono', monospace" }}>
+                          {o.label}
+                        </button>
+                      ))}
                     </div>
                   )
                 })()}

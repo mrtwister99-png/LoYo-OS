@@ -95,3 +95,7 @@ Thumbs.db
 ehthumbs.db
 # Playwright MCP — screenshoty a snímky stránek (runtime)
 data/screenshots/
+
+# Strážce — stav, pid, pauza (runtime)
+data/strazce/
+tools/strazce/strazce.vbs

@@ -1,5 +1,57 @@
 [
   {
+    "id": "44d4ab7c-083c-412e-9f52-52616ad36f40",
+    "ts": "2026-11-21T04:36:34.949Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "💡 nápad: TEST z chatu"
+  },
+  {
+    "id": "974d907d-bed4-4b6a-b42d-5fbf89a29290",
+    "ts": "2026-11-21T04:36:34.940Z",
+    "agent": "Mary_Jane",
+    "type": "chat",
+    "action": "UI: /napad TEST z chatu",
+    "meta": {
+      "source": "test"
+    }
+  },
+  {
+    "id": "8f5984bb-edeb-4262-a516-1d4ae70b6c57",
+    "ts": "2026-11-21T04:36:12.824Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "💡 nápad: TEST Strážce na telefonu"
+  },
+  {
+    "id": "80e4b251-3ba2-45ef-a1a4-fcfd2bf09bc2",
+    "ts": "2026-11-21T04:33:17.533Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn"
+  },
+  {
+    "id": "fc9205f6-284d-435a-9d61-dfac206348ed",
+    "ts": "2026-11-21T04:33:14.191Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot zastaven"
+  },
+  {
+    "id": "50ecf239-ff4c-4400-acd8-48434380b0db",
+    "ts": "2026-11-21T04:13:31.412Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
+    "id": "441f9be0-264a-4ad8-9812-5509ce4984c6",
+    "ts": "2026-11-21T03:57:17.094Z",
+    "agent": "Mary Jane",
+    "type": "system",
+    "action": "Telegram bot spuštěn se startem API"
+  },
+  {
     "id": "22b60a56-6340-473b-9572-cfd407870a40",
     "ts": "2026-11-21T03:26:59.514Z",
     "agent": "Mary Jane",

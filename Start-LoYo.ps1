@@ -101,7 +101,10 @@ function Start-All {
     # 1) všechno najednou, minimalizované
     Write-Host "  $CYAN▸$RST spouštím ${BOLD}API$RST · ${BOLD}MCP$RST · ${BOLD}WEB$RST najednou (minimalizované)…"
     Write-Host ""
-    $null = Start-Service-Min 'API' $API_PATH 'pnpm dev'
+    # Strážce: zase hlídat (Q ho pozastavil)
+    Remove-Item (Join-Path $ROOT 'data\strazce\pauza') -Force -ErrorAction SilentlyContinue
+    # API už mohl nahodit Strážce → podruhé ho nespouštět (porvaly by se o port 3001)
+    if (Test-Port6 3001) { Write-Host "  $GREY  API už běží (nahodil ho Strážce) — nespouštím znovu$RST" } else { $null = Start-Service-Min 'API' $API_PATH 'pnpm dev' }
     if ($MCP_PATH) { $null = Start-Service-Min 'MCP' $MCP_PATH 'pnpm dev' }
     $null = Start-Service-Min 'WEB' $WEB_PATH 'pnpm tauri dev 2>nul || pnpm dev'
 
@@ -153,6 +156,9 @@ function Start-All {
 
 function Kill-All {
     Write-Host ""; Write-Host "  $RED▸ vypínám WEB · MCP · API…$RST"
+    # Strážce: schválné vypnutí → nenahazovat
+    $sd = Join-Path $ROOT 'data\strazce'; New-Item -ItemType Directory -Force -Path $sd | Out-Null
+    Set-Content -Path (Join-Path $sd 'pauza') -Value (Get-Date -Format o)
     foreach ($name in 'web', 'mcp', 'api') {
         $f = "$PID_DIR\$name.pid"
         if (Test-Path $f) { $id = Get-Content $f; if ($id) { taskkill /F /T /PID $id 2>$null | Out-Null } }

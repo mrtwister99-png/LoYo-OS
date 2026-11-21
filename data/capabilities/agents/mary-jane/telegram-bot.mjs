@@ -103,6 +103,29 @@ async function sendLong(token, chatId, text, replyMarkup = null) {
   }
 }
 
+// Možnosti nabízené v odpovědi Mary → tlačítka (stejná pravidla jako apps/web/src/components/replyOptions.ts)
+//   „/příkaz něco — popis“ → pošle „/příkaz něco“ · „A) …“ → pošle „A“
+export function replyOptions(text) {
+  if (!text || /\/ano [a-z0-9]{4}\b/.test(text)) return []
+  const out = []
+  const seen = new Set()
+  const cmdLines = String(text).split('\n')
+    .map((l) => l.trim().replace(/^[•\-*·]\s*/, ''))
+    .map((l) => l.match(/^(\/[a-z0-9_-]+(?: [^\s—–<>|]+){0,3})\s+[—–-]\s+\S/i)?.[1])
+    .filter((c) => c && !/[<>[\]]/.test(c))
+  if (cmdLines.length && cmdLines.length <= 12) for (const c of cmdLines) if (!seen.has(c)) { seen.add(c); out.push(c) }
+  for (const m of String(text).matchAll(/(?:^|\s)([A-F])\)\s+([^\n]{1,60}?)(?=[,;]?\s+[A-F]\)\s|\.\s|\.$|\n|$)/g)) if (!seen.has(m[1])) { seen.add(m[1]); out.push(m[1]) }
+  return out.slice(0, 12)
+}
+
+function replyOptionsKeyboard(text) {
+  const opts = replyOptions(text)
+  if (!opts.length) return null
+  const rows = []
+  for (let i = 0; i < opts.length; i += 2) rows.push(opts.slice(i, i + 2).map((t) => ({ text: t })))
+  return { keyboard: rows, resize_keyboard: true, one_time_keyboard: true }
+}
+
 // Telegram neumí našeptávat další slovo → u příkazu bez argumentu nabídne možnosti tlačítky
 // (stejné „args“ z commands.json jako našeptávač v UI). Klepnutí rovnou pošle např. „/new agent“.
 async function optionsKeyboard(text) {
@@ -161,7 +184,8 @@ const HELP = [
   '/grill <téma> — brainstorming (grill-me), /grill stop = shrnutí',
   '/luuu smaž spam — všechen spam z celého Gmailu do Koše (potvrdíš /ano)',
   '/luuu — Luuu roztřídí nové maily · /fetch <url> · /web <url> · /screenshot <url>',
-  '/ano · /ne — potvrdit / zrušit riskantní příkaz',
+  '/ano · /ne — potvrdit / zrušit riskantní příkaz (nebo tlačítko / „ano“)',
+  '/napad <text> — nápad na dashboard · /strazce — hlídač LoYo + odkaz pro telefon',
   '/ls [plocha|stažené|dokumenty] · /cat <soubor> · /najdi <název> — soubory na PC',
   '/py <soubor.py> - <zadání> — napíšu Python skript (bez cesty = plocha)',
   '/skript <soubor> · /spust <agent> — spustí skript / agenta',
@@ -334,7 +358,7 @@ async function handleMessage(message, token, allowedChatId) {
       const code = String(result?.reply ?? '').match(/\/ano ([a-z0-9]{4})\b/)?.[1]
       const keyboard = code
         ? { inline_keyboard: [[{ text: '✅ Potvrdit', callback_data: `ok:${code}` }, { text: '❌ Zrušit', callback_data: `no:${code}` }]] }
-        : await optionsKeyboard(text).catch(() => null)
+        : (await optionsKeyboard(text).catch(() => null)) ?? replyOptionsKeyboard(result?.reply ?? '')
       await sendLong(token, chatId, result?.reply ?? '', keyboard)
     }
   } catch (err) {
@@ -424,6 +448,16 @@ async function main() {
   // menu příkazů v Telegramu (po napsání „/“) = commands.json, stejně jako našeptávač v UI
   await syncTelegramCommands(token).catch((err) => console.warn(`[mary-bot] setMyCommands: ${err?.message ?? err}`))
 
+  // jen jeden bot naráz — dva by si přebírali zprávy (Telegram getUpdates 409)
+  const other = Number(String(await readFile(PID_PATH, 'utf8').catch(() => '')).trim())
+  if (other && other !== process.pid) {
+    let alive = false
+    try { process.kill(other, 0); alive = true } catch {}
+    if (alive) {
+      console.log(`[mary-bot] už běží jiný bot (pid ${other}) — končím`)
+      return
+    }
+  }
   await writeFile(PID_PATH, String(process.pid), 'utf8')
   console.log(`[mary-bot] @${me.username} spuštěn (pid ${process.pid}) · API ${API_URL} · chat ${allowedChatId || 'jakýkoli'}`)
 
