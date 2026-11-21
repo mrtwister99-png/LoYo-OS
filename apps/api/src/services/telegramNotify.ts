@@ -2,23 +2,27 @@
 // LOYO OS // MARY JANE — API samo pošle zprávu do Telegram chatu Mary.
 // Používá fronta (výsledky úkolů zadaných z Telegramu) a plánovač (/voda, /daily-brief…).
 // Token a chat id bere z ENV nebo z .env v rootu (stejné klíče jako telegram-bot.mjs).
-import { readFile } from 'node:fs/promises'
+import { readFile, stat } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { DATA_DIR } from '../lib/dataPaths.js'
 
-let envCache: Record<string, string> | null = null
+// .env se načte znovu, když se změní (úprava hesla apod. nevyžaduje restart API)
+let envCache: { mtime: number; values: Record<string, string> } | null = null
+const ENV_FILE = resolve(DATA_DIR, '..', '.env')
 
 export async function envValue(key: string): Promise<string> {
   if (process.env[key]) return process.env[key] as string
-  if (!envCache) {
-    envCache = {}
-    const raw = await readFile(resolve(DATA_DIR, '..', '.env'), 'utf8').catch(() => '')
+  const mtime = (await stat(ENV_FILE).catch(() => null))?.mtimeMs ?? 0
+  if (!envCache || envCache.mtime !== mtime) {
+    const values: Record<string, string> = {}
+    const raw = await readFile(ENV_FILE, 'utf8').catch(() => '')
     for (const line of raw.split(/\r?\n/)) {
       const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/)
-      if (m) envCache[m[1]] = m[2].trim().replace(/^['"]|['"]$/g, '')
+      if (m) values[m[1]] = m[2].trim().replace(/^['"]|['"]$/g, '')
     }
+    envCache = { mtime, values }
   }
-  return envCache[key] ?? ''
+  return envCache.values[key] ?? ''
 }
 
 function splitText(text: string, max = 3800): string[] {
